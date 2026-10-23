@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>大物热学 · 知识总结</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --phys:#f5a623; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--phys);
+    border:1px solid rgba(245,166,35,.35);background:rgba(245,166,35,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  section{margin-bottom:26px}
+  h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--phys)}
+  h3{font-size:13px;font-weight:700;color:var(--cyan);margin:14px 0 7px}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:11px 14px;margin-bottom:9px}
+  .f .n{font-size:11px;color:var(--tx3);margin-bottom:3px}
+  .f .e{font-size:14px;color:var(--tx);font-family:"Cambria Math","Times New Roman",serif;
+    letter-spacing:.01em;line-height:1.9}
+  .f .c{font-size:11.5px;color:var(--tx3);margin-top:5px;line-height:1.6}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  .warn{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2);margin-bottom:12px}
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2);margin-bottom:12px}
+  .warn b,.info b{color:var(--tx)}
+  .warn .t,.info .t{display:block;font-weight:700;margin-bottom:4px}
+
+  ul{list-style:none}
+  ul li{position:relative;padding-left:16px;margin-bottom:7px;font-size:12.5px;color:var(--tx2)}
+  ul li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul li b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">大学物理（二）· 期中范围</div>
+  <h1>热学知识总结
+    <small>气体动理论 + 热力学第一定律 + 热力学第二定律</small>
+  </h1>
+</header>
+
+<div class="info">
+  <span class="t">这份怎么用</span>
+  不是拿来读的，是拿来<b>每天默写</b>的。你说过公式「记不住」——那属于记忆型问题，看课和做题都解决不了，<b>只有默写能解决</b>。把下面每个公式遮住默一遍，错的打点，第二天重点默打点的。
+</div>
+
+<!-- 第13章 -->
+<section>
+  <h2>T1 · 气体动理论</h2>
+
+  <h3>状态方程与压强</h3>
+  <div class="f"><div class="n">理想气体状态方程</div>
+    <div class="e">pV = νRT = (m/M)RT = NkT</div>
+    <div class="c">ν 摩尔数，R = 8.31 J/(mol·K)，k = 1.38×10⁻²³ J/K，N 分子数</div></div>
+  <div class="f"><div class="n">压强（微观本质）</div>
+    <div class="e">p = (1/3) n m v̄² = (2/3) n ε̄<sub>k</sub></div>
+    <div class="c">n = N/V 数密度，ε̄<sub>k</sub> = (1/2)m v̄² 平均平动动能</div></div>
+  <div class="f"><div class="n">温度的微观意义</div>
+    <div class="e">ε̄<sub>k</sub> = (3/2) kT</div>
+    <div class="c">温度是分子平均平动动能的量度——只与平动有关，与转动无关</div></div>
+
+  <h3>能量均分定理</h3>
+  <div class="f"><div class="n">每个自由度的平均动能</div>
+    <div class="e">(1/2) kT</div>
+    <div class="c">单原子 i=3（只有平动）；刚性双原子 i=5（3 平动 + 2 转动）；刚性多原子 i=6</div></div>
+  <div class="f"><div class="n">理想气体内能</div>
+    <div class="e">U = (i/2) νRT</div>
+    <div class="c"><b>只与温度有关</b>，与体积、压强无关——这条是解题关键</div></div>
+
+  <h3>三种速率（必背）</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>速率</th><th>公式</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>最概然速率 v<sub>p</sub></td><td>√(2RT/M)</td><td>速率分布曲线的峰值位置</td></tr>
+      <tr><td>平均速率 v̄</td><td>√(8RT/πM)</td><td>算平均自由程、碰撞频率</td></tr>
+      <tr><td>方均根速率 √(v̄²)</td><td>√(3RT/M)</td><td>算平均平动动能</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="f" style="margin-top:9px"><div class="n">三者比例</div>
+    <div class="e">v<sub>p</sub> : v̄ : √(v̄²) = 1 : 1.128 : 1.225</div>
+    <div class="c">记住「最概然 &lt; 平均 &lt; 方均根」就不会搞混</div></div>
+
+  <div class="f"><div class="n">平均自由程</div>
+    <div class="e">λ = kT / (√2 π d² p)</div>
+    <div class="c">d 分子有效直径。与压强成反比、与温度成正比</div></div>
+</section>
+
+<!-- 第14章 第一定律 -->
+<section>
+  <h2>T2 · 热力学第一定律</h2>
+
+  <div class="f"><div class="n">核心公式（符号规定：吸热为正，系统对外做功为正）</div>
+    <div class="e">Q = ΔU + W　　dQ = dU + p dV</div>
+    <div class="c"><b>符号错一次，整题全错</b>。先把符号规定写在卷子边上</div></div>
+
+  <h3>四种过程对比（最高频考点）</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>过程</th><th>W</th><th>ΔU</th><th>Q</th><th>特征式</th></tr></thead>
+    <tbody>
+      <tr><td><b>等容</b></td><td>0</td><td>(i/2)νRΔT</td><td>= ΔU</td><td>V = 常数</td></tr>
+      <tr><td><b>等压</b></td><td>pΔV = νRΔT</td><td>(i/2)νRΔT</td><td>(i/2+1)νRΔT</td><td>p = 常数</td></tr>
+      <tr><td><b>等温</b></td><td>νRT ln(V₂/V₁)</td><td><b>0</b></td><td>= W</td><td>pV = 常数</td></tr>
+      <tr><td><b>绝热</b></td><td>−ΔU</td><td>(i/2)νRΔT</td><td><b>0</b></td><td>pV<sup>γ</sup> = 常数</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn" style="margin-top:11px">
+    <span class="t">四个最容易错的地方</span>
+    ① <b>等温 ΔU = 0 但 Q ≠ 0</b>（热量全变成功）<br>
+    ② <b>绝热 Q = 0 但 ΔU ≠ 0</b>（靠消耗内能做功）<br>
+    ③ 等压摩尔热容 <b>C<sub>p</sub> = C<sub>V</sub> + R</b>，多出来的 R 就是「维持压强不变要额外做的功」<br>
+    ④ 绝热过程方程里的 γ = C<sub>p</sub>/C<sub>V</sub> = (i+2)/i，单原子 1.67、双原子 1.40
+  </div>
+
+  <div class="f"><div class="n">摩尔热容</div>
+    <div class="e">C<sub>V</sub> = (i/2)R　　C<sub>p</sub> = ((i+2)/2)R　　γ = C<sub>p</sub>/C<sub>V</sub></div>
+    <div class="c">单原子 i=3：C<sub>V</sub>=1.5R，C<sub>p</sub>=2.5R，γ=5/3</div></div>
+
+  <h3>循环过程</h3>
+  <div class="f"><div class="n">一个循环结束后</div>
+    <div class="e">ΔU = 0　→　Q<sub>净</sub> = W<sub>净</sub></div>
+    <div class="c">循环的关键：内能回到原点，所以「吸收的总热量 = 对外做的总功」</div></div>
+  <div class="f"><div class="n">热机效率</div>
+    <div class="e">η = W<sub>净</sub> / Q<sub>吸</sub> = 1 − |Q<sub>放</sub>| / Q<sub>吸</sub></div>
+    <div class="c"><b>分母只算「吸」的热量</b>，不含放出的——这里错了扣分最多</div></div>
+</section>
+
+<!-- 第14章 第二定律 -->
+<section>
+  <h2>T3 · 热力学第二定律</h2>
+
+  <div class="f"><div class="n">卡诺循环效率（效率上限）</div>
+    <div class="e">η<sub>卡</sub> = 1 − T₂/T₁</div>
+    <div class="c">T₁ 高温热源、T₂ 低温热源，<b>必须用热力学温度 K</b>。任何工作在同一对热源之间的热机，效率都不可能超过它</div></div>
+
+  <div class="f"><div class="n">熵的定义</div>
+    <div class="e">dS = dQ<sub>可逆</sub> / T　　ΔS = ∫ dQ<sub>可逆</sub>/T</div>
+    <div class="c"><b>熵是状态函数</b>——只与初末态有关。但计算时必须<b>设计一条可逆路径</b>来积分</div></div>
+
+  <div class="f"><div class="n">熵增原理</div>
+    <div class="e">孤立系统：ΔS ≥ 0（可逆取等号）</div>
+    <div class="c">这是第二定律的数学表达：孤立系统的自发过程总是朝熵增方向</div></div>
+
+  <h3>熵变计算四类（考试就这四种）</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>类型</th><th>怎么算</th></tr></thead>
+    <tbody>
+      <tr><td><b>理想气体过程</b></td><td>ΔS = νC<sub>V</sub>ln(T₂/T₁) + νR ln(V₂/V₁)</td></tr>
+      <tr><td><b>可逆相变</b></td><td>ΔS = Q/T = m·L/T（L 为相变潜热，T 为相变温度）</td></tr>
+      <tr><td><b>混合（不同温度）</b></td><td>分两段算：ΔS = m₁c·ln(T/T₁) + m₂c·ln(T/T₂)</td></tr>
+      <tr><td><b>不可逆过程</b></td><td><b>设计可逆路径</b>：先等温再等容，或先等压再等温，用状态函数性质绕过去</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info" style="margin-top:11px">
+    <span class="t">第四类是重点也是难点</span>
+    熵是状态函数，所以<b>「不可逆过程的熵变 = 同样初末态之间任意可逆路径的熵变」</b>。碰到自由膨胀、热传导这类不可逆过程，千万不要直接拿 dQ/T 算（因为过程不可逆，那个积分不成立），要自己造一条可逆路径。
+  </div>
+
+  <div class="warn">
+    <span class="t">第二定律的两种表述（可能考简答）</span>
+    <b>开尔文表述</b>：不可能从单一热源吸热，使之完全变成功而不产生其他影响（第二类永动机不可能）<br>
+    <b>克劳修斯表述</b>：热量不可能自发地从低温物体传到高温物体
+  </div>
+</section>
+
+<!-- 题型 -->
+<section>
+  <h2>三类必考题</h2>
+
+  <div class="info">
+    <span class="t">① 求某过程的 Q / W / ΔU</span>
+    步骤固定：<b>先在 p–V 图上标出初末态 → 判断是什么过程 → 套对应公式</b>。热学题的难点不在计算量，在符号和方向。
+  </div>
+  <div class="info">
+    <span class="t">② 循环效率</span>
+    步骤：<b>拆成几个分过程 → 逐个算 Q（注意正负）→ 把所有 Q&gt;0 的加起来当分母 → W净 当分子</b>。最容易错的是把放热也加进分母。
+  </div>
+  <div class="info">
+    <span class="t">③ 熵变</span>
+    先判断是不是可逆。可逆直接积分；不可逆先设计路径。混合、相变、自由膨胀各有一套。
+  </div>
+</section>
+
+<!-- 默写表 -->
+<section>
+  <h2>每日默写清单</h2>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:32px">#</th><th>默写内容</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>pV = νRT = NkT</td></tr>
+      <tr><td>2</td><td>p = (1/3)nm v̄² = (2/3)n ε̄<sub>k</sub></td></tr>
+      <tr><td>3</td><td>ε̄<sub>k</sub> = (3/2)kT</td></tr>
+      <tr><td>4</td><td>U = (i/2)νRT</td></tr>
+      <tr><td>5</td><td>v<sub>p</sub> = √(2RT/M)，v̄ = √(8RT/πM)，√(v̄²) = √(3RT/M)</td></tr>
+      <tr><td>6</td><td>λ = kT/(√2 π d² p)</td></tr>
+      <tr><td>7</td><td>Q = ΔU + W，dQ = dU + p dV</td></tr>
+      <tr><td>8</td><td>四种过程的 W / ΔU / Q（表格默写）</td></tr>
+      <tr><td>9</td><td>C<sub>V</sub> = (i/2)R，C<sub>p</sub> = ((i+2)/2)R，γ = (i+2)/i</td></tr>
+      <tr><td>10</td><td>pV<sup>γ</sup> = 常数（绝热）</td></tr>
+      <tr><td>11</td><td>η = W<sub>净</sub>/Q<sub>吸</sub> = 1 − |Q<sub>放</sub>|/Q<sub>吸</sub></td></tr>
+      <tr><td>12</td><td>η<sub>卡</sub> = 1 − T₂/T₁</td></tr>
+      <tr><td>13</td><td>dS = dQ<sub>可逆</sub>/T，ΔS = ∫dQ<sub>可逆</sub>/T</td></tr>
+      <tr><td>14</td><td>ΔS = νC<sub>V</sub>ln(T₂/T₁) + νR ln(V₂/V₁)</td></tr>
+      <tr><td>15</td><td>孤立系统 ΔS ≥ 0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info" style="margin-top:11px">
+    <b>15 条，每天遮住默一遍，大约 8 分钟。</b>一周后你会发现做不出题的原因从「想不起公式」变成「算错」——那就是进步。
+  </div>
+</section>
+
+<footer>
+  <div>范围：期中热学三章（气体动理论 / 热力学第一定律 / 热力学第二定律）</div>
+  <div>配套：<code>大物速成课目录.html</code>（P38–P43 是范围）· <code>大物模拟卷.html</code></div>
+</footer>
+
+</div>
+</body>
+</html>
