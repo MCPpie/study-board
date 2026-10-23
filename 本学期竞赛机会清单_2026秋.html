@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本学期竞赛机会清单 · 2026 秋</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --go:#2ecc8f; --hold:#f5a623; --no:#7c8699; --blue:#5b9bff; --cyan:#38d0d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 80px;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+  header{padding:52px 0 34px;border-bottom:1px solid var(--line);margin-bottom:34px;position:relative;overflow:hidden}
+  header::before{
+    content:"";position:absolute;inset:-130px -40% auto -40%;height:340px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(46,204,143,.13),transparent 70%);pointer-events:none;
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--go);
+    border:1px solid rgba(46,204,143,.35);background:rgba(46,204,143,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:16px;
+  }
+  h1{font-size:30px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14.5px;font-weight:400;color:var(--tx3);margin-top:10px;letter-spacing:0}
+
+  section{margin-bottom:42px}
+  h2{font-size:19px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--go)}
+  h2.o::before{background:var(--hold)} h2.n::before{background:var(--no)}
+  h2.b::before{background:var(--blue)}
+  .sub{font-size:13.5px;color:var(--tx3);margin-bottom:20px;padding-left:14px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  .plain{list-style:none}
+  .plain li{position:relative;padding-left:18px;margin-bottom:11px;font-size:14px;color:var(--tx2)}
+  .plain li:last-child{margin-bottom:0}
+  .plain li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)}
+  .plain li b{color:var(--tx);font-weight:600}
+
+  code{font-family:"Cascadia Code","Consolas",monospace;font-size:12.5px;
+    background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cyan)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:var(--tx3);font-weight:600;letter-spacing:.04em;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  td b{color:var(--tx)}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+
+  .verdict{background:linear-gradient(135deg,rgba(46,204,143,.10),rgba(56,208,216,.05));
+    border:1px solid rgba(46,204,143,.30);border-radius:14px;padding:24px 26px}
+  .verdict .big{font-size:20px;font-weight:700;line-height:1.5;margin-bottom:12px}
+  .verdict .big em{font-style:normal;color:var(--go)}
+  .verdict p{font-size:14px;color:var(--tx2)}
+
+  .hero{background:var(--card);border:1px solid rgba(46,204,143,.35);border-radius:16px;overflow:hidden}
+  .hero-hd{padding:20px 24px;background:rgba(46,204,143,.07);border-bottom:1px solid rgba(46,204,143,.2);
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:100px;
+    background:var(--go);color:#0b1a12}
+  .hero-hd .t{font-size:18px;font-weight:700;flex:1;min-width:200px}
+  .hero-bd{padding:22px 24px}
+  .kv{display:grid;grid-template-columns:100px 1fr;gap:10px 18px;font-size:14px;margin-bottom:18px}
+  .kv dt{color:var(--tx3);font-size:12.5px;padding-top:3px}
+  .kv dd{color:var(--tx2)}
+  .kv dd b{color:var(--tx)}
+  .kv dd .hl{color:var(--go);font-weight:700}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .warn{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .danger{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .info b,.warn b,.danger b{color:var(--tx)}
+
+  /* 时间轴 */
+  .tl{position:relative;padding-left:26px}
+  .tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line2)}
+  .tl-item{position:relative;margin-bottom:22px}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-25px;top:7px;width:10px;height:10px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--line2)}
+  .tl-item.now::before{border-color:var(--go);background:var(--go);box-shadow:0 0 0 4px rgba(46,204,143,.15)}
+  .tl-item.big::before{border-color:var(--blue)}
+  .tl-d{font-size:12.5px;color:var(--tx3);font-variant-numeric:tabular-nums}
+  .tl-t{font-size:14.5px;font-weight:600;margin-top:1px}
+  .tl-x{font-size:13px;color:var(--tx2);margin-top:2px}
+
+  footer{border-top:1px solid var(--line);padding-top:24px;font-size:12px;color:var(--tx3);line-height:1.9}
+
+  /* ===== 手机适配 ===== */
+  @media (max-width:640px){
+    .wrap{ max-width:100% !important; padding:0 12px !important; }
+    body{ font-size:14px !important; }
+    h1{ font-size:21px !important; }
+    h1 small{ font-size:12.5px !important; }
+    h2{ font-size:16px !important; }
+    .sub{ font-size:12px !important; padding-left:10px !important; }
+    header{ padding:26px 0 18px !important; }
+    section{ margin-bottom:26px !important; }
+    .card,.hero-bd,.today-bd,.lvl-bd,.verdict{ padding:15px 14px !important; }
+    .plain li{ font-size:13px !important; margin-bottom:9px !important; }
+    .info,.warn,.danger{ padding:13px 14px !important; font-size:12.5px !important; }
+    table{ font-size:12px !important; }
+    th,td{ padding:8px !important; }
+    .tscroll{ -webkit-overflow-scrolling:touch; }
+    .tscroll table{ min-width:540px; }
+    .exams{ grid-template-columns:1fr 1fr !important; gap:9px !important; }
+    .ex{ padding:11px 12px !important; }
+    .ex .dt{ font-size:13.5px !important; }
+    .blocks{ grid-template-columns:1fr !important; }
+    .gantt{ font-size:10.5px !important; }
+    .glab{ width:64px !important; font-size:10.5px !important; }
+    .kv{ grid-template-columns:74px 1fr !important; gap:8px 12px !important; font-size:13px !important; }
+    .spec{ grid-template-columns:66px 1fr !important; gap:6px 10px !important; font-size:12.5px !important; }
+    pre{ font-size:10px !important; padding:12px 10px !important; }
+    .lvl-hd,.hero-hd{ padding:12px 14px !important; gap:10px !important; }
+    .lvl-no{ flex:0 0 32px !important; height:32px !important; font-size:14px !important; }
+    .lvl-t .tt{ font-size:14px !important; }
+    .lvl-t .st{ font-size:11.5px !important; }
+    .verdict .big{ font-size:16px !important; }
+    .tl{ padding-left:22px !important; }
+    .tl-t{ font-size:13.5px !important; }
+    .tl-x{ font-size:12px !important; }
+    .pid{ font-size:11px !important; }
+    footer{ font-size:11px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">竞赛机会筛选 · 2026-10-22</div>
+  <h1>本学期还能参加什么竞赛
+    <small>依据桌面《教育部认可的全国大学生学科竞赛目录清单》84 项 + 逐项核实 2026-2027 实际时间</small>
+  </h1>
+</header>
+
+<!-- 结论 -->
+<section>
+  <div class="verdict">
+    <div class="big">筛完之后，这学期真正值得做的<em>只有一个</em>：<br>第十八届蓝桥杯 —— 而且<em>现在就在报名期</em>。</div>
+    <p>不是因为别的赛事不好，是因为时间。你 10/31 大物期中、11/14 数竞初赛、12/12 六级、1 月初期末四门——<b>这四个月没有一段能容纳"从零做一个参赛项目"的时间</b>。所以这学期的正确策略是<b>报名 + 打基础</b>，把比赛留到 2027 年 4 月，那正好是你编程能力上来之后。</p>
+  </div>
+</section>
+
+<!-- 蓝桥杯 -->
+<section>
+  <h2>必报：第十八届蓝桥杯（软件赛 · C/C++ 程序设计）</h2>
+  <p class="sub">计算机专业最对口的 A 类赛事，而且它的赛程和你的时间表几乎是量身定做的。</p>
+
+  <div class="hero">
+    <div class="hero-hd">
+      <span class="badge">强推</span>
+      <span class="t">第十八届蓝桥杯全国大学生软件和信息技术大赛</span>
+    </div>
+    <div class="hero-bd">
+      <dl class="kv">
+        <dt>报名时间</dt>
+        <dd><span class="hl">2026 年 10 月 8 日 10:00 — 2026 年 12 月 18 日 14:00</span>（软件赛 / 电子赛 / 人工智能赛）</dd>
+        <dt>省赛时间</dt>
+        <dd>2027 年 4 月（各科目具体时间以准考证为准）</dd>
+        <dt>全国总决赛</dt>
+        <dd>2027 年 6 月</dd>
+        <dt>你报哪组</dt>
+        <dd><b>C/C++ 程序设计 · 大学 A 组</b>（双一流高校组，哈工大属 A 组）</dd>
+        <dt>报名方式</dt>
+        <dd>官网 <code>dasai.lanqiao.cn</code> 在线报名，个人赛，报名费约 300 元（以官网为准）</dd>
+        <dt>现在要做</dt>
+        <dd><b>只有一件事：报名。</b> 报名只需要几分钟，不占学习时间</dd>
+      </dl>
+
+      <div class="info" style="margin-bottom:14px">
+        <b>为什么这个赛程对你几乎完美</b><br>
+        · 报名截止 <b>12/18</b>，在你六级（12/12）之后 6 天，<b>完全不撞</b><br>
+        · 省赛在 <b>2027 年 4 月</b>，准备期正好落在<b>寒假</b>——那本来就是你计划里的"编程主攻期"<br>
+        · 考的就是 <b>C/C++ 写算法题</b>，和你现在洛谷刷的是同一件事，<b>不需要额外开辟新战场</b><br>
+        · A 组难度高，但省奖按比例给（省一约 10%、省二约 20%、省三约 30%），<b>不是只有顶尖才能拿</b>
+      </div>
+
+      <div class="warn">
+        <b>一个必须提醒你的点</b>：A 组是和全国双一流高校的学生同场。以你现在的状态（洛谷还没开始），裸考省三都难。<b>但这不是现在要解决的问题</b>——寒假那 6 周如果按项目阶梯走完第 5-6 级 + 洛谷刷到【入门5】，省三是有把握的，省二要拼。<b>先把名报上，把目标定在"省三保底、冲省二"</b>。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 慎重 -->
+<section>
+  <h2 class="o">慎重：华为 ICT 大赛（第十一届）</h2>
+  <p class="sub">表格里写"9-11 月报名"，确实是本学期，但赛程和你的数竞正面撞车。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>时间</b>：报名 2026/8/31 – 11/30（部分学校 10/31 截止）；省赛资格赛 实验考核 9/18–11/8、<b>理论考核 11/14–11/15</b>；省赛 12 月；全国总决赛 2027/3–4</li>
+      <li><b>冲突点</b>：理论考核 <b>11 月 14-15 日</b>，而你的数学竞赛初赛是 <b>11 月 14 日 09:00–11:30</b>。<b>同一天。</b>省赛又在 12 月，紧挨六级。</li>
+      <li><b>能力门槛</b>：实践赛考华为的数通 / 云 / AI 方向，需要专门学它的技术栈，<b>和你的 C 语言路线不重合</b>，等于开新战场</li>
+      <li><b>结论</b>：<b>这学期不报。</b> 如果你想走网络/云方向，大二下再考虑，那时候数竞已经结束</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 不推荐 -->
+<section>
+  <h2 class="n">这学期不用考虑的（逐项说明原因）</h2>
+  <p class="sub">下面这些在目录里确实落在 10-12 月，但每一个都有明确的不推荐理由。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:200px">赛事</th><th style="width:120px">报名时间</th><th>为什么不建议</th></tr></thead>
+    <tbody>
+      <tr><td><b>全国大学生机器人大赛</b></td><td>10 月–次年 3 月</td><td>需要硬件、场地、团队长期投入，<b>至少每周 10 小时</b>，你这学期没有</td></tr>
+      <tr><td><b>全国大学生职业规划大赛</b></td><td>10 月–次年 1 月</td><td>门槛低（写职业规划书），但含金量一般，<b>写材料要占掉整块时间</b>，性价比不如把时间给蓝桥杯</td></tr>
+      <tr><td><b>全国大学生能源经济学术创意大赛</b></td><td>10–11 月</td><td>偏经济能源方向，专业不对口</td></tr>
+      <tr><td><b>米兰设计周 / 中国好创意</b></td><td>10 月起</td><td>艺术设计类，专业不对口</td></tr>
+      <tr><td><b>"工行杯"金融科技创新大赛</b></td><td>11 月–次年 1 月</td><td>需要金融业务知识 + 团队，<b>技术只是其中一环</b></td></tr>
+      <tr><td><b>全国大学生机器人大赛-RoboTAC</b></td><td>11–12 月</td><td>职业技能类，主要面向高职，本科参加意义不大</td></tr>
+      <tr><td><b>全国大学生创新创业能力比赛</b></td><td>11/30 截止</td><td>材料型赛事，含金量一般</td></tr>
+      <tr><td><b>"大唐杯"新一代信息通信技术大赛</b></td><td>12 月–次年 2 月</td><td>通信方向（5G/无线），<b>你没有通信基础</b></td></tr>
+      <tr><td><b>全国大学生金相技能大赛</b></td><td>12 月–次年 4 月</td><td>材料学科，专业不对口</td></tr>
+      <tr><td><b>未来设计师 / 花园设计建造</b></td><td>12 月</td><td>艺术 / 农学，专业不对口</td></tr>
+      <tr><td><b>电子商务"创新创意及创业"挑战赛</b></td><td>9–12 月</td><td>需要完整创业项目 + 团队，投入远超你的余量</td></tr>
+      <tr><td><b>市场调查与分析大赛</b></td><td>9–10 月</td><td>已近截止，且需要统计调研全流程</td></tr>
+      <tr><td><b>全球校园人工智能算法精英大赛</b></td><td>5–10 月</td><td>已近截止，需要 AI 建模基础</td></tr>
+      <tr><td><b>中国大学生服务外包创新创业大赛</b></td><td>表写 12 月<br><b>实际次年 2–3 月</b></td><td>查了第十七届：<b>2026 年 2 月 11 日–3 月 20 日报名</b>。所以第十八届在 2027 年 2-3 月，<b>不在本学期</b></td></tr>
+      <tr><td><b>团体程序设计天梯赛</b></td><td>表未列<br><b>实际次年 3 月</b></td><td>查了近两届：<b>3 月报名、4 月比赛</b>，同样不在本学期</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 判断 -->
+<section>
+  <h2 class="b">为什么"少报"比"多报"更对</h2>
+  <p class="sub">这一段比上面的表格更重要。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>竞赛的收益是"结果 × 完成度"，不是"报名数量"</b>。报 5 个每个都糊弄，简历上是 5 条减分项；报 1 个拿到省三，是 1 条实打实的加分项。</li>
+      <li><b>你现在最缺的不是奖项，是"能把程序写出来"这个能力</b>。这个能力不解决，报什么赛都是陪跑；解决了，明年春天你会有一批可以参加的赛（蓝桥杯、天梯赛、服务外包、计算机设计大赛、软件杯）。</li>
+      <li><b>这学期的正确顺序</b>：先解决 10/31 大物 → 11/14 数竞 → 12/12 六级 → 1 月期末。<b>蓝桥杯报名只是在这条线上插一个 5 分钟的动作</b>，不改变任何安排。</li>
+      <li><b>真正的竞赛季是 2027 年 3-6 月</b>。那时候数竞结束了、六级结束了、期末也过了，寒假攒下的编程能力刚好能用上。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 时间线 -->
+<section>
+  <h2>时间线：从现在到 2027 年 6 月</h2>
+  <p class="sub">只列真正要动手的节点。</p>
+  <div class="card">
+    <div class="tl">
+      <div class="tl-item now">
+        <div class="tl-d">2026 / 10 / 22 — 现在</div>
+        <div class="tl-t">报蓝桥杯（C/C++ 大学 A 组）</div>
+        <div class="tl-x">官网 dasai.lanqiao.cn，几分钟搞定。报完就回到原计划，不加任何学习任务</div>
+      </div>
+      <div class="tl-item big">
+        <div class="tl-d">2026 / 10 / 31</div>
+        <div class="tl-t">大物（二）期中</div>
+        <div class="tl-x">目标 90+，热学三章</div>
+      </div>
+      <div class="tl-item big">
+        <div class="tl-d">2026 / 11 / 14</div>
+        <div class="tl-t">数学竞赛初赛</div>
+        <div class="tl-x">目标省二</div>
+      </div>
+      <div class="tl-item big">
+        <div class="tl-d">2026 / 12 / 12</div>
+        <div class="tl-t">英语六级</div>
+        <div class="tl-x">目标 550+，听力专项</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-d">2026 / 12 / 18 14:00</div>
+        <div class="tl-t">蓝桥杯报名截止</div>
+        <div class="tl-x">最后期限，别忘</div>
+      </div>
+      <div class="tl-item big">
+        <div class="tl-d">2027 / 01 初</div>
+        <div class="tl-t">期末四门</div>
+        <div class="tl-x">概率论 / 大物 / 离散 / 电路</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-d">2027 / 02 寒假</div>
+        <div class="tl-t">编程主攻期（这是关键窗口）</div>
+        <div class="tl-x">项目阶梯第 5–6 级 + 洛谷刷到【入门5】+ 蓝桥杯历年真题（近 5 届）</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-d">2027 / 03</div>
+        <div class="tl-t">天梯赛报名（3 月）+ 服务外包报名（2–3 月）</div>
+        <div class="tl-x">这两个到时可以顺手报，赛程都在 4 月</div>
+      </div>
+      <div class="tl-item big">
+        <div class="tl-d">2027 / 04</div>
+        <div class="tl-t">蓝桥杯省赛 + 天梯赛</div>
+        <div class="tl-x">目标：省三保底，冲省二</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-d">2027 / 06</div>
+        <div class="tl-t">蓝桥杯全国总决赛（如果进）</div>
+        <div class="tl-x">省一才能进，先不用想</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 衔接 -->
+<section>
+  <h2 class="o">和现有计划的衔接</h2>
+  <p class="sub">不需要改 v5 的任何一条，只需要知道洛谷那 3 题在为谁服务。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>洛谷每天 3 题 = 蓝桥杯的地基。</b> 蓝桥杯 C/C++ 组考的是算法实现能力，和洛谷题单是同一套东西。<b>你现在做的每一题，都在往 4 月的省赛上攒</b>——这不是额外负担，是把已有的动作赋予了目标。</li>
+      <li><b>10-12 月的目标不变</b>：洛谷【入门1】→【入门2】→【入门3】。每天 3 题，到 12 月底大概 200 题。<b>这个量足够省赛入场</b>。</li>
+      <li><b>寒假集中冲</b>：把项目阶梯第 5-6 级做完（这时你才真正"会写程序"），同时刷【入门4】【入门5】+ 近 5 届蓝桥杯真题（官网有）。<b>寒假 6 周是这个赛季唯一的准备窗口</b>。</li>
+      <li><b>别在 10-12 月提前刷蓝桥杯真题。</b> 现在刷只会打击信心（真题难度远高于【入门2】）。<b>寒假再碰</b>。</li>
+    </ul>
+  </div>
+  <div class="danger" style="margin-top:14px">
+    <b>最后一句实话</b>：你现在连最简单的程序都做不出来，这学期报竞赛的唯一意义是<b>"把位置占住"</b>——蓝桥杯报名不要钱不要时间，但错过了就要等一年。真正的较量在寒假，那 6 周决定 4 月你是陪跑还是拿奖。
+  </div>
+</section>
+
+<footer>
+  <div>生成于 2026-10-22 ｜ 数据来源：桌面《教育部认可的全国大学生学科竞赛目录清单.xls》（84 项，参照 2025 年时间）+ 逐项核实 2026-2027 官方通知</div>
+  <div>已核实：第十八届蓝桥杯（报名 2026/10/8–12/18，省赛 2027/4）｜第十一届华为 ICT（报名 2026/8/31–11/30，理论考核 11/14–15）｜第十七届服务外包（实际报名 2026/2/11–3/20）｜第十一届天梯赛（3 月报名、4 月比赛）</div>
+  <div>配套：<code>个人学习总规划_2026秋.html</code>（v5 总表）｜<code>编程能力建设路线图.html</code>（六级项目阶梯）</div>
+</footer>
+
+</div>
+</body>
+</html>
