@@ -2,7 +2,7 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "run.agentos_app.sg.app_51b90c41346045a5bb5bcca2f3341794.twa",
-        "sha256_cert_fingerprints": ["83:E0:75:31:EF:25:5D:AB:B9:B3:C1:BA:64:1F:A0:36:E4:E7:1E:CD:6A:98:73:87:BF:5C:E7:96:CB:1E:4B:38"]
+        "package_name": "io.github.mcppie.twa",
+        "sha256_cert_fingerprints": ["B2:60:EF:66:B7:B4:67:DC:AA:93:96:A4:C5:30:BB:DA:4F:16:F4:FC:BF:11:11:02:28:41:8A:11:B8:68:E6:C4"]
       }
     }]
