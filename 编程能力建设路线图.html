@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>编程能力建设路线图 · 从「做不出程序」到「能写工程」</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --code:#a97bff; --cyan:#38d0d8; --green:#2ecc8f;
+    --orange:#f5a623; --red:#ff7a7a; --blue:#5b9bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 80px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  header{padding:52px 0 34px;border-bottom:1px solid var(--line);margin-bottom:34px;position:relative;overflow:hidden}
+  header::before{
+    content:"";position:absolute;inset:-130px -40% auto -40%;height:340px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(169,123,255,.14),transparent 70%);pointer-events:none;
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--code);
+    border:1px solid rgba(169,123,255,.35);background:rgba(169,123,255,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:16px;
+  }
+  h1{font-size:30px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14.5px;font-weight:400;color:var(--tx3);margin-top:10px;letter-spacing:0}
+
+  section{margin-bottom:44px}
+  h2{font-size:19px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--code)}
+  h2.c::before{background:var(--cyan)} h2.g::before{background:var(--green)}
+  h2.o::before{background:var(--orange)} h2.b::before{background:var(--blue)}
+  .sub{font-size:13.5px;color:var(--tx3);margin-bottom:20px;padding-left:14px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  .card + .card{margin-top:14px}
+  .plain{list-style:none}
+  .plain li{position:relative;padding-left:18px;margin-bottom:11px;font-size:14px;color:var(--tx2)}
+  .plain li:last-child{margin-bottom:0}
+  .plain li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)}
+  .plain li b{color:var(--tx);font-weight:600}
+  code{
+    font-family:"Cascadia Code","Consolas","SF Mono",monospace;font-size:12.5px;
+    background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cyan);
+  }
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .warn{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .danger{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);border-radius:12px;padding:16px 20px;font-size:13.5px;color:var(--tx2)}
+  .info b,.warn b,.danger b{color:var(--tx)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:var(--tx3);font-weight:600;letter-spacing:.04em;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  td b{color:var(--tx)}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+
+  /* 阶梯卡片 */
+  .lvl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin-bottom:16px}
+  .lvl-hd{display:flex;align-items:center;gap:14px;padding:16px 22px;background:var(--card2);border-bottom:1px solid var(--line)}
+  .lvl-no{
+    flex:0 0 38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:700;background:rgba(169,123,255,.14);color:var(--code);border:1px solid rgba(169,123,255,.3)
+  }
+  .lvl-t{flex:1}
+  .lvl-t .tt{font-size:15.5px;font-weight:700}
+  .lvl-t .st{font-size:12.5px;color:var(--tx3);margin-top:2px}
+  .lvl-bd{padding:20px 22px}
+  .lvl.done{opacity:.55}
+  .lvl.done .tt{text-decoration:line-through}
+  .ckwrap{flex:0 0 auto}
+  .ckwrap input{width:18px;height:18px;cursor:pointer;accent-color:var(--code)}
+
+  .spec{display:grid;grid-template-columns:92px 1fr;gap:8px 16px;font-size:13.5px;margin-bottom:16px}
+  .spec dt{color:var(--tx3);font-size:12.5px;padding-top:2px}
+  .spec dd{color:var(--tx2)}
+  .spec dd b{color:var(--tx)}
+
+  pre{
+    background:#0b0d12;border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;overflow-x:auto;margin:14px 0 6px;
+    font-family:"Cascadia Code","Consolas","SF Mono",monospace;
+    font-size:12.5px;line-height:1.65;color:#c9d3e6;
+  }
+  pre .cm{color:#5d6b82}
+  pre .kw{color:#c792ea}
+  pre .fn{color:#82aaff}
+  pre .st{color:#c3e88d}
+  pre .nm{color:#f78c6c}
+  .cap{font-size:12px;color:var(--tx3);margin-bottom:4px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+  .progbar{height:8px;background:var(--card2);border-radius:100px;overflow:hidden;margin:14px 0 8px;border:1px solid var(--line)}
+  .progbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--code),var(--cyan));transition:width .35s ease}
+  .ptxt{font-size:12.5px;color:var(--tx3)}
+
+  footer{border-top:1px solid var(--line);padding-top:24px;font-size:12px;color:var(--tx3);line-height:1.9}
+
+  /* ===== 打印 / PDF 专用 ===== */
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+
+    :root{
+      --bg:#0e1015 !important; --card:#181c24 !important; --card2:#1e2330 !important;
+      --line:#272d3a !important; --line2:#333b4d !important;
+      --tx:#e8ebf2 !important; --tx2:#aab3c4 !important; --tx3:#7c8699 !important;
+      --prob:#ff7a7a !important; --phys:#f5a623 !important; --math:#5b9bff !important;
+      --eng:#2ecc8f !important; --code:#a97bff !important; --dm:#22d3ee !important;
+      --circ:#fb923c !important; --cyan:#38d0d8 !important;
+      --green:#2ecc8f !important; --orange:#f5a623 !important; --red:#ff7a7a !important; --blue:#5b9bff !important;
+    }
+    .card,.ex,.lvl,.blk,.hero,.verdict,.tl,.tscroll{ background:#181c24 !important; }
+    .lvl-hd,.hero-hd{ background:#1e2330 !important; }
+    .info{ background:#12262a !important; } .warn{ background:#2a2317 !important; } .danger{ background:#2a1a1a !important; }
+    h1,h2,h3,h4,.tt,.t,.big,td b,.plain li b,.kv dd b,.spec dd b{ color:#e8ebf2 !important; }
+    .plain li,td,.sub,.kv dd,.spec dd,p,.cap,.tl-x{ color:#aab3c4 !important; }
+    .tl-d,.ptxt,.st,.lvl-t .st{ color:#7c8699 !important; }
+    .ex .nm,.ex .cd{ color:#8f99ab !important; }
+    th{ color:#8f99ab !important; }
+
+    *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    html{ background:#0e1015 !important; }
+    body{ background:#0e1015 !important; padding:7mm 6mm 0 !important; }
+    section:last-of-type{ margin-bottom:0 !important; }
+    footer{ margin-bottom:0 !important; }
+    .wrap{ max-width:100% !important; padding:0 !important; }
+    header{ padding:14px 0 12px !important; margin-bottom:14px !important; }
+    header::before{ display:none !important; }
+    h1{ font-size:20px !important; }
+    h1 small{ font-size:11px !important; }
+    section{ margin-bottom:16px !important; page-break-inside:auto; }
+    h2{ font-size:14px !important; margin-bottom:4px !important; page-break-after:avoid; }
+    .sub{ font-size:10.5px !important; margin-bottom:10px !important; }
+    .hero,.verdict,.gantt,.blocks{ page-break-inside:avoid; }
+    .lvl,.blk,.tl{ page-break-inside:auto; }
+    .lvl-hd{ page-break-after:avoid; }
+    .lvl-bd>dl,.spec{ page-break-inside:avoid; }
+    .card,.tscroll{ page-break-inside:auto; }
+    pre{ page-break-inside:auto; }
+    tr,li{ page-break-inside:avoid; }
+    thead{ display:table-header-group; }
+    .toolbar,.progbar,.ptxt,input[type=checkbox],footer{ display:none !important; }
+    .tscroll{ overflow:visible !important; }
+    pre{ overflow:visible !important; white-space:pre-wrap !important; word-break:break-word; }
+    body{ font-size:10.5px !important; line-height:1.55 !important; }
+    .plain li{ font-size:10.5px !important; margin-bottom:6px !important; }
+    table{ font-size:9.5px !important; }
+    th,td{ padding:5px 7px !important; }
+    code{ font-size:9px !important; }
+    pre{ font-size:8.6px !important; line-height:1.5 !important; padding:10px 12px !important; }
+    .lvl-hd,.hero-hd{ padding:10px 14px !important; }
+    .lvl-bd,.hero-bd,.card{ padding:12px 14px !important; }
+    .spec{ font-size:10px !important; }
+    .kv{ font-size:10.5px !important; }
+    .info,.warn,.danger{ font-size:10.5px !important; padding:10px 13px !important; }
+    .exams{ gap:8px !important; margin-top:14px !important; }
+    .ex{ padding:9px 11px !important; }
+    .ex .dt{ font-size:12px !important; }
+  }
+
+  /* ===== 手机适配 ===== */
+  @media (max-width:640px){
+    .wrap{ max-width:100% !important; padding:0 12px !important; }
+    body{ font-size:14px !important; }
+    h1{ font-size:21px !important; }
+    h1 small{ font-size:12.5px !important; }
+    h2{ font-size:16px !important; }
+    .sub{ font-size:12px !important; padding-left:10px !important; }
+    header{ padding:26px 0 18px !important; }
+    section{ margin-bottom:26px !important; }
+    .card,.hero-bd,.today-bd,.lvl-bd,.verdict{ padding:15px 14px !important; }
+    .plain li{ font-size:13px !important; margin-bottom:9px !important; }
+    .info,.warn,.danger{ padding:13px 14px !important; font-size:12.5px !important; }
+    table{ font-size:12px !important; }
+    th,td{ padding:8px !important; }
+    .tscroll{ -webkit-overflow-scrolling:touch; }
+    .tscroll table{ min-width:540px; }
+    .exams{ grid-template-columns:1fr 1fr !important; gap:9px !important; }
+    .ex{ padding:11px 12px !important; }
+    .ex .dt{ font-size:13.5px !important; }
+    .blocks{ grid-template-columns:1fr !important; }
+    .gantt{ font-size:10.5px !important; }
+    .glab{ width:64px !important; font-size:10.5px !important; }
+    .kv{ grid-template-columns:74px 1fr !important; gap:8px 12px !important; font-size:13px !important; }
+    .spec{ grid-template-columns:66px 1fr !important; gap:6px 10px !important; font-size:12.5px !important; }
+    pre{ font-size:10px !important; padding:12px 10px !important; }
+    .lvl-hd,.hero-hd{ padding:12px 14px !important; gap:10px !important; }
+    .lvl-no{ flex:0 0 32px !important; height:32px !important; font-size:14px !important; }
+    .lvl-t .tt{ font-size:14px !important; }
+    .lvl-t .st{ font-size:11.5px !important; }
+    .verdict .big{ font-size:16px !important; }
+    .tl{ padding-left:22px !important; }
+    .tl-t{ font-size:13.5px !important; }
+    .tl-x{ font-size:12px !important; }
+    .pid{ font-size:11px !important; }
+    footer{ font-size:11px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">编程能力建设 · 2026 秋</div>
+  <h1>从「做不出程序」到「能写工程」
+    <small>六个项目阶梯 · 每级只加一个新维度 · 脚手架递减 · 每天洛谷 3 题打底</small>
+  </h1>
+</header>
+
+<!-- ===== 诊断 ===== -->
+<section>
+  <h2 class="o">先把问题说准：你的缺口不是语法</h2>
+  <p class="sub">「C 语言课过了，但连最简单的程序都做不出来」——这不矛盾，因为它们是两种不同的能力。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>你练过的</b>：C 语言课的作业几乎全是「补全这个函数」「输出这个图形」「求这个数列的和」。这类练习<b>已经告诉你第一步做什么、第二步做什么</b>，你只需要把语法填进去。</li>
+      <li><b>你没练过的</b>：给你一句模糊的需求（「做个能记账的东西」），你要自己想清楚：<b>数据怎么存？分成几个功能？每个功能对应哪个函数？输入错了怎么办？</b>——这叫程序构造。</li>
+      <li><b>打个比方</b>：你背熟了所有砖块的名称（int、for、if、数组、指针），但从来没有盖过房子。所以一动手就不知道第一块砖放哪，这不是能力问题，是<b>练习类型缺失</b>。</li>
+      <li><b>结论</b>：纯刷题解决不了这件事。刷题题目把输入输出描述得清清楚楚，不需要你做需求分析。<b>刷题练「算法实现」，做项目才练「程序构造」</b>，两个都要，但项目是主线。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 三类能力 ===== -->
+<section>
+  <h2 class="c">三类能力，分开练</h2>
+  <p class="sub">计算机专业真正的核心能力有三个方向，混在一起练会互相拖累。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:110px">能力</th><th style="width:150px">表现</th><th>怎么练</th><th style="width:130px">什么时候</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>算法实现</b></td>
+        <td>给明确输入输出，写出正确代码</td>
+        <td>洛谷题单，从【入门1】开始，每天 3 题</td>
+        <td>贯穿全程</td>
+      </tr>
+      <tr>
+        <td><b>程序构造</b></td>
+        <td>给模糊需求，设计出程序结构</td>
+        <td><b>做小项目</b>，六级阶梯，从 80 行到 250 行</td>
+        <td><b>主线，10 月起</b></td>
+      </tr>
+      <tr>
+        <td><b>代码阅读</b></td>
+        <td>看懂别人的代码在干什么</td>
+        <td>读小型开源项目，画流程图，逐行标注</td>
+        <td>寒假开始</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn" style="margin-top:14px">
+    <b>为什么代码阅读被排到最后</b>：读别人的代码需要先有「自己写过」的经验做锚点。你连 200 行的程序都没构造过，去读 cJSON 那种一千行的项目只会更挫败。<b>先自己盖一间小房子，再去看别人怎么盖楼</b>。
+  </div>
+</section>
+
+<!-- ===== 环境 ===== -->
+<section>
+  <h2 class="b">第 0 步：环境（已完成）</h2>
+  <p class="sub">本机原先只有 VS Code、没有编译器——这意味着你从来没有「随手跑代码」的条件。这个摩擦大到足以让人永远不开始。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>已装</b>：w64devkit（MinGW-w64 便携版），位置 <code>C:\w64devkit</code>，含 gcc / g++ / gdb / make。已加入 PATH。</li>
+      <li><b>验证</b>：打开终端输入 <code>gcc --version</code>，能看到版本号就说明通了。</li>
+      <li><b>编译运行（命令行，最快）</b>：<br>
+        <code>gcc hello.c -o hello.exe</code> 然后 <code>.\hello.exe</code><br>
+        <b>养成加 <code>-Wall -Wextra</code> 的习惯</b>：<code>gcc -Wall -Wextra hello.c -o hello.exe</code>，它会提前告诉你哪里写错了。</li>
+      <li><b>VS Code 里一键编译</b>：装扩展 <b>C/C++</b>（Microsoft 官方），然后在项目文件夹下建 <code>.vscode\tasks.json</code>，内容见下面。<b>之后按 Ctrl+Shift+B 就编译，F5 就调试</b>。</li>
+    </ul>
+    <div class="cap" style="margin-top:16px">.vscode\tasks.json</div>
+    <pre>{
+  <span class="st">"version"</span>: <span class="st">"2.0.0"</span>,
+  <span class="st">"tasks"</span>: [
+    {
+      <span class="st">"label"</span>: <span class="st">"build"</span>,
+      <span class="st">"type"</span>: <span class="st">"shell"</span>,
+      <span class="st">"command"</span>: <span class="st">"gcc"</span>,
+      <span class="st">"args"</span>: [<span class="st">"-Wall"</span>, <span class="st">"-Wextra"</span>, <span class="st">"-g"</span>, <span class="st">"${file}"</span>, <span class="st">"-o"</span>, <span class="st">"${fileDirname}\\${fileBasenameNoExtension}.exe"</span>],
+      <span class="st">"group"</span>: { <span class="st">"kind"</span>: <span class="st">"build"</span>, <span class="st">"isDefault"</span>: <span class="kw">true</span> }
+    }
+  ]
+}</pre>
+    <div class="info" style="margin-top:14px">
+      <b>关键不是装了什么，是那个循环</b>：改一行 → 编译 → 看结果，全程 5 秒内。这个循环跑顺了，学习速度会快一个数量级；跑不顺，所有学习都是纸上谈兵。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 阶梯 ===== -->
+<section>
+  <h2>六级项目阶梯</h2>
+  <p class="sub">每一级<b>只加一个新维度</b>（输入 → 状态 → 持久化 → 数据结构 → 工程结构 → 语言抽象），不会一次淹没你。勾选自动保存。</p>
+
+  <div class="progbar"><i id="pi"></i></div>
+  <div class="ptxt" id="pt">已完成 0 / 6 级</div>
+
+  <!-- 第 1 级 -->
+  <div class="lvl" data-i="1" style="margin-top:20px">
+    <div class="lvl-hd">
+      <div class="lvl-no">1</div>
+      <div class="lvl-t">
+        <div class="tt">个税计算器</div>
+        <div class="st">约 80 行 · 新维度：<b>输入 → 判断 → 输出</b> · 我给完整代码</div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="1"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>要做什么</dt><dd>输入税前月工资，按七级累进税率算出个税和税后收入，输出一张明细表</dd>
+        <dt>新学到</dt><dd><code>scanf</code> 的<b>返回值检查</b>（这是新手最容易漏的一步）、<code>double</code> 与 <code>%lf</code>、<code>if-else</code> 链、<code>printf</code> 宽度与精度控制</dd>
+        <dt>验收标准</dt><dd>输入 10000 → 应纳税所得 4000 → 个税 190 → 税后 8810。<b>四个数都对，才算过</b></dd>
+      </dl>
+      <div class="cap">完整代码（先跑通，再改造）</div>
+      <pre><span class="cm">/* 个税计算器 —— 中国工资薪金七级累进税率（简化版） */</span>
+<span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> salary;    <span class="cm">/* 税前工资 */</span>
+    <span class="kw">double</span> social;    <span class="cm">/* 三险一金 */</span>
+    <span class="kw">double</span> taxable;   <span class="cm">/* 应纳税所得额 */</span>
+    <span class="kw">double</span> tax = 0;   <span class="cm">/* 个税 */</span>
+    <span class="kw">double</span> after;     <span class="cm">/* 税后到手 */</span>
+
+    <span class="fn">printf</span>(<span class="st">"请输入税前月工资（元）："</span>);
+
+    <span class="cm">/* 关键：scanf 返回"成功读到了几个值"，不等于 1 说明输入不是数字 */</span>
+    <span class="kw">if</span> (<span class="fn">scanf</span>(<span class="st">"%lf"</span>, &amp;salary) != 1) {
+        <span class="fn">printf</span>(<span class="st">"输入有误，请输入数字。\n"</span>);
+        <span class="kw">return</span> 1;
+    }
+    <span class="kw">if</span> (salary &lt;= 0) {
+        <span class="fn">printf</span>(<span class="st">"工资必须大于 0。\n"</span>);
+        <span class="kw">return</span> 1;
+    }
+
+    social  = salary * 0.10;              <span class="cm">/* 简化：三险一金按 10% 算 */</span>
+    taxable = salary - social - 5000.0;   <span class="cm">/* 起征点 5000 */</span>
+    <span class="kw">if</span> (taxable &lt; 0) taxable = 0;          <span class="cm">/* 工资低时不能是负数 */</span>
+
+    <span class="cm">/* 七级累进税率：税率 + 速算扣除数 */</span>
+    <span class="kw">if</span>      (taxable &lt;= 3000)  tax = taxable * 0.03;
+    <span class="kw">else if</span> (taxable &lt;= 12000) tax = taxable * 0.10 - 210;
+    <span class="kw">else if</span> (taxable &lt;= 25000) tax = taxable * 0.20 - 1410;
+    <span class="kw">else if</span> (taxable &lt;= 35000) tax = taxable * 0.25 - 2660;
+    <span class="kw">else if</span> (taxable &lt;= 55000) tax = taxable * 0.30 - 4410;
+    <span class="kw">else if</span> (taxable &lt;= 80000) tax = taxable * 0.35 - 7160;
+    <span class="kw">else</span>                      tax = taxable * 0.45 - 15160;
+
+    after = salary - social - tax;
+
+    <span class="fn">printf</span>(<span class="st">"\n-------- 计算结果 --------\n"</span>);
+    <span class="fn">printf</span>(<span class="st">"税前工资   : %10.2f 元\n"</span>, salary);
+    <span class="fn">printf</span>(<span class="st">"三险一金   : %10.2f 元\n"</span>, social);
+    <span class="fn">printf</span>(<span class="st">"应纳税所得 : %10.2f 元\n"</span>, taxable);
+    <span class="fn">printf</span>(<span class="st">"应缴个税   : %10.2f 元\n"</span>, tax);
+    <span class="fn">printf</span>(<span class="st">"税后到手   : %10.2f 元\n"</span>, after);
+    <span class="fn">printf</span>(<span class="st">"--------------------------\n"</span>);
+
+    <span class="kw">return</span> 0;
+}</pre>
+      <div class="info" style="margin-top:14px">
+        <b>三个改造任务（按顺序做，做完打勾）</b><br>
+        ① 把 10% 改成让用户输入（体会「硬编码」和「参数」的区别）<br>
+        ② 加一个循环，让程序能连续算多个人，输入 0 才退出（体会 <code>while</code> + 提前终止）<br>
+        ③ 加年终奖：年终奖单独计税（用「除以 12 找税率，再全额乘」的算法）——<b>这个需要你自己查政策，是第一次真正的「需求分析」</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第 2 级 -->
+  <div class="lvl" data-i="2">
+    <div class="lvl-hd">
+      <div class="lvl-no">2</div>
+      <div class="lvl-t">
+        <div class="tt">记账本 v1（纯内存）</div>
+        <div class="st">约 150 行 · 新维度：<b>状态</b>（数据要活到下一次操作） · 我给骨架</div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="2"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>功能</dt><dd>菜单循环：<b>1 记一笔 / 2 看总额 / 3 列明细 / 4 按类别汇总 / 0 退出</b></dd>
+        <dt>新学到</dt><dd><b>数组</b>（数据存在哪）、<b>菜单循环</b>（<code>while</code> + <code>switch</code> 的经典组合）、<b>计数器</b>（当前存了几笔）、字符串比较 <code>strcmp</code></dd>
+        <dt>验收标准</dt><dd>连续记 5 笔不同类别的账，总额和分类汇总都正确；输错菜单号不崩溃</dd>
+        <dt>常见坑</dt><dd>① 数组越界（记满 100 笔还继续记）② <code>switch</code> 忘了 <code>break</code> ③ 用 <code>==</code> 比较字符串（C 语言里必须用 <code>strcmp</code>）</dd>
+      </dl>
+      <div class="warn">
+        <b>这一级的真正难点不是语法，是设计</b>：你要先想清楚「一笔账要存哪些字段」（金额、类别、日期、备注？），再决定「用什么装这些账」（几个平行数组？还是先各存各的？）。<b>把这个想清楚再动手，比写完再改快十倍</b>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 第 3 级 -->
+  <div class="lvl" data-i="3">
+    <div class="lvl-hd">
+      <div class="lvl-no">3</div>
+      <div class="lvl-t">
+        <div class="tt">记账本 v2（存文件）</div>
+        <div class="st">约 200 行 · 新维度：<b>持久化</b>（关掉再打开数据还在） · 我给接口说明</div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="3"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>要加什么</dt><dd>启动时从文件读入全部账目，退出时写回文件；文件不存在时不能崩</dd>
+        <dt>新学到</dt><dd><code>fopen / fprintf / fscanf / fclose</code>、<b>文件格式设计</b>（一行一笔还是 CSV？）、<b>错误处理</b>（<code>fopen</code> 返回 <code>NULL</code> 怎么办）</dd>
+        <dt>验收标准</dt><dd>记 3 笔 → 退出 → 重新打开 → 3 笔还在，且总额一致</dd>
+        <dt>常见坑</dt><dd>① 忘了 <code>fclose</code> 导致数据没写进去 ② 文件路径用了相对路径，换个目录运行就找不到 ③ 读文件时没判断读到结尾（<code>fscanf</code> 返回值）</dd>
+      </dl>
+      <div class="info">
+        <b>这是跨越性的一步</b>：前面两级的程序「跑一次就没了」，这一级开始你的程序有了<b>记忆</b>。从这之后，「程序」和「一段计算过程」才真正分家。
+      </div>
+    </div>
+  </div>
+
+  <!-- 第 4 级 -->
+  <div class="lvl" data-i="4">
+    <div class="lvl-hd">
+      <div class="lvl-no">4</div>
+      <div class="lvl-t">
+        <div class="tt">通讯录</div>
+        <div class="st">约 250 行 · 新维度：<b>数据结构</b>（struct） · 只给需求</div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="4"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>功能</dt><dd><b>增 / 删 / 改 / 查 / 按姓名排序 / 存文件 / 读文件</b>，菜单驱动</dd>
+        <dt>新学到</dt><dd><code>struct</code> 定义与初始化、结构体数组、<code>strcpy</code> 赋值、<b>冒泡或选择排序</b>、<b>删除元素后的数组搬移</b></dd>
+        <dt>验收标准</dt><dd>加 10 个人 → 删中间一个 → 排序 → 保存 → 重开 → 数据一致且有序</dd>
+        <dt>常见坑</dt><dd>① 结构体里的 <code>char name[20]</code> 不能直接赋值，要用 <code>strcpy</code> ② 删除时忘了把后面的元素往前挪，留下空洞 ③ 排序时交换的是整个结构体，不是只换姓名</dd>
+      </dl>
+      <div class="warn">
+        <b>做完这一级，基本就「会写程序」了</b>。它是 C 语言课程设计的经典题，覆盖了数组、字符串、结构体、指针（排序时）、文件五个核心点。<b>这一级不要我给任何代码</b>——前面三级攒的手感，就是为了这一级能自己从零开始。
+      </div>
+    </div>
+  </div>
+
+  <!-- 第 5 级 -->
+  <div class="lvl" data-i="5">
+    <div class="lvl-hd">
+      <div class="lvl-no">5</div>
+      <div class="lvl-t">
+        <div class="tt">把通讯录拆成多文件</div>
+        <div class="st">不增加功能 · 新维度：<b>工程结构</b> · 这是分水岭</div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="5"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>要做的事</dt><dd>拆成 <code>main.c</code>（菜单和流程）+ <code>contact.c</code>（所有功能实现）+ <code>contact.h</code>（结构体定义和函数声明）+ <code>Makefile</code></dd>
+        <dt>新学到</dt><dd><b>头文件</b>为什么存在、<b>声明与定义的区别</b>、<b>编译单元</b>、<code>#include "..."</code> 和 <code>&lt;...&gt;</code> 的区别、<b>Makefile</b> 的最小写法</dd>
+        <dt>验收标准</dt><dd>只改 <code>contact.c</code> 里的一个函数，<code>make</code> 只重新编译那一个文件</dd>
+        <dt>常见坑</dt><dd>① 头文件被重复 include 导致重定义（需要 <code>#ifndef</code> 守卫）② 在 <code>.h</code> 里定义变量而不是声明 ③ 函数忘了在头文件里声明，编译时报 implicit declaration</dd>
+      </dl>
+      <div class="info">
+        <b>为什么这是分水岭</b>：单文件程序叫「脚本」，多文件 + Makefile 才叫「工程」。<b>从这一级开始，你写的代码才能被别人接手</b>——这也是为什么所有真实项目都是多文件的。
+      </div>
+    </div>
+  </div>
+
+  <!-- 第 6 级 -->
+  <div class="lvl" data-i="6">
+    <div class="lvl-hd">
+      <div class="lvl-no">6</div>
+      <div class="lvl-t">
+        <div class="tt">换语言重写（寒假）</div>
+        <div class="st">Python 或 C++ · 新维度：<b>语言抽象</b></div>
+      </div>
+      <div class="ckwrap"><input type="checkbox" class="cb" data-i="6"></div>
+    </div>
+    <div class="lvl-bd">
+      <dl class="spec">
+        <dt>做什么</dt><dd>用 Python 把通讯录重写一遍，<b>对比两种语言各花了多少行、哪些地方 C 让你痛苦</b></dd>
+        <dt>会体会到</dt><dd>C 里 250 行的东西，Python 大概 80 行——因为字符串、列表、字典都是内置的。你会第一次理解<b>「语言是工具，不是信仰」</b></dd>
+        <dt>验收标准</dt><dd>能说出三个「C 麻烦但 Python 方便」的具体例子，和两个「C 清楚但 Python 模糊」的例子</dd>
+      </dl>
+      <div class="warn">
+        <b>为什么要先吃 C 的苦再换</b>：C 逼你理解内存、指针、类型——这些是所有语言的底层。先学 Python 的人往往写三年也不知道变量存在哪。<b>但也不能一直待在 C 里</b>：它没有字符串类型、没有容器，长期只用它会限制视野。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 洛谷 ===== -->
+<section>
+  <h2 class="g">配菜：洛谷每天 3 题</h2>
+  <p class="sub">项目线是主线，刷题是配菜。但配菜不能断——它维持的是「手不生」。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>为什么是洛谷不是力扣</b>：力扣的 C 支持很差（没有字符串类型、没有动态数组、没有哈希表），第一题 Two Sum 就得手写哈希表，你会以为自己不会编程，其实是工具不对。</li>
+      <li><b>洛谷的好处</b>：官方题单是阶梯式的（【入门1】→【入门2】→…→【普及/提高-】），不用自己找题；C 语言完全够用；每题都有题解；<b>格式要求严格，会逼你真正掌握 scanf 的返回值和多组输入</b>。</li>
+      <li><b>起点</b>：注册后直接做 <code>P1001 A+B Problem</code>。这是所有刷题者的第一题，五行代码。<b>它的意义不在题目本身，在于把状态从「还没开始」改成「已经开始了」</b>。</li>
+      <li><b>题单路径</b>：【入门1】顺序结构（15 题）→【入门2】分支结构（15 题）→【入门3】循环结构 →【入门4】数组 →【入门5】字符串 →【算法1-1】模拟 →【算法1-2】排序。</li>
+      <li><b>节奏</b>：每天 3 题，10 月起步阶段只做前两个题单。<b>先写项目，再做 3 题</b>——项目有「今天做出来了」的即时反馈，能喂养动力；刷题容易变成机械重复。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 排进日程 ===== -->
+<section>
+  <h2 class="b">排进日程（任务量，不是时长）</h2>
+  <p class="sub">编程这学期没有死线（C 语言是上学期课，已结课），所以它的定位是<b>不断线</b>，不是主攻。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:120px">时间</th><th style="width:170px">项目线</th><th>刷题</th><th style="width:110px">定位</th></tr></thead>
+    <tbody>
+      <tr><td><b>10 月</b></td><td>第 1 级（计算器）</td><td>洛谷每天 3 题，【入门1】【入门2】</td><td>起步 / 破冰</td></tr>
+      <tr><td><b>11 月</b></td><td>第 2 级 → 第 3 级</td><td>每天 3 题，【入门3】【入门4】</td><td>不断线</td></tr>
+      <tr><td><b>12 月</b></td><td>第 4 级（通讯录）</td><td>每天 1–2 题，维持手感</td><td>维持（期末优先）</td></tr>
+      <tr><td><b>寒假</b></td><td>第 5 级 → 第 6 级</td><td>【算法1-x】系列</td><td><b>主攻</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="danger" style="margin-top:14px">
+    <b>关于「C 语言忘得差不多了」</b>：你忘的是<b>语法细节</b>（分号、<code>%d</code> 和 <code>%f</code>、<code>fopen</code> 的参数顺序），这些查一下就回来，职业程序员也天天查文档。<b>没忘的是编程直觉</b>——变量、循环、条件、函数是什么，这些东西一旦理解就不会消失。<br>
+    而且<b>「忘了」比「以为自己会」好教得多</b>。白纸状态学东西反而快，因为没有错误习惯要纠正。
+  </div>
+</section>
+
+<footer>
+  <div>生成于 2026-10-22 ｜ 配套：<code>个人学习总规划_2026秋.html</code>（v5 总表）</div>
+  <div>设计原则：每级只加一个新维度 · 脚手架递减（完整代码 → 骨架 → 只给需求）· 验收标准优先于任务量</div>
+  <div>下一份文件：第 1 级完成后，按你的实际用时校准第 2 级的规模</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var KEY='prog-roadmap-2026';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+
+  var boxes=document.querySelectorAll('.cb');
+  function sync(){
+    var n=0;
+    boxes.forEach(function(c){ if(c.checked) n++; });
+    document.getElementById('pi').style.width=(n/boxes.length*100)+'%';
+    document.getElementById('pt').textContent='已完成 '+n+' / '+boxes.length+' 级';
+  }
+  boxes.forEach(function(c){
+    var i=c.dataset.i;
+    if(saved[i]){ c.checked=true; c.closest('.lvl').classList.add('done'); }
+    c.addEventListener('change',function(){
+      var lv=c.closest('.lvl');
+      if(c.checked){ saved[i]=1; lv.classList.add('done'); }
+      else { delete saved[i]; lv.classList.remove('done'); }
+      try{ localStorage.setItem(KEY,JSON.stringify(saved)); }catch(e){}
+      sync();
+    });
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
