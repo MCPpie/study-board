@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>洛谷题单进度表 · 入门 1–3</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --must:#2ecc8f; --skip:#7c8699; --mid:#f5a623; --now:#5b9bff; --cyan:#38d0d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);line-height:1.7;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 70px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  header{padding:46px 0 30px;border-bottom:1px solid var(--line);margin-bottom:30px;position:relative;overflow:hidden}
+  header::before{content:"";position:absolute;inset:-130px -40% auto -40%;height:320px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(91,155,255,.13),transparent 70%);pointer-events:none}
+  .kicker{display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--now);
+    border:1px solid rgba(91,155,255,.35);background:rgba(91,155,255,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:15px}
+  h1{font-size:28px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14px;font-weight:400;color:var(--tx3);margin-top:9px;letter-spacing:0}
+
+  section{margin-bottom:36px}
+  h2{font-size:18px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--now)}
+  h2.g::before{background:var(--must)} h2.o::before{background:var(--mid)}
+  .sub{font-size:13px;color:var(--tx3);margin-bottom:16px;padding-left:14px}
+
+  code{font-family:"Cascadia Code","Consolas",monospace;font-size:12.5px;
+    background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cyan)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11.5px;color:var(--tx3);font-weight:600;letter-spacing:.04em;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+
+  .pid{font-family:"Cascadia Code","Consolas",monospace;font-size:12px;color:var(--now);font-weight:600;white-space:nowrap}
+  .nm{color:var(--tx)}
+  .tip{color:var(--tx3);font-size:12px}
+  .tip b{color:var(--tx2);font-weight:600}
+  .ck{width:30px;text-align:center}
+  .ck input{width:15px;height:15px;cursor:pointer;accent-color:var(--must)}
+
+  .tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:100px;white-space:nowrap;font-weight:600}
+  .t-must{background:rgba(46,204,143,.13);color:var(--must);border:1px solid rgba(46,204,143,.3)}
+  .t-skip{background:rgba(124,134,153,.13);color:var(--skip);border:1px solid rgba(124,134,153,.3)}
+  .t-mid{background:rgba(245,166,35,.13);color:var(--mid);border:1px solid rgba(245,166,35,.3)}
+  .t-now{background:rgba(91,155,255,.16);color:#8ab4ff;border:1px solid rgba(91,155,255,.4)}
+
+  tr.done td{opacity:.42}
+  tr.done .nm{text-decoration:line-through}
+
+  .today{border:1px solid rgba(91,155,255,.4);border-radius:14px;overflow:hidden;background:var(--card)}
+  .today-hd{padding:14px 20px;background:rgba(91,155,255,.08);border-bottom:1px solid rgba(91,155,255,.22);
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .today-hd .t{font-size:15.5px;font-weight:700;flex:1;min-width:180px}
+  .today-bd{padding:18px 20px}
+  .q{margin-bottom:20px}
+  .q:last-child{margin-bottom:0}
+  .q-h{font-size:14px;font-weight:700;margin-bottom:5px}
+  .q-h .pid{font-size:13px;margin-right:6px}
+  .q-b{font-size:13px;color:var(--tx2)}
+  .q-b b{color:var(--tx)}
+  .q-b .pit{color:#ffb4b4}
+  .q-b .out{display:block;margin-top:6px;padding:7px 11px;background:#0b0d12;border:1px solid var(--line);
+    border-radius:8px;font-family:"Cascadia Code",monospace;font-size:12px;color:#c3e88d}
+
+  .progbar{height:8px;background:var(--card2);border-radius:100px;overflow:hidden;margin:12px 0 8px;border:1px solid var(--line)}
+  .progbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--must),var(--cyan));transition:width .3s}
+  .ptxt{font-size:12.5px;color:var(--tx3)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);border-radius:12px;padding:15px 18px;font-size:13px;color:var(--tx2)}
+  .warn{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.22);border-radius:12px;padding:15px 18px;font-size:13px;color:var(--tx2)}
+  .danger{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);border-radius:12px;padding:15px 18px;font-size:13px;color:var(--tx2)}
+  .info b,.warn b,.danger b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:20px;font-size:12px;color:var(--tx3);line-height:1.9}
+  @media print{
+    .progbar,.ptxt,input{display:none!important}
+    body{background:#0e1015!important}
+  }
+
+  /* ===== 手机适配 ===== */
+  @media (max-width:640px){
+    .wrap{ max-width:100% !important; padding:0 12px !important; }
+    body{ font-size:14px !important; }
+    h1{ font-size:21px !important; }
+    h1 small{ font-size:12.5px !important; }
+    h2{ font-size:16px !important; }
+    .sub{ font-size:12px !important; padding-left:10px !important; }
+    header{ padding:26px 0 18px !important; }
+    section{ margin-bottom:26px !important; }
+    .card,.hero-bd,.today-bd,.lvl-bd,.verdict{ padding:15px 14px !important; }
+    .plain li{ font-size:13px !important; margin-bottom:9px !important; }
+    .info,.warn,.danger{ padding:13px 14px !important; font-size:12.5px !important; }
+    table{ font-size:12px !important; }
+    th,td{ padding:8px !important; }
+    .tscroll{ -webkit-overflow-scrolling:touch; }
+    .tscroll table{ min-width:540px; }
+    .exams{ grid-template-columns:1fr 1fr !important; gap:9px !important; }
+    .ex{ padding:11px 12px !important; }
+    .ex .dt{ font-size:13.5px !important; }
+    .blocks{ grid-template-columns:1fr !important; }
+    .gantt{ font-size:10.5px !important; }
+    .glab{ width:64px !important; font-size:10.5px !important; }
+    .kv{ grid-template-columns:74px 1fr !important; gap:8px 12px !important; font-size:13px !important; }
+    .spec{ grid-template-columns:66px 1fr !important; gap:6px 10px !important; font-size:12.5px !important; }
+    pre{ font-size:10px !important; padding:12px 10px !important; }
+    .lvl-hd,.hero-hd{ padding:12px 14px !important; gap:10px !important; }
+    .lvl-no{ flex:0 0 32px !important; height:32px !important; font-size:14px !important; }
+    .lvl-t .tt{ font-size:14px !important; }
+    .lvl-t .st{ font-size:11.5px !important; }
+    .verdict .big{ font-size:16px !important; }
+    .tl{ padding-left:22px !important; }
+    .tl-t{ font-size:13.5px !important; }
+    .tl-x{ font-size:12px !important; }
+    .pid{ font-size:11px !important; }
+    footer{ font-size:11px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">洛谷题单 · 每天 3 题</div>
+  <h1>入门 1–3 完整题目清单
+    <small>题号已核对洛谷官方题单（training/100–102）｜标出必做 / 可跳 / 中等</small>
+  </h1>
+</header>
+
+<!-- 今天 -->
+<section>
+  <h2 class="g">今天（10/23）就做这 3 道</h2>
+  <p class="sub">从「只会看」到「自己写」的第一步。三道题覆盖顺序结构的三件事：<b>输出 → 输入 → 计算</b>。</p>
+
+  <div class="today">
+    <div class="today-hd">
+      <span class="tag t-now">今天</span>
+      <span class="t">B2002 → P1001 → P5703</span>
+    </div>
+    <div class="today-bd">
+
+      <div class="q">
+        <div class="q-h"><span class="pid">B2002</span> Hello,World!</div>
+        <div class="q-b">
+          输出一行 <code>Hello,World!</code>。
+          <b>坑在这里</b>：<span class="pit">逗号后面没有空格</span>。写成 <code>Hello, World!</code> 会 WA（答案错误）。这是全站最经典的一个坑，第一次踩到能让你记住"输出格式必须逐字符对齐"。
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-h"><span class="pid">P1001</span> A+B Problem</div>
+        <div class="q-b">
+          输入两个整数，输出它们的和。<b>全站第一题，所有人的起点</b>。<br>
+          <b>坑 1</b>：<code>scanf("%d%d", &amp;a, &amp;b)</code> —— <span class="pit">两个 &amp; 都要有</span>，漏了会直接崩溃或算出乱数。<br>
+          <b>坑 2</b>：用 <code>%d</code> 不是 <code>%f</code>，int 和 double 不能混。
+          <span class="out">输入：1 2　　输出：3</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-h"><span class="pid">P5703</span> 【深基2.例5】苹果采购</div>
+        <div class="q-b">
+          n 个同学，每人 x 个苹果，一共要买多少。<br>
+          <b>这是第一道"要用变量算"的题</b>：不再是 <code>a+b</code> 这种现成式子，你要自己写出 <code>n*x</code>。<br>
+          <b>坑</b>：<span class="pit">数据范围</span>。看清楚题目给的 n、x 上限，想想 <code>int</code> 够不够（够，但要养成看范围的习惯——这是以后被 long long 坑的开始）。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="warn" style="margin-top:14px">
+    <b>今天只做 3 题，不要贪多。</b> 做完这 3 道就关掉洛谷，去干电路和数竞。刷题的价值在于<b>每天都做</b>，不在于某天做很多——今天做 15 题然后停一周，效果远不如每天 3 题。
+  </div>
+</section>
+
+<!-- 进度 -->
+<section>
+  <h2>总进度</h2>
+  <div class="progbar"><i id="pi"></i></div>
+  <div class="ptxt" id="pt">已完成 0 / 30 题</div>
+  <p class="sub" style="margin-top:10px">共 33 题，其中 3 道「可跳」不计入进度（做了也可以勾，只是不占分母）。勾选自动保存。</p>
+</section>
+
+<!-- 入门1 -->
+<section>
+  <h2 class="g">【入门1】顺序结构 · 15 题</h2>
+  <p class="sub">目标：能独立写出「读输入 → 算 → 输出」的程序。<b>建议 4 天做完</b>（每天 3 题）。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th class="ck"></th><th style="width:76px">题号</th><th style="width:230px">题目</th><th style="width:64px">标记</th><th>考点 / 坑</th></tr></thead>
+    <tbody>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="B2002"></td><td class="pid">B2002</td><td class="nm">Hello,World!</td><td><span class="tag t-must">必做</span></td><td class="tip">纯输出。<b>逗号后无空格</b></td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="B2025" data-skip="1"></td><td class="pid">B2025</td><td class="nm">输出字符菱形</td><td><span class="tag t-skip">可跳</span></td><td class="tip">纯字符画，和 B2005 重复</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1000" data-skip="1"></td><td class="pid">P1000</td><td class="nm">超级玛丽游戏</td><td><span class="tag t-skip">可跳</span></td><td class="tip">一大段字符画，本质是复制粘贴，耗时无收益</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1001"></td><td class="pid">P1001</td><td class="nm">A+B Problem</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>第一次 scanf</b>，两个 &amp; 别漏</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="B2005"></td><td class="pid">B2005</td><td class="nm">字符三角形</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>输出对齐</b>，数清每行前面几个空格</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5703"></td><td class="pid">P5703</td><td class="nm">【深基2.例5】苹果采购</td><td><span class="tag t-must">必做</span></td><td class="tip">乘法 + <b>先看数据范围</b></td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5704"></td><td class="pid">P5704</td><td class="nm">【深基2.例6】字母转换</td><td><span class="tag t-must">必做</span></td><td class="tip">字符与 ASCII，大小写差 32</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5705"></td><td class="pid">P5705</td><td class="nm">【深基2.例7】数字反转</td><td><span class="tag t-must">必做</span></td><td class="tip">字符串倒序输出的思维</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5706"></td><td class="pid">P5706</td><td class="nm">【深基2.例8】再分肥宅水</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>浮点除法 + 保留小数</b>（%.3f）</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5708"></td><td class="pid">P5708</td><td class="nm">【深基2.习2】三角形面积</td><td><span class="tag t-must">必做</span></td><td class="tip">海伦公式 + <code>sqrt</code>（要 #include &lt;math.h&gt;）</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5707"></td><td class="pid">P5707</td><td class="nm">【深基2.例12】上学迟到</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>向上取整</b> + 时间换算，坑最多的一题</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="B2029"></td><td class="pid">B2029</td><td class="nm">大象喝水</td><td><span class="tag t-must">必做</span></td><td class="tip">除法<b>向上取整</b>（别用 int 直接除）</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1425"></td><td class="pid">P1425</td><td class="nm">小鱼的游泳时间</td><td><span class="tag t-must">必做</span></td><td class="tip">时间差 + 借位（分钟不够向小时借）</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1421"></td><td class="pid">P1421</td><td class="nm">小玉买文具</td><td><span class="tag t-must">必做</span></td><td class="tip">元角换算 + 整除</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P3954"></td><td class="pid">P3954</td><td class="nm">[NOIP 2017 普及组] 成绩</td><td><span class="tag t-must">必做</span></td><td class="tip">加权求和，第一次见"真题"</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 入门2 -->
+<section>
+  <h2 class="o">【入门2】分支结构 · 18 题</h2>
+  <p class="sub">目标：能用 <code>if-else</code> 和 <code>switch</code> 处理多情况。<b>建议 6 天做完</b>。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th class="ck"></th><th style="width:76px">题号</th><th style="width:230px">题目</th><th style="width:64px">标记</th><th>考点 / 坑</th></tr></thead>
+    <tbody>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P2433" data-skip="1"></td><td class="pid">P2433</td><td class="nm">【深基1-2】小学数学 N 合一</td><td><span class="tag t-skip">建议跳</span></td><td class="tip"><b>题目超长</b>，是阅读理解不是编程，很多新手在这劝退</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5709"></td><td class="pid">P5709</td><td class="nm">【深基2.习6】Apples Prologue</td><td><span class="tag t-must">必做</span></td><td class="tip">边界判断，注意"吃完了"的情况</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5710"></td><td class="pid">P5710</td><td class="nm">【深基3.例2】数的性质</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>逻辑运算</b> &amp;&amp; 和 || 的组合</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5711"></td><td class="pid">P5711</td><td class="nm">【深基3.例3】闰年判断</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>经典题</b>：能被4整除且不被100整除，或能被400整除</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5712"></td><td class="pid">P5712</td><td class="nm">【深基3.例4】Apples</td><td><span class="tag t-must">必做</span></td><td class="tip">单复数判断，输出要精确</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5713"></td><td class="pid">P5713</td><td class="nm">【深基3.例5】洛谷团队系统</td><td><span class="tag t-must">必做</span></td><td class="tip">简单比较，2 分钟题</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5714"></td><td class="pid">P5714</td><td class="nm">【深基3.例7】肥胖问题</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>浮点比较</b>，别用 == 比浮点数</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5715"></td><td class="pid">P5715</td><td class="nm">【深基3.例8】三位数排序</td><td><span class="tag t-must">必做</span></td><td class="tip">if 嵌套排序，<b>入门2 的核心题</b></td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5716"></td><td class="pid">P5716</td><td class="nm">【深基3.例9】月份天数</td><td><span class="tag t-must">必做</span></td><td class="tip"><code>switch</code> 的典型用法，注意二月闰年</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1085"></td><td class="pid">P1085</td><td class="nm">[NOIP 2004 普及组] 不高兴的津津</td><td><span class="tag t-must">必做</span></td><td class="tip">找最大值 + 记录位置</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1909"></td><td class="pid">P1909</td><td class="nm">[NOIP 2016 普及组] 买铅笔</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>枚举三种方案取最小</b>，第一次写"最优解"</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P5717"></td><td class="pid">P5717</td><td class="nm">【深基3.习8】三角形分类</td><td><span class="tag t-must">必做</span></td><td class="tip">多重条件判断，<b>顺序很重要</b>（先判能不能成三角形）</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1422"></td><td class="pid">P1422</td><td class="nm">小玉家的电费</td><td><span class="tag t-must">必做</span></td><td class="tip">分段函数，注意区间边界</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1424"></td><td class="pid">P1424</td><td class="nm">小鱼的航程（改进版）</td><td><span class="tag t-must">必做</span></td><td class="tip">循环的雏形，可以先用 if 硬写</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1888"></td><td class="pid">P1888</td><td class="nm">三角函数</td><td><span class="tag t-must">必做</span></td><td class="tip"><b>求最大公约数</b>，第一次写 gcd 循环</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1046"></td><td class="pid">P1046</td><td class="nm">[NOIP 2005 普及组] 陶陶摘苹果</td><td><span class="tag t-must">必做</span></td><td class="tip">计数，第一次要处理"多个数据"</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P4414"></td><td class="pid">P4414</td><td class="nm">[COCI 2006/2007] ABC</td><td><span class="tag t-mid">中等</span></td><td class="tip">排序 + 按字母映射输出，思路绕</td></tr>
+      <tr><td class="ck"><input type="checkbox" class="cb" data-k="P1055"></td><td class="pid">P1055</td><td class="nm">[NOIP 2008 普及组] ISBN 号码</td><td><span class="tag t-mid">中等</span></td><td class="tip">字符串处理 + 取模，<b>本题单最难</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 入门3 预告 -->
+<section>
+  <h2>【入门3】循环结构 · 21 题（预告）</h2>
+  <p class="sub">11 月再做。这里开始真正写 <code>for</code> / <code>while</code>，也是<b>蓝桥杯真正的地基</b>。</p>
+  <div class="card" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px">
+    <div style="font-size:13px;color:var(--tx2);line-height:2">
+      <span class="pid">P5718</span> 找最小值 · <span class="pid">P5719</span> 分类平均 · <span class="pid">P5720</span> 一尺之棰 · <span class="pid">P5721</span> 数字直角三角形 · <span class="pid">P1009</span> 阶乘之和 · <span class="pid">P1980</span> 计数问题 · <span class="pid">P1035</span> 级数求和 · <span class="pid">P2669</span> 金币 · <span class="pid">P5722</span> 数列求和 · <span class="pid">P5723</span> 质数口袋 · <span class="pid">P1217</span> 回文质数 · <span class="pid">P1423</span> 小玉在游泳 · <span class="pid">P1307</span> 数字反转 · <span class="pid">P1720</span> 斐波那契 · <span class="pid">P5724</span> 求极差 · <span class="pid">P1420</span> 最长连号 · <span class="pid">P1075</span> 质因数分解 · <span class="pid">P5725</span> 求三角形 · <span class="pid">P5726</span> 打分 · <span class="pid">P4956</span> Davor · <span class="pid">P1089</span> 津津的储蓄计划
+    </div>
+  </div>
+</section>
+
+<!-- 配套看课 -->
+<section>
+  <h2 class="o">配套看课：翁恺《C 语言程序设计》</h2>
+  <p class="sub">
+    B 站 <code>BV1dr4y1n7vA</code>（浙江大学翁恺，<b>100 集 / 14.2 小时</b>）。
+    <b>结论：这门课值得看，但从头看是浪费——砍掉 4.9 小时，只看 9.2 小时。</b>
+  </p>
+
+  <div class="tscroll" style="margin-bottom:16px">
+  <table>
+    <thead><tr><th style="width:88px">分P</th><th style="width:190px">内容</th><th style="width:72px">时长</th><th style="width:70px">看不看</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td class="pid">P1–P10</td><td>入门 / 第一个程序</td><td>1.1h</td><td><span class="tag t-skip">跳过</span></td><td class="tip">洛谷入门1 前 5 题就在做同样的事，而且是你自己写</td></tr>
+      <tr><td class="pid">P11–P24</td><td>变量·输入·运算符</td><td>1.8h</td><td><span class="tag t-skip">跳过</span></td><td class="tip">上学期学过，刷题会强制你捡回来</td></tr>
+      <tr><td class="pid">P25–P32</td><td>if 分支</td><td>1.1h</td><td><span class="tag t-skip">跳过</span></td><td class="tip">入门2 那 18 道题练的就是这个</td></tr>
+      <tr><td class="pid">P33–P46</td><td><b>循环</b></td><td>2.2h</td><td><span class="tag t-must">11 月下</span></td><td class="tip">写「记账本 v1」时看，循环马上用上</td></tr>
+      <tr><td class="pid">P47–P53</td><td>编程练习解析（习题课）</td><td>0.6h</td><td><span class="tag t-skip">跳过</span></td><td class="tip">是讲题，直接做洛谷更快</td></tr>
+      <tr><td class="pid">P54–P67</td><td>数据类型（int/float/char/逻辑）</td><td>1.7h</td><td><span class="tag t-mid">寒假补</span></td><td class="tip">整数溢出、浮点精度这些坑，写项目时会撞上</td></tr>
+      <tr><td class="pid">P68–P74</td><td><b>函数</b></td><td>1.1h</td><td><span class="tag t-must">12 月看</span></td><td class="tip">写「记账本 v2」之前必须过一遍</td></tr>
+      <tr><td class="pid">P75–P80</td><td><b>数组</b></td><td>1.2h</td><td><span class="tag t-must">11 月下</span></td><td class="tip">记账本要存多条账目，数组必备</td></tr>
+      <tr><td class="pid">P81–P87</td><td><b>指针</b>（含动态内存）</td><td>1.6h</td><td><span class="tag t-mid">寒假看</span></td><td class="tip"><b>C 语言唯一的真门槛</b>，写通讯录时还用不深，链表才需要</td></tr>
+      <tr><td class="pid">P88–P96</td><td><b>字符串</b>（含 strlen/strcmp/strcpy）</td><td>1.4h</td><td><span class="tag t-must">12 月看</span></td><td class="tip">【入门5】的配套，也是通讯录的核心</td></tr>
+      <tr><td class="pid">P97</td><td>枚举</td><td>0.1h</td><td><span class="tag t-mid">顺手</span></td><td class="tip">很短，可以顺手看</td></tr>
+      <tr><td class="pid">P98–P100</td><td>附录 ACLLib 图形库</td><td>0.3h</td><td><span class="tag t-skip">跳过</span></td><td class="tip">与考试、刷题、项目全都无关</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="info" style="margin-bottom:14px">
+    <b>看课的节奏：跟着刷题走，不要提前看</b><br>
+    · <b>10 月</b>：入门1–2 期间<b>一集都不用看</b>。刷题本身就在做"变量、scanf、if"的复现训练，比看课有效<br>
+    · <b>11 月上半（数竞独占期）</b>：刷【入门3 循环】，<b>不看课</b>，卡住就看题解——数竞期不能挤时间<br>
+    · <b>11 月下半</b>：写「记账本 v1」看 P33–P46 循环 + P75–P80 数组<br>
+    · <b>12 月</b>：写「记账本 v2」看 P68–P74 函数；写「通讯录」看 P88–P96 字符串<br>
+    · <b>寒假</b>：P54–P67 数据类型 + P81–P87 指针<br>
+    <b>总计 9.2 小时（1.5 倍速约 6 小时），摊到 5 个月，每月 1–2 小时。</b>
+  </div>
+
+  <div class="warn" style="margin-bottom:12px">
+    <b>三个必须知道的坑</b><br>
+    ① <b>翁恺用的是 Dev-C++</b>（P6 专门讲这个），你装的是 w64devkit + VS Code，<b>不用换</b>。Dev-C++ 早就淘汰了，跟着他敲代码就行，环境差异不影响理解。<br>
+    ② <b>每集都要跟着敲</b>。他最大的价值是边讲边写，你光看等于看剧。<b>看一集 = 敲一遍 = 改几个参数看结果</b>，三步都要有。<br>
+    ③ <b>1.5 倍速，第一遍别上 2 倍</b>。他语速本来就慢，1.5 刚好；2 倍会漏掉他讲"为什么这么写"的那几句，而那才是重点。
+  </div>
+
+  <div class="danger">
+    <b>最重要的一句</b>：翁恺的课解决的是「<b>不知道 C 有什么</b>」，不解决「<b>写不出程序</b>」。后者只能靠项目。<br>
+    如果你看完指针那三集，觉得"好像懂了"但一动手还是空白——<b>这是正常的</b>，因为看懂和写出来之间隔着几十次动手。指针看第一遍不懂也完全没关系，等 12 月写通讯录时再看第二遍就通了。
+  </div>
+
+  <div class="info" style="margin-top:12px">
+    <b>如果现在就想看点什么</b>：只推荐 <b>P81–P83 指针三集</b>（共 33 分钟）——取地址运算 / 指针是什么 / 指针怎么用。这是 C 语言最反直觉的部分，早看早解脱，而且不需要任何前置知识。<b>其余的都等到对应月份再看。</b>
+  </div>
+</section>
+
+<!-- 使用说明 -->
+<section>
+  <h2>怎么用这份表</h2>
+  <div class="card" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px">
+    <ul style="list-style:none">
+      <li style="position:relative;padding-left:18px;margin-bottom:10px;font-size:13.5px;color:var(--tx2)">
+        <span style="position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)"></span>
+        <b style="color:var(--tx)">每天固定 3 题</b>，按表里的顺序做，不要跳着做。<b style="color:var(--tx)">题号顺序就是难度顺序</b>，洛谷官方排的。
+      </li>
+      <li style="position:relative;padding-left:18px;margin-bottom:10px;font-size:13.5px;color:var(--tx2)">
+        <span style="position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)"></span>
+        <b style="color:var(--tx)">卡住超过 20 分钟就看题解</b>，不要硬耗。看题解的正确方式是：看懂思路 → <b style="color:var(--tx)">关掉题解自己重写一遍</b> → 能独立写出来才算过。
+      </li>
+      <li style="position:relative;padding-left:18px;margin-bottom:10px;font-size:13.5px;color:var(--tx2)">
+        <span style="position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)"></span>
+        <b style="color:var(--tx)">标「可跳」的题真的可以跳</b>，别强迫症。B2025 和 P1000 是字符画，P2433 是阅读理解，跳过它们不影响任何后续内容。
+      </li>
+      <li style="position:relative;padding-left:18px;margin-bottom:0;font-size:13.5px;color:var(--tx2)">
+        <span style="position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--line2)"></span>
+        <b style="color:var(--tx)">提交时语言选「C」</b>（不是 C++）。洛谷对 C 支持很好，但注意 C 没有 <code>bool</code>、没有 <code>string</code>，遇到这些要自己换写法。
+      </li>
+    </ul>
+  </div>
+
+  <div class="info" style="margin-top:14px">
+    <b>和蓝桥杯的关系</b>：入门 1–2 只是热身，真正对应蓝桥杯省赛难度的是<b>【入门3】之后</b>的【入门4 数组】【入门5 字符串】【算法1-1 模拟】【算法1-2 排序】。你现在这 45 题的目标不是"会做难题"，是<b>把「读输入 → 处理 → 按格式输出」变成肌肉记忆</b>——这是所有算法题的外壳，壳不熟，里面的算法再懂也拿不到分。
+  </div>
+
+  <div class="danger" style="margin-top:12px">
+    <b>一个提醒</b>：不要为了赶进度复制题解。刷题的唯一价值是<b>你想不出来、然后想出来了</b>的那个瞬间。复制粘贴 100 题，不如自己啃下来 10 题。
+  </div>
+</section>
+
+<footer>
+  <div>题目数据抓取自洛谷官方题单 training/100（入门1）、101（入门2）、102（入门3）｜核对时间 2026-10-23</div>
+  <div>配套：<code>编程能力建设路线图.html</code>（项目线六级阶梯）｜<code>个人学习总规划_2026秋.html</code>（v5 总表）</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var KEY='luogu-rumen-2026';
+  var saved={};
+  try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ saved={}; }
+  var boxes=document.querySelectorAll('.cb');
+  var counted=document.querySelectorAll('.cb:not([data-skip])');
+  var total=counted.length;
+  function sync(){
+    var n=0;
+    counted.forEach(function(c){ if(c.checked) n++; });
+    document.getElementById('pi').style.width=(n/total*100)+'%';
+    document.getElementById('pt').textContent='已完成 '+n+' / '+total+' 题';
+  }
+  boxes.forEach(function(c){
+    var k=c.dataset.k;
+    if(saved[k]){ c.checked=true; c.closest('tr').classList.add('done'); }
+    c.addEventListener('change',function(){
+      var tr=c.closest('tr');
+      if(c.checked){ saved[k]=1; tr.classList.add('done'); }
+      else { delete saved[k]; tr.classList.remove('done'); }
+      try{ localStorage.setItem(KEY,JSON.stringify(saved)); }catch(e){}
+      sync();
+    });
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
