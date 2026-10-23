@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v7
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v7';
+const CACHE = 'study-board-v8';
 
 const ASSETS = [
   './',
@@ -15,6 +15,7 @@ const ASSETS = [
   './编程能力建设路线图.html',
   './本学期竞赛机会清单_2026秋.html',
   './docs/电路课件带读手册.html',
+  './docs/电路课件3带读.html',
   './docs/电子电路与技术2_补课辅助.html',
   './docs/数竞30天冲刺计划_非数学A类.html',
   './docs/大物速成课目录.html',
