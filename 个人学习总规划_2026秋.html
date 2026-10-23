@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>个人学习总规划 v5 · 2026 秋（任务量制 / 三个死线一场接力）</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --prob:#ff7a7a;   /* 概率论 */
+    --phys:#f5a623;   /* 大物 */
+    --math:#5b9bff;   /* 数竞 */
+    --eng:#2ecc8f;    /* 六级 */
+    --code:#a97bff;   /* C语言 */
+    --dm:#22d3ee;     /* 离散数学 */
+    --circ:#fb923c;   /* 电路电子技术 */
+    --cyan:#38d0d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--tx);line-height:1.7;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 80px;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+
+  header{padding:50px 0 32px;border-bottom:1px solid var(--line);margin-bottom:32px;position:relative;overflow:hidden}
+  header::before{
+    content:"";position:absolute;inset:-130px -40% auto -40%;height:340px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(34,211,238,.12),transparent 70%);pointer-events:none;
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--dm);
+    border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:16px;
+  }
+  h1{font-size:31px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14.5px;font-weight:400;color:var(--tx3);margin-top:10px;letter-spacing:0}
+
+  .exams{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:28px}
+  .ex{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;border-left:3px solid var(--line2)}
+  .ex.a{border-left-color:var(--prob);background:rgba(255,122,122,.055)}
+  .ex.b{border-left-color:var(--phys)} .ex.c{border-left-color:var(--math)} .ex.d{border-left-color:var(--eng)}
+  .ex.e{border-left-color:var(--dm);background:rgba(34,211,238,.05)}
+  .ex .nm{font-size:12.5px;color:var(--tx3);margin-bottom:5px}
+  .ex .dt{font-size:15.5px;font-weight:600;margin-bottom:4px}
+  .ex .cd{font-size:12px;color:var(--tx3)}
+  .ex .cd b{color:var(--tx);font-weight:600}
+  .ex.a .cd b{color:#ff9d9d}
+  .ex.e .cd b{color:#67e8f9}
+
+  section{margin-bottom:42px}
+  h2{font-size:19px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--math)}
+  h2.o::before{background:var(--phys)} h2.g::before{background:var(--eng)}
+  h2.p::before{background:var(--code)} h2.r::before{background:var(--prob)}
+  h2.c::before{background:var(--dm)}
+  .sub{font-size:13.5px;color:var(--tx3);margin-bottom:20px;padding-left:14px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 23px}
+  ul.plain{list-style:none}
+  ul.plain li{padding-left:19px;position:relative;font-size:13.5px;color:var(--tx2);margin-bottom:8px;line-height:1.7}
+  ul.plain li::before{content:"";position:absolute;left:3px;top:10px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul.plain li b{color:var(--tx)}
+  code{font-family:"Cascadia Code",Consolas,monospace;font-size:12.5px;background:var(--card2);padding:2px 7px;border-radius:5px;color:var(--cyan);border:1px solid var(--line)}
+
+  /* 甘特图 */
+  .gantt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 14px}
+  .gaxis{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin:0 0 6px 122px;letter-spacing:.03em}
+  .grow{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+  .glab{width:110px;flex:none;font-size:12.5px;color:var(--tx2);text-align:right}
+  .gtrack{flex:1;height:26px;background:var(--card2);border-radius:7px;position:relative;overflow:hidden;border:1px solid var(--line)}
+  .gbar{position:absolute;top:0;height:100%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;color:#0b0d11;letter-spacing:.02em;white-space:nowrap;overflow:hidden}
+  .glow{opacity:.24} .gmid{opacity:.55} .gfull{opacity:1}
+  .gp{background:linear-gradient(90deg,#ff7a7a,#ff9d9d)}
+  .gph{background:linear-gradient(90deg,#f5a623,#ffc45e)}
+  .gm{background:linear-gradient(90deg,#5b9bff,#8dbcff)}
+  .ge{background:linear-gradient(90deg,#2ecc8f,#5fe0ae)}
+  .gc{background:linear-gradient(90deg,#a97bff,#c3a3ff)}
+  .gdm{background:linear-gradient(90deg,#22d3ee,#67e8f9)}
+  .gci{background:linear-gradient(90deg,#fb923c,#fdba74)}
+  .gnone{background:repeating-linear-gradient(45deg,#333b4d,#333b4d 6px,#272d3a 6px,#272d3a 12px);opacity:.5;color:#aab3c4}
+
+  /* 时间块模板 */
+  .blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+  .blk{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px 18px;border-top:3px solid var(--line2)}
+  .blk.pa{border-top-color:var(--prob)} .blk.pb{border-top-color:var(--phys)}
+  .blk.pc{border-top-color:var(--math)} .blk.pd{border-top-color:var(--eng)}
+  .blk.pe{border-top-color:var(--code)} .blk.pf{border-top-color:var(--dm)}
+  .blk h4{font-size:14px;margin-bottom:3px}
+  .blk .rng{font-size:11.5px;color:var(--tx3);margin-bottom:12px}
+  .blk .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);padding:4px 0;border-bottom:1px dashed var(--line)}
+  .blk .row:last-child{border:none}
+  .blk .row b{color:var(--tx);font-weight:600}
+  .blk .row.off{color:var(--tx3)}
+  .blk .row.off b{color:var(--tx3);font-weight:400}
+  .blk .row.new b{color:#67e8f9}
+  .blk .tot{display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-top:9px;padding-top:9px;border-top:1px solid var(--line2)}
+  .blk .tot b{color:var(--tx);font-size:13px}
+
+  /* 表格 */
+  .toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .prog{flex:1;min-width:200px;height:9px;background:var(--card2);border-radius:100px;overflow:hidden;border:1px solid var(--line)}
+  .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--math),var(--eng));transition:width .3s}
+  .ptxt{font-size:13px;color:var(--tx3);white-space:nowrap}
+  button{font:inherit;font-size:12.5px;color:var(--tx2);background:var(--card2);border:1px solid var(--line2);border-radius:8px;padding:6px 14px;cursor:pointer;transition:.18s}
+  button:hover{color:var(--tx);border-color:var(--math);background:rgba(91,155,255,.1)}
+
+  .tscroll{overflow-x:auto;border-radius:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+  thead th{text-align:left;font-size:11.5px;font-weight:600;color:var(--tx3);letter-spacing:.06em;padding:0 13px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+  tbody tr{border-bottom:1px solid var(--line)}
+  tbody tr:hover{background:rgba(255,255,255,.016)}
+  tbody td{padding:12px 13px;vertical-align:top;color:var(--tx2);line-height:1.65}
+  td.ck{width:34px;padding-right:0}
+  td.d{color:var(--tx);font-weight:600;white-space:nowrap;font-size:13px}
+  td.d em{display:block;font-style:normal;font-size:11px;color:var(--tx3);font-weight:400;margin-top:1px}
+  td.t{white-space:nowrap;color:var(--tx3);font-size:12px;text-align:right}
+  tr.done td:not(.t){opacity:.4}
+  tr.done td.d{text-decoration:line-through}
+  tr.hi td{background:rgba(255,255,255,.028)}
+  tr.examday td{background:rgba(255,95,95,.075)}
+  tr.examday td.d{color:#ff8f8f}
+  .cb{appearance:none;width:17px;height:17px;border:1.5px solid var(--line2);border-radius:5px;background:transparent;cursor:pointer;position:relative;transition:.15s}
+  .cb:hover{border-color:var(--math)}
+  .cb:checked{background:var(--eng);border-color:var(--eng)}
+  .cb:checked::after{content:"";position:absolute;left:4.6px;top:1.4px;width:4.5px;height:8.5px;border:solid #0b0d11;border-width:0 2px 2px 0;transform:rotate(43deg)}
+
+  .li{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px;font-size:12.5px;line-height:1.6}
+  .li:last-child{margin-bottom:0}
+  .li .tg{flex:none;width:52px;font-size:10.5px;font-weight:600;text-align:center;border-radius:5px;padding:1px 0;margin-top:2px}
+  .tg.prob{background:rgba(255,122,122,.14);color:#ff9d9d;border:1px solid rgba(255,122,122,.3)}
+  .tg.phys{background:rgba(245,166,35,.13);color:#ffc45e;border:1px solid rgba(245,166,35,.3)}
+  .tg.math{background:rgba(91,155,255,.13);color:#8dbcff;border:1px solid rgba(91,155,255,.3)}
+  .tg.eng{background:rgba(46,204,143,.12);color:#5fe0ae;border:1px solid rgba(46,204,143,.28)}
+  .tg.code{background:rgba(169,123,255,.13);color:#c3a3ff;border:1px solid rgba(169,123,255,.3)}
+  .tg.dm{background:rgba(34,211,238,.13);color:#67e8f9;border:1px solid rgba(34,211,238,.32)}
+  .tg.circ{background:rgba(251,146,60,.13);color:#fdba74;border:1px solid rgba(251,146,60,.32)}
+  .li .hr{flex:none;width:36px;color:var(--tx3);font-size:11.5px;text-align:right;margin-top:2px}
+
+  .tracks{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.tracks{grid-template-columns:1fr}}
+  .tk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;border-top:3px solid var(--line2)}
+  .tk.prob{border-top-color:var(--prob)} .tk.phys{border-top-color:var(--phys)}
+  .tk.math{border-top-color:var(--math)} .tk.eng{border-top-color:var(--eng)}
+  .tk.code{border-top-color:var(--code)}
+  .tk.dm{border-top-color:var(--dm)} .tk.circ{border-top-color:var(--circ)}
+  .tk h4{font-size:15px;margin-bottom:4px}
+  .tk .goal{font-size:12px;color:var(--tx3);margin-bottom:14px}
+
+  .warn{border-left:3px solid var(--phys);background:rgba(245,166,35,.07);padding:15px 20px;border-radius:0 10px 10px 0;font-size:13.5px;color:var(--tx2);line-height:1.75}
+  .warn b{color:#ffc45e}
+  .danger{border-left:3px solid var(--prob);background:rgba(255,122,122,.07);padding:15px 20px;border-radius:0 10px 10px 0;font-size:13.5px;color:var(--tx2);line-height:1.75}
+  .danger b{color:#ff9d9d}
+  .todo{border-left:3px solid var(--code);background:rgba(169,123,255,.07);padding:15px 20px;border-radius:0 10px 10px 0;font-size:13.5px;color:var(--tx2);line-height:1.75}
+  .todo b{color:#c3a3ff}
+  .info{border-left:3px solid var(--dm);background:rgba(34,211,238,.07);padding:15px 20px;border-radius:0 10px 10px 0;font-size:13.5px;color:var(--tx2);line-height:1.75}
+  .info b{color:#67e8f9}
+
+  footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx3);line-height:1.9}
+  @media print{
+    body{background:#fff;color:#111;padding:0}
+    header::before{display:none}
+    .toolbar,button{display:none}
+    .card,.blk,.tk,.gantt,.ex{border-color:#ddd;background:#fff}
+    tbody td{color:#333} h1,h2{color:#000}
+    .gtrack{background:#f2f2f2}
+  }
+
+  /* ===== 打印 / PDF 专用 ===== */
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+
+    :root{
+      --bg:#0e1015 !important; --card:#181c24 !important; --card2:#1e2330 !important;
+      --line:#272d3a !important; --line2:#333b4d !important;
+      --tx:#e8ebf2 !important; --tx2:#aab3c4 !important; --tx3:#7c8699 !important;
+      --prob:#ff7a7a !important; --phys:#f5a623 !important; --math:#5b9bff !important;
+      --eng:#2ecc8f !important; --code:#a97bff !important; --dm:#22d3ee !important;
+      --circ:#fb923c !important; --cyan:#38d0d8 !important;
+      --green:#2ecc8f !important; --orange:#f5a623 !important; --red:#ff7a7a !important; --blue:#5b9bff !important;
+    }
+    .card,.ex,.lvl,.blk,.hero,.verdict,.tl,.tscroll{ background:#181c24 !important; }
+    .lvl-hd,.hero-hd{ background:#1e2330 !important; }
+    .info{ background:#12262a !important; } .warn{ background:#2a2317 !important; } .danger{ background:#2a1a1a !important; }
+    h1,h2,h3,h4,.tt,.t,.big,td b,.plain li b,.kv dd b,.spec dd b{ color:#e8ebf2 !important; }
+    .plain li,td,.sub,.kv dd,.spec dd,p,.cap,.tl-x{ color:#aab3c4 !important; }
+    .tl-d,.ptxt,.st,.lvl-t .st{ color:#7c8699 !important; }
+    .ex .nm,.ex .cd{ color:#8f99ab !important; }
+    th{ color:#8f99ab !important; }
+
+    *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    html{ background:#0e1015 !important; }
+    body{ background:#0e1015 !important; padding:7mm 6mm 0 !important; }
+    section:last-of-type{ margin-bottom:0 !important; }
+    footer{ margin-bottom:0 !important; }
+    .wrap{ max-width:100% !important; padding:0 !important; }
+    header{ padding:14px 0 12px !important; margin-bottom:14px !important; }
+    header::before{ display:none !important; }
+    h1{ font-size:20px !important; }
+    h1 small{ font-size:11px !important; }
+    section{ margin-bottom:16px !important; page-break-inside:auto; }
+    h2{ font-size:14px !important; margin-bottom:4px !important; page-break-after:avoid; }
+    .sub{ font-size:10.5px !important; margin-bottom:10px !important; }
+    .hero,.verdict,.gantt,.blocks{ page-break-inside:avoid; }
+    .lvl,.blk,.tl{ page-break-inside:auto; }
+    .lvl-hd{ page-break-after:avoid; }
+    .lvl-bd>dl,.spec{ page-break-inside:avoid; }
+    .card,.tscroll{ page-break-inside:auto; }
+    pre{ page-break-inside:auto; }
+    tr,li{ page-break-inside:avoid; }
+    thead{ display:table-header-group; }
+    .toolbar,.progbar,.ptxt,input[type=checkbox],footer{ display:none !important; }
+    .tscroll{ overflow:visible !important; }
+    pre{ overflow:visible !important; white-space:pre-wrap !important; word-break:break-word; }
+    body{ font-size:10.5px !important; line-height:1.55 !important; }
+    .plain li{ font-size:10.5px !important; margin-bottom:6px !important; }
+    table{ font-size:9.5px !important; }
+    th,td{ padding:5px 7px !important; }
+    code{ font-size:9px !important; }
+    pre{ font-size:8.6px !important; line-height:1.5 !important; padding:10px 12px !important; }
+    .lvl-hd,.hero-hd{ padding:10px 14px !important; }
+    .lvl-bd,.hero-bd,.card{ padding:12px 14px !important; }
+    .spec{ font-size:10px !important; }
+    .kv{ font-size:10.5px !important; }
+    .info,.warn,.danger{ font-size:10.5px !important; padding:10px 13px !important; }
+    .exams{ gap:8px !important; margin-top:14px !important; }
+    .ex{ padding:9px 11px !important; }
+    .ex .dt{ font-size:12px !important; }
+  }
+
+  /* ===== 手机适配 ===== */
+  @media (max-width:640px){
+    .wrap{ max-width:100% !important; padding:0 12px !important; }
+    body{ font-size:14px !important; }
+    h1{ font-size:21px !important; }
+    h1 small{ font-size:12.5px !important; }
+    h2{ font-size:16px !important; }
+    .sub{ font-size:12px !important; padding-left:10px !important; }
+    header{ padding:26px 0 18px !important; }
+    section{ margin-bottom:26px !important; }
+    .card,.hero-bd,.today-bd,.lvl-bd,.verdict{ padding:15px 14px !important; }
+    .plain li{ font-size:13px !important; margin-bottom:9px !important; }
+    .info,.warn,.danger{ padding:13px 14px !important; font-size:12.5px !important; }
+    table{ font-size:12px !important; }
+    th,td{ padding:8px !important; }
+    .tscroll{ -webkit-overflow-scrolling:touch; }
+    .tscroll table{ min-width:540px; }
+    .exams{ grid-template-columns:1fr 1fr !important; gap:9px !important; }
+    .ex{ padding:11px 12px !important; }
+    .ex .dt{ font-size:13.5px !important; }
+    .blocks{ grid-template-columns:1fr !important; }
+    .gantt{ font-size:10.5px !important; }
+    .glab{ width:64px !important; font-size:10.5px !important; }
+    .kv{ grid-template-columns:74px 1fr !important; gap:8px 12px !important; font-size:13px !important; }
+    .spec{ grid-template-columns:66px 1fr !important; gap:6px 10px !important; font-size:12.5px !important; }
+    pre{ font-size:10px !important; padding:12px 10px !important; }
+    .lvl-hd,.hero-hd{ padding:12px 14px !important; gap:10px !important; }
+    .lvl-no{ flex:0 0 32px !important; height:32px !important; font-size:14px !important; }
+    .lvl-t .tt{ font-size:14px !important; }
+    .lvl-t .st{ font-size:11.5px !important; }
+    .verdict .big{ font-size:16px !important; }
+    .tl{ padding-left:22px !important; }
+    .tl-t{ font-size:13.5px !important; }
+    .tl-x{ font-size:12px !important; }
+    .pid{ font-size:11px !important; }
+    footer{ font-size:11px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">2026 秋季 · 个人学习总规划（v5 · 任务量制 / 三个死线一场接力）</div>
+  <h1>七个目标，58 天：每天只打一场主角戏
+    <small>2026 年 10 月 16 日 — 12 月 12 日 ｜ 每日 <b>2 个大块 + 1 个例行</b>（不再是 6 个碎片块）｜ 概率论 · 大物2 · 数竞 · 六级 · C 语言 · <b style="color:#67e8f9">离散数学</b> · <b style="color:#fdba74">电路电子技术（2）</b></small>
+  </h1>
+  <div class="exams">
+    <div class="ex a">
+      <div class="nm">概率论 期中</div>
+      <div class="dt">10 月 19 日（周一）</div>
+      <div class="cd"><b>已考完 · 估分 17/20</b></div>
+    </div>
+    <div class="ex b">
+      <div class="nm">大学物理（二）期中</div>
+      <div class="dt">10 月 31 日（周六）</div>
+      <div class="cd">还剩 <b id="cd2">—</b> ｜ 目标 90+</div>
+    </div>
+    <div class="ex c">
+      <div class="nm">全国大学生数学竞赛 初赛</div>
+      <div class="dt">11 月 14 日 09:00</div>
+      <div class="cd">还剩 <b id="cd3">—</b> ｜ 目标省二</div>
+    </div>
+    <div class="ex d">
+      <div class="nm">英语六级 笔试</div>
+      <div class="dt">12 月 12 日 15:00</div>
+      <div class="cd">还剩 <b id="cd4">—</b> ｜ 目标 550+</div>
+    </div>
+    <div class="ex e">
+      <div class="nm">期末周（四门）</div>
+      <div class="dt">1 月初（具体待定）</div>
+      <div class="cd">还剩 <b id="cd5">—</b> ｜ 概率论 / 大物 / 离散 / 电路</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 本次变更 ===== -->
+<section>
+  <h2 class="c">v5 重排：从「卡时长」改成「卡任务量」</h2>
+  <p class="sub">v4 解决的是「每天项目太多、注意力不断切换」，做法是压缩时长。v5 换了一把更根本的尺子：<b>不再用「学几小时」定义任务，改用「做完什么算完成」</b>。时间从配额降级成事后记录。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>为什么换尺子</b>：用时长卡任务，本质是在为「坐够时间」负责——坐满 4 小时只做了 5 道题，账面上也算完成。用任务量卡，才是为「学会」负责。<b>而且你完全可能用更短的时间完成同样的量</b>，时长配额反而会让人故意拖到点。</li>
+      <li><b>每项都带验收标准</b>：不是「看课件 3」，而是「课件 3 P48–P75 走完 + 能不看书画出微变等效电路并说出 Au 表达式」。<b>标准写得出来，才知道自己过没过</b>。</li>
+      <li><b>头三天是标定，不是拖延</b>：任务量卡法要成立，得先知道「一个单位任务要多久」。660 你只做过 10 题，这个数没有。所以 10/22–10/24 先跑一遍、如实记用时，之后才能排出「今天 12 题」这种靠谱的数字。</li>
+      <li><b>10 月最大的结构变化：离散归零</b>。你选了方案 A（不去上课、11 月后集中补），这个选择直接释放了 10 月的 12 小时——<b>时间是离散那儿出的，不是从大物那儿抢的</b>。腾出来的全给数竞摸底。</li>
+      <li><b>数竞地位上调</b>：660 实际只做了 10 题，目标省二。10 月每天 12 题限时（记用时 + 错因），10 天约 110 题，<b>目的不是赶进度，是测出「每题几分钟」</b>——这个数是 11 月排量的地基。</li>
+      <li><b>六级不再只是背单词</b>：听力极弱、阅读接近满分 → 70 分空间几乎全在听力。每天 1 篇 Section C 精听（听写 → 归因 → 跟读），<b>泛听无效</b>。</li>
+      <li><b>编程每天 3 题，不断线</b>：不占主块，塞在例行里。这学期它没有死线，寒假才是主攻期。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 核心逻辑 ===== -->
+<section>
+  <h2>整体逻辑：三个死线，一场接力</h2>
+  <p class="sub">七门课里真正有死线的只有三个：<b>大物 10/31 → 数竞 11/14 → 六级 12/12</b>。其余四项全是期末或长期。所以整学期是接力，不是并行。</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>10/22–10/31｜大物当主角</b>。大物日 / 电路日交替，数竞每天 12 题当副手（摸底），六级精听 + 洛谷 3 题在例行里。<b>10/31 大物期中，目标 90+</b>。</li>
+      <li><b>11/01–11/13｜数竞独占</b>。每天 24 题 + 4 个网课分P，第 7 / 10 / 12 天各一套真题限时。<b>这 13 天没有任何别的科目抢主块</b>。</li>
+      <li><b>11/15–12/12｜六级接棒</b>。听力专项 4 周，写作翻译第 3 周启动。电路补课件 7–9（跟课堂），离散集中补第 6–10 章，编程做项目。</li>
+      <li><b>12/13–1 月初｜期末四门</b>。概率论（第 3、6 章专项 15–20h）、大物、离散、电路。<b>期末全部集中在一月初，有 7 周缓冲，来得及</b>。</li>
+      <li><b>为什么必须错峰</b>：七门课同时推进，每天要把七份上下文装进脑子再倒出来。错峰的代价是某科会隔很久不碰，换回来的是<b>「一段时间只对一件事负责」</b>——这才是「时间更长更深入」，靠的不是压缩，是排序。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 甘特图 ===== -->
+<section>
+  <h2 class="o">七条轨道的时间占用</h2>
+  <p class="sub">色块深浅代表强度：斜纹 = 暂停，浅 = 维持档，中 = 稳步推进，深 = 主攻。<b>同一时间最多两条深色</b>，其余都在维持档或暂停。</p>
+  <div class="gantt">
+    <div class="gaxis"><span>10/16</span><span>10/31</span><span>11/14</span><span>11/30</span><span>12/12</span></div>
+
+    <div class="grow">
+      <div class="glab">概率论</div>
+      <div class="gtrack">
+        <div class="gbar gp gfull" style="left:0%;width:6.9%">4.5h 突击</div>
+        <div class="gbar gp gnone" style="left:6.9%;width:93.1%">已考完 · 期末一月再启（第 3、6 章专项）</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">大学物理（二）</div>
+      <div class="gtrack">
+        <div class="gbar gph gmid" style="left:0%;width:6.9%">1h</div>
+        <div class="gbar gph gmid" style="left:6.9%;width:3.4%">2.5h</div>
+        <div class="gbar gph gfull" style="left:10.3%;width:17.2%">主角：T3 + 2 套卷 + 收官</div>
+        <div class="gbar gph gfull" style="left:27.6%;width:1.7%">考</div>
+        <div class="gbar gph gnone" style="left:29.3%;width:70.7%">已考完（期末一月再启）</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">数学竞赛</div>
+      <div class="gtrack">
+        <div class="gbar gm gnone" style="left:0%;width:6.9%">暂停</div>
+        <div class="gbar gm glow" style="left:6.9%;width:3.4%">2h</div>
+        <div class="gbar gm gmid" style="left:10.3%;width:17.2%">摸底 12 题/天</div>
+        <div class="gbar gm gfull" style="left:27.6%;width:22.4%">主角 24 题/天 + 3 套真题</div>
+        <div class="gbar gm gfull" style="left:50%;width:1.7%">考</div>
+        <div class="gbar gm gnone" style="left:51.7%;width:48.3%">已考完</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">电路电子（2）</div>
+      <div class="gtrack">
+        <div class="gbar gci gmid" style="left:6.9%;width:3.4%">1h</div>
+        <div class="gbar gci gfull" style="left:10.3%;width:17.2%">课件 3–6（主块带读）</div>
+        <div class="gbar gci gmid" style="left:27.6%;width:22.4%">跟课 1.5h · 隔天</div>
+        <div class="gbar gci glow" style="left:51.7%;width:48.3%">课件 7–9 跟课 + 课件 5 收尾</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">离散数学</div>
+      <div class="gtrack">
+        <div class="gbar gdm gmid" style="left:6.9%;width:3.4%">1h</div>
+        <div class="gbar gdm gnone" style="left:10.3%;width:39.7%">暂停（方案 A：11 月后集中补）</div>
+        <div class="gbar gdm gfull" style="left:51.7%;width:48.3%">集中补 第 6–10 章</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">英语六级</div>
+      <div class="gtrack">
+        <div class="gbar ge gnone" style="left:0%;width:6.9%">暂停</div>
+        <div class="gbar ge glow" style="left:6.9%;width:3.4%">0.5h</div>
+        <div class="gbar ge gmid" style="left:10.3%;width:39.7%">每天 1 篇 Section C 精听</div>
+        <div class="gbar ge gfull" style="left:51.7%;width:48.3%">主攻：听力专项 + 写作翻译 + 3 套真题</div>
+      </div>
+    </div>
+
+    <div class="grow">
+      <div class="glab">编程 / C 语言</div>
+      <div class="gtrack">
+        <div class="gbar gc gnone" style="left:0%;width:6.9%">暂停</div>
+        <div class="gbar gc glow" style="left:6.9%;width:3.4%">0.5h</div>
+        <div class="gbar gc glow" style="left:10.3%;width:39.7%">每天 3 题 · 不断线</div>
+        <div class="gbar gc gmid" style="left:51.7%;width:48.3%">项目线：记账本 → 通讯录 → 拆多文件</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 时间块模板 ===== -->
+<section>
+  <h2>每天怎么切</h2>
+  <p class="sub">四段时期的块结构。<b>固定三段：例行（最短最固定）、主力块、副手块</b>。时段也固定下来，让脑子形成条件反射。</p>
+  <div class="blocks">
+    <div class="blk pa">
+      <h4>阶段 A · 概率论突击</h4>
+      <div class="rng">10/16 – 10/19</div>
+      <div class="row"><span>概率论（主）</span><b>4.5h</b></div>
+      <div class="row"><span>大学物理</span><b>1h</b></div>
+      <div class="row"><span>数学竞赛</span><b>0.5h</b></div>
+      <div class="row off"><span>六级 / C 语言</span><b>暂停</b></div>
+      <div class="row off"><span>离散 / 电路</span><b>未启动</b></div>
+      <div class="tot"><span>已结束</span><b>期中 17/20</b></div>
+    </div>
+    <div class="blk pb">
+      <h4>阶段 B · 旧排法（已弃用）</h4>
+      <div class="rng">10/20 – 10/21</div>
+      <div class="row"><span>大学物理</span><b>2.5h</b></div>
+      <div class="row"><span>数学竞赛</span><b>2h</b></div>
+      <div class="row new"><span>离散数学</span><b>1h</b></div>
+      <div class="row new"><span>电路电子（2）</span><b>1h</b></div>
+      <div class="row"><span>六级</span><b>0.5h</b></div>
+      <div class="row"><span>C 语言</span><b>0.5h</b></div>
+      <div class="tot"><span>6 块 · 一天换 6 次脑子</span><b>7.5h</b></div>
+    </div>
+    <div class="blk pb">
+      <h4>阶段 C · 大物冲刺 + 数竞摸底</h4>
+      <div class="rng">10/22 – 10/31</div>
+      <div class="row"><span>【主】大物 / 电路 轮换</span><b>一个完整单元</b></div>
+      <div class="row new"><span>【副】数竞摸底</span><b>12 题 · 限时 40 分</b></div>
+      <div class="row"><span>例行：六级精听 + 洛谷</span><b>1 篇 + 3 题</b></div>
+      <div class="row off"><span>离散数学</span><b>归零（方案 A）</b></div>
+      <div class="tot"><span>3 块</span><b>任务量制</b></div>
+    </div>
+    <div class="blk pc">
+      <h4>阶段 D · 数竞独占</h4>
+      <div class="rng">11/01 – 11/13</div>
+      <div class="row"><span>【主】660 + 网课</span><b>24 题 + 4 分P</b></div>
+      <div class="row new"><span>【副】电路跟课 / 错题回炉</span><b>隔天轮</b></div>
+      <div class="row"><span>例行：六级精听 + 洛谷</span><b>1 篇 + 3 题</b></div>
+      <div class="row off"><span>离散</span><b>暂停</b></div>
+      <div class="tot"><span>3 块 · 真题日 3 天</span><b>任务量制</b></div>
+    </div>
+    <div class="blk pd">
+      <h4>阶段 E · 六级主攻 + 编程项目</h4>
+      <div class="rng">11/15 – 12/12</div>
+      <div class="row"><span>【主】六级听力专项</span><b>2 篇精听</b></div>
+      <div class="row new"><span>【副】编程项目 / 离散 / 电路 轮</span><b>一个完整单元</b></div>
+      <div class="row"><span>例行：洛谷 3 题</span><b>不断线</b></div>
+      <div class="tot"><span>3 块</span><b>任务量制</b></div>
+    </div>
+  </div>
+
+  <div class="info" style="margin-top:18px">
+    <b>固定时段建议（时段固定，脑子会自动进入状态）</b>：<br>
+    <b>07:50–08:20</b> 例行（六级精听 1 篇 + 洛谷 3 题）｜ <b>08:30–12:00</b> 主力块 ｜ <b>14:00–16:30</b> 副手块 ｜ 晚上不排正课，只留 20 分钟把今天的错题标一下。<br>
+    <b>为什么不把两个大块连在一起</b>：连续 6 小时同一科目会掉质量，中间隔一顿饭刚好。而<b>两个块之间不要插入第三件事</b>——一插就变成三段碎片了。<br>
+    <b>v5 的时段只是建议，不是配额</b>：上面的时间是「默认几点开始」，不是「必须坐够多久」。<b>做完就走，做不完就续</b>。
+  </div>
+</section>
+
+<!-- ===== 逐日计划 ===== -->
+<section>
+  <h2 class="g">逐日计划表 · 10/22 – 11/14（24 天 · 任务量制）</h2>
+  <p class="sub">勾选自动保存。<b>最后一列是当天主攻科目</b>，每项第二列是<b>任务量</b>不是时长——做完就算完成，做不完就续，不按时长卡。<b>验收标准写在每项的正文里</b>，达不到标准就不算过。10/16–10/21 是历史记录（旧排法），保留供对照。</p>
+
+  <div class="toolbar">
+    <div class="prog"><i id="pi"></i></div>
+    <div class="ptxt" id="pt">已完成 0 / 30 天</div>
+    <button id="btnPrint">打印</button>
+    <button id="btnReset">重置进度</button>
+  </div>
+
+  <div class="tscroll">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:34px"></th>
+        <th style="width:96px">日期</th>
+        <th>当日安排</th>
+        <th style="text-align:center;width:80px">主攻</th>
+      </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ===== 周计划 ===== -->
+<section>
+  <h2 class="g">周计划表 · 11/15 – 12/12（4 周）</h2>
+  <p class="sub">六级主攻期，3 块结构：<b>六级听力专项（主）+ 编程项目 / 离散集中补 / 电路跟课（副轮换）+ 洛谷 3 题（例行）</b>。电路补课件 7–9 跟课堂，离散按方案 A 从这里开始集中补。</p>
+  <div class="tscroll">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:110px">周次</th>
+        <th>英语六级（主 · 听力专项）</th>
+        <th>编程（项目线 · 每天 3 题打底）</th>
+        <th>离散数学（11 月起集中补）</th>
+        <th>电路电子（2）（课件 5–9 收尾）</th>
+      </tr>
+    </thead>
+    <tbody id="tbw"></tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ===== 七轨详解 ===== -->
+<section>
+  <h2>七条轨道各自的打法</h2>
+  <p class="sub">每条轨道的材料、路线和目标，都在这里。</p>
+  <div class="tracks">
+
+    <div class="tk prob">
+      <h4>概率论期中</h4>
+      <div class="goal">10/16 – 10/19 ｜ 今天考试 ｜ 考完即清空</div>
+      <ul class="plain">
+        <li><b>材料（桌面已有）</b>：<code>概率论期中复习资料.pdf</code>、<code>概率论期中复习资料_打印版.pdf</code>、<code>概率论第1-2章练习卷.pdf</code>、<code>大二上\概率论\概率论期中复习重点与习题.docx</code></li>
+        <li><b>今天（10/19）</b>：考前 1 小时只看公式表和错题，不做新题。考完彻底放松，不要立刻开大物</li>
+        <li><b>高频考点</b>：全概率与贝叶斯公式、常见分布（二项 / 泊松 / 均匀 / 正态 / 指数）的期望方差、二维随机变量的边缘分布与独立性判断</li>
+      </ul>
+    </div>
+
+    <div class="tk dm">
+      <h4>离散数学（方案 A：11 月后集中补）</h4>
+      <div class="goal">10 月归零 ｜ 11/15 起集中补 ｜ 课堂：第 7 章树 ｜ 自己：九月底停在二元关系 ｜ 教材：屈婉玲《离散数学》第 3 版</div>
+      <ul class="plain">
+        <li><b>真实进度（10/21 确认）</b>：<b>课堂</b>已经讲到第 7 章树；<b>你自己</b>九月底跟完集合论的二元关系后就停了。<b>这两条线不是一回事，不要用课堂进度衡量自己</b></li>
+        <li><b>教材结构</b>：屈婉玲第 3 版共六部分 19 章，<b>集合论在前（第 1–3 章）、数理逻辑在最后（第 15–19 章）</b>。这门课只讲四部分：集合论（1–3）、图论（5–9）、代数结构（12–14）、数理逻辑（15–19）。<b>初等数论（第 4 章）和组合数学（第 10–11 章）不讲</b></li>
+        <li><b>方案 A 的代价，说清楚</b>：<br>
+          · <b>平时分</b>：不去上课，出勤分和课堂表现分要放弃（通常占 10–20%）<br>
+          · <b>划重点信息</b>：期末老师划重点时你不在场，要靠同学转达<br>
+          · <b>换回来的是 10 月的 12 小时</b>，全部给了数竞摸底</li>
+        <li><b>11/15 起集中补的顺序</b>（按依赖排，不是按章号）：<br>
+          ① <b>第 6 章 集合代数</b>：子集、幂集、笛卡尔积、交并差补、运算律、恒等式证明两种套路（元素法 / 运算律法）<br>
+          ② <b>第 7 章 二元关系</b>：关系矩阵与关系图、五种性质判定、复合与逆、三种闭包（含 Warshall）、等价关系与划分、偏序与哈斯图<br>
+          ③ <b>第 8 章 函数</b>：单射 / 满射 / 双射、复合与反函数、基数、可数集与康托对角线法<br>
+          ④ <b>第 9 章 图的基本概念</b>：度与握手定理、子图与补图、通路回路、连通性与割集、邻接矩阵<br>
+          ⑤ <b>第 10 章 欧拉图与哈密顿图</b>：欧拉回路 / 通路判定、哈密顿图充分条件</li>
+        <li><b>网课映射（可选）</b>：北大离散全套课 <code>BV1BW411n7gw</code>（134P / 88h47m），对应你的缺口是 <b>P13–P14 + P20–P27 ≈ 6h20m</b>。<b>图论和代数结构看课，集合论和数理逻辑读书更快</b></li>
+        <li><b>最省时的打法</b>：这门课题型高度程式化，<b>先把定义和定理的「条件」抄成卡片，再做 3–5 道典型题</b>。第 7 章性质判定和第 9 章握手定理是必考送分题</li>
+      </ul>
+    </div>
+
+    <div class="tk circ">
+      <h4>电路电子技术（2）</h4>
+      <div class="goal">10/22 – 12/12 ｜ 课堂：课件 8 组合逻辑 ｜ 要补课件 3–7 ｜ 顺序 1 → 3 → 4 → 5 → 6（10 月）→ 7 → 8 → 9（11 月跟课堂）</div>
+      <ul class="plain">
+        <li><b>为什么顺序不是 1 到 9</b>：课件 3–6 是模电（放大电路 + 运放 + 电源），是整门课的地基；课件 7–9 是数电（逻辑代数 + 组合 + 触发器），独立性很强。<b>10 月先打模电地基，11 月跟课堂学数电</b>，两条线不冲突</li>
+        <li><b>10 月的四个主块</b>：<br>
+          ① <b>课件 3 上半</b>（10/23）：直流通路 → 静态 Q → 图解法与失真 → 微变等效 rbe / Au / Ri / Ro<br>
+          ② <b>课件 3 收尾 + 课件 4</b>（10/25）：分压偏置与温度、共集 / 共基（只了解）、三组态对比；MOSFET 共源<br>
+          ③ <b>课件 5 线性应用</b>（10/27）：虚短虚断 → 比例 / 加减 / 积分 / 微分，有源滤波只识别<br>
+          ④ <b>课件 5 后半 + 课件 6</b>（10/29）：比较器 + 整流滤波稳压</li>
+        <li><b>11 月跟课堂</b>：课件 7 逻辑代数 → 8 组合逻辑 → 9 触发器，和课堂同步走</li>
+        <li><b>大纲红线（照着这个砍，别多学）</b>：<br>
+          ✗ 多级放大与频率响应 —— 进度表里没有<br>
+          ✗ 反馈放大电路、功率放大 —— 进度表里没有<br>
+          ✗ 窗口比较器、开关稳压电源 —— 课件明写「不在大纲内」<br>
+          ✗ 加法器 / 编码器 / 译码器 / 数据选择器 —— 只考功能表，不考设计</li>
+        <li><b>配套文件</b>：<code>电路课件带读手册.html</code>（课件 1 已出完整逐段带读，课件 2–9 按你的进度逐份产出）+ <code>电子电路与技术2_补课辅助.html</code>（公式卡 + 例题 + 24 道自测）。<b>带读手册按页码区间走，不用翻 9 份 PDF</b></li>
+      </ul>
+    </div>
+
+    <div class="tk phys">
+      <h4>大学物理（二）· 期中 10/31</h4>
+      <div class="goal">10/22 – 10/31 ｜ 范围：热学前三章 ｜ 目标 90+ ｜ 课程：B 站 <code>BV1G4wqz7EpN</code></div>
+      <ul class="plain">
+        <li><b>材料</b>：T1 课件 ×4、T2 课件 ×3、T3 课件 ×3；<code>历年大学物理期末考试题.zip</code>；教材《马文蔚 物理学 第六版 下册》</li>
+        <li><b>课程进度（10/21 确认）</b>：P38–P40 已看完，<b>剩 P41 热力学定律核心 53:02 + P42 拓展 7:09 + P43 习题 20:53 = 81 分钟</b>。热学全部课程只有 2h22m，你已经投了 5h——<b>课不是瓶颈，题才是</b></li>
+        <li><b>10 月的五个主块</b>：<br>
+          · 10/22 P41 + 熵变四类公式默写 + 课后题 12 道<br>
+          · 10/24 T1–T3 横向拉通，一页纸公式表（约 30 个公式 + 适用条件）<br>
+          · 10/26、10/28 限时套卷各 90 分钟 + 精批 + 横向归类<br>
+          · 10/30 收官：第 3 套重点题 + 公式表定稿 + 只过错题</li>
+        <li><b>公式不熟怎么办（你的主要问题）</b>：你说公式"记不住"——这属于<b>A 类问题（记忆型）</b>，<b>看课和做题都解决不了</b>。解法只有一个：<b>每天 10 分钟默写</b>。把 30 个核心公式写成一张表，每天遮住默一遍，错的打点，第二天重点默打点的。<b>一周后你会发现做不出题的原因从"想不起公式"变成"算错"——那就是进步</b></li>
+        <li><b>三章核心公式</b>：T1 压强公式与能量均分定理；T2 第一定律 dQ = dU + dW 及四种过程（等容 / 等压 / 等温 / 绝热）；T3 熵增原理与卡诺循环效率</li>
+        <li><b>提醒</b>：热学题计算量不大但符号方向极易错（功的正负、循环过程热量进出、熵变正负）。<b>务必先画 p–V 图再动笔</b></li>
+      </ul>
+    </div>
+
+    <div class="tk math">
+      <h4>全国大学生数学竞赛（非数学 A 类）· 11/14</h4>
+      <div class="goal">10/22 – 11/14 ｜ 目标：省二 ｜ 660 已做 10 题，剩约 330 题 ｜ 基线：暂无速度数据</div>
+      <ul class="plain">
+        <li><b>网课</b>：B 站 <code>BV1qGJHzpEBM</code>（33h / 43 分P）。已看 7 个，剩 36 个。<b>1.5–2 倍速只记考点，不暂停不做笔记</b>。A 类必看 P30–P35（曲线积分 / 曲面积分 / 空间解析几何）</li>
+        <li><b>刷题</b>：武忠祥《660 题》<b>只做高数部分</b>（约 330 题），线代和概率直接跳过</li>
+        <li><b>10/22–10/30｜摸底期，每天 12 题</b>：<b>限时 40 分钟，到点就停</b>。每题记三样：用时 / 对错 / 错因（不会做 · 算错 · 概念不清 · 看错题）。<b>这 9 天的目的不是赶进度，是测出「每题几分钟」</b>——这个数是 11 月排量的地基。9 天约 110 题</li>
+        <li><b>11/1–11/13｜独占主角位，每天 24 题 + 4 个网课分P</b>：660 剩余章节 + 网课补段。<b>11/7、11/10、11/12 各一套限时真题（150 分钟）</b>，当天批完；11/13 三套横评 + 公式表定稿</li>
+        <li><b>省二意味着什么</b>：150 分钟 5–6 道大题，<b>稳定做出 3 道</b>。省二和省三的差距不在难题，在<b>基础题的手速和准确率</b>。所以 660 打基础、真题练手速，<b>660 不是充分条件，真题才是</b></li>
+        <li><b>优先级</b>：真题精讲 &gt; 真题套卷 &gt; 660 题。冲突时按这个顺序砍，但<b>套卷和错题回炉绝不能砍</b></li>
+        <li><b>要下的材料</b>：B 站 <code>BV1fKNb6bENY</code> 有第 9–17 届真题，<b>11 月初必须下好</b>——本地只有第 1–8 届，而冲刺要用的第 13 / 15 / 17 届都没有</li>
+      </ul>
+    </div>
+
+    <div class="tk eng">
+      <h4>英语六级 · 12/12</h4>
+      <div class="goal">10/22 – 12/12 ｜ 上次 480 ｜ 目标 550+ ｜ 听力极弱 · 阅读接近满分</div>
+      <ul class="plain">
+        <li><b>分数结构</b>：听力 249（35%）+ 阅读 249（35%）+ 写作翻译 212（30%）。按 480 倒推大约是 听力 120 / 阅读 230 / 写作翻译 130</li>
+        <li><b>核心判断：70 分空间几乎全在听力</b>。阅读从 230 提到 240 要花的力气，比听力从 120 提到 180 大得多。<b>阅读唯一的任务是「别退步」，绝不加量</b></li>
+        <li><b>听力为什么崩在 Section C</b>：三部分里 Section C 讲座 10 题 × 14.2 分 = 142 分，<b>占听力 57%</b>，而且最难。<b>听力 120 分的人，几乎都是 Section C 十道题只对两三道</b></li>
+        <li><b>关键洞察：问题不在词汇量</b>。阅读接近满分说明词汇语法都够，听力弱是<b>「音形连接」断裂</b>——认得却听不出。<b>所以不要背单词书，要背听力高频词且必须带发音</b>，只看拼写无效</li>
+        <li><b>方法：每天 1 篇 Section C 精听</b>，产出三样：<br>
+          ① <b>听写稿</b>——听不出留空，不猜<br>
+          ② <b>对照归因</b>——生词 / 连读吞音 / 语速跟不上 / 逻辑没跟上<br>
+          ③ <b>跟读 3 遍</b>——最容易被跳过，但它是唯一能改音形连接的<br>
+          <b>泛听（走路听、看剧）对提分几乎无效</b>——大脑会自动跳过听不懂的部分</li>
+        <li><b>节奏</b>：10/22–10/31 每天 1 篇（跑通方法、建习惯）→ 11/1–11/13 每天 1 篇（底线不断）→ 11/15–12/12 每天 2 篇 + 写作翻译 + 3 套真题</li>
+        <li><b>写作翻译</b>：第 3 周（11/29）起定型 3 个模板，翻译重点练中国文化类话题</li>
+      </ul>
+    </div>
+
+    <div class="tk code">
+      <h4>C 语言 / 编程能力（最需要补的一条线）</h4>
+      <div class="goal">10/22 起 ｜ 每天洛谷 3 题打底 ｜ 项目线是主线 ｜ 寒假主攻</div>
+      <ul class="plain">
+        <li><b>先说清楚问题在哪</b>：C 语言课过了，但"连最简单的程序都做不出来"。这不矛盾——<b>你练过的是"补全函数"，从没练过"从零构造"</b>。就像背熟了所有砖块的名称，但从没盖过房子</li>
+        <li><b>三类能力要分开练</b>：<b>算法实现</b>（刷题练）｜<b>程序构造</b>（做小项目练，<b>这是你的缺口</b>）｜<b>代码阅读</b>（读源码练，长期）。<b>纯刷题解决不了"做不出程序"</b>——题目已经把输入输出描述清楚了，不需要你做需求分析</li>
+        <li><b>环境已就绪</b>：本机原先只有 VS Code、没有编译器。<b>已装 MinGW-w64（gcc），做到改一行、按一下、5 秒内看到结果</b>。这个循环是编程能力的前提，没有它所有学习都是纸上谈兵</li>
+        <li><b>平台：洛谷（luogu.com.cn），不是力扣</b>。力扣没有字符串类型、没有容器，C 写起来极其痛苦；洛谷有官方阶梯题单，C 支持好，每题有题解</li>
+        <li><b>项目阶梯（每级只加一个新维度）</b>：<br>
+          ① <b>个税 / BMI 计算器</b>（约 80 行）—— 输入、判断、输出<br>
+          ② <b>记账本 v1</b>（约 150 行）—— 菜单循环 + 数组 + 汇总，程序开始有"状态"<br>
+          ③ <b>记账本 v2</b>（约 200 行）—— 存文件，关掉再打开数据还在<br>
+          ④ <b>通讯录</b>（约 250 行）—— struct + 增删改查 + 排序，<b>做完基本就「会写程序」了</b><br>
+          ⑤ <b>拆多文件 + Makefile</b> —— 从「写脚本」跨到「写工程」<br>
+          ⑥ <b>寒假换 Python / C++ 重写</b> —— 体会语言只是工具</li>
+        <li><b>脚手架递减</b>：第 1 个项目我给完整代码（你负责跑通、改参数、问看不懂的行）→ 第 2 个给骨架（你填空）→ 第 3 个只给需求。<b>先体验"我的程序跑起来了"，语法会在项目里自己回来</b></li>
+        <li><b>节奏</b>：10 月每天 3 题 + 第 1 级；11 月第 2–3 级；12 月第 4–5 级；寒假第 6 级 + 数据结构。<b>项目先写、刷题后做</b>——项目有"今天做出来了"的即时反馈</li>
+        <li><b>配套看课：翁恺《C 语言程序设计》</b>（B 站 <code>BV1dr4y1n7vA</code>，100 集 / 14.2 小时）。<b>但从头看是浪费，砍掉 4.9 小时，只看 9.2 小时</b>：<br>
+          ✗ <b>不看 P1–P32</b>（入门 / 变量 / 运算符 / if，4.0h）——这些洛谷入门1–2 的 30 道题会强制你复现，<b>写一遍比听一遍有效</b><br>
+          ✗ <b>不看 P47–P53</b>（习题讲解 0.6h）、<b>P98–P100</b>（ACLLib 图形库 0.3h）<br>
+          ✓ <b>只看 P33–P96</b>（循环 / 数据类型 / 函数 / 数组 / 指针 / 字符串，9.2h）</li>
+        <li><b>看课的铁律：跟着项目走，不要提前看</b>——<b>每个项目需要什么，就看什么课</b>：<br>
+          · 10/23–11/13（刷洛谷入门1–3）：<b>一集都不看</b>，卡住就看题解<br>
+          · 11/15 起写「记账本 v1」：看 <b>P33–P46 循环</b>（2.2h）+ <b>P75–P80 数组</b>（1.2h）<br>
+          · 写「记账本 v2」：看 <b>P68–P74 函数</b>（1.1h）<br>
+          · 写「通讯录」：看 <b>P88–P96 字符串</b>（1.4h）<br>
+          · 寒假：<b>P54–P67 数据类型</b>（1.7h）+ <b>P81–P87 指针</b>（1.6h）<br>
+          <b>1.5 倍速约 6 小时，摊到 5 个月每月 1–2 小时。</b></li>
+        <li><b>三个坑</b>：① 翁恺全程用 Dev-C++，<b>你不用换环境</b>，跟着敲代码就行；② <b>每集必须跟着敲</b>，光看等于看剧（看一集 = 敲一遍 = 改几个参数看结果）；③ <b>1.5 倍速，第一遍别上 2 倍</b>，会漏掉他讲"为什么这么写"的那几句</li>
+        <li><b>最重要的一句</b>：翁恺的课解决「<b>不知道 C 有什么</b>」，不解决「<b>写不出程序</b>」——后者只能靠项目。<b>看懂和写出来之间隔着几十次动手</b>，指针看第一遍不懂是正常的，12 月写通讯录时再看第二遍就通了</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== 待办与风险 ===== -->
+<section>
+  <h2 class="r">开工前必须先处理的三件事</h2>
+  <p class="sub">概率论期中的日期已确认（10/19），从待办里划掉。电路课件已补齐，补课的"弹药"到位了。</p>
+  <div class="info" style="margin-bottom:14px">
+    <b>① 电路课件已齐（已完成）</b>：<code>桌面\电子电路与技术（2）\</code> 现有 9 份课件（1 绪论+二极管 → 9 触发器）+ 17 单元进度表 + 数电习题解答。<b>补课顺序完全按这 9 份课件的编号走</b>，不用再找别的资料。配套的 <code>电子电路与技术2_补课辅助.html</code> 已按同一顺序写好，打开就能用。
+  </div>
+  <div class="danger" style="margin-bottom:14px">
+    <b>② 补数竞真题（最紧急）</b>：本地 <code>Desktop\大二上\大学生数学竞赛\</code> 只有第 1–8 届，而 11/10–11/12 冲刺周要用的<b>第十七、十六、十五、十三届全都没有</b>。去 B 站收藏的 <code>BV1fKNb6bENY</code> 下载第 9–17 届。
+  </div>
+  <div class="todo">
+    <b>③ 确认六级报名状态</b>：2026 下半年六级笔试 12/12 15:00–17:25，口试 11/22。如果报了口语，11/22 那天要单独留出来。
+  </div>
+
+  <div class="warn" style="margin-top:20px">
+    <b>进度落后了怎么砍（v5 版，按这个顺序）</b>：<br>
+    ① 先砍 <b>副手块的任务量</b>（24 题 → 12 题），别砍主块——<b>主块是当天唯一"真正推进"的部分</b><br>
+    ② 再砍 <b>洛谷题数</b>（3 题 → 1 题），它没有截止日期<br>
+    ③ 再砍 <b>660 的次要章节</b>（定积分应用、空间解析几何的选填）<br>
+    ④ <b>例行不能砍</b>——六级精听 1 篇 + 洛谷 3 题，一天 30 分钟。<b>听力是唯一有 70 分空间的科目，断了就前功尽弃</b><br>
+    ⑤ <b>绝对不砍</b>：大物限时套卷、数竞三套真题（11/7、11/10、11/12）、电路课件 3 与 7 的主块
+  </div>
+
+  <div class="danger" style="margin-top:14px">
+    <b>任务量制最大的风险：高估自己</b>。第一天可能排了 12 题只做了 8 题——<b>这不算失败，这是数据</b>。你要做的是把"实际做了 8 题、用了 55 分钟"记下来，第二天按真实速度调。<b>前三天就是在标定，标定完这套表才真正属于你</b>。<br>
+    两个硬规则不变：<b>① 手机放在另一个房间；② 主块中途只允许休息一次（10 分钟，起来走动）</b>。任务量制只改了"怎么定义完成"，没改"专注需要连续"这件事。
+  </div>
+
+  <div class="info" style="margin-top:14px">
+    <b>错峰排法的一个副作用，提前告诉你</b>：某科隔几天才碰一次，会感觉"上次学的东西好像忘了"。<b>这是正常的，不是退步</b>。<br>
+    真正的检验标准不是"随时能背出来"，而是<b>"翻开笔记 10 分钟内能接上"</b>。如果 10 分钟接不上，说明上一个块没学透，下次块开头留 15 分钟回顾；如果 10 分钟能接上，就继续往前走，不用焦虑。<br>
+    <b>还有一条：验收标准比任务量更重要</b>。做了 12 题但每题都靠看答案，不如做 6 题且每题都能独立复现。任务量是下限，验收标准是真实门槛。
+  </div>
+</section>
+
+<footer>
+  <div>规划 v5 生成于 2026-10-22 ｜ 覆盖 10/22 – 12/12，共 52 天 ｜ 本次变更：<b>从「卡时长」改成「卡任务量」</b>——每项写成「做完什么 = 算完成」，第二列显示任务量而非小时数，时间降级为事后记录。结构变化：<b>离散 10 月归零</b>（方案 A 释放 12h 全给数竞摸底）、<b>数竞 10 月每天 12 题摸底</b>、<b>六级改为每天 1 篇 Section C 精听</b>、<b>编程洛谷每天 3 题不断线</b>。</div>
+  <div>硬考期依据：概率论期中 2026-10-19（用户确认）；大物（二）2026-10-31（用户确认）；第十八届全国大学生数学竞赛初赛 2026-11-14 09:00–11:30；2026 下半年大学英语六级笔试 2026-12-12 15:00–17:25。</div>
+  <div>章节依据（v5 按 10/21 七维讨论校准）：<b>离散数学</b>——课堂进度到第 7 章树，自己九月底停在二元关系；教材屈婉玲《离散数学》第 3 版，六部分 19 章（集合论第 1–3 章在前、数理逻辑第 15–19 章在后），课程只讲四部分，<b>初等数论第 4 章与组合数学第 10–11 章不讲</b>；<b>电路电子技术（2）</b>——9 份课件带读，顺序按课堂需求排为 课件 1 → 3 → 4 → 5 → 6（10 月）→ 7 → 8 → 9（11 月跟课堂），<b>已剔除超纲的多级放大、频率响应、反馈放大、功率放大、窗口比较器、开关稳压电源</b>；<b>数竞</b>——武忠祥 660 只做高数部分（约 330 题），真题用第 13/15/17 届非数 A。</div>
+</footer>
+
+</div>
+
+<script>
+/* ================= 逐日数据 ================= */
+const P='prob', H='phys', M='math', E='eng', C='code', D='dm', K='circ';
+const TAG={prob:'概率论',phys:'大物2',math:'数竞',eng:'六级',code:'C语言',dm:'离散',circ:'电路'};
+
+const DAYS=[
+ {d:'10-16',w:'周五',sum:'6h',n:3,hi:1,it:[
+   [P,'4.5h','<b>突击 Day 1</b>｜第 1 章：古典概型 / 条件概率 / 全概率与贝叶斯公式；第 2 章：随机变量、分布函数、离散型与连续型。做完《概率论第1-2章练习卷》'],
+   [H,'1h','T1 气体动理论 课件 1–2 通读，只求有印象 + 标出不懂的点'],
+   [M,'0.5h','网课 P1 函数极限·考点基础（1.5 倍速，不做题）']]},
+
+ {d:'10-17',w:'周六',sum:'6h',n:3,hi:1,it:[
+   [P,'4.5h','<b>突击 Day 2</b>｜第 3 章：二维随机变量、边缘分布、独立性；数字特征（期望 / 方差 / 协方差 / 相关系数）。按《概率论期中复习重点与习题》逐题过'],
+   [H,'1h','T1 气体动理论 课件 3–4'],
+   [M,'0.5h','网课 P3 + P4 函数极限·真题精讲（1.5 倍速）']]},
+
+ {d:'10-18',w:'周日',sum:'6h',n:3,hi:1,it:[
+   [P,'4.5h','<b>突击 Day 3</b>｜全范围查漏 + <b>限时做 1–2 套模拟卷</b> + 错题归因，整理成一页纸公式表'],
+   [H,'1h','T2 热力学第一定律 课件 1'],
+   [M,'0.5h','网课 P5 数列极限·考点基础（1.5 倍速）']]},
+
+ {d:'10-19',w:'周一',sum:'—',exam:1,it:[
+   [P,'考试','<b>概率论期中考试</b>。考前 1 小时只看公式表和错题，不做新题。考完当天彻底放松，<b>两门新课明天才启动</b>']]},
+
+ {d:'10-20',w:'周二',sum:'7.5h',n:6,it:[
+   [H,'2.5h','T1 章精读：教材对应章节 + 课件 + 课后题'],
+   [M,'2h','网课 P6 + P7 数列极限·真题精讲（上/下）'],
+   [D,'1h','<b>补课 ①-1</b>｜第 6 章 集合代数：子集与幂集、笛卡尔积、交并差补与对称差（先抄定义，做 3 道例题）'],
+   [K,'1h','<b>补课 ⓪</b>｜课件 1–2 速览：PN 结单向导电、二极管三种等效模型（理想/恒压降/折线）、稳压管 UZ 与 IZmin/IZmax。只抓这三样，别通读'],
+   [E,'0.5h','30 个六级核心词 + 1 篇听力精听（恢复维持档）'],
+   [C,'0.5h','笔记第 1 章「程序结构」+ 把示例代码敲一遍跑通']]},
+
+ {d:'10-21',w:'周三',sum:'7.5h',n:6,it:[
+   [H,'2.5h','T2 章精读：热力学第一定律 + 四种过程 + 课后题'],
+   [M,'2h','660 题 第一章 函数极限连续（约 48 题）'],
+   [D,'1h','<b>补课 ①-2</b>｜第 6 章：集合恒等式与运算律（分配律、德摩根、吸收律），有界格与布尔代数初步'],
+   [K,'1h','<b>补课 ①-1</b>｜课件 3：BJT 结构与电流放大 IC=βIB、IE=(1+β)IB；发射结正偏 + 集电结反偏；输入/输出特性曲线与三个工作区'],
+   [E,'0.5h','30 词'],
+   [C,'0.5h','笔记第 2 章「变量与数据类型」']]},
+
+ {d:'10-22',w:'周四',m:'大物',n:3,it:[
+   [H,'P41 + 12 题','<b>【主】热力学第二定律</b>｜P41 全片看完（53 分钟）+ <b>能默写熵变四类公式</b>（理想气体各过程 / 相变 / 混合 / 不可逆）+ 课后题 12 道，<b>对 ≥ 10 才算过</b>'],
+   [M,'12 题','<b>【副】数竞·摸底第 1 天</b>｜660 第一章剩余 12 题，<b>限时 40 分钟，到点就停</b>。每题记三样：用时 / 对错 / 错因（不会做 · 算错 · 概念不清 · 看错题）'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级 1 篇 Section C 精听（听写 → 对照归因 → 跟读 3 遍）+ 洛谷 3 题']]},
+
+ {d:'10-23',w:'周五',m:'电路',n:3,it:[
+   [K,'课件 3 上半','<b>【主】共射放大一次走完</b>｜P48–P75：直流通路 → 静态 Q（IBQ=(VCC−UBE)/Rb、UCEQ=VCC−ICQ·Rc）→ 图解法与截止/饱和失真 → 微变等效 rbe / Au / Ri / Ro。<b>验收：能不看书画出微变等效电路并说出 Au 表达式</b>'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第一章继续 12 题，限时 40 分钟，记用时和错因'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-24',w:'周六',m:'大物',n:3,it:[
+   [H,'一页纸公式表','<b>【主】热学三章横向拉通</b>｜T1–T3 公式 + 适用条件 + 易错点做成一张对照表（约 30 个公式）+ 重做课件标记「不懂」的例题。<b>验收：合上书能默出公式表八成</b>'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第一章收尾 12 题 + 前面 24 题错题重做一遍'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-25',w:'周日',m:'电路',n:3,it:[
+   [K,'课件 3 收尾 + 4','<b>【主】三组态 + 场效应管</b>｜分压偏置与温度稳定性、共集/共基（只到了解）、三种组态对比表；接 MOSFET：结构与特性曲线、开启电压、共源静态与动态、Au=−gmRd。<b>验收：说出三种组态各自适合做什么</b>'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第二章 12 题（导数与微分），限时 40 分钟'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-26',w:'周一',m:'大物',n:3,it:[
+   [H,'模拟卷 1','<b>【主】限时 90 分钟做第 1 套</b>｜严格计时，做完再对答案。每道错题<b>回教材定位到具体小节</b>，不只看答案'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第二章继续 12 题'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-27',w:'周二',m:'电路',n:3,it:[
+   [K,'课件 5','<b>【主】运放线性应用</b>｜虚短 + 虚断 → 比例 / 加减 / 积分 / 微分电路；<b>有源滤波只要求「能识别是什么滤波」</b>，习题可不做。<b>验收：看到电路能写出 Uo 与 Ui 的关系</b>'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第二章收尾 12 题'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-28',w:'周三',m:'大物',n:3,it:[
+   [H,'模拟卷 2','<b>【主】限时 90 分钟做第 2 套</b>｜做完精批，<b>和第 1 套的错题做横向归类</b>——找出重复犯的那两三个错'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第三章 12 题（中值定理与导数应用）'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-29',w:'周四',m:'电路',n:3,it:[
+   [K,'课件 5 后半 + 6','<b>【主】比较器 + 直流电源</b>｜单限 UTH=UREF、滞回（两阈值用叠加定理现场推）、矩形波/三角波；接整流滤波稳压：半波 0.45U2、桥式 0.9U2、URM=√2U2、电容滤波 1.2U2、78xx/79xx'],
+   [M,'12 题','<b>【副】数竞·摸底</b>｜660 第三章继续 12 题'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'10-30',w:'周五',m:'大物',n:3,it:[
+   [H,'收官','<b>【主】只做三件事</b>｜第 3 套重点题 + <b>一页纸公式表定稿</b> + 只过错题。<b>明天考试，今天不熬夜</b>'],
+   [M,'6 题','<b>【副】数竞·减量</b>｜只做 6 题维持手感，不追进度'],
+   [C,'3 题','<b>例行</b>｜洛谷 3 题（六级精听今天停一天，给大物让路）']]},
+
+ {d:'10-31',w:'周六',m:'考试',n:1,it:[
+   [H,'考试','<b>大学物理（二）考试</b>。考完当天彻底放松——<b>补课已在 10/30 收尾，今天什么都不用补</b>']]},
+
+ {d:'11-01',w:'周日',m:'数竞',n:3,it:[
+   [M,'24 题 + P8–P11','<b>【主】660 第二章 + 网课补段</b>｜导数与微分 24 题（限时）+ 网课 P8–P11（1.5 倍速，只记考点不暂停）。<b>今天起数竞独占主角位，连续 13 天</b>'],
+   [K,'1.5h','<b>【副】电路跟课</b>｜本周课堂内容 + 作业一次做完；回看静态工作点和微变等效'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-02',w:'周一',m:'数竞',n:3,it:[
+   [M,'24 题 + P12–P15','<b>【主】660 第三章 + 多元微分</b>｜中值定理与导数应用 24 题 + 网课 P12–P15'],
+   [M,'错题 10 题','<b>【副】错题回炉</b>｜把 10 月摸底阶段的错题按错因分类重做，<b>只做「不会做」和「概念不清」两类</b>，「算错」不用重做'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-03',w:'周二',m:'数竞',n:3,it:[
+   [M,'24 题 + P16–P19','<b>【主】660 第四章 + 不定积分</b>｜不定积分 24 题 + 网课 P16–P19'],
+   [K,'1.5h','<b>【副】电路跟课</b>｜本周课堂 + 课后题；画一张「放大电路分析三步走」流程图'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-04',w:'周三',m:'数竞',n:3,it:[
+   [M,'24 题 + P20–P23','<b>【主】660 第五章 + 定积分</b>｜定积分与反常积分 24 题 + 网课 P20–P23'],
+   [M,'错题 10 题','<b>【副】错题回炉</b>｜本周新错题当天清，不积压'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-05',w:'周四',m:'数竞',n:3,it:[
+   [M,'24 题 + P24–P27','<b>【主】660 第六七章 + 重积分</b>｜定积分应用与二重积分 24 题 + 网课 P24–P27'],
+   [K,'1.5h','<b>【副】电路跟课</b>｜本周课堂 + 课后题；模电错题本建起来（抄题干 + 错因，不抄答案）'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-06',w:'周五',m:'数竞',n:3,it:[
+   [M,'24 题 + P28–P31','<b>【主】660 第八章 + 三重积分</b>｜多元积分学 24 题 + 网课 P28–P31'],
+   [M,'错题 10 题','<b>【副】错题回炉</b>｜明天做真题，今天把错的都清一遍'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-07',w:'周六',m:'数竞',n:3,hi:1,it:[
+   [M,'真题 1 套','<b>【主】第十七届非数 A 真题</b>，<b>严格限时 150 分钟</b> + 逐题精批。错因分三类：不会 / 算错 / 看错题——<b>这个分类比分数重要</b>'],
+   [M,'精批归因','<b>【副】当天批完</b>｜不隔夜，隔夜就记不清当时的思路了'],
+   [C,'3 题','<b>例行</b>｜洛谷 3 题（真题日六级精听暂停）']]},
+
+ {d:'11-08',w:'周日',m:'数竞',n:3,it:[
+   [M,'24 题 + P32–P35','<b>【主】660 第九章 + 曲线积分</b>｜24 题 + 网课 P32–P35（曲线积分 / 格林公式）'],
+   [M,'真题 1 错题','<b>【副】真题回炉</b>｜昨天真题的错题重做一遍，尤其是「不会」那一类'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-09',w:'周一',m:'数竞',n:3,it:[
+   [M,'24 题 + P36–P38','<b>【主】660 第十章 + 曲面积分</b>｜24 题 + 网课 P36–P38（曲面积分 / 高斯公式）'],
+   [K,'1.5h','<b>【副】电路跟课</b>｜本周课堂 + 课后题；错题本重做'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-10',w:'周二',m:'数竞',n:3,hi:1,it:[
+   [M,'真题 2 套','<b>【主】第十五届非数 A 真题</b>，限时 150 分钟 + 精批。<b>和第一套比，看错因分布有没有变化</b>'],
+   [M,'精批归因','<b>【副】当天批完</b>｜重点看「算错」有没有减少——那是熟练度指标'],
+   [C,'3 题','<b>例行</b>｜洛谷 3 题']]},
+
+ {d:'11-11',w:'周三',m:'数竞',n:3,it:[
+   [M,'24 题 + P39–P41','<b>【主】660 第十一十二章 + 级数</b>｜24 题 + 网课 P39–P41（无穷级数）'],
+   [M,'错题 10 题','<b>【副】错题回炉</b>｜两套真题的重复错因，专项补'],
+   [E,'1 篇 + 3 题','<b>例行</b>｜六级精听 1 篇 + 洛谷 3 题']]},
+
+ {d:'11-12',w:'周四',m:'数竞',n:3,hi:1,it:[
+   [M,'真题 3 套','<b>【主】第十三届非数 A 真题</b>，限时 150 分钟 + 精批'],
+   [M,'精批归因','<b>【副】当天批完</b>｜第三套的作用是<b>验证前两套的补漏有没有生效</b>'],
+   [C,'3 题','<b>例行</b>｜洛谷 3 题']]},
+
+ {d:'11-13',w:'周五',m:'数竞',n:3,hi:1,it:[
+   [M,'三套横评','<b>【主】错题横向归类</b>｜把三套真题错题按题型归（极限 / 微分 / 积分 / 级数 / 线面积分），找出<b>重复犯的那两三个错</b>，专项补'],
+   [M,'公式表定稿','<b>【副】一页纸公式表</b>｜网课 P42 十六届精讲过一遍 + 只看错题。<b>不做新题，22:30 前睡</b>'],
+   [C,'3 题','<b>例行</b>｜洛谷 3 题（考前减量，只维持手感）']]},
+
+ {d:'11-14',w:'周六',m:'考试',n:1,exam:1,it:[
+   [M,'考试','<b>09:00–11:30 数学竞赛初赛</b>。按「填空 40 分钟 → 常规大题 → 压轴骗分 → 留 10 分钟检查」的节奏走。<b>省二 = 六道题稳定做出三道，基础题不丢分比攻难题重要</b>']]}
+];
+
+/* ================= 周计划 ================= */
+const WEEKS=[
+ ['第 1 周<br>11/15 – 11/21',
+  '<b>听力专项启动。</b>每天 2 篇精听（1 篇 Section C + 1 篇长对话），<b>每篇都要听写</b>；周末 1 套完整听力限时。阅读只做 1 篇长篇匹配维持手感',
+  '<b>记账本 v1（纯内存）。</b>菜单循环 + 数组 + 分类汇总，约 150 行。<b>先能跑，再谈好看</b><br><b>配翁恺 P33–P46 循环</b>（2.2h）+ <b>P75–P80 数组</b>（1.2h）',
+  '<b>第 6 章集合代数收尾 + 第 7 章二元关系。</b>关系矩阵、五种性质判定、三种闭包（Warshall）、等价关系与划分、偏序与哈斯图',
+  '<b>课件 7 逻辑代数。</b>数制码制、三种基本运算、公式与规则（对偶/反演）、最小项与标准与或式、卡诺图化简'],
+ ['第 2 周<br>11/22 – 11/28',
+  '<b>听力 + 阅读双轨。</b>每天 2 篇精听 + 1 篇仔细阅读（限时 10 分钟）；周六第 1 套完整真题，<b>按考试时间做</b>',
+  '<b>记账本 v2（存文件）。</b>fopen / fprintf / fscanf + 错误处理，关掉再打开数据还在。<b>这是跨越性的一步</b><br><b>配翁恺 P68–P74 函数</b>（1.1h）',
+  '<b>第 8 章函数 + 第 9 章图的基本概念。</b>单射/满射/双射、基数与可数集；度与握手定理、通路与回路、连通性、欧拉图与哈密顿图',
+  '<b>课件 8 组合逻辑。</b>分析三步（表达式 → 真值表 → 功能）、设计三步；编码器/译码器/数据选择器只背功能表'],
+ ['第 3 周<br>11/29 – 12/05',
+  '<b>写作翻译定型。</b>3 个写作模板 + 5 篇翻译专项；每周 2 套完整真题限时。<b>听力精听降到每天 1 篇，不断线就行</b>',
+  '<b>通讯录（struct + 增删改查）。</b>结构体数组 + 字符串处理 + 排序查找，约 250 行。<b>做完这个基本就「会写程序」了</b><br><b>配翁恺 P88–P96 字符串</b>（1.4h）',
+  '<b>第 10 章欧拉图与哈密顿图 + 树与平面图。</b>树的定义与性质、最小生成树（Kruskal / Prim）；平面图与欧拉公式',
+  '<b>课件 9 触发器。</b>基本 RS 的约束、D / JK / T / T′ 特性方程与状态转换图、触发器相互转换'],
+ ['第 4 周<br>12/06 – 12/12',
+  '12/6 第 3 套真题；12/7–12/11 <b>只看错题 + 默写作文模板</b> + 每天 1 篇听力；<br><b>12/12 15:00–17:25 考试</b>',
+  '<b>通讯录收尾 + 拆多文件。</b>main.c / contact.c / contact.h + Makefile，<b>从「写脚本」跨到「写工程」</b><br><b>本周不看课</b>，专心拆文件',
+  '<b>代数结构 + 期末第一轮。</b>二元运算、半群与群；按题型归类（性质判定 / 闭包 / 哈斯图 / 图的判定）',
+  '<b>课件 5 运放（期末前补）。</b>虚短虚断、比例 / 加减 / 积分电路、比较器；和课件 6 的电源串一遍']
+];
+
+/* ================= 渲染 ================= */
+const tb=document.getElementById('tb');
+const KEY='plan-2026autumn-v5';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+
+DAYS.forEach((it,i)=>{
+  const tr=document.createElement('tr');
+  tr.className=(it.exam?'examday':'')+(it.hi?' hi':'');
+  const lines=it.it.map(x=>'<div class="li"><span class="tg '+x[0]+'">'+TAG[x[0]]+'</span><span class="hr">'+x[1]+'</span><span>'+x[2]+'</span></div>').join('');
+  tr.innerHTML='<td class="ck"><input type="checkbox" class="cb" data-i="'+i+'"'+(saved[i]?' checked':'')+'></td>'+
+    '<td class="d">'+it.d+'<em>'+it.w+'</em></td>'+
+    '<td>'+lines+'</td>'+
+    '<td class="t">'+(it.m||'已过')+(it.n?'<em style="display:block;margin-top:2px;font-style:normal;font-size:10px;color:var(--tx3)">'+it.n+' 项</em>':'')+'</td>';
+  if(saved[i]) tr.classList.add('done');
+  tb.appendChild(tr);
+});
+
+function sync(){
+  let n=0,tot=0;
+  document.querySelectorAll('.cb').forEach(c=>{
+    const k=+c.dataset.i;
+    if(DAYS[k] && DAYS[k].m){ tot++; if(c.checked) n++; }
+  });
+  document.getElementById('pi').style.width=(tot?(n/tot*100):0)+'%';
+  document.getElementById('pt').textContent='已完成 '+n+' / '+tot+' 天（10/22 起）';
+}
+tb.addEventListener('change',e=>{
+  const cb=e.target; if(!cb.classList.contains('cb'))return;
+  const i=cb.dataset.i, tr=cb.closest('tr');
+  if(cb.checked){saved[i]=1;tr.classList.add('done');} else {delete saved[i];tr.classList.remove('done');}
+  try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+  sync();
+});
+sync();
+document.getElementById('btnReset').addEventListener('click',()=>{
+  if(!confirm('确定清空所有勾选进度吗？'))return;
+  saved={}; try{localStorage.removeItem(KEY);}catch(e){}
+  document.querySelectorAll('.cb').forEach(c=>{c.checked=false;c.closest('tr').classList.remove('done');});
+  sync();
+});
+document.getElementById('btnPrint').addEventListener('click',()=>window.print());
+
+const tbw=document.getElementById('tbw');
+WEEKS.forEach(w=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td class="d" style="font-size:12.5px">'+w[0]+'</td><td>'+w[1]+'</td><td>'+w[2]+'</td><td>'+w[3]+'</td><td>'+w[4]+'</td>';
+  tbw.appendChild(tr);
+});
+
+/* ================= 倒计时 ================= */
+(function(){
+  const now=new Date();
+  const list=[['cd2','2026-10-31T08:00:00+08:00'],
+              ['cd3','2026-11-14T09:00:00+08:00'],['cd4','2026-12-12T15:00:00+08:00'],
+              ['cd5','2027-01-04T08:00:00+08:00']];
+  list.forEach(([id,iso])=>{
+    const t=new Date(iso), d=Math.ceil((t-now)/86400000), el=document.getElementById(id);
+    if(!el) return;
+    if(d>1) el.textContent=d+' 天';
+    else if(d===1) el.textContent='明天';
+    else if(d===0) el.textContent='今天';
+    else el.textContent='已过';
+  });
+})();
+</script>
+</body>
+</html>
