@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>电路课件 3 · 带读手册</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --circ:#fb923c; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--circ);
+    border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+  .m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .m span{display:block;font-size:10.5px;color:var(--tx3)}
+  .m b{display:block;font-size:14px;font-weight:700;margin-top:1px}
+
+  .hl{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.28);
+    border-radius:11px;padding:13px 15px;margin-bottom:20px;font-size:12.5px;color:var(--tx2)}
+  .hl b{color:var(--tx)}
+
+  h2{font-size:14px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h2::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--circ)}
+
+  .step{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:0;overflow:hidden;margin-bottom:10px}
+  .step-h{padding:11px 14px;background:var(--card2);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .step-n{flex:0 0 auto;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;
+    background:rgba(251,146,60,.15);color:var(--circ)}
+  .step-p{flex:1;font-size:12.5px;font-weight:700;min-width:120px}
+  .step-t{font-size:10.5px;color:var(--tx3)}
+  .step-b{padding:12px 14px}
+  .step-b .one{font-size:12.5px;color:var(--tx);font-weight:600;margin-bottom:6px}
+  .step-b ul{list-style:none}
+  .step-b li{position:relative;padding-left:15px;margin-bottom:5px;font-size:12.5px;color:var(--tx2)}
+  .step-b li:last-child{margin-bottom:0}
+  .step-b li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .step-b li b{color:var(--tx)}
+  .step-b li.k{color:#ffc48a}
+  .step-b li.k::before{background:var(--circ)}
+  .skip{font-size:11.5px;color:var(--tx3);margin-top:7px;padding-top:7px;
+    border-top:1px dashed rgba(255,255,255,.07)}
+  .skip b{color:#ff9d9d}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 13px;margin-bottom:8px}
+  .f .n{font-size:10.5px;color:var(--tx3);margin-bottom:2px}
+  .f .e{font-size:13.5px;font-family:"Cambria Math","Times New Roman",serif;line-height:1.9}
+  .f .c{font-size:11px;color:var(--tx3);margin-top:3px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--tx2);margin-top:10px}
+  .info b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">电路（2）· 课件 3 带读</div>
+  <h1>三极管及其放大电路
+    <small>90 页 ｜ 全课最重的一份 ｜ 预计 3 小时</small>
+  </h1>
+</header>
+
+<div class="meta">
+  <div class="m"><span>总页数</span><b>90 页</b></div>
+  <div class="m"><span>可跳</span><b>约 12 页</b></div>
+  <div class="m"><span>核心段</span><b>P30–P73</b></div>
+  <div class="m"><span>预计</span><b>3 小时</b></div>
+</div>
+
+<div class="hl">
+  <b>这份为什么最重</b>：后面运放、稳压、甚至数电的题，全都要你先会「<b>算静态 Q + 画微变等效</b>」。<br>
+  <b>这一份如果切成三次 1 小时、中间隔好几天，等于学了三遍还没学完</b>。所以建议 <b>2.5 小时一次走完 P1–P57</b>，第二天再补 P58–P90。
+</div>
+
+<!-- 第一段 -->
+<h2>第 1 段 · 晶体管是什么 <span style="font-size:11px;color:var(--tx3);font-weight:400">P1–P7 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">01</span><span class="step-p">P1–P4　结构与符号</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三个区、两个结</div>
+    <ul>
+      <li><b>三区</b>：发射区、基区、集电区</li>
+      <li><b>两结</b>：发射结（发射区-基区）、集电结（基区-集电区）</li>
+      <li class="k"><b>基区非常薄、掺杂浓度很低</b>——这是三极管能放大的物理基础，一定要记住这句话</li>
+      <li>符号上<b>发射极的箭头方向</b> = 发射结正偏时的电流方向（NPN 朝外，PNP 朝内）</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P2 的历史介绍、P4 的掺杂浓度具体数值，扫一眼即可</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">02</span><span class="step-p">P5–P7　电流放大原理</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：IB 怎么控制 IC</div>
+    <ul>
+      <li class="k"><b>放大的外部条件</b>：<b>发射结正偏 + 集电结反偏</b>（背下来，选择题必考）</li>
+      <li>内部过程：发射区发射电子 → 基区极少复合（所以基区要薄）→ 绝大部分被集电区收集</li>
+      <li class="k"><b>IE = IB + IC</b>（基极电流很小，集电极电流很大）</li>
+      <li class="k"><b>IC = β·IB</b>，<b>IE = (1+β)·IB</b>——这两个式子后面每一步都要用</li>
+      <li>β 一般 20–200，硅管约 50–150</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第二段 -->
+<h2>第 2 段 · 特性曲线与参数 <span style="font-size:11px;color:var(--tx3);font-weight:400">P8–P15 · 20 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">03</span><span class="step-p">P8–P11　输入/输出特性曲线</span><span class="step-t">12 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三个工作区怎么分</div>
+    <ul>
+      <li><b>输入特性</b>：i<sub>B</sub> = f(u<sub>BE</sub>)，形状像二极管的正向特性（因为发射结就是个 PN 结）</li>
+      <li><b>输出特性</b>：i<sub>C</sub> = f(u<sub>CE</sub>)，一族曲线，每条对应一个 i<sub>B</sub></li>
+      <li class="k"><b>三个区（必须能一眼认出来）</b>：<br>
+        · <b>放大区</b>：曲线平坦，i<sub>C</sub> 只受 i<sub>B</sub> 控制，<b>发射结正偏 + 集电结反偏</b><br>
+        · <b>饱和区</b>：u<sub>CE</sub> &lt; 0.7V 左右，i<sub>C</sub> 受 u<sub>CE</sub> 控制，<b>两个结都正偏</b><br>
+        · <b>截止区</b>：i<sub>B</sub> = 0 以下，<b>两个结都反偏</b></li>
+      <li><b>怎么记</b>：放大区 = 「一正一反」，饱和区 = 「两正」，截止区 = 「两反」</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">04</span><span class="step-p">P12–P15　主要参数</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：β 要记，其余了解</div>
+    <ul>
+      <li class="k"><b>β（共射电流放大系数）</b>——唯一必须掌握的，IC = βIB</li>
+      <li>f<sub>β</sub>、f<sub>T</sub>（频率参数）：知道「β 随频率升高而下降」就够了</li>
+      <li>I<sub>CBO</sub>、I<sub>CEO</sub>（反向饱和电流）：知道「受温度影响大」就够了</li>
+      <li class="k"><b>极限参数三个</b>：I<sub>CM</sub>（最大集电极电流）、P<sub>CM</sub>（最大功耗）、U<sub>(BR)CEO</sub>（击穿电压）——<b>选管时要同时满足三个</b></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P13–P14 的频率特性和反向电流细节，课件自己写了「其余参数了解即可」，考试不考计算</div>
+  </div>
+</div>
+
+<!-- 第三段 -->
+<h2>第 3 段 · 放大的概念 <span style="font-size:11px;color:var(--tx3);font-weight:400">P16–P22 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">05</span><span class="step-p">P16–P20　四个基本指标</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：Au、Ri、Ro 是什么</div>
+    <ul>
+      <li class="k"><b>放大的本质</b>：<b>用小的输入控制大的输出，能量的放大来自直流电源</b>，不是晶体管自己变出来的</li>
+      <li><b>电压放大倍数</b> A<sub>u</sub> = u<sub>o</sub>/u<sub>i</sub>（共射电路 A<sub>u</sub> 是<b>负</b>的，表示反相）</li>
+      <li class="k"><b>输入电阻 R<sub>i</sub></b>：从输入端看进去的等效电阻。<b>越大越好</b>（对信号源负担小）</li>
+      <li class="k"><b>输出电阻 R<sub>o</sub></b>：从输出端看进去的信号源内阻。<b>越小越好</b>（带负载能力强）</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P21–P22 非线性失真系数，纯概念、不考计算</div>
+  </div>
+</div>
+
+<!-- 第四段 -->
+<h2>第 4 段 · 共射电路怎么搭 <span style="font-size:11px;color:var(--tx3);font-weight:400">P23–P29 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">06</span><span class="step-p">P23–P29　电路组成与工作原理</span><span class="step-t">15 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：每个元件是干什么的</div>
+    <ul>
+      <li><b>V<sub>CC</sub></b>：直流电源，提供能量 + 保证发射结正偏、集电结反偏</li>
+      <li class="k"><b>R<sub>b</sub></b>：基极偏置电阻，<b>决定 I<sub>BQ</sub></b>，也就决定了整个 Q 点</li>
+      <li><b>R<sub>c</sub></b>：集电极电阻，<b>把电流变化转成电压变化</b>——没有它就取不出电压信号</li>
+      <li class="k"><b>C<sub>1</sub>、C<sub>2</sub>（耦合电容）</b>：<b>隔直通交</b>。隔断直流不让它影响信号源和负载，同时让交流信号通过</li>
+      <li><b>组成原则</b>：晶体管工作在放大区 + 信号能进能出 + 不失真</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第五段 -->
+<h2>第 5 段 · 静态分析 ★核心 <span style="font-size:11px;color:var(--tx3);font-weight:400">P30–P45 · 30 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">07</span><span class="step-p">P30–P33　静态 vs 动态</span><span class="step-t">6 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：分析分两步走</div>
+    <ul>
+      <li class="k"><b>静态分析</b>（算 Q 点）：只看直流量，<b>电容视为开路</b></li>
+      <li class="k"><b>动态分析</b>（算 Au、Ri、Ro）：只看交流量，<b>电容视为短路、直流电源视为接地</b></li>
+      <li><b>为什么分两步</b>：因为是非线性电路，先定工作点，才能在小范围内线性化</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">08</span><span class="step-p">P34–P43　图解法与失真</span><span class="step-t">16 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：Q 点位置决定会不会失真</div>
+    <ul>
+      <li><b>直流负载线</b>：u<sub>CE</sub> = V<sub>CC</sub> − i<sub>C</sub>R<sub>c</sub>，画在输出特性曲线上，与曲线的交点就是 Q 点</li>
+      <li><b>交流负载线</b>：斜率是 −1/(R<sub>c</sub>∥R<sub>L</sub>)，<b>比直流负载线更陡</b>，且过 Q 点</li>
+      <li class="k"><b>截止失真</b>：Q 点太低 → 输出波形<b>顶部</b>被削平<br>
+        <b>饱和失真</b>：Q 点太高 → 输出波形<b>底部</b>被削平</li>
+      <li class="k"><b>怎么调</b>：Q 点低就减小 R<sub>b</sub>（增大 I<sub>B</sub>），Q 点高就增大 R<sub>b</sub></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P39–P41 的波形作图细节，只要记住「截止削顶、饱和削底」这个结论</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">09</span><span class="step-p">P44–P45　估算法算 Q 点 ★必考</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三个公式直接算</div>
+    <ul>
+      <li class="k"><b>第一步</b>：画直流通路（电容开路）</li>
+      <li class="k"><b>第二步</b>：I<sub>BQ</sub> = (V<sub>CC</sub> − U<sub>BEQ</sub>) / R<sub>b</sub>　（U<sub>BEQ</sub> 硅管取 0.7V）</li>
+      <li class="k"><b>第三步</b>：I<sub>CQ</sub> = β·I<sub>BQ</sub></li>
+      <li class="k"><b>第四步</b>：U<sub>CEQ</sub> = V<sub>CC</sub> − I<sub>CQ</sub>·R<sub>c</sub></li>
+      <li><b>验算</b>：U<sub>CEQ</sub> 应该落在 0.3V ~ V<sub>CC</sub> 之间，如果算出负数说明管子饱和了，假设不成立</li>
+    </ul>
+    <div class="info"><b>这四步是整章的地基。</b>后面所有题（不管是算 Au 还是算效率）都从这四个数出发。</div>
+  </div>
+</div>
+
+<!-- 第六段 -->
+<h2>第 6 段 · 动态分析 ★最核心 <span style="font-size:11px;color:var(--tx3);font-weight:400">P46–P57 · 40 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">10</span><span class="step-p">P46–P49　小信号模型</span><span class="step-t">12 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：把晶体管换成一个电阻</div>
+    <ul>
+      <li><b>前提</b>：<b>交流小信号</b>——信号足够小，才能在 Q 点附近线性化</li>
+      <li class="k"><b>r<sub>be</sub> 的公式（必背）</b>：r<sub>be</sub> = r<sub>bb'</sub> + (1+β)·26mV / I<sub>EQ</sub>(mA)</li>
+      <li>r<sub>bb'</sub> 一般取 200Ω（题目会给）</li>
+      <li class="k"><b>微变等效电路的画法</b>：b、e 之间画一个 r<sub>be</sub>，c、e 之间画一个受控电流源 βi<sub>b</sub></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P47 的 h 参数矩阵推导，只要记住 r<sub>be</sub> 那个公式和等效电路画法</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">11</span><span class="step-p">P50–P53　Au / Ri / Ro 三个公式 ★必考</span><span class="step-t">14 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三个公式，背下来</div>
+    <ul>
+      <li class="k"><b>A<sub>u</sub> = −β·R<sub>L</sub>' / r<sub>be</sub></b>　其中 R<sub>L</sub>' = R<sub>c</sub> ∥ R<sub>L</sub><br>
+        <b>负号表示反相</b>——共射电路输出与输入反相，这是它的标志</li>
+      <li class="k"><b>R<sub>i</sub> = R<sub>b</sub> ∥ r<sub>be</sub></b>（通常 ≈ r<sub>be</sub>，因为 R<sub>b</sub> 很大）</li>
+      <li class="k"><b>R<sub>o</sub> ≈ R<sub>c</sub></b>（从输出端看进去，受控源开路）</li>
+      <li><b>R<sub>o</sub> 的求法</b>：输入端信号源置零（u<sub>s</sub>=0），输出端加测试电压求电流</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">12</span><span class="step-p">P54–P57　完整例题</span><span class="step-t">14 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：把前面所有公式串起来用一遍</div>
+    <ul>
+      <li>题目：V<sub>CC</sub>=12V，R<sub>b</sub>=300kΩ，R<sub>c</sub>=3kΩ，R<sub>L</sub>=3kΩ，r<sub>bb'</sub>=200Ω，β=50</li>
+      <li class="k"><b>标准五步</b>：① 算 Q 点 → ② 算 r<sub>be</sub> → ③ 画微变等效 → ④ 算 A<sub>u</sub> → ⑤ 算 R<sub>i</sub>、R<sub>o</sub></li>
+      <li><b>自己先算一遍再看解答</b>，这一步不能省——看懂和算对是两件事</li>
+    </ul>
+    <div class="info"><b>做到这里就完成 P1–P57 了，约 2.5 小时。</b>剩下的 P58–P90 建议第二天单独一块，因为分压偏置是新的一整套思路。</div>
+  </div>
+</div>
+
+<!-- 第七段 -->
+<h2>第 7 段 · Q 点稳定与分压偏置 ★重点 <span style="font-size:11px;color:var(--tx3);font-weight:400">P58–P73 · 35 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">13</span><span class="step-p">P58–P61　温度为什么要命</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：温度升高 → Q 点上移 → 失真</div>
+    <ul>
+      <li class="k"><b>三条路径</b>：T↑ → U<sub>BE</sub>↓（I<sub>B</sub>↑）、β↑、I<sub>CBO</sub>↑ → 最终 <b>I<sub>C</sub>↑</b></li>
+      <li>I<sub>C</sub> 升高 → Q 点向饱和区移动 → <b>容易饱和失真，严重时烧管</b></li>
+      <li class="k"><b>结论</b>：基本共射电路的 Q 点不稳定，工程上必须改进</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">14</span><span class="step-p">P62–P68　分压偏置电路 ★必考</span><span class="step-t">15 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：加一个 R<sub>e</sub> 就能稳定 Q 点</div>
+    <ul>
+      <li class="k"><b>稳定原理</b>：I<sub>C</sub>↑ → I<sub>E</sub>↑ → U<sub>E</sub>=I<sub>E</sub>R<sub>e</sub>↑ → U<sub>BE</sub>=U<sub>B</sub>−U<sub>E</sub>↓ → I<sub>B</sub>↓ → I<sub>C</sub>↓<br>
+        <b>这叫直流负反馈</b>，是「自己纠正自己」</li>
+      <li class="k"><b>静态计算四步</b>：<br>
+        ① U<sub>B</sub> ≈ R<sub>b2</sub>/(R<sub>b1</sub>+R<sub>b2</sub>)·V<sub>CC</sub>（前提：I<sub>2</sub> ≫ I<sub>B</sub>）<br>
+        ② U<sub>E</sub> = U<sub>B</sub> − U<sub>BE</sub><br>
+        ③ I<sub>EQ</sub> = U<sub>E</sub>/R<sub>e</sub> ≈ I<sub>CQ</sub><br>
+        ④ U<sub>CEQ</sub> = V<sub>CC</sub> − I<sub>CQ</sub>(R<sub>c</sub>+R<sub>e</sub>)</li>
+      <li class="k"><b>动态三个公式（有 C<sub>e</sub> 旁路时）</b>：<br>
+        A<sub>u</sub> = −β·R<sub>L</sub>'/r<sub>be</sub>　　R<sub>i</sub> = R<sub>b1</sub>∥R<sub>b2</sub>∥r<sub>be</sub>　　R<sub>o</sub> ≈ R<sub>c</sub><br>
+        <b>注意 R<sub>e</sub> 被 C<sub>e</sub> 短路了，所以公式里没有 R<sub>e</sub></b></li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">15</span><span class="step-p">P69–P73　Ce 的作用 ★易错</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：有没有 C<sub>e</sub>，放大倍数差很多</div>
+    <ul>
+      <li class="k"><b>有 C<sub>e</sub></b>：R<sub>e</sub> 被交流短路，A<sub>u</sub> = −βR<sub>L</sub>'/r<sub>be</sub>（<b>大</b>）</li>
+      <li class="k"><b>没有 C<sub>e</sub></b>：R<sub>e</sub> 参与交流，A<sub>u</sub> = −βR<sub>L</sub>'/(r<sub>be</sub>+(1+β)R<sub>e</sub>)（<b>小很多</b>）</li>
+      <li><b>为什么</b>：R<sub>e</sub> 引入了<b>交流负反馈</b>，牺牲放大倍数换取稳定性</li>
+      <li>这就是「<b>用增益换稳定</b>」的典型例子</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第八段 -->
+<h2>第 8 段 · 三种组态 <span style="font-size:11px;color:var(--tx3);font-weight:400">P74–P87 · 25 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">16</span><span class="step-p">P74–P81　共集电极（射极输出器）</span><span class="step-t">12 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：电压不放大，但能带负载</div>
+    <ul>
+      <li class="k"><b>A<sub>u</sub> ≈ 1</b>（略小于 1，<b>同相</b>）——所以叫「射极跟随器」</li>
+      <li class="k"><b>R<sub>i</sub> 很大，R<sub>o</sub> 很小</b>——这是它最大的价值</li>
+      <li><b>用途</b>：<b>缓冲级 / 阻抗变换</b>。放在信号源后面，把高阻变成低阻去驱动负载</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P78–P80 的推导过程，记住「Au≈1、Ri 大、Ro 小」三个结论就够</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">17</span><span class="step-p">P82–P87　共基极 + 三种比较 ★必背表</span><span class="step-t">13 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三种组态各自适合做什么</div>
+    <div class="tscroll" style="margin-top:8px">
+    <table>
+      <thead><tr><th>组态</th><th>A<sub>u</sub></th><th>R<sub>i</sub></th><th>R<sub>o</sub></th><th>相位</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td><b>共射</b></td><td>大（负）</td><td>中</td><td>中</td><td>反相</td><td><b>电压放大</b></td></tr>
+        <tr><td><b>共集</b></td><td>≈1</td><td><b>大</b></td><td><b>小</b></td><td>同相</td><td><b>缓冲 / 阻抗变换</b></td></tr>
+        <tr><td><b>共基</b></td><td>大（正）</td><td>小</td><td>大</td><td>同相</td><td>高频 / 电流跟随</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="info" style="margin-top:9px"><b>这张表必背</b>。考试常问「某电路适合做什么」，答案就在「用途」那一列。</div>
+  </div>
+</div>
+
+<!-- 第九段 -->
+<h2>第 9 段 · 小结与作业 <span style="font-size:11px;color:var(--tx3);font-weight:400">P88–P90 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">18</span><span class="step-p">P88–P90　小结 + 练习题</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：把整章的线索串一遍</div>
+    <ul>
+      <li>P88–P89 的小结<b>建议抄一遍</b>，它把整章串成了一条线</li>
+      <li class="k"><b>作业（P90 原文）</b>：自我检测 —— <b>二版第 3 章 1–24 题，三版第 5 章 1–20 题</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 必记点 -->
+<h2>必记点汇总（12 条）</h2>
+<div class="f"><div class="n">1</div><div class="e">放大的外部条件：发射结正偏 + 集电结反偏</div></div>
+<div class="f"><div class="n">2</div><div class="e">I<sub>E</sub> = I<sub>B</sub> + I<sub>C</sub>　　I<sub>C</sub> = βI<sub>B</sub>　　I<sub>E</sub> = (1+β)I<sub>B</sub></div></div>
+<div class="f"><div class="n">3</div><div class="e">三区：放大（一正一反）、饱和（两正）、截止（两反）</div></div>
+<div class="f"><div class="n">4</div><div class="e">I<sub>BQ</sub> = (V<sub>CC</sub>−U<sub>BEQ</sub>)/R<sub>b</sub>　　I<sub>CQ</sub> = βI<sub>BQ</sub>　　U<sub>CEQ</sub> = V<sub>CC</sub>−I<sub>CQ</sub>R<sub>c</sub></div></div>
+<div class="f"><div class="n">5</div><div class="e">截止失真削顶（Q 太低）、饱和失真削底（Q 太高）</div></div>
+<div class="f"><div class="n">6</div><div class="e">r<sub>be</sub> = r<sub>bb'</sub> + (1+β)·26mV/I<sub>EQ</sub>(mA)</div></div>
+<div class="f"><div class="n">7</div><div class="e">A<sub>u</sub> = −βR<sub>L</sub>'/r<sub>be</sub>　（R<sub>L</sub>' = R<sub>c</sub>∥R<sub>L</sub>，负号=反相）</div></div>
+<div class="f"><div class="n">8</div><div class="e">R<sub>i</sub> = R<sub>b</sub>∥r<sub>be</sub>　　R<sub>o</sub> ≈ R<sub>c</sub></div></div>
+<div class="f"><div class="n">9</div><div class="e">分压偏置：U<sub>B</sub> ≈ R<sub>b2</sub>V<sub>CC</sub>/(R<sub>b1</sub>+R<sub>b2</sub>)　　I<sub>EQ</sub> = (U<sub>B</sub>−U<sub>BE</sub>)/R<sub>e</sub></div></div>
+<div class="f"><div class="n">10</div><div class="e">R<sub>e</sub> 的作用：直流负反馈稳定 Q 点；有 C<sub>e</sub> 时交流短路不影响增益</div></div>
+<div class="f"><div class="n">11</div><div class="e">共集：Au≈1、Ri 大、Ro 小 → 缓冲；共基：Ri 小、Ro 大、同相 → 高频</div></div>
+<div class="f"><div class="n">12</div><div class="e">三个极限参数：I<sub>CM</sub>、P<sub>CM</sub>、U<sub>(BR)CEO</sub>，选管要同时满足</div></div>
+
+<!-- 自测 -->
+<h2>看完自测（6 题）</h2>
+<div class="info">
+  <b>1.</b> 三极管能放大的外部条件是什么？内部条件（结构上）是什么？<br><br>
+  <b>2.</b> 已知 V<sub>CC</sub>=12V，R<sub>b</sub>=470kΩ，R<sub>c</sub>=4kΩ，β=60，U<sub>BEQ</sub>=0.7V。求 Q 点三个值。<br><br>
+  <b>3.</b> 上题若 R<sub>L</sub>=4kΩ，r<sub>bb'</sub>=200Ω，求 r<sub>be</sub>、A<sub>u</sub>、R<sub>i</sub>、R<sub>o</sub>。<br><br>
+  <b>4.</b> 输出波形顶部被削平，是截止失真还是饱和失真？应该调大还是调小 R<sub>b</sub>？<br><br>
+  <b>5.</b> 分压偏置电路中，R<sub>e</sub> 是怎么稳定 Q 点的？请用箭头链写出过程。<br><br>
+  <b>6.</b> 一个电路要求「输入电阻大、输出电阻小、电压不放大」，应该选哪种组态？
+</div>
+
+<footer>
+  <div>课件：<code>3.三极管及其放大电路.pdf</code>（90 页）｜ 建议分两次：P1–P57（2.5h）+ P58–P90（1h）</div>
+  <div>作业：二版第 3 章 1–24，三版第 5 章 1–20</div>
+  <div>配套：<code>电路课件带读手册.html</code>（课件 1）· <code>电子电路与技术2_补课辅助.html</code></div>
+</footer>
+
+</div>
+</body>
+</html>
