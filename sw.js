@@ -1,5 +1,5 @@
 /* 学习看板 Service Worker */
-const CACHE = 'study-board-v4';
+const CACHE = 'study-board-v6';
 
 const ASSETS = [
   './',
@@ -15,9 +15,16 @@ const ASSETS = [
   './docs/电路课件带读手册.html',
   './docs/电子电路与技术2_补课辅助.html',
   './docs/数竞30天冲刺计划_非数学A类.html',
-  './docs/大学物理速成课_目录.md',
+  './docs/大物速成课目录.html',
+  './docs/大物热学知识总结.html',
+  './docs/大物模拟卷.html',
   './docs/六级听力专项.html',
-  './docs/离散集中补计划.html'
+  './docs/离散集中补计划.html',
+  './docs/离散知识点卡片.html',
+  './docs/数竞公式与题型.html',
+  './docs/数竞真题指南.html',
+  './docs/概率论期末专项.html',
+  './docs/六级写作翻译模板.html'
 ];
 
 self.addEventListener('install', e => {
