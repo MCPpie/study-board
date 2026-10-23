@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "run.agentos_app.sg.app_51b90c41346045a5bb5bcca2f3341794.twa",
+        "sha256_cert_fingerprints": ["83:E0:75:31:EF:25:5D:AB:B9:B3:C1:BA:64:1F:A0:36:E4:E7:1E:CD:6A:98:73:87:BF:5C:E7:96:CB:1E:4B:38"]
+      }
+    }]
