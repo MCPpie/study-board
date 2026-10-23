@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电子电路与技术（2）· 补课辅助手册（严格按本校 9 份课件 + 17 单元进度表）</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330; --card3:#232936;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --circ:#fb923c; --circ2:#fdba74;
+    --ok:#2ecc8f; --warn:#f5a623; --bad:#ff7a7a; --cyan:#38d0d8; --vio:#a97bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--tx);line-height:1.72;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 90px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* ---------- header ---------- */
+  header{padding:48px 0 30px;border-bottom:1px solid var(--line);margin-bottom:34px;position:relative;overflow:hidden}
+  header::before{
+    content:"";position:absolute;inset:-140px -40% auto -40%;height:340px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(251,146,60,.14),transparent 70%);pointer-events:none;
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.16em;color:var(--circ2);
+    border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.09);
+    padding:4px 12px;border-radius:100px;margin-bottom:15px;
+  }
+  h1{font-size:30px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14px;font-weight:400;color:var(--tx3);margin-top:10px;letter-spacing:0;line-height:1.7}
+
+  .pos{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px;margin-top:26px}
+  .pc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-left:3px solid var(--line2)}
+  .pc.now{border-left-color:var(--circ);background:rgba(251,146,60,.06)}
+  .pc.goal{border-left-color:var(--cyan);background:rgba(56,208,216,.05)}
+  .pc.out{border-left-color:var(--bad);background:rgba(255,122,122,.05)}
+  .pc .k{font-size:12px;color:var(--tx3);margin-bottom:5px}
+  .pc .v{font-size:15px;font-weight:600}
+  .pc .n{font-size:12px;color:var(--tx3);margin-top:4px}
+  .pc.now .v{color:var(--circ2)} .pc.goal .v{color:#67e8f9} .pc.out .v{color:#ff9d9d}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:40;background:rgba(14,16,21,.93);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+    margin-bottom:34px;
+  }
+  nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+  nav .wrap::-webkit-scrollbar{display:none}
+  nav a{
+    flex:0 0 auto;font-size:13px;color:var(--tx2);text-decoration:none;
+    padding:6px 12px;border-radius:8px;border:1px solid transparent;white-space:nowrap;
+    transition:.15s;
+  }
+  nav a:hover{color:var(--tx);background:var(--card2);border-color:var(--line2)}
+  nav a.hot{color:var(--circ2);border-color:rgba(251,146,60,.35);background:rgba(251,146,60,.08)}
+
+  section{margin-bottom:46px;scroll-margin-top:64px}
+  h2{font-size:20px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  h2::before{content:"";width:4px;height:19px;border-radius:2px;background:var(--circ);flex:0 0 auto}
+  h2 .tagx{font-size:11.5px;font-weight:500;letter-spacing:.05em;padding:2px 9px;border-radius:100px;border:1px solid var(--line2);color:var(--tx3)}
+  h2 .tagx.must{color:var(--bad);border-color:rgba(255,122,122,.4);background:rgba(255,122,122,.08)}
+  h2 .tagx.mid{color:var(--warn);border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.08)}
+  h2 .tagx.lite{color:var(--ok);border-color:rgba(46,204,143,.4);background:rgba(46,204,143,.08)}
+  .sub{font-size:13.5px;color:var(--tx3);margin-bottom:20px;padding-left:14px}
+
+  /* ---------- generic card ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px}
+  .card+.card{margin-top:14px}
+  ul.plain{list-style:none;display:flex;flex-direction:column;gap:9px}
+  ul.plain>li{font-size:14px;color:var(--tx2);padding-left:16px;position:relative}
+  ul.plain>li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul.plain>li b{color:var(--tx);font-weight:600}
+  code{font-family:"Cascadia Code","Consolas",monospace;font-size:12.5px;background:var(--card3);color:#9fd4ff;padding:1px 6px;border-radius:5px}
+
+  /* ---------- 大纲表 ---------- */
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:660px}
+  thead th{
+    background:var(--card2);color:var(--tx3);font-weight:600;font-size:12px;
+    text-align:left;padding:11px 13px;border-bottom:1px solid var(--line2);white-space:nowrap;
+  }
+  tbody td{padding:10px 13px;border-bottom:1px solid var(--line);color:var(--tx2);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:rgba(255,255,255,.02)}
+  td.u{color:var(--tx3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.nm{color:var(--tx);font-weight:600}
+  .st{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;white-space:nowrap;font-weight:600}
+  .st.b{color:var(--bad);background:rgba(255,122,122,.12);border:1px solid rgba(255,122,122,.3)}
+  .st.y{color:var(--warn);background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3)}
+  .st.g{color:var(--ok);background:rgba(46,204,143,.12);border:1px solid rgba(46,204,143,.3)}
+  .st.x{color:var(--tx3);background:rgba(124,134,153,.12);border:1px solid var(--line2)}
+  tr.off td{opacity:.55}
+  tr.off td.nm{text-decoration:line-through;text-decoration-color:rgba(255,122,122,.6)}
+
+  /* ---------- 日程 ---------- */
+  .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
+  .day{
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:12px 13px;cursor:pointer;transition:.16s;position:relative;user-select:none;
+  }
+  .day:hover{border-color:var(--line2);background:var(--card2)}
+  .day .dh{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}
+  .day .dd{font-size:12px;color:var(--tx3);font-variant-numeric:tabular-nums}
+  .day .box{
+    width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line2);
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;
+  }
+  .day .tt{font-size:13px;font-weight:600;color:var(--tx);line-height:1.45}
+  .day .cc{font-size:11.5px;color:var(--tx3);margin-top:4px;line-height:1.5}
+  .day.done{border-color:rgba(46,204,143,.4);background:rgba(46,204,143,.055)}
+  .day.done .box{background:var(--ok);border-color:var(--ok);color:#0e1015}
+  .day.done .tt{color:var(--tx3);text-decoration:line-through;text-decoration-color:rgba(46,204,143,.55)}
+  .day.key{border-left:3px solid var(--circ)}
+
+  /* ---------- 概念块 ---------- */
+  .blk{background:var(--card);border:1px solid var(--line);border-radius:13px;margin-bottom:14px;overflow:hidden}
+  .blk>.bh{
+    padding:15px 20px;background:var(--card2);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;
+  }
+  .blk>.bh:hover{background:var(--card3)}
+  .bh .no{
+    flex:0 0 auto;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;font-weight:700;background:rgba(251,146,60,.14);color:var(--circ2);border:1px solid rgba(251,146,60,.3);
+  }
+  .bh .ti{font-size:15px;font-weight:600;flex:1}
+  .bh .pg{font-size:11.5px;color:var(--tx3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bh .ar{font-size:11px;color:var(--tx3);transition:.2s;flex:0 0 auto}
+  .blk.open .bh .ar{transform:rotate(90deg)}
+  .blk>.bb{display:none;padding:20px 22px}
+  .blk.open>.bb{display:block}
+
+  h3{font-size:14.5px;font-weight:700;color:var(--tx);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+  h3:first-child{margin-top:0}
+  h3::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--circ);opacity:.8}
+
+  /* ---------- 公式卡 ---------- */
+  .fx{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:11px;margin:12px 0}
+  .f{background:var(--card2);border:1px solid var(--line2);border-radius:10px;padding:13px 15px}
+  .f .lbl{font-size:11.5px;color:var(--circ2);font-weight:600;margin-bottom:7px;letter-spacing:.02em}
+  .f .eq{
+    font-family:"Cambria Math","Cambria","Georgia",serif;font-size:16px;color:#fff;
+    line-height:1.85;word-break:break-word;
+  }
+  .f .eq i{font-style:italic}
+  .f .nt{font-size:11.5px;color:var(--tx3);margin-top:7px;line-height:1.6}
+
+  /* ---------- 例题 ---------- */
+  .eg{background:rgba(56,208,216,.045);border:1px solid rgba(56,208,216,.22);border-radius:11px;padding:15px 17px;margin:13px 0}
+  .eg .eh{font-size:12.5px;font-weight:700;color:#67e8f9;margin-bottom:9px;letter-spacing:.02em}
+  .eg .q{font-size:13.5px;color:var(--tx2);margin-bottom:10px;line-height:1.75}
+  .eg .q b{color:var(--tx)}
+  .steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:7px}
+  .steps>li{
+    counter-increment:s;font-size:13px;color:var(--tx2);padding-left:26px;position:relative;line-height:1.75;
+  }
+  .steps>li::before{
+    content:counter(s);position:absolute;left:0;top:2px;width:18px;height:18px;border-radius:50%;
+    background:rgba(56,208,216,.16);color:#67e8f9;font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps>li b{color:var(--tx)}
+  .steps>li .ans{color:#7ee7b0;font-weight:600;font-family:"Cambria Math","Georgia",serif;font-size:14px}
+
+  /* ---------- 提示框 ---------- */
+  .tip{border-radius:11px;padding:14px 17px;margin:13px 0;font-size:13.3px;line-height:1.75}
+  .tip b{font-weight:700}
+  .tip.err{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.25);color:#ffc9c9}
+  .tip.err b{color:#ff9d9d}
+  .tip.key{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.25);color:#ffe0ab}
+  .tip.key b{color:#fbbf24}
+  .tip.no{background:rgba(124,134,153,.07);border:1px solid var(--line2);color:var(--tx3)}
+  .tip.no b{color:var(--tx2)}
+  .tip.no .st{margin-right:6px}
+
+  /* ---------- 自测 ---------- */
+  .qz{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;margin-bottom:12px}
+  .qz .qh{
+    padding:13px 17px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;user-select:none;
+  }
+  .qz .qh:hover{background:var(--card2)}
+  .qz .qn{font-size:12px;font-weight:700;color:var(--circ2);flex:0 0 auto;font-variant-numeric:tabular-nums;padding-top:2px}
+  .qz .qt{font-size:13.5px;color:var(--tx2);flex:1;line-height:1.7}
+  .qz .qt b{color:var(--tx)}
+  .qz .qa{display:none;padding:0 17px 15px 45px;font-size:13px;color:#9fe8c4;line-height:1.8;border-top:1px dashed var(--line2);margin-top:0;padding-top:13px}
+  .qz.open .qa{display:block}
+  .qz.open .qh{background:var(--card2)}
+  .qz .qa b{color:#7ee7b0}
+
+  /* ---------- 打印卡 ---------- */
+  .pcard{background:var(--card);border:1px solid var(--line2);border-radius:13px;padding:22px 24px}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .pcol h4{font-size:13px;color:var(--circ2);margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--line2);letter-spacing:.03em}
+  .pcol dl{display:grid;grid-template-columns:auto 1fr;gap:5px 11px;font-size:12.5px}
+  .pcol dt{color:var(--tx3);white-space:nowrap}
+  .pcol dd{color:var(--tx);font-family:"Cambria Math","Georgia",serif;font-size:13px}
+
+  footer{border-top:1px solid var(--line);margin-top:50px;padding-top:22px;font-size:12px;color:var(--tx3);line-height:1.9}
+
+  /* ---------- 打印 ---------- */
+  @media print{
+    :root{--bg:#fff;--card:#fff;--card2:#f6f7f9;--card3:#eef0f4;--line:#d6dae2;--line2:#c2c8d3;
+          --tx:#111;--tx2:#333;--tx3:#666;--circ:#c2570a;--circ2:#a34a08}
+    body{padding:0;font-size:11pt}
+    nav,.kicker,.days,.day{display:none!important}
+    .blk>.bb{display:block!important}
+    .qz .qa{display:block!important}
+    .blk,.card,.f,.eg,.qz{break-inside:avoid}
+    section{break-inside:auto}
+    header{padding-top:0}
+    .f .eq{color:#000}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">电子电路与技术（2）· 补课辅助手册</div>
+    <h1>7 个块补到课件 8：只学本校要考的那部分
+      <small>依据：桌面 <code>电子电路与技术（2）</code> 文件夹里 9 份课件 + 《内容进度大致安排》17 个教学单元<br>
+      本校课时少，大纲比通用模电教材窄一大截——这份手册把所有「不考」的内容都标了出来，别多学。</small>
+    </h1>
+
+    <div class="pos">
+      <div class="pc now">
+        <div class="k">课堂现在讲到</div>
+        <div class="v">课件 8 · 组合逻辑电路</div>
+        <div class="n">这一块跟着课上走，不用补</div>
+      </div>
+      <div class="pc out">
+        <div class="k">你落下的</div>
+        <div class="v">课件 3 – 7（5 份）</div>
+        <div class="n">课件 1–2 只需 1 小时速览</div>
+      </div>
+      <div class="pc goal">
+        <div class="k">补完截止</div>
+        <div class="v">10 月 30 日</div>
+        <div class="n">10/30 收尾，10/31 考试当天不排</div>
+      </div>
+      <div class="pc">
+        <div class="k">总量</div>
+        <div class="v">约 18 小时</div>
+        <div class="n">按 7 次推进，10/22 起每块 2–4 小时连续做</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#map" class="hot">大纲地图</a>
+    <a href="#sched">块状日程</a>
+    <a href="#b0">⓪ 二极管速览</a>
+    <a href="#b1" class="hot">① 三极管放大 ★</a>
+    <a href="#b2">② 场效应管</a>
+    <a href="#b3">③ 运放应用</a>
+    <a href="#b4">④ 直流电源</a>
+    <a href="#b5">⑤ 逻辑代数</a>
+    <a href="#next">跟课预告</a>
+    <a href="#formula">公式速查卡</a>
+    <a href="#quiz">自测 24 题</a>
+    <a href="#hw">作业清单</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ 大纲地图 ============ -->
+<section id="map">
+  <h2>先看清楚：17 个教学单元，你只需要补 11 个 <span class="tagx">依据：进度表原文</span></h2>
+  <p class="sub">这张表是从桌面《内容进度大致安排-电子技术自学和复习参考.pdf》里逐条抄下来的，学时也是原文的。红色 = 要补，黄色 = 跟课，灰色 = 本校不考。</p>
+
+  <div class="tscroll">
+    <table>
+      <thead>
+        <tr><th style="width:44px">单元</th><th style="width:60px">学时</th><th>教学内容</th><th style="width:78px">对应课件</th><th style="width:88px">你的状态</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="u">1</td><td class="u">2</td><td class="nm">半导体二极管；稳压二极管</td><td class="u">课件 2</td><td><span class="st y">1h 速览</span></td></tr>
+        <tr><td class="u">2</td><td class="u">2</td><td class="nm">双极型晶体管；共射基本放大电路组成及工作原理</td><td class="u">课件 3</td><td><span class="st b">要补 ★</span></td></tr>
+        <tr><td class="u">3</td><td class="u">3</td><td class="nm">基本放大电路分析方法；共射 / 共集 / 共基；三种组态比较</td><td class="u">课件 3</td><td><span class="st b">要补 ★</span></td></tr>
+        <tr><td class="u">4</td><td class="u">1</td><td class="nm">场效应管（MOSFET）</td><td class="u">课件 4</td><td><span class="st b">要补</span></td></tr>
+        <tr><td class="u">5</td><td class="u">1</td><td class="nm">场效应管基本放大电路</td><td class="u">课件 4</td><td><span class="st b">要补</span></td></tr>
+        <tr><td class="u">6</td><td class="u">1</td><td class="nm">有源滤波器</td><td class="u">课件 5</td><td><span class="st b">要补（只识别）</span></td></tr>
+        <tr><td class="u">7</td><td class="u">3</td><td class="nm">运放非线性应用；非正弦波信号发生电路</td><td class="u">课件 5</td><td><span class="st b">要补 ★</span></td></tr>
+        <tr><td class="u">8</td><td class="u">1</td><td class="nm">直流电源组成；整流；滤波</td><td class="u">课件 6</td><td><span class="st b">要补</span></td></tr>
+        <tr><td class="u">9</td><td class="u">1</td><td class="nm">串联型稳压电路；三端集成稳压器</td><td class="u">课件 6</td><td><span class="st b">要补</span></td></tr>
+        <tr><td class="u">10</td><td class="u">2</td><td class="nm">数制码制；逻辑运算；逻辑代数定理规则；最小项</td><td class="u">课件 7</td><td><span class="st b">要补</span></td></tr>
+        <tr><td class="u">11</td><td class="u">2</td><td class="nm">卡诺图化简；无关项化简</td><td class="u">课件 7</td><td><span class="st b">要补 ★</span></td></tr>
+        <tr><td class="u">12</td><td class="u">2</td><td class="nm">组合逻辑电路分析与设计</td><td class="u">课件 8</td><td><span class="st y">跟课（正在讲）</span></td></tr>
+        <tr><td class="u">13</td><td class="u">—</td><td class="nm">加法器 / 编码器 / 译码器 / 数据选择器<br><span style="color:var(--tx3);font-size:12px">进度表原文：功能表介绍，设计不讲</span></td><td class="u">课件 8</td><td><span class="st y">跟课（只背功能表）</span></td></tr>
+        <tr><td class="u">14</td><td class="u">—</td><td class="nm">触发器 / 计数器（7490 内部结构）</td><td class="u">课件 9</td><td><span class="st y">跟课</span></td></tr>
+        <tr><td class="u">15</td><td class="u">2</td><td class="nm">集成同步加法计数器 74LS160/161/162/163 + 改进制</td><td class="u">待发</td><td><span class="st g">未开始</span></td></tr>
+        <tr><td class="u">16</td><td class="u">2</td><td class="nm">半导体存储器 ROM / RAM + 容量扩展寻址</td><td class="u">待发</td><td><span class="st g">未开始</span></td></tr>
+        <tr><td class="u">17</td><td class="u">2</td><td class="nm">数模模数转换 A/D、D/A</td><td class="u">待发</td><td><span class="st g">未开始</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip no" style="margin-top:16px">
+    <b>本校不考、通用教材里有但你别学的（课件里明写了"不在大纲内"）：</b><br>
+    <span class="st x">跳过</span> 多级放大与频率响应 &nbsp;·&nbsp;
+    <span class="st x">跳过</span> 反馈放大电路（判别 / 四种组态 / 深度负反馈）&nbsp;·&nbsp;
+    <span class="st x">跳过</span> 功率放大电路 &nbsp;·&nbsp;
+    <span class="st x">跳过</span> 窗口比较器（课件原文："不在大纲内，课上不讲"）&nbsp;·&nbsp;
+    <span class="st x">跳过</span> 开关稳压电源（同上）&nbsp;·&nbsp;
+    <span class="st x">跳过</span> 卡诺图 5 变量及以上、最大项相关题
+  </div>
+</section>
+
+<!-- ============ 日程 ============ -->
+<section id="sched">
+  <h2>补课日程（v4 块状） <span class="tagx">点一下打钩，自动保存</span></h2>
+  <p class="sub">每天 1 小时，跟《个人学习总规划》里的「电路 1h」完全对应。顺序不能乱：课件 3 是地基，跳过去后面全是空中楼阁。</p>
+  <div class="days" id="daybox"></div>
+  <div class="tip key" style="margin-top:16px">
+    <b>如果某天只剩 40 分钟怎么办？</b>优先保「公式 + 1 道例题」，习题挪到周末补。千万别把 1 小时摊成"翻了 20 页 PPT"——那等于没学。
+  </div>
+</section>
+
+<!-- ============ ⓪ 二极管 ============ -->
+<section id="b0">
+  <h2>⓪ 课件 1–2 · 半导体二极管 <span class="tagx lite">1 小时速览</span></h2>
+  <p class="sub">47 页课件，你只需要看 4 个地方：二极管三种等效模型、稳压管、半波整流波形。其余（本征半导体、共价键、载流子浓度）属于背景知识，考不到计算。</p>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">0</div><div class="ti">二极管与稳压管：只抓三个模型 + 一个参数</div><div class="pg">课件 2 · P30–P44</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>核心概念</h3>
+      <ul class="plain">
+        <li><b>PN 结单向导电</b>：正偏导通（正向压降硅管 0.6~0.7V，锗管 0.3V），反偏截止（只有极小的反向饱和电流）。</li>
+        <li><b>三个等效模型，按信号幅度选</b>：信号幅度 ≫ 0.7V 用<b>理想模型</b>（当开关）；一般工程计算用<b>恒压降模型</b>（串一个 0.7V 电池）；要求精确时用<b>折线模型</b>（串 0.7V + 动态电阻 r<sub>D</sub>）。</li>
+        <li><b>稳压管</b>：工作在<b>反向击穿区</b>。它的"稳压"不是不坏，而是只要电流限制在 I<sub>Zmin</sub> ~ I<sub>Zmax</sub> 之间，击穿就是可逆的。</li>
+      </ul>
+
+      <h3>必背公式</h3>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">稳压管限流电阻</div>
+          <div class="eq"><i>R</i> = (<i>U</i><sub>I</sub> − <i>U</i><sub>Z</sub>) / (<i>I</i><sub>Z</sub> + <i>I</i><sub>L</sub>)</div>
+          <div class="nt">取 I<sub>Z</sub> 的中间值算。校验：I<sub>Zmin</sub> ≤ I<sub>Z</sub> ≤ I<sub>Zmax</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">半波整流输出平均值</div>
+          <div class="eq"><i>U</i><sub>O(AV)</sub> = 0.45<i>U</i><sub>2</sub></div>
+          <div class="nt">U<sub>2</sub> 是变压器二次侧<b>有效值</b>。桥式是 0.9U<sub>2</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">二极管最大反向电压</div>
+          <div class="eq"><i>U</i><sub>RM</sub> = √2 · <i>U</i><sub>2</sub></div>
+          <div class="nt">选管子时耐压要留 1.5~2 倍余量</div>
+        </div>
+      </div>
+
+      <div class="eg">
+        <div class="eh">例 1｜稳压管电路求限流电阻</div>
+        <div class="q">U<sub>I</sub> = 12V，稳压管 U<sub>Z</sub> = 6V，I<sub>Z</sub> = 10mA，负载 R<sub>L</sub> = 1kΩ。求限流电阻 R。</div>
+        <ol class="steps">
+          <li>先算负载电流：<b>I<sub>L</sub> = U<sub>Z</sub> / R<sub>L</sub> = 6V / 1kΩ = 6mA</b></li>
+          <li>总电流 = 稳压管电流 + 负载电流：<b>I = 10 + 6 = 16mA</b></li>
+          <li>限流电阻上要降掉的电压：<b>U<sub>R</sub> = U<sub>I</sub> − U<sub>Z</sub> = 12 − 6 = 6V</b></li>
+          <li>R = U<sub>R</sub> / I = 6V / 16mA = <span class="ans">375Ω</span>（取标称值 360Ω 或 390Ω）</li>
+        </ol>
+      </div>
+
+      <div class="tip err">
+        <b>三个高频错点</b><br>
+        ① <b>U<sub>2</sub> 是有效值不是峰值</b>。题目给"u<sub>2</sub> = 20√2 sinωt V"时，U<sub>2</sub> = 20V，峰值才是 28.3V。<br>
+        ② <b>稳压管反接</b>。它的符号箭头方向和普通二极管相反，正常工作时电流从阴极流向阳极。<br>
+        ③ <b>整流二极管平均电流不等于负载电流</b>。桥式整流里每个管子只导通半个周期，I<sub>D(AV)</sub> 是 I<sub>L</sub> 的一半。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ① 三极管 ============ -->
+<section id="b1">
+  <h2>① 课件 3 · 三极管及其放大电路 <span class="tagx must">最重 · 3 小时</span></h2>
+  <p class="sub">90 页，占整门课将近三分之一的分量。<b>这一章的「共射放大电路分析」是整门课的地基</b>——后面运放、稳压全都建立在它上面。三天拆成：Day 1 原理 + 静态，Day 2 动态（微变等效），Day 3 分压偏置 + 失真 + 共集共基。</p>
+
+  <!-- Day1 -->
+  <div class="blk open">
+    <div class="bh"><div class="no">1</div><div class="ti">Day 1 · BJT 原理与特性曲线：先搞懂"为什么能放大"</div><div class="pg">课件 3 · P2–P29</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>核心概念</h3>
+      <ul class="plain">
+        <li><b>BJT 是电流控制电流源（CCCS）</b>，FET 是电压控制电流源（VCCS）。这句话是两者的分水岭。</li>
+        <li><b>放大的外部条件（NPN）</b>：<b>发射结正偏</b>（V<sub>B</sub> &gt; V<sub>E</sub>）+ <b>集电结反偏</b>（V<sub>C</sub> &gt; V<sub>B</sub>）。两个条件缺一不可，这是判断"能不能放大"的唯一标准。</li>
+        <li><b>内部机理一句话</b>：发射区高掺杂 → 大量电子注入基区 → 基区薄、复合少 → 绝大部分电子被集电结电场"拉"到集电区 → 很小的 I<sub>B</sub> 控制很大的 I<sub>C</sub>。</li>
+        <li><b>三个工作区</b>：截止（发射结反偏，I<sub>C</sub>≈0）、放大（正偏 + 反偏，I<sub>C</sub>=βI<sub>B</sub>）、饱和（两个结都正偏，U<sub>CE</sub>≈U<sub>CES</sub>≈0.3V，I<sub>C</sub> 不再随 I<sub>B</sub> 增大）。</li>
+      </ul>
+
+      <h3>必背公式</h3>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">电流关系</div>
+          <div class="eq"><i>I</i><sub>C</sub> = β<i>I</i><sub>B</sub>　　<i>I</i><sub>E</sub> = (1+β)<i>I</i><sub>B</sub> = <i>I</i><sub>C</sub> + <i>I</i><sub>B</sub></div>
+          <div class="nt">β 一般 20~200。注意 I<sub>E</sub> 比 I<sub>C</sub> 大一点点，别写成相等</div>
+        </div>
+        <div class="f">
+          <div class="lbl">工作区判别（NPN）</div>
+          <div class="eq">U<sub>BE</sub> &lt; 0.5V → 截止<br>U<sub>CE</sub> &gt; 1V → 放大<br>U<sub>CE</sub> &lt; 0.3V → 饱和</div>
+          <div class="nt">算完 U<sub>CE</sub> 后必须回头判断假设是否成立</div>
+        </div>
+        <div class="f">
+          <div class="lbl">共射特性曲线</div>
+          <div class="eq">输入：<i>i</i><sub>B</sub> = f(<i>u</i><sub>BE</sub>) | <i>U</i><sub>CE</sub>=常数<br>输出：<i>i</i><sub>C</sub> = f(<i>u</i><sub>CE</sub>) | <i>I</i><sub>B</sub>=常数</div>
+          <div class="nt">输入曲线像二极管正向特性；输出曲线分三个区、略微上翘</div>
+        </div>
+      </div>
+
+      <div class="tip err">
+        <b>最容易错的地方</b>：判断 PNP 管的工作状态时，<b>所有电压符号反过来</b>——发射结正偏是 V<sub>E</sub> &gt; V<sub>B</sub>，集电结反偏是 V<sub>B</sub> &gt; V<sub>C</sub>。每年都有人在这里翻车。
+      </div>
+    </div>
+  </div>
+
+  <!-- Day2 -->
+  <div class="blk open">
+    <div class="bh"><div class="no">2</div><div class="ti">Day 2 · 共射放大电路：静态 Q + 微变等效（整门课第一大题）</div><div class="pg">课件 3 · P30–P56</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <div class="tip key">
+        <b>这一节必须练到"不看公式能默写"。</b>模电期末大题有极大概率就是这一套：给一个共射电路 → 求 Q → 画微变等效 → 求 A<sub>u</sub> / R<sub>i</sub> / R<sub>o</sub> → 问失真。四步一气呵成。
+      </div>
+
+      <h3>第一步：画直流通路，求静态工作点 Q</h3>
+      <ul class="plain">
+        <li><b>直流通路怎么画</b>：电容开路（C<sub>1</sub>、C<sub>2</sub>、C<sub>e</sub> 全断开），直流电源保留，交流信号源置零。</li>
+      </ul>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">基本共射（固定偏置）</div>
+          <div class="eq"><i>I</i><sub>BQ</sub> = (<i>V</i><sub>CC</sub> − <i>U</i><sub>BEQ</sub>) / <i>R</i><sub>b</sub> ≈ <i>V</i><sub>CC</sub> / <i>R</i><sub>b</sub><br><i>I</i><sub>CQ</sub> = β<i>I</i><sub>BQ</sub><br><i>U</i><sub>CEQ</sub> = <i>V</i><sub>CC</sub> − <i>I</i><sub>CQ</sub><i>R</i><sub>c</sub></div>
+          <div class="nt">硅管 U<sub>BEQ</sub> 取 0.7V。R<sub>b</sub> 通常几百 kΩ，所以近似成立</div>
+        </div>
+        <div class="f">
+          <div class="lbl">分压式偏置（重点）</div>
+          <div class="eq"><i>U</i><sub>B</sub> = <i>V</i><sub>CC</sub> · <i>R</i><sub>b2</sub> / (<i>R</i><sub>b1</sub>+<i>R</i><sub>b2</sub>)<br><i>I</i><sub>E</sub> = (<i>U</i><sub>B</sub> − <i>U</i><sub>BE</sub>) / <i>R</i><sub>e</sub> ≈ <i>I</i><sub>C</sub><br><i>U</i><sub>CE</sub> = <i>V</i><sub>CC</sub> − <i>I</i><sub>C</sub>(<i>R</i><sub>c</sub>+<i>R</i><sub>e</sub>)</div>
+          <div class="nt">前提：I<sub>2</sub> = (5~10)I<sub>B</sub>，即 U<sub>B</sub> = (5~10)U<sub>BE</sub></div>
+        </div>
+      </div>
+
+      <h3>第二步：画交流通路 → 微变等效电路</h3>
+      <ul class="plain">
+        <li><b>交流通路怎么画</b>：耦合电容和旁路电容<b>短路</b>，直流电源 V<sub>CC</sub> 对交流<b>短路接地</b>。</li>
+        <li><b>微变等效</b>：把三极管换成一个 r<sub>be</sub>（b、e 之间）+ 一个受控电流源 βI<sub>b</sub>（c、e 之间）。</li>
+      </ul>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">r<sub>be</sub> —— 全章最关键的一个数</div>
+          <div class="eq"><i>r</i><sub>be</sub> = <i>r</i><sub>bb'</sub> + (1+β)·26mV / <i>I</i><sub>E</sub>(mA)</div>
+          <div class="nt">r<sub>bb'</sub> = 100~300Ω，题目不给就取 200Ω。<b>I<sub>E</sub> 单位必须是 mA</b></div>
+        </div>
+        <div class="f">
+          <div class="lbl">电压放大倍数</div>
+          <div class="eq"><i>A</i><sub>u</sub> = −β<i>R</i>'<sub>L</sub> / <i>r</i><sub>be</sub></div>
+          <div class="nt">R'<sub>L</sub> = R<sub>c</sub> ∥ R<sub>L</sub>。负号 = 反相，别丢</div>
+        </div>
+        <div class="f">
+          <div class="lbl">输入电阻</div>
+          <div class="eq"><i>R</i><sub>i</sub> = <i>R</i><sub>b</sub> ∥ <i>r</i><sub>be</sub> ≈ <i>r</i><sub>be</sub></div>
+          <div class="nt">R<sub>b</sub> 几百 kΩ，并联后基本等于 r<sub>be</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">输出电阻</div>
+          <div class="eq"><i>R</i><sub>o</sub> = <i>R</i><sub>c</sub></div>
+          <div class="nt">求法：信号源置零、负载断开，从输出端看进去</div>
+        </div>
+        <div class="f">
+          <div class="lbl">考虑信号源内阻时</div>
+          <div class="eq"><i>A</i><sub>us</sub> = <i>A</i><sub>u</sub> · <i>R</i><sub>i</sub> / (<i>R</i><sub>i</sub> + <i>R</i><sub>s</sub>)</div>
+          <div class="nt">R<sub>s</sub> 越大，A<sub>us</sub> 衰减越多 → 所以希望 R<sub>i</sub> 大</div>
+        </div>
+      </div>
+
+      <div class="eg">
+        <div class="eh">例 2｜完整四步走（课件 P54–P56 原题）</div>
+        <div class="q">V<sub>CC</sub> = 12V，R<sub>b</sub> = 300kΩ，R<sub>c</sub> = 3kΩ，R<sub>L</sub> = 3kΩ，r<sub>bb'</sub> = 200Ω，β = 50。<br>
+        求：① 静态工作点 Q；② A<sub>u</sub>、R<sub>i</sub>、R<sub>o</sub>；③ 最大不失真输出幅度；④ 若出现截止失真该调哪个元件。</div>
+        <ol class="steps">
+          <li><b>求 Q</b>：I<sub>BQ</sub> = (12 − 0.7)/300k ≈ <b>40μA</b>；I<sub>CQ</sub> = 50 × 40μA = <b>2mA</b>；U<sub>CEQ</sub> = 12 − 2mA × 3kΩ = <b>6V</b>。<br><span style="color:var(--tx3);font-size:12px">→ 检查：U<sub>CEQ</sub> = 6V &gt; 1V，放大区假设成立 ✓</span></li>
+          <li><b>算 r<sub>be</sub></b>：r<sub>be</sub> = 200 + 51 × 26mV / 2mA = 200 + 663 = <b>863Ω ≈ 0.863kΩ</b></li>
+          <li><b>求 A<sub>u</sub></b>：R'<sub>L</sub> = 3k ∥ 3k = 1.5kΩ，A<sub>u</sub> = −50 × 1.5k / 0.863k = <span class="ans">−87</span></li>
+          <li><b>求 R<sub>i</sub>、R<sub>o</sub></b>：R<sub>i</sub> = 300k ∥ 0.863k ≈ <b>0.863kΩ</b>；R<sub>o</sub> = R<sub>c</sub> = <b>3kΩ</b></li>
+          <li><b>最大不失真输出</b>：U<sub>ommax</sub> = min[U<sub>CEQ</sub> − U<sub>CES</sub>, I<sub>CQ</sub>·R'<sub>L</sub>] = min[6 − 0.3, 2×1.5] = min[5.7, 3] = <span class="ans">3V</span></li>
+          <li><b>截止失真</b>：Q 点偏低（靠近截止区）→ 应<b>减小 R<sub>b</sub></b>，让 I<sub>BQ</sub> 增大、Q 点上移。<br><span style="color:var(--tx3);font-size:12px">记忆法：截止失真 = Q 太低 = I<sub>B</sub> 太小 = R<sub>b</sub> 太大 → 减小 R<sub>b</sub></span></li>
+        </ol>
+      </div>
+
+      <div class="tip err">
+        <b>四个必扣分的细节</b><br>
+        ① <b>r<sub>be</sub> 里 I<sub>E</sub> 要用 mA</b>。用 A 代入会算出天文数字。<br>
+        ② <b>A<sub>u</sub> 的负号不能丢</b>。共射是反相放大，丢负号直接扣分。<br>
+        ③ <b>R'<sub>L</sub> 别忘了并 R<sub>L</sub></b>。题目给了 R<sub>L</sub> 就必须并联，没给才是 R<sub>c</sub>。<br>
+        ④ <b>求 R<sub>o</sub> 时负载要断开</b>。R<sub>o</sub> = R<sub>c</sub>，不含 R<sub>L</sub>——这是"从输出端看进去"的定义决定的。
+      </div>
+    </div>
+  </div>
+
+  <!-- Day3 -->
+  <div class="blk open">
+    <div class="bh"><div class="no">3</div><div class="ti">Day 3 · 分压偏置、失真判断、共集共基比较</div><div class="pg">课件 3 · P57–P89</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>为什么要分压偏置</h3>
+      <ul class="plain">
+        <li>温度升高 → U<sub>BE</sub> 减小、β 增大、I<sub>CEO</sub> 增大 → <b>I<sub>C</sub> 增大 → Q 点上移 → 容易饱和失真</b>。固定偏置电路对此毫无抵抗力。</li>
+        <li><b>分压偏置的稳定过程</b>（背下这条链）：T↑ → I<sub>C</sub>↑ → I<sub>E</sub>↑ → U<sub>E</sub> = I<sub>E</sub>R<sub>e</sub>↑ → U<sub>BE</sub> = U<sub>B</sub> − U<sub>E</sub>↓ → I<sub>B</sub>↓ → I<sub>C</sub>↓。<b>本质是直流负反馈</b>。</li>
+        <li><b>旁路电容 C<sub>e</sub> 的作用</b>：它让 R<sub>e</sub> 对交流短路。没有 C<sub>e</sub> 时，R<sub>e</sub> 会大幅降低 A<sub>u</sub>（因为 A<sub>u</sub> = −βR'<sub>L</sub>/[r<sub>be</sub>+(1+β)R<sub>e</sub>]）；有了 C<sub>e</sub>，A<sub>u</sub> 恢复到 −βR'<sub>L</sub>/r<sub>be</sub>。<b>C<sub>e</sub> 不影响 Q，只影响动态参数</b>——这句话是简答题常客。</li>
+      </ul>
+
+      <h3>失真的判断与消除</h3>
+      <div class="tscroll" style="margin:12px 0">
+        <table style="min-width:520px">
+          <thead><tr><th>失真类型</th><th>波形特征</th><th>Q 点位置</th><th>调节方法</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">截止失真</td><td>输出电压<b>顶部</b>削平（NPN 共射）</td><td>Q 点偏低，靠近截止区</td><td><b>减小 R<sub>b</sub></b>（增大 I<sub>B</sub>，Q 上移）</td></tr>
+            <tr><td class="nm">饱和失真</td><td>输出电压<b>底部</b>削平</td><td>Q 点偏高，靠近饱和区</td><td><b>增大 R<sub>b</sub></b>（减小 I<sub>B</sub>，Q 下移）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">最大不失真输出幅度</div>
+          <div class="eq"><i>U</i><sub>ommax</sub> = min[<i>U</i><sub>CEQ</sub> − <i>U</i><sub>CES</sub>, <i>I</i><sub>CQ</sub>·<i>R</i>'<sub>L</sub>]</div>
+          <div class="nt">取两者中较小的：前者是"向下能摆多少"（饱和），后者是"向上能摆多少"（截止）</div>
+        </div>
+      </div>
+
+      <h3>三种组态比较（只要"了解"，但比较表必须背）</h3>
+      <div class="tscroll" style="margin:12px 0">
+        <table style="min-width:620px">
+          <thead><tr><th>性能</th><th>共射</th><th>共集（射极跟随器）</th><th>共基</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">A<sub>u</sub></td><td>大（几十~几百），<b>反相</b></td><td>≈ 1（略小于 1），<b>同相</b></td><td>大，<b>同相</b></td></tr>
+            <tr><td class="nm">A<sub>i</sub></td><td>β</td><td>1+β</td><td>β/(1+β) ≈ 1</td></tr>
+            <tr><td class="nm">R<sub>i</sub></td><td>中（几百Ω~几千Ω）</td><td><b>大</b>（几十 kΩ 以上）</td><td><b>小</b>（几Ω~几十Ω）</td></tr>
+            <tr><td class="nm">R<sub>o</sub></td><td>中（R<sub>c</sub>）</td><td><b>小</b>（几Ω~几十Ω）</td><td>大（R<sub>c</sub>）</td></tr>
+            <tr><td class="nm">频响</td><td>差</td><td>较好</td><td><b>好</b>（频带宽）</td></tr>
+            <tr><td class="nm">典型用途</td><td>电压放大</td><td>缓冲、跟随、隔离</td><td>高频放大</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">共集（射极输出器）</div>
+          <div class="eq"><i>A</i><sub>u</sub> = (1+β)<i>R</i>'<sub>L</sub> / [<i>r</i><sub>be</sub>+(1+β)<i>R</i>'<sub>L</sub>] ≈ 1<br><i>R</i><sub>i</sub> = <i>R</i><sub>b</sub> ∥ [<i>r</i><sub>be</sub>+(1+β)<i>R</i>'<sub>L</sub>]<br><i>R</i><sub>o</sub> = <i>R</i><sub>e</sub> ∥ [<i>r</i><sub>be</sub>+<i>R</i>'<sub>s</sub>]/(1+β)</div>
+          <div class="nt">R'<sub>L</sub> = R<sub>e</sub>∥R<sub>L</sub>；R'<sub>s</sub> = R<sub>s</sub>∥R<sub>b</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">共基</div>
+          <div class="eq"><i>A</i><sub>u</sub> = +β<i>R</i>'<sub>L</sub> / <i>r</i><sub>be</sub><br><i>R</i><sub>i</sub> = <i>R</i><sub>e</sub> ∥ <i>r</i><sub>be</sub>/(1+β)<br><i>R</i><sub>o</sub> = <i>R</i><sub>c</sub></div>
+          <div class="nt">A<sub>u</sub> 是正的（同相）——这是和共射唯一的符号差别</div>
+        </div>
+      </div>
+
+      <div class="tip key">
+        <b>课件原文的措辞要注意</b>：P74 明确写了「共射……<b>要求熟练掌握</b>；本节介绍共集和共基组态基本放大电路、三种组态性能比较特点，<b>要求了解</b>」。所以共集共基只要会<b>认电路、背比较表、记 Au≈1</b> 就够了，不用像共射那样反复练。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ② 场效应管 ============ -->
+<section id="b2">
+  <h2>② 课件 4 · 场效应管及其放大电路 <span class="tagx mid">1 小时</span></h2>
+  <p class="sub">只有 24 页，是五份要补的课件里最轻的。核心就一句：<b>FET 是电压控制，输入电阻极高</b>。共源放大的分析和共射完全同构，只是把 r<sub>be</sub> 换成 ∞、把 βI<sub>b</sub> 换成 g<sub>m</sub>U<sub>gs</sub>。</p>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">4</div><div class="ti">MOSFET 特性 + 共源放大</div><div class="pg">课件 4 · P1–P24</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>核心概念</h3>
+      <ul class="plain">
+        <li><b>N 沟道增强型 MOSFET</b>：U<sub>GS</sub> &gt; U<sub>GS(th)</sub>（开启电压）时才形成导电沟道。<b>U<sub>GS</sub> = 0 时没有沟道、不导通</b>——这是"增强型"的含义。</li>
+        <li><b>为什么输入电阻那么高</b>：栅极和沟道之间隔着一层 SiO<sub>2</sub> 绝缘层，栅极电流几乎为零（10⁻⁹ A 级）。所以 R<sub>i</sub> 可达 10⁹~10¹² Ω。</li>
+        <li><b>转移特性</b>描述 I<sub>D</sub> 与 U<sub>GS</sub> 的关系；<b>输出特性</b>描述 I<sub>D</sub> 与 U<sub>DS</sub> 的关系，分可变电阻区、恒流区（放大区）、击穿区。</li>
+        <li><b>放大条件</b>：工作在<b>恒流区</b>（饱和区），即 U<sub>GS</sub> &gt; U<sub>GS(th)</sub> 且 U<sub>DS</sub> &gt; U<sub>GS</sub> − U<sub>GS(th)</sub>。</li>
+      </ul>
+
+      <h3>必背公式</h3>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">增强型 MOSFET 转移特性</div>
+          <div class="eq"><i>I</i><sub>D</sub> = <i>I</i><sub>DO</sub>(<i>U</i><sub>GS</sub>/<i>U</i><sub>GS(th)</sub> − 1)²</div>
+          <div class="nt">I<sub>DO</sub> 是 U<sub>GS</sub> = 2U<sub>GS(th)</sub> 时的漏极电流</div>
+        </div>
+        <div class="f">
+          <div class="lbl">共源放大（对应共射）</div>
+          <div class="eq"><i>A</i><sub>u</sub> = −<i>g</i><sub>m</sub>(<i>R</i><sub>d</sub> ∥ <i>R</i><sub>L</sub>)<br><i>R</i><sub>i</sub> ≈ <i>R</i><sub>g</sub>（极大）<br><i>R</i><sub>o</sub> = <i>R</i><sub>d</sub></div>
+          <div class="nt">和共射一一对应：r<sub>be</sub> → ∞，βI<sub>b</sub> → g<sub>m</sub>U<sub>gs</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">跨导</div>
+          <div class="eq"><i>g</i><sub>m</sub> = Δ<i>I</i><sub>D</sub> / Δ<i>U</i><sub>GS</sub></div>
+          <div class="nt">单位 mS（毫西门子）。相当于 BJT 的 β</div>
+        </div>
+      </div>
+
+      <h3>BJT 与 FET 对比（课件 P22 的内容，简答题爱考）</h3>
+      <div class="tscroll" style="margin:12px 0">
+        <table style="min-width:520px">
+          <thead><tr><th>对比项</th><th>BJT（三极管）</th><th>FET（场效应管）</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">控制方式</td><td>电流控制（I<sub>B</sub> 控 I<sub>C</sub>）</td><td>电压控制（U<sub>GS</sub> 控 I<sub>D</sub>）</td></tr>
+            <tr><td class="nm">载流子</td><td>两种（电子 + 空穴）</td><td>一种（多子）</td></tr>
+            <tr><td class="nm">输入电阻</td><td>低（kΩ 级）</td><td><b>极高</b>（10⁹ Ω 以上）</td></tr>
+            <tr><td class="nm">噪声</td><td>较大</td><td><b>小</b></td></tr>
+            <tr><td class="nm">温度稳定性</td><td>较差（有热失控风险）</td><td><b>好</b>（有负温度系数）</td></tr>
+            <tr><td class="nm">缺点</td><td>—</td><td>易被静电击穿，存放要短接栅极</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip no">
+        <b>课件原文</b>：P24 学习要求写的是「<b>了解</b>共漏、共栅组态的电路构成和性能比较」。所以共漏（相当于共集，A<sub>u</sub>≈1、R<sub>i</sub> 大、R<sub>o</sub> 小）和共栅只需知道结论，不用推公式。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ③ 运放应用 ============ -->
+<section id="b3">
+  <h2>③ 课件 5 · 集成运放的应用 <span class="tagx must">2 小时 · 比较器是重点</span></h2>
+  <p class="sub">58 页分两半：<b>有源滤波（P4–P27）</b>和<b>运放非线性应用（P28–P57）</b>。前者只要"会识别"，后者是考试重点。比例/加减/积分这些线性运算上学期已经学过，本课件不再重复。</p>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">5</div><div class="ti">运放的两个工作区：线性区 vs 非线性区（一切分析的起点）</div><div class="pg">课件 5 · P1–P3</div><div class="ar">▶</div></div>
+    <div class="bb">
+      <div class="tscroll" style="margin:6px 0 14px">
+        <table style="min-width:600px">
+          <thead><tr><th>工作区</th><th>条件</th><th>能用什么</th><th>不能用什么</th><th>典型电路</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">线性区</td><td><b>深度负反馈</b></td><td>虚短（u<sub>P</sub>=u<sub>N</sub>）+ 虚断（i<sub>P</sub>=i<sub>N</sub>=0）</td><td>—</td><td>比例、加减、积分、有源滤波</td></tr>
+            <tr><td class="nm">非线性区</td><td><b>开环或正反馈</b></td><td>只有虚断（i<sub>P</sub>=i<sub>N</sub>=0）</td><td><b>虚短不成立</b></td><td>电压比较器、非正弦波发生</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">非线性区的输出判据（唯一要记的）</div>
+          <div class="eq"><i>u</i><sub>P</sub> &gt; <i>u</i><sub>N</sub> → <i>u</i><sub>O</sub> = +<i>U</i><sub>OM</sub><br><i>u</i><sub>P</sub> &lt; <i>u</i><sub>N</sub> → <i>u</i><sub>O</sub> = −<i>U</i><sub>OM</sub></div>
+          <div class="nt">输出端接稳压管时，±U<sub>OM</sub> 换成 ±U<sub>Z</sub></div>
+        </div>
+        <div class="f">
+          <div class="lbl">理想运放指标</div>
+          <div class="eq">A<sub>od</sub>=∞　R<sub>id</sub>=∞　R<sub>o</sub>=0<br>K<sub>CMR</sub>=∞　BW=∞</div>
+          <div class="nt">线性区非常窄（一般 &lt; 1.5mV），所以开环必饱和</div>
+        </div>
+      </div>
+      <div class="tip err">
+        <b>最常见的致命错误</b>：在比较器电路里写"u<sub>P</sub> = u<sub>N</sub>"。<b>比较器是开环或正反馈，虚短绝对不成立</b>。只有虚断成立。这一条错了，后面全错。
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">6</div><div class="ti">有源滤波器：只需要"能识别"</div><div class="pg">课件 5 · P4–P27</div><div class="ar">▶</div></div>
+    <div class="bb">
+      <div class="tip key">
+        <b>课件原文（P25）</b>：「识别滤波电路即可（内容以课件为主，识别课件中讲过的滤波器即可，<b>习题可不做</b>）。自我检测：第 9 章 1-3。」<br>
+        → 也就是说：<b>不用推传递函数，不用算截止频率，只要看图能说出是低通还是高通、一阶还是二阶。</b>
+      </div>
+
+      <h3>识别口诀（这个比背公式管用）</h3>
+      <ul class="plain">
+        <li><b>看电容和电阻的位置</b>：电容<b>串联</b>在信号通路里 → 直流和低频过不去 → <b>高通</b>。电容<b>并在反馈回路或对地</b> → 高频被旁路掉 → <b>低通</b>。</li>
+        <li><b>数电容个数</b>：一个电容 = 一阶，两个电容 = 二阶。阶数越高，过渡带越陡、滤波特性越接近理想。</li>
+        <li><b>带通 / 带阻</b>：低通和高通<b>串联</b> → 带通；<b>并联</b>（或用一个二阶电路）→ 带阻。</li>
+      </ul>
+
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">一阶有源低通（课件 P10）</div>
+          <div class="eq"><i>A</i><sub>0</sub> = 1 + <i>R</i><sub>f</sub>/<i>R</i><sub>1</sub>　　<i>ω</i><sub>0</sub> = 1/(<i>RC</i>)<br><i>A</i>(<i>jω</i>) = <i>A</i><sub>0</sub> / (1 + <i>jω</i>/<i>ω</i><sub>0</sub>)</div>
+          <div class="nt">A<sub>0</sub> = 通带增益（同相比例）；ω<sub>0</sub> = 特征频率 = 截止频率</div>
+        </div>
+        <div class="f">
+          <div class="lbl">波特图斜率（记这个结论）</div>
+          <div class="eq">一阶：−20dB / 十倍频程<br>二阶：−40dB / 十倍频程</div>
+          <div class="nt">每加一阶，斜率再降 20dB/dec。这是"滤波器好坏"的量化指标</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">7</div><div class="ti">电压比较器：单限 + 滞回（本节最重要）</div><div class="pg">课件 5 · P28–P40</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>单限比较器</h3>
+      <ul class="plain">
+        <li><b>结构</b>：运放<b>开环</b>，一端接 u<sub>I</sub>，另一端接参考电压 U<sub>REF</sub>。</li>
+        <li><b>阈值</b>：只有一个，U<sub>TH</sub> = U<sub>REF</sub>。u<sub>I</sub> 越过它就翻转。</li>
+        <li><b>输出限幅</b>：输出端接 R + 稳压管（或两个背靠背稳压管），把 ±U<sub>OM</sub> 限制成 ±U<sub>Z</sub>，方便和数字电路接口。</li>
+        <li><b>输入保护</b>：输入端并联两个反接的二极管，防止差模电压过大损坏输入级。</li>
+        <li><b>用途</b>：波形变换（正弦 → 方波）、脉宽调制（PWM）。</li>
+      </ul>
+
+      <div class="eg">
+        <div class="eh">例 3｜阈值不是 U<sub>REF</sub> 的情况（课件 P33 原题）</div>
+        <div class="q">u<sub>I</sub> 经 R<sub>1</sub>、U<sub>REF</sub> 经 R<sub>2</sub> 都接到反相端 N，同相端 P 接地（u<sub>P</sub> = 0）。求阈值 U<sub>TH</sub>。</div>
+        <ol class="steps">
+          <li>先写 u<sub>P</sub>：直接接地，<b>u<sub>P</sub> = 0</b></li>
+          <li>用叠加定理写 u<sub>N</sub>：<b>u<sub>N</sub> = u<sub>I</sub>·R<sub>2</sub>/(R<sub>1</sub>+R<sub>2</sub>) + U<sub>REF</sub>·R<sub>1</sub>/(R<sub>1</sub>+R<sub>2</sub>)</b><br><span style="color:var(--tx3);font-size:12px">（两个电阻分压，谁的电阻在对侧就乘谁）</span></li>
+          <li>令 u<sub>N</sub> = u<sub>P</sub> = 0，解出 u<sub>I</sub> 就是阈值：<span class="ans">U<sub>TH</sub> = −(R<sub>1</sub>/R<sub>2</sub>)·U<sub>REF</sub></span></li>
+          <li>结论：<b>阈值大小和符号都由分压比决定，不是简单地等于 U<sub>REF</sub></b>。所以考试必须现场推，不能背。</li>
+        </ol>
+      </div>
+
+      <h3>滞回比较器（施密特触发器）</h3>
+      <ul class="plain">
+        <li><b>结构</b>：运放引入<b>正反馈</b>（输出经 R 接回同相端），所以输出只有 ±U<sub>Z</sub> 两个状态。</li>
+        <li><b>两个阈值</b>：输出为 +U<sub>Z</sub> 时对应一个阈值，为 −U<sub>Z</sub> 时对应另一个。两个阈值之差叫<b>回差（滞回电压）ΔU</b>。</li>
+        <li><b>为什么抗干扰强</b>：输入信号在阈值附近抖动时，只要抖动幅度小于 ΔU，输出就不会反复翻转。这是单限比较器做不到的。</li>
+      </ul>
+
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">同相滞回比较器（课件 P37，已验证）</div>
+          <div class="eq"><i>U</i><sub>TH1</sub> = (<i>R</i><sub>1</sub>+<i>R</i><sub>2</sub>)/<i>R</i><sub>2</sub> · <i>U</i><sub>REF</sub> − <i>R</i><sub>1</sub>/<i>R</i><sub>2</sub> · <i>U</i><sub>Z</sub><br><i>U</i><sub>TH2</sub> = (<i>R</i><sub>1</sub>+<i>R</i><sub>2</sub>)/<i>R</i><sub>2</sub> · <i>U</i><sub>REF</sub> + <i>R</i><sub>1</sub>/<i>R</i><sub>2</sub> · <i>U</i><sub>Z</sub></div>
+          <div class="nt">UREF = 0 时，UTH = ±R<sub>1</sub>U<sub>Z</sub>/R<sub>2</sub>，关于纵轴对称</div>
+        </div>
+        <div class="f">
+          <div class="lbl">回差</div>
+          <div class="eq">Δ<i>U</i> = <i>U</i><sub>TH2</sub> − <i>U</i><sub>TH1</sub> = 2<i>R</i><sub>1</sub><i>U</i><sub>Z</sub> / <i>R</i><sub>2</sub></div>
+          <div class="nt">同相：ΔU = 2R<sub>1</sub>U<sub>Z</sub>/R<sub>2</sub>。反相结构的系数是分压比，<b>现场推</b></div>
+        </div>
+      </div>
+
+      <div class="eg">
+        <div class="eh">例 4｜同相滞回比较器求阈值（课件 P38 原题）</div>
+        <div class="q">R<sub>1</sub> = 10kΩ，R<sub>2</sub> = 20kΩ，U<sub>REF</sub> = +3V，稳压管限幅 ±U<sub>Z</sub> = ±6V。求两个阈值和回差，并画电压传输特性。</div>
+        <ol class="steps">
+          <li>U<sub>TH1</sub> = (10+20)/20 × 3 − 10/20 × 6 = 4.5 − 3 = <span class="ans">1.5V</span></li>
+          <li>U<sub>TH2</sub> = (10+20)/20 × 3 + 10/20 × 6 = 4.5 + 3 = <span class="ans">7.5V</span></li>
+          <li>ΔU = 7.5 − 1.5 = <span class="ans">6V</span>（也可以用 2R<sub>1</sub>U<sub>Z</sub>/R<sub>2</sub> = 2×10×6/20 = 6V 校验 ✓）</li>
+          <li>画传输特性：横轴 u<sub>I</sub>、纵轴 u<sub>O</sub>。u<sub>I</sub> 从负往正走，<b>越过 7.5V</b> 时 u<sub>O</sub> 由 +6V 跳到 −6V；u<sub>I</sub> 从正往负走，<b>越过 1.5V</b> 时 u<sub>O</sub> 由 −6V 跳到 +6V。<b>箭头方向相反，这就是"回差"</b></li>
+        </ol>
+      </div>
+
+      <div class="tip err">
+        <b>画传输特性时的三个坑</b><br>
+        ① <b>两个阈值的方向要标箭头</b>。只画一个矩形框不标箭头，等于没画。<br>
+        ② <b>输出是 ±U<sub>Z</sub> 不是 ±U<sub>OM</sub></b>。接了稳压管就以 U<sub>Z</sub> 为准。<br>
+        ③ <b>阈值可能不在纵轴两侧</b>。像例 4 两个阈值都是正的（1.5 和 7.5），说明特性整体右移了——因为 U<sub>REF</sub> 不为零。别默认"一正一负"。
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">8</div><div class="ti">非正弦波发生电路：矩形波 / 三角波 / 锯齿波</div><div class="pg">课件 5 · P41–P57</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>三个电路的组成套路（记结构比记公式重要）</h3>
+      <ul class="plain">
+        <li><b>矩形波</b> = 滞回比较器 + RC 定时电路（RC 充放电决定周期）。输出在 ±U<sub>Z</sub> 之间跳，电容电压在 ±U<sub>TH</sub> 之间来回充放电。</li>
+        <li><b>三角波</b> = 滞回比较器 + <b>积分器</b>。矩形波经积分就变三角波。</li>
+        <li><b>锯齿波</b> = 三角波电路里让<b>充电和放电时间常数不相等</b>（在 R 上并联二极管 + 电位器），上升慢下降快（或反之）。</li>
+      </ul>
+
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">矩形波周期与占空比</div>
+          <div class="eq"><i>T</i> = 2<i>RC</i> · ln(1 + 2<i>R</i><sub>2</sub>/<i>R</i><sub>1</sub>)<br>占空比 D = 50%</div>
+          <div class="nt">对称的 RC 充放电 → 占空比必然是 50%。要改占空比就得让充放电时间常数不同</div>
+        </div>
+        <div class="f">
+          <div class="lbl">三角波</div>
+          <div class="eq"><i>U</i><sub>om</sub> = (<i>R</i><sub>1</sub>/<i>R</i><sub>2</sub>)·<i>U</i><sub>Z</sub>　　<i>T</i> = 4<i>R</i><sub>1</sub><i>RC</i>/<i>R</i><sub>2</sub></div>
+          <div class="nt">幅度由比较器的分压比决定，频率由积分器的时间常数决定</div>
+        </div>
+      </div>
+
+      <div class="tip key">
+        <b>课件 P48 专门讲了一个"为什么"</b>：为什么不用「矩形波 + 积分电路」直接产生三角波？因为矩形波的正负幅度如果不相等（U<sub>Z1</sub> ≠ U<sub>Z2</sub>），积分后会<b>产生直流偏移，最终把运放推到饱和</b>，三角波就没了。所以要用<b>滞回比较器 + 积分器闭环</b>的结构，让它自己稳定在对称状态。
+      </div>
+
+      <div class="tip no">
+        <b>练习范围（课件 P57）</b>：二版教材第 8 章 自我检测 8-12、习题 8；三版教材第 8 章 自我检测 9-15、习题 10。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ④ 直流电源 ============ -->
+<section id="b4">
+  <h2>④ 课件 6 · 直流电源 <span class="tagx mid">2 小时 · 计算题友好</span></h2>
+  <p class="sub">33 页，结构非常清楚：<b>变压 → 整流 → 滤波 → 稳压</b>四步。这一章是"套公式得分"的章节，只要把 0.45 / 0.9 / 1.2 三个系数和四个公式记牢，基本不丢分。</p>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">9</div><div class="ti">整流 + 滤波：三个系数定乾坤</div><div class="pg">课件 6 · P3–P18</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>整流电路对比（必背）</h3>
+      <div class="tscroll" style="margin:6px 0 14px">
+        <table style="min-width:660px">
+          <thead><tr><th>项目</th><th>单相半波</th><th>单相桥式</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">输出平均值 U<sub>O(AV)</sub></td><td><b>0.45U<sub>2</sub></b></td><td><b>0.9U<sub>2</sub></b></td><td>桥式是半波的两倍</td></tr>
+            <tr><td class="nm">二极管平均电流 I<sub>D(AV)</sub></td><td>0.45U<sub>2</sub>/R<sub>L</sub></td><td><b>0.45U<sub>2</sub>/R<sub>L</sub></b>（= I<sub>L</sub>/2）</td><td>桥式每管只导通半周</td></tr>
+            <tr><td class="nm">最大反向电压 U<sub>RM</sub></td><td>√2U<sub>2</sub></td><td><b>√2U<sub>2</sub></b></td><td>两者相同</td></tr>
+            <tr><td class="nm">输出波形</td><td>半个周期有输出</td><td>全波（两个半周都有）</td><td>桥式脉动频率是 2 倍工频</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>滤波电路</h3>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">电容滤波（最常用）</div>
+          <div class="eq"><i>U</i><sub>L</sub> ≈ 1.2<i>U</i><sub>2</sub>　（桥式）</div>
+          <div class="nt">取值条件：R<sub>L</sub>C ≥ (3~5)T/2，T 为电网周期 20ms</div>
+        </div>
+        <div class="f">
+          <div class="lbl">电感滤波</div>
+          <div class="eq"><i>U</i><sub>O(AV)</sub> ≈ 0.9<i>U</i><sub>2</sub></div>
+          <div class="nt">电感对直流短路、对交流阻抗大。适合<b>大电流、负载变化大</b>的场合</div>
+        </div>
+        <div class="f">
+          <div class="lbl">系数记忆链</div>
+          <div class="eq">无滤波 0.9 → 电容滤波 1.2<br>（上限 1.4，下限 0.9）</div>
+          <div class="nt">1.2 是"有限负载"的工程估算，介于空载 1.4U<sub>2</sub> 和满载 0.9U<sub>2</sub> 之间</div>
+        </div>
+      </div>
+
+      <div class="eg">
+        <div class="eh">例 5｜桥式整流 + 电容滤波设计题</div>
+        <div class="q">要求输出直流电压 U<sub>L</sub> = 12V，负载电流 I<sub>L</sub> = 100mA，采用桥式整流 + 电容滤波。求：① 变压器二次侧电压有效值 U<sub>2</sub>；② 二极管最大反向电压；③ 滤波电容的最小值。</div>
+        <ol class="steps">
+          <li>由 U<sub>L</sub> ≈ 1.2U<sub>2</sub> → <b>U<sub>2</sub> = 12/1.2 = 10V</b></li>
+          <li>U<sub>RM</sub> = √2 × 10 = <span class="ans">14.1V</span>（选管耐压至少 25V）</li>
+          <li>I<sub>D(AV)</sub> = I<sub>L</sub>/2 = 50mA（选管额定电流至少 100mA）</li>
+          <li>R<sub>L</sub> = U<sub>L</sub>/I<sub>L</sub> = 12/0.1 = 120Ω</li>
+          <li>由 R<sub>L</sub>C ≥ (3~5)T/2 = 5 × 20ms/2 = 50ms → <b>C ≥ 50ms/120Ω = 417μF</b>（取 470μF/25V）</li>
+        </ol>
+      </div>
+
+      <div class="tip err">
+        <b>两个易错点</b><br>
+        ① <b>U<sub>2</sub> 是有效值</b>。题目给"u<sub>2</sub> = 14.1sinωt"时 U<sub>2</sub> = 10V（除以 √2），峰值才是 14.1V。<br>
+        ② <b>桥式的 I<sub>D(AV)</sub> 是 I<sub>L</sub> 的一半</b>，不是等于 I<sub>L</sub>。因为四个管子两两轮流导通，每个只干半个周期。
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">10</div><div class="ti">稳压电路：串联型 + 三端集成</div><div class="pg">课件 6 · P19–P32</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>串联型稳压电路的四个组成部分（必考简答）</h3>
+      <ul class="plain">
+        <li><b>基准电压源</b>（稳压管 + 限流电阻）——提供稳定的 U<sub>Z</sub></li>
+        <li><b>调整管</b>（T）——串联在输入和输出之间，靠改变 U<sub>CE</sub> 来稳压</li>
+        <li><b>取样电路</b>（R<sub>1</sub>、R<sub>2</sub>、R<sub>P</sub> 分压）——把 U<sub>O</sub> 的一部分取出来当反馈 U<sub>f</sub></li>
+        <li><b>误差放大器</b>（A）——比较 U<sub>f</sub> 和 U<sub>Z</sub>，放大差值去控制调整管</li>
+      </ul>
+      <p style="font-size:13.3px;color:var(--tx2);margin-top:12px"><b>稳压的实质是电压负反馈</b>。背这条链：U<sub>I</sub>↑ → U<sub>O</sub>↑ → U<sub>f</sub>↑ → (U<sub>Z</sub>−U<sub>f</sub>)↓ → 调整管基极电流↓ → U<sub>CE</sub>↑ → U<sub>O</sub>↓。最终 U<sub>O</sub> 基本不变。</p>
+
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">输出电压（调节范围）</div>
+          <div class="eq"><i>U</i><sub>O</sub> = <i>U</i><sub>Z</sub> · (<i>R</i><sub>1</sub>+<i>R</i><sub>2</sub>+<i>R</i><sub>P</sub>) / (<i>R</i><sub>2</sub>+<i>R</i><sub>Pa</sub>)</div>
+          <div class="nt">R<sub>Pa</sub> 是电位器<b>下半部分</b>的阻值。滑到下端 R<sub>Pa</sub>=0 → U<sub>O</sub> 最大；滑到上端 R<sub>Pa</sub>=R<sub>P</sub> → U<sub>O</sub> 最小</div>
+        </div>
+        <div class="f">
+          <div class="lbl">三端可调 CW317</div>
+          <div class="eq"><i>U</i><sub>O</sub> = 1.25 × (1 + <i>R</i><sub>2</sub>/<i>R</i><sub>1</sub>)</div>
+          <div class="nt">1.25V 是内部基准。CW337 是负压版本，公式取负</div>
+        </div>
+        <div class="f">
+          <div class="lbl">三端固定 W78xx / W79xx</div>
+          <div class="eq">W7805 → +5V　W7812 → +12V<br>W7905 → −5V　W7912 → −12V</div>
+          <div class="nt">78 = 正压，79 = 负压，xx = 电压值。引脚：1 输入 / 2 公共 / 3 输出</div>
+        </div>
+      </div>
+
+      <div class="tip err">
+        <b>串联稳压的成立条件（课件 P24 的四个因素）</b><br>
+        ① <b>U<sub>I</sub> &gt; U<sub>O</sub></b>，且调整管的 U<sub>CE</sub> &gt; U<sub>CES</sub>，否则调整管退出线性区，失去调节能力。<br>
+        ② 基准电压 U<sub>Z</sub> 越稳定越好（U<sub>Z</sub> 和 U<sub>f</sub> 的差值是误差信号）。<br>
+        ③ 误差放大器零点漂移越小越好。<br>
+        ④ 误差放大器增益 A<sub>u</sub> 和反馈系数 F<sub>u</sub> 越大，稳压性能越好。
+      </div>
+
+      <div class="tip no">
+        <b>跳过</b>：开关稳压电源（课件 P1 原文"不在大纲内，课上不讲"）。电感滤波只需知道结论，不用推导。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ⑤ 逻辑代数 ============ -->
+<section id="b5">
+  <h2>⑤ 课件 7 · 逻辑代数基础 <span class="tagx must">2 小时 · 数电的地基</span></h2>
+  <p class="sub">69 页，是数电部分的第一块砖。核心只有两个：<b>公式化简</b>和<b>卡诺图化简</b>。前者考技巧，后者考套路——卡诺图是数电里最稳的送分题。</p>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">11</div><div class="ti">数制与码制：会转换、认得出 8421BCD 和格雷码</div><div class="pg">课件 7 · P6–P18</div><div class="ar">▶</div></div>
+    <div class="bb">
+      <h3>核心概念</h3>
+      <ul class="plain">
+        <li><b>数制三要素</b>：数码、基数、位权。二进制基数 2、八进制 8、十六进制 16。</li>
+        <li><b>8421BCD 码</b>：用 4 位二进制表示 1 位十进制数。<b>它不是二进制数</b>——(1001)<sub>8421BCD</sub> = 9，而 (1001)<sub>2</sub> = 9 只是巧合；但 (0001 0010)<sub>8421BCD</sub> = 12，而 (00010010)<sub>2</sub> = 18。这是最经典的陷阱题。</li>
+        <li><b>余 3 码</b> = 8421BCD + 3（0011）。<b>格雷码</b>：相邻两个码只有 1 位不同，用于避免代码转换时产生过渡噪声。</li>
+        <li><b>ASCII 码</b>：7 位，128 个字符。1000001 = 'A'。</li>
+      </ul>
+      <div class="tip key">
+        <b>课件 P14 的对比题值得记一下</b>：(100010010011)<sub>B</sub> = 2195（当二进制算）；(100010010011)<sub>8421BCD</sub> = 893（按每 4 位一组读）。<b>同一个 0/1 串，标注不同结果差 10 倍以上</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">12</div><div class="ti">逻辑运算与公式：这 6 组公式必须背下来</div><div class="pg">课件 7 · P19–P36</div><div class="ar">▶</div></div>
+    <div class="bb">
+      <h3>基本运算</h3>
+      <ul class="plain">
+        <li><b>与</b>（Y=AB，全 1 才 1）、<b>或</b>（Y=A+B，有 1 就 1）、<b>非</b>（Y=A'）</li>
+        <li><b>复合</b>：与非、或非、<b>异或</b>（Y=A⊕B，相异为 1）、同或（Y=A⊙B，相同为 1）。异或和同或互为反运算。</li>
+      </ul>
+
+      <h3>必背公式（考试直接套）</h3>
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">0-1 律 / 自等律</div>
+          <div class="eq">A·0 = 0　　A+1 = 1<br>A·1 = A　　A+0 = A</div>
+        </div>
+        <div class="f">
+          <div class="lbl">互补律 / 重叠律 / 还原律</div>
+          <div class="eq">A·A' = 0　　A+A' = 1<br>A·A = A　　A+A = A　　(A')' = A</div>
+        </div>
+        <div class="f">
+          <div class="lbl">反演律（德摩根）★</div>
+          <div class="eq">(A·B)' = A' + B'<br>(A+B)' = A' · B'</div>
+          <div class="nt">"长杠变短杠，符号要变号"——化简和反函数全靠它</div>
+        </div>
+        <div class="f">
+          <div class="lbl">合并律 / 吸收律</div>
+          <div class="eq">AB + AB' = A<br>A + AB = A　　A(A+B) = A</div>
+        </div>
+        <div class="f">
+          <div class="lbl">消因律 ★</div>
+          <div class="eq">A + A'B = A + B<br>A(A'+B) = AB</div>
+          <div class="nt">这个用得最多，看到"一项带撇、一项不带"就往这想</div>
+        </div>
+        <div class="f">
+          <div class="lbl">包含律（冗余项定理）★</div>
+          <div class="eq">AB + A'C + BC = AB + A'C</div>
+          <div class="nt">BC 是冗余项，可直接删掉。可以推广到任意多项</div>
+        </div>
+      </div>
+
+      <h3>三个规则（区别要分清）</h3>
+      <div class="tscroll" style="margin:12px 0">
+        <table style="min-width:600px">
+          <thead><tr><th>规则</th><th>操作</th><th>变量怎么变</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">代入规则</td><td>用同一个函数替换某个变量</td><td>替换</td><td>扩展公式的适用范围</td></tr>
+            <tr><td class="nm">对偶规则</td><td>· ↔ +，0 ↔ 1</td><td><b>变量不变</b></td><td>由已知等式写出对偶等式</td></tr>
+            <tr><td class="nm">反演规则</td><td>· ↔ +，0 ↔ 1，<b>原变量 ↔ 反变量</b></td><td><b>变量要变</b></td><td>求反函数</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip err">
+        <b>用对偶/反演规则时，必须保持原来的运算优先顺序。</b>比如 Y = A + B·C，求对偶时要写成 Y<sup>D</sup> = A·(B+C)，<b>括号不能丢</b>——因为原来 B·C 先算，对偶后 B+C 也要先算。
+      </div>
+    </div>
+  </div>
+
+  <div class="blk open">
+    <div class="bh"><div class="no">13</div><div class="ti">最小项与卡诺图：数电最稳的送分题</div><div class="pg">课件 7 · P44–P66</div><div class="ar">▶</div></div>
+    <div class="bb">
+
+      <h3>最小项</h3>
+      <ul class="plain">
+        <li><b>定义</b>：n 变量的最小项是包含全部 n 个因子的乘积项，每个变量以原变量或反变量形式<b>出现且仅出现一次</b>。n 变量共 2<sup>n</sup> 个最小项。</li>
+        <li><b>编号</b>：把变量按顺序排好，原变量记 1、反变量记 0，得到一个二进制数，其十进制值就是下标。例：ABC' → 110 → m<sub>6</sub>。</li>
+        <li><b>相邻性</b>：两个最小项只有一个因子不同（如 m<sub>3</sub>=A'BC 和 m<sub>7</sub>=ABC），相加可消去一个变量。</li>
+        <li><b>标准与或式</b>：把真值表中输出为 1 的那些最小项加起来，记作 Y = Σm(...)。</li>
+      </ul>
+
+      <h3>卡诺图化简三步法</h3>
+      <ol class="steps">
+        <li><b>填图</b>：把函数化成最小项之和，在对应格填 1，其余填 0。无关项填 ×。</li>
+        <li><b>画圈</b>：按 2<sup>n</sup> 个一组圈（1、2、4、8 格）。圈要<b>尽可能大</b>（消掉更多变量）、<b>尽可能少</b>（乘积项最少）。<b>每个圈里至少有一个 1 只被这个圈圈住</b>。</li>
+        <li><b>写式</b>：每个圈写一个乘积项——<b>圈内取值不变的变量保留</b>（1 取原变量、0 取反变量），<b>变化的变量消掉</b>。所有圈相或。</li>
+      </ol>
+
+      <div class="fx">
+        <div class="f">
+          <div class="lbl">合并规律</div>
+          <div class="eq">2 格 → 消 1 个变量<br>4 格 → 消 2 个变量<br>8 格 → 消 3 个变量</div>
+          <div class="nt">2<sup>n</sup> 格合并消去 n 个变量</div>
+        </div>
+        <div class="f">
+          <div class="lbl">卡诺图的"卷边"性质</div>
+          <div class="eq">左右首尾相邻、上下首尾相邻<br>四个角也两两相邻</div>
+          <div class="nt">四变量图里 m<sub>0</sub>、m<sub>2</sub>、m<sub>8</sub>、m<sub>10</sub> 可以圈成一个 4 格圈</div>
+        </div>
+      </div>
+
+      <div class="eg">
+        <div class="eh">例 6｜含无关项的卡诺图化简（课件 P62 原题）</div>
+        <div class="q">化简 Y = Σm(0,1,2,3,5,7) + Σd(4,6)　（四变量 A、B、C、D，d 表示无关项）</div>
+        <ol class="steps">
+          <li><b>画四变量卡诺图</b>：横轴 AB（00/01/11/10），纵轴 CD（00/01/11/10）。m<sub>0</sub> 在左上角，按格雷码顺序排。</li>
+          <li><b>填数</b>：m<sub>0</sub>,m<sub>1</sub>,m<sub>2</sub>,m<sub>3</sub>,m<sub>5</sub>,m<sub>7</sub> 填 1；m<sub>4</sub>,m<sub>6</sub> 填 ×；其余填 0。</li>
+          <li><b>用无关项补圈</b>：m<sub>0</sub>,m<sub>1</sub>,m<sub>4</sub>,m<sub>5</sub> 这一行里，m<sub>0</sub>、m<sub>1</sub> 是 1，m<sub>4</sub>、m<sub>5</sub> 中 m<sub>5</sub> 是 1、m<sub>4</sub> 是 × → <b>把 × 当 1 圈成 4 格</b>，消掉 2 个变量。</li>
+          <li><b>关键判断</b>：无关项"可以当 1，也可以当 0"，<b>哪种能让圈更大就当哪种</b>。如果补上它圈没变大，就干脆当 0，别乱圈。</li>
+          <li>结果形如 <span class="ans">Y = A' + B'C'D'...</span>（具体项取决于圈法，以实际填图为准）。<b>考试时按图现场圈，不要背这题的答案</b>。</li>
+        </ol>
+      </div>
+
+      <div class="tip err">
+        <b>卡诺图四个高频错误</b><br>
+        ① <b>圈的大小不是 2<sup>n</sup></b>。3 格、5 格、6 格的圈都是错的。<br>
+        ② <b>有 1 没被圈到</b>。所有 1 都必须圈进去，孤立的 1 也要单独圈一格。<br>
+        ③ <b>画了无效圈</b>。如果某个圈里的 1 全被别的圈圈过了，这个圈就是多余的，必须删掉。<br>
+        ④ <b>变量取值搞反</b>。圈内某个变量恒为 0 时取<b>反变量</b>（如 A'），恒为 1 时取原变量（A）。这里反了整道题就废了。
+      </div>
+
+      <div class="tip no">
+        <b>练习范围（课件 P69 原文）</b>：涉及<b>最大项</b>的题不做；卡诺图化简 <b>5 变量及以上</b>不做；自我检测 12、16 不做。<br>
+        <b>必做</b>：习题 3-4、3-5(1-3)、3-6、3-10。可做：3-1(1-4)、3-3、3-11、3-12。<br>
+        <b>雨课堂要交</b>：3-4、3-5(1-3)、3-6。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 跟课预告 ============ -->
+<section id="next">
+  <h2>跟课预告：课件 8 组合逻辑 / 课件 9 触发器 <span class="tagx">11/1 之后的内容</span></h2>
+  <p class="sub">这两块不用补，跟着课上走。这里只列"必须抓住什么"，让你上课时知道该记哪里。</p>
+
+  <div class="card">
+    <ul class="plain">
+      <li><b>课件 8 组合逻辑（第 5 章）· 正在讲</b><br>
+        <b>分析三步</b>：逻辑图 → 写表达式 → 化简 → 列真值表 → 说明功能。<br>
+        <b>设计三步</b>：分析题意定输入输出 → 列真值表 → 写表达式并化简 → 画逻辑图。<br>
+        <b>重点模块</b>：加法器（半加 / 全加）、编码器（高/低有效、优先编码）、译码器（二进制译码、显示译码）、数据选择器（2<sup>n</sup> 个输入、1 个输出）。<br>
+        <b>红线</b>：进度表写明「功能表介绍，设计不讲」——<b>只背功能表，不练用门电路搭译码器</b>。课件 P77 也写了 HDL 题不做、习题 5/9/13 不做，建议必做 3、6、7、12、14、15，雨课堂交 7、12。</li>
+
+      <li><b>课件 9 触发器（第 6 章）· 下一块</b><br>
+        <b>五个特性方程（背下来）</b>：<br>
+        RS：Q<sup>n+1</sup> = S + R'Q<sup>n</sup>，约束 SR = 0<br>
+        JK：Q<sup>n+1</sup> = JQ'<sup>n</sup> + K'Q<sup>n</sup>　　D：Q<sup>n+1</sup> = D<br>
+        T：Q<sup>n+1</sup> = TQ'<sup>n</sup> + T'Q<sup>n</sup>　　T′：Q<sup>n+1</sup> = Q'<sup>n</sup>（每来一个时钟翻转一次 = 二分频）<br>
+        <b>三种描述方法</b>：功能表、特性方程、状态转换图（+ 波形图）。<b>触发器的相互转换</b>：令两个特性方程相等，解出驱动方程——这是标准套路。<br>
+        <b>注意</b>：基本 RS 有约束（R、S 不能同时有效），边沿触发器没有。D 触发器是"跟随"，JK 是"全能"，T′ 是"翻转"。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 公式速查 ============ -->
+<section id="formula">
+  <h2>公式速查卡 <span class="tagx">考前 10 分钟只看这一页</span></h2>
+  <p class="sub">按课件顺序排。建议打印出来夹在书里——打印时会自动切成浅色主题，省墨。</p>
+
+  <div class="pcard">
+    <div class="pgrid">
+
+      <div class="pcol">
+        <h4>课件 2 · 二极管</h4>
+        <dl>
+          <dt>硅管压降</dt><dd>0.6 ~ 0.7V</dd>
+          <dt>锗管压降</dt><dd>≈ 0.3V</dd>
+          <dt>限流电阻</dt><dd>R = (U<sub>I</sub>−U<sub>Z</sub>)/(I<sub>Z</sub>+I<sub>L</sub>)</dd>
+          <dt>半波整流</dt><dd>U<sub>O</sub> = 0.45U<sub>2</sub></dd>
+          <dt>最大反压</dt><dd>U<sub>RM</sub> = √2U<sub>2</sub></dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 3 · 三极管</h4>
+        <dl>
+          <dt>电流关系</dt><dd>I<sub>C</sub>=βI<sub>B</sub>，I<sub>E</sub>=(1+β)I<sub>B</sub></dd>
+          <dt>放大条件</dt><dd>发射结正偏 + 集电结反偏</dd>
+          <dt>固定偏置 Q</dt><dd>I<sub>BQ</sub>=(V<sub>CC</sub>−0.7)/R<sub>b</sub></dd>
+          <dt></dt><dd>U<sub>CEQ</sub>=V<sub>CC</sub>−I<sub>CQ</sub>R<sub>c</sub></dd>
+          <dt>分压偏置 Q</dt><dd>U<sub>B</sub>=V<sub>CC</sub>R<sub>b2</sub>/(R<sub>b1</sub>+R<sub>b2</sub>)</dd>
+          <dt></dt><dd>I<sub>E</sub>=(U<sub>B</sub>−0.7)/R<sub>e</sub></dd>
+          <dt></dt><dd>U<sub>CE</sub>=V<sub>CC</sub>−I<sub>C</sub>(R<sub>c</sub>+R<sub>e</sub>)</dd>
+          <dt>r<sub>be</sub></dt><dd>r<sub>bb'</sub>+(1+β)26mV/I<sub>E</sub>(mA)</dd>
+          <dt>共射 A<sub>u</sub></dt><dd>−βR'<sub>L</sub>/r<sub>be</sub></dd>
+          <dt>共射 R<sub>i</sub></dt><dd>R<sub>b</sub>∥r<sub>be</sub> ≈ r<sub>be</sub></dd>
+          <dt>共射 R<sub>o</sub></dt><dd>R<sub>c</sub></dd>
+          <dt>共集 A<sub>u</sub></dt><dd>≈ 1（同相）</dd>
+          <dt>共基 A<sub>u</sub></dt><dd>+βR'<sub>L</sub>/r<sub>be</sub>（同相）</dd>
+          <dt>最大输出</dt><dd>min[U<sub>CEQ</sub>−U<sub>CES</sub>, I<sub>CQ</sub>R'<sub>L</sub>]</dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 4 · 场效应管</h4>
+        <dl>
+          <dt>转移特性</dt><dd>I<sub>D</sub>=I<sub>DO</sub>(U<sub>GS</sub>/U<sub>GS(th)</sub>−1)²</dd>
+          <dt>跨导</dt><dd>g<sub>m</sub>=ΔI<sub>D</sub>/ΔU<sub>GS</sub></dd>
+          <dt>共源 A<sub>u</sub></dt><dd>−g<sub>m</sub>(R<sub>d</sub>∥R<sub>L</sub>)</dd>
+          <dt>共源 R<sub>i</sub></dt><dd>≈ R<sub>g</sub>（10⁹Ω 级）</dd>
+          <dt>共源 R<sub>o</sub></dt><dd>R<sub>d</sub></dd>
+          <dt>放大区条件</dt><dd>U<sub>GS</sub>&gt;U<sub>GS(th)</sub> 且 U<sub>DS</sub>&gt;U<sub>GS</sub>−U<sub>GS(th)</sub></dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 5 · 运放应用</h4>
+        <dl>
+          <dt>线性区</dt><dd>虚短 + 虚断</dd>
+          <dt>非线性区</dt><dd>只有虚断</dd>
+          <dt>输出判据</dt><dd>u<sub>P</sub>&gt;u<sub>N</sub> → +U<sub>OM</sub></dd>
+          <dt></dt><dd>u<sub>P</sub>&lt;u<sub>N</sub> → −U<sub>OM</sub></dd>
+          <dt>一阶低通</dt><dd>A<sub>0</sub>=1+R<sub>f</sub>/R<sub>1</sub>，ω<sub>0</sub>=1/(RC)</dd>
+          <dt>波特斜率</dt><dd>一阶 −20dB/dec，二阶 −40dB/dec</dd>
+          <dt>单限阈值</dt><dd>U<sub>TH</sub>=U<sub>REF</sub>（简单接法）</dd>
+          <dt>滞回（同相）</dt><dd>U<sub>TH1,2</sub>=(R<sub>1</sub>+R<sub>2</sub>)/R<sub>2</sub>·U<sub>REF</sub> ∓ R<sub>1</sub>/R<sub>2</sub>·U<sub>Z</sub></dd>
+          <dt>回差</dt><dd>ΔU=2R<sub>1</sub>U<sub>Z</sub>/R<sub>2</sub></dd>
+          <dt>矩形波 T</dt><dd>2RC·ln(1+2R<sub>2</sub>/R<sub>1</sub>)</dd>
+          <dt>三角波</dt><dd>U<sub>om</sub>=(R<sub>1</sub>/R<sub>2</sub>)U<sub>Z</sub></dd>
+          <dt></dt><dd>T=4R<sub>1</sub>RC/R<sub>2</sub></dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 6 · 直流电源</h4>
+        <dl>
+          <dt>半波整流</dt><dd>U<sub>O</sub>=0.45U<sub>2</sub></dd>
+          <dt>桥式整流</dt><dd>U<sub>O</sub>=0.9U<sub>2</sub></dd>
+          <dt>桥式管流</dt><dd>I<sub>D</sub>=0.45U<sub>2</sub>/R<sub>L</sub>=I<sub>L</sub>/2</dd>
+          <dt>最大反压</dt><dd>U<sub>RM</sub>=√2U<sub>2</sub></dd>
+          <dt>电容滤波</dt><dd>U<sub>L</sub>≈1.2U<sub>2</sub>（R<sub>L</sub>C≥(3~5)T/2）</dd>
+          <dt>电感滤波</dt><dd>U<sub>O</sub>≈0.9U<sub>2</sub></dd>
+          <dt>串联稳压</dt><dd>U<sub>O</sub>=U<sub>Z</sub>(R<sub>1</sub>+R<sub>2</sub>+R<sub>P</sub>)/(R<sub>2</sub>+R<sub>Pa</sub>)</dd>
+          <dt>CW317</dt><dd>U<sub>O</sub>=1.25(1+R<sub>2</sub>/R<sub>1</sub>)</dd>
+          <dt>固定三端</dt><dd>W78xx 正压 / W79xx 负压</dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 7 · 逻辑代数</h4>
+        <dl>
+          <dt>德摩根</dt><dd>(AB)'=A'+B'　(A+B)'=A'B'</dd>
+          <dt>合并律</dt><dd>AB+AB'=A</dd>
+          <dt>吸收律</dt><dd>A+AB=A</dd>
+          <dt>消因律</dt><dd>A+A'B=A+B</dd>
+          <dt>包含律</dt><dd>AB+A'C+BC=AB+A'C</dd>
+          <dt>对偶</dt><dd>· ↔ +，0 ↔ 1，变量不变</dd>
+          <dt>反演</dt><dd>· ↔ +，0 ↔ 1，变量也变</dd>
+          <dt>合并规律</dt><dd>2<sup>n</sup> 格消 n 个变量</dd>
+          <dt>无关项</dt><dd>记 ×/d，可当 1 也可当 0</dd>
+        </dl>
+      </div>
+
+      <div class="pcol">
+        <h4>课件 9 · 触发器（跟课预习）</h4>
+        <dl>
+          <dt>RS</dt><dd>Q<sup>n+1</sup>=S+R'Q<sup>n</sup>，SR=0</dd>
+          <dt>JK</dt><dd>Q<sup>n+1</sup>=JQ'<sup>n</sup>+K'Q<sup>n</sup></dd>
+          <dt>D</dt><dd>Q<sup>n+1</sup>=D</dd>
+          <dt>T</dt><dd>Q<sup>n+1</sup>=TQ'<sup>n</sup>+T'Q<sup>n</sup></dd>
+          <dt>T′</dt><dd>Q<sup>n+1</sup>=Q'<sup>n</sup>（二分频）</dd>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 自测 ============ -->
+<section id="quiz">
+  <h2>自测 24 题 <span class="tagx">点题目看答案</span></h2>
+  <p class="sub">做完再点开。答错 3 题以上的那一块，回头把对应章节的例题再走一遍。</p>
+  <div id="qbox"></div>
+</section>
+
+<!-- ============ 作业 ============ -->
+<section id="hw">
+  <h2>作业与练习清单 <span class="tagx">全部从课件末页抄的</span></h2>
+  <p class="sub">这些是课件里明写的范围和老师要收的作业。按这个做就够了，别自己加码。</p>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th style="width:88px">课件</th><th>自我检测</th><th>习题</th><th style="width:150px">雨课堂要交</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">2 二极管</td><td>P45–P46 的 10 个复习问题（口头过一遍）</td><td>—</td><td class="u">—</td></tr>
+        <tr><td class="nm">3 三极管</td><td>二版第 3 章 1-24；三版第 5 章 1-20</td><td><b>3、4、6、8、9、10</b></td><td class="u">共射 6、8、9；共集 10</td></tr>
+        <tr><td class="nm">4 场效应管</td><td>二版第 4 章全部；三版第 5 章 21-25</td><td>二版第 4 章：1、4、5、6、8</td><td class="u">—</td></tr>
+        <tr><td class="nm">5 有源滤波</td><td>第 9 章 1-3</td><td>第 9 章 1-5（<b>可不做</b>）</td><td class="u">—</td></tr>
+        <tr><td class="nm">5 非正弦波</td><td>二版第 8 章 8-12；三版第 8 章 9-15</td><td>二版第 8 章：8；三版第 8 章：10</td><td class="u">—</td></tr>
+        <tr><td class="nm">6 直流电源</td><td>第 10 章 全部可做</td><td>重点 <b>2、5、8、11、12</b></td><td class="u">—</td></tr>
+        <tr><td class="nm">7 逻辑代数</td><td>12、16 不做，其余可做</td><td><b>必做 3-4、3-5(1-3)、3-6、3-10</b><br>可做 3-1(1-4)、3-3、3-11、3-12</td><td class="u">3-4、3-5(1-3)、3-6</td></tr>
+        <tr><td class="nm">8 组合逻辑<br><span style="font-size:11px;color:var(--tx3)">跟课</span></td><td>HDL 题不做，其余可做</td><td>5、9、13 不做；<b>必做 3、6、7、12、14、15</b></td><td class="u">7、12</td></tr>
+        <tr><td class="nm">9 触发器<br><span style="font-size:11px;color:var(--tx3)">跟课</span></td><td>自行练习</td><td><b>4、6、7、8</b></td><td class="u">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip key" style="margin-top:16px">
+    <b>做题顺序建议</b>：先做<b>例题</b>（课件里的），再做<b>自我检测</b>（自测题，难度低、用来查概念），最后做<b>习题</b>（要交的作业，难度高）。<b>不要一上来就做习题</b>——概念没通做习题只会浪费时间。
+  </div>
+</section>
+
+<footer>
+  <div>生成于 2026-10-19 ｜ 严格依据：桌面 <code>电子电路与技术（2）</code> 文件夹内 9 份课件（1 绪论+二极管 / 3 三极管放大 / 4 场效应管 / 5 运放应用 / 6 直流电源 / 7 逻辑代数 / 8 组合逻辑 / 9 触发器）+ 《内容进度大致安排-电子技术自学和复习参考.pdf》17 单元进度表。</div>
+  <div>公式与例题全部取自课件原文（课件 3 的 P54–P56、P69–P71 例题，课件 5 的 P38 滞回比较器例题、P62 卡诺图例题等）。<b>若课堂讲义与本文有出入，一律以课件为准。</b></div>
+  <div>标记说明：<span style="color:#ff9d9d">红 = 重点必练</span>　<span style="color:#fbbf24">黄 = 一般</span>　<span style="color:#7ee7b0">绿 = 只识别/了解</span>　<span style="color:#7c8699">灰 = 本校不考，跳过</span></div>
+</footer>
+
+</div>
+
+<script>
+/* ================= 补课日程 ================= */
+const DAYS = [
+  ['10-20','课件 1–2 速览','二极管三模型 + 稳压管','1h',''],
+  ['10-21','课件 3 · 器件','BJT 原理、特性曲线、三个工作区','1h',''],
+  ['10-22','课件 3 · 上半【主块】','共射组成 + 静态 Q + 图解法失真 + 微变等效','2.5h','key'],
+  ['10-23','课件 3 收尾 + 课件 4【主块】','分压偏置与温度、共集共基比较、MOSFET 共源','3.5h','key'],
+  ['10-25','课件 5 · 线性【副块】','运放两区 + 比例加减积分 + 有源滤波（只识别）','2h',''],
+  ['10-27','课件 5 后半 + 课件 6【主块】','单限 / 滞回比较器 + 非正弦波 + 整流滤波稳压','4h','key'],
+  ['10-30','课件 7 · 逻辑代数【主块】','数制码制 + 公式规则 + 最小项 + 卡诺图','4h','key']
+];
+
+const DKEY = 'circ-catchup-2026';
+let ddone = {};
+try { ddone = JSON.parse(localStorage.getItem(DKEY) || '{}'); } catch(e) { ddone = {}; }
+
+const daybox = document.getElementById('daybox');
+DAYS.forEach((d, i) => {
+  const [dd, tt, cc, hh, cls] = d;
+  const el = document.createElement('div');
+  el.className = 'day' + (cls ? ' ' + cls : '') + (ddone[dd] ? ' done' : '');
+  el.dataset.d = dd;
+  el.innerHTML = '<div class="dh"><span class="dd">' + dd + '</span><span class="box">✓</span></div>'
+               + '<div class="tt">' + tt + '</div>'
+               + '<div class="cc">' + cc + ' · ' + hh + '</div>';
+  el.addEventListener('click', () => {
+    ddone[dd] = !ddone[dd];
+    el.classList.toggle('done', !!ddone[dd]);
+    localStorage.setItem(DKEY, JSON.stringify(ddone));
+    updateDayStat();
+  });
+  daybox.appendChild(el);
+});
+
+function updateDayStat() {
+  const n = DAYS.filter(d => ddone[d[0]]).length;
+  const h = document.querySelector('#sched h2 .tagx');
+  if (h) h.textContent = n + ' / 11 已完成';
+}
+updateDayStat();
+
+/* ================= 折叠块 ================= */
+document.querySelectorAll('.blk > .bh').forEach(h => {
+  h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+});
+
+/* ================= 自测题 ================= */
+const QS = [
+  ['二极管', '稳压管正常稳压时工作在哪个区？如果限流电阻取太小会怎样？',
+   '工作在<b>反向击穿区</b>。限流电阻太小 → 电流超过 I<sub>Zmax</sub> → 功耗 P=U<sub>Z</sub>I<sub>Z</sub> 超过额定值 → <b>热击穿烧毁</b>。所以 R 必须保证 I<sub>Zmin</sub> ≤ I<sub>Z</sub> ≤ I<sub>Zmax</sub>。'],
+
+  ['二极管', '桥式整流电路中，每个二极管承受的最大反向电压是多少？和半波比呢？',
+   '都是 <b>√2U<sub>2</sub></b>，两者相同。但桥式每个管的平均电流是 I<sub>L</sub>/2（半波是 I<sub>L</sub>），且桥式输出平均值是半波的 2 倍（0.9U<sub>2</sub> vs 0.45U<sub>2</sub>）。'],
+
+  ['三极管', 'NPN 管要能放大，两个结的偏置条件是什么？',
+   '<b>发射结正偏</b>（V<sub>B</sub> &gt; V<sub>E</sub>）+ <b>集电结反偏</b>（V<sub>C</sub> &gt; V<sub>B</sub>）。PNP 管全部反过来：V<sub>E</sub> &gt; V<sub>B</sub> &gt; V<sub>C</sub>。'],
+
+  ['三极管', '算完静态工作点 U<sub>CEQ</sub> = 0.2V，说明管子工作在什么状态？下一步该怎么做？',
+   '<b>饱和状态</b>（U<sub>CE</sub> &lt; U<sub>CES</sub> ≈ 0.3V），说明一开始"假设在放大区"是错的。必须<b>改用饱和条件重算</b>：U<sub>CE</sub> = U<sub>CES</sub>，I<sub>C</sub> 由外电路决定而不是 βI<sub>B</sub>。<b>这是每年必考的坑</b>。'],
+
+  ['三极管', 'r<sub>be</sub> = r<sub>bb\'</sub> + (1+β)26mV/I<sub>E</sub>，如果 I<sub>E</sub> = 2mA，β = 50，r<sub>bb\'</sub> = 200Ω，r<sub>be</sub> 是多少？',
+   'r<sub>be</sub> = 200 + 51 × 26/2 = 200 + 663 = <b>863Ω ≈ 0.86kΩ</b>。<b>注意 I<sub>E</sub> 用 mA 代入</b>，这是最容易错的地方。'],
+
+  ['三极管', '共射放大电路 A<sub>u</sub> 算出 −87，负号代表什么？如果把旁路电容 C<sub>e</sub> 去掉，A<sub>u</sub> 会怎么变？',
+   '负号代表<b>输出与输入反相</b>（相差 180°）。去掉 C<sub>e</sub> 后 R<sub>e</sub> 参与交流，A<sub>u</sub> = −βR\'<sub>L</sub>/[r<sub>be</sub>+(1+β)R<sub>e</sub>]，<b>幅值大幅下降</b>（因为分母多了 (1+β)R<sub>e</sub>），同时 R<sub>i</sub> 提高。<b>C<sub>e</sub> 不影响 Q，只影响动态参数</b>。'],
+
+  ['三极管', '输出电压波形顶部被削平，是截止失真还是饱和失真？该调 R<sub>b</sub> 还是 R<sub>c</sub>？',
+   'NPN 共射电路中，顶部削平 = <b>截止失真</b>（Q 点偏低）。应<b>减小 R<sub>b</sub></b>，使 I<sub>BQ</sub> 增大、Q 点上移。底部削平才是饱和失真，那时要增大 R<sub>b</sub>。'],
+
+  ['三极管', '三种组态里，哪个输入电阻最大、输出电阻最小？它有什么用？',
+   '<b>共集电极</b>（射极输出器 / 射极跟随器）。A<sub>u</sub> ≈ 1（同相），R<sub>i</sub> 大、R<sub>o</sub> 小。用途：放在多级放大器的<b>输入端提高输入电阻</b>、放在<b>输出端减小输出电阻</b>、放在<b>两级之间起缓冲隔离</b>作用。'],
+
+  ['场效应管', '为什么 MOSFET 的输入电阻能做到 10⁹Ω 以上？',
+   '因为栅极和沟道之间有 <b>SiO<sub>2</sub> 绝缘层</b>，栅极电流几乎为零（10⁻⁹A 级）。它是<b>电压控制</b>器件，不像 BJT 那样需要基极电流。代价是绝缘层很薄，<b>极易被静电击穿</b>，存放时要短接栅极。'],
+
+  ['场效应管', '共源放大电路和共射放大电路的公式有什么对应关系？',
+   '一一对应：<b>r<sub>be</sub> → ∞</b>（所以 R<sub>i</sub> ≈ R<sub>g</sub> 极大），<b>βI<sub>b</sub> → g<sub>m</sub>U<sub>gs</sub></b>（所以 A<sub>u</sub> = −g<sub>m</sub>(R<sub>d</sub>∥R<sub>L</sub>)），<b>R<sub>c</sub> → R<sub>d</sub></b>（R<sub>o</sub> = R<sub>d</sub>）。符号都是负的（反相）。'],
+
+  ['运放', '运放在线性区和非线性区，分别能用"虚短"和"虚断"中的哪些？',
+   '线性区（深度负反馈）：<b>虚短 + 虚断都能用</b>。非线性区（开环或正反馈）：<b>只能用虚断</b>，虚短绝对不成立。<b>这是比较器题目的第一道生死线</b>。'],
+
+  ['运放', '怎么从电路图快速判断一个有源滤波器是低通还是高通？',
+   '看<b>电容的位置</b>：电容<b>串联</b>在信号通路里 → 低频和直流过不去 → <b>高通</b>；电容<b>并在反馈回路或对地</b> → 高频被旁路 → <b>低通</b>。数电容个数定阶数：1 个 = 一阶，2 个 = 二阶。'],
+
+  ['运放', '滞回比较器和单限比较器最大的区别是什么？为什么抗干扰能力强？',
+   '滞回比较器有<b>两个阈值</b>（回差 ΔU），单限只有一个。输入信号在阈值附近抖动时，只要抖动幅度<b>小于 ΔU</b>，输出就不会反复翻转——这就是抗干扰的来源。单限比较器在阈值附近一有噪声就疯狂翻转。'],
+
+  ['运放', '同相滞回比较器：R<sub>1</sub>=10k，R<sub>2</sub>=20k，U<sub>REF</sub>=3V，U<sub>Z</sub>=6V。求两个阈值和回差。',
+   'U<sub>TH1</sub> = (10+20)/20×3 − 10/20×6 = 4.5 − 3 = <b>1.5V</b>；U<sub>TH2</sub> = 4.5 + 3 = <b>7.5V</b>；ΔU = <b>6V</b>（校验：2R<sub>1</sub>U<sub>Z</sub>/R<sub>2</sub> = 2×10×6/20 = 6V ✓）。<b>注意两个阈值都是正的</b>——因为 U<sub>REF</sub> ≠ 0，特性整体右移了。'],
+
+  ['运放', '为什么不用"矩形波 + 积分电路"直接产生三角波？',
+   '因为矩形波的正负幅度如果不相等（U<sub>Z1</sub> ≠ U<sub>Z2</sub>），积分后会<b>产生直流偏移，不断累积最终把运放推到饱和</b>，三角波就消失了。所以要用<b>滞回比较器 + 积分器闭环</b>的结构，让它自己稳定在对称状态。'],
+
+  ['直流电源', '桥式整流 + 电容滤波，要求输出 12V，U<sub>2</sub> 该取多少？',
+   '由 U<sub>L</sub> ≈ 1.2U<sub>2</sub> → <b>U<sub>2</sub> = 12/1.2 = 10V</b>（有效值）。同时二极管耐压要 ≥ √2×10 = 14.1V，实际选 25V 以上留余量。'],
+
+  ['直流电源', '半波和桥式整流，哪个输出电压高？高多少？',
+   '<b>桥式</b>高。半波 U<sub>O</sub> = 0.45U<sub>2</sub>，桥式 U<sub>O</sub> = 0.9U<sub>2</sub>，<b>正好是 2 倍</b>。因为桥式在正负两个半周都有输出，而半波只用一个半周。'],
+
+  ['直流电源', '串联型稳压电路由哪四部分组成？稳压的实质是什么？',
+   '<b>基准电压源、调整管、取样电路、误差放大器</b>。实质是<b>电压负反馈</b>：U<sub>O</sub>↑ → U<sub>f</sub>↑ → 误差信号↓ → 调整管 U<sub>CE</sub>↑ → U<sub>O</sub>↓，最终 U<sub>O</sub> 基本不变。'],
+
+  ['直流电源', 'W7812 和 W7912 分别输出多少伏？CW317 的 1.25V 是什么？',
+   'W7812 → <b>+12V</b>，W7912 → <b>−12V</b>（78 正压、79 负压、末两位是电压值）。CW317 的 1.25V 是<b>内部基准电压</b>（输出端与调整端之间的固定压差），U<sub>O</sub> = 1.25(1 + R<sub>2</sub>/R<sub>1</sub>)。'],
+
+  ['逻辑代数', '(100010010011) 当成二进制数是多少？当成 8421BCD 码是多少？',
+   '当二进制：2<sup>11</sup>+2<sup>7</sup>+2<sup>4</sup>+2<sup>1</sup>+2<sup>0</sup> = 2048+128+16+2+1 = <b>2195</b>。当 8421BCD：按每 4 位一组 → 1000 / 1001 / 0011 → 8 / 9 / 3 = <b>893</b>。<b>同一个 0/1 串，结果差 2 倍多</b>。'],
+
+  ['逻辑代数', '化简 AB + A\'C + BC。',
+   '= <b>AB + A\'C</b>。BC 是<b>冗余项</b>（包含律），可以直接删掉。验证：BC = BC(A+A\') = ABC + A\'BC，而 ABC 被 AB 吸收、A\'BC 被 A\'C 吸收，所以 BC 完全是多余的。'],
+
+  ['逻辑代数', '卡诺图中 8 个相邻的 1 圈成一组，能消掉几个变量？四个角能圈在一起吗？',
+   '8 = 2³，<b>消掉 3 个变量</b>。四个角<b>可以</b>圈在一起——卡诺图是"卷起来的"，左右首尾相邻、上下首尾相邻，所以四个角两两相邻，能圈成一个 4 格圈（消 2 个变量）。'],
+
+  ['逻辑代数', '无关项（×）在化简时怎么处理？',
+   '无关项<b>可以当 1，也可以当 0</b>，取决于哪种能让圈更大。如果补上它能让圈从 2 格变 4 格，就当 1 用；如果对圈的大小没帮助，就当 0 忽略。<b>没被利用的无关项不用管</b>。']
+];
+
+const qbox = document.getElementById('qbox');
+QS.forEach((q, i) => {
+  const [tag, qt, qa] = q;
+  const el = document.createElement('div');
+  el.className = 'qz';
+  el.innerHTML = '<div class="qh"><span class="qn">' + String(i + 1).padStart(2, '0') + '</span>'
+               + '<span class="qt"><span style="font-size:11px;color:var(--circ2);border:1px solid rgba(251,146,60,.3);'
+               + 'background:rgba(251,146,60,.08);padding:1px 7px;border-radius:100px;margin-right:7px">' + tag + '</span>'
+               + qt + '</span></div>'
+               + '<div class="qa"><b>答：</b>' + qa + '</div>';
+  el.querySelector('.qh').addEventListener('click', () => el.classList.toggle('open'));
+  qbox.appendChild(el);
+});
+</script>
+
+</body>
+</html>
