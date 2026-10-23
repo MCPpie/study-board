@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>离散数学 · 集中补计划</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --dm:#22d3ee; --cyan:#38d0d8; --warn:#f5a623; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--dm);
+    border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:21px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  section{margin-bottom:26px}
+  h2{font-size:15px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+  h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--dm)}
+  h2.o::before{background:var(--warn)} h2.b::before{background:var(--bad)}
+  .sub{font-size:12px;color:var(--tx3);margin-bottom:13px;padding-left:11px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 17px}
+  .plain{list-style:none}
+  .plain li{position:relative;padding-left:16px;margin-bottom:9px;font-size:13px;color:var(--tx2)}
+  .plain li:last-child{margin-bottom:0}
+  .plain li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .plain li b{color:var(--tx);font-weight:600}
+
+  code{font-family:"Cascadia Code","Consolas",monospace;font-size:11.5px;
+    background:var(--card2);border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--cyan)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  td b{color:var(--tx)}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2)}
+  .warn{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2)}
+  .bad{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2)}
+  .info b,.warn b,.bad b{color:var(--tx)}
+
+  .ch{background:var(--card);border:1px solid var(--line);border-radius:13px;
+    padding:0;overflow:hidden;margin-bottom:12px}
+  .ch-h{padding:12px 15px;background:var(--card2);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ch-no{flex:0 0 auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;
+    background:rgba(34,211,238,.14);color:var(--dm)}
+  .ch-t{flex:1;font-size:13.5px;font-weight:700;min-width:120px}
+  .ch-time{font-size:11px;color:var(--tx3)}
+  .ch-b{padding:13px 15px}
+  .ch-b ul{list-style:none}
+  .ch-b li{position:relative;padding-left:15px;margin-bottom:7px;font-size:12.5px;color:var(--tx2)}
+  .ch-b li:last-child{margin-bottom:0}
+  .ch-b li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .ch-b li b{color:var(--tx)}
+  .key{color:#ff9d9d;font-weight:600}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">离散数学 · 方案 A</div>
+  <h1>集中补：第 6–10 章
+    <small>11/15 起四周补完 · 不去上课 · 教材屈婉玲第 3 版</small>
+  </h1>
+</header>
+
+<!-- 进度定位 -->
+<section>
+  <h2 class="b">先把进度说准</h2>
+  <p class="sub">这里最容易搞混——课堂进度和你自己的进度是两条线。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:110px">线</th><th>到哪了</th></tr></thead>
+    <tbody>
+      <tr><td><b>课堂</b></td><td>已经讲到<b>第 7 章 树</b></td></tr>
+      <tr><td><b>你自己</b></td><td>九月底跟完集合论的<b>二元关系</b>后就停了</td></tr>
+      <tr><td><b>要补的</b></td><td><b>第 6 章集合代数 → 第 7 章二元关系 → 第 8 章函数 → 第 9 章图的基本概念 → 第 10 章欧拉图与哈密顿图</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="bad" style="margin-top:12px">
+    <b>不要用课堂进度衡量自己。</b>课堂讲到第 7 章树，不等于你跟到了第 7 章——你实际停在二元关系的开头。
+  </div>
+</section>
+
+<!-- 教材结构 -->
+<section>
+  <h2>教材结构（这条容易搞错）</h2>
+  <p class="sub">屈婉玲《离散数学》第 3 版共六部分 19 章，编排顺序和很多人的直觉相反。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>部分</th><th>章节</th><th>这门课讲不讲</th></tr></thead>
+    <tbody>
+      <tr><td>集合论</td><td>第 1–3 章</td><td>✅ 讲（第 1–3 章）</td></tr>
+      <tr><td>初等数论</td><td>第 4 章</td><td>❌ <b>不讲</b></td></tr>
+      <tr><td>图论</td><td>第 5–9 章</td><td>✅ 讲（第 5–9 章）</td></tr>
+      <tr><td>组合数学</td><td>第 10–11 章</td><td>❌ <b>不讲</b></td></tr>
+      <tr><td>代数结构</td><td>第 12–14 章</td><td>✅ 讲</td></tr>
+      <tr><td>数理逻辑</td><td>第 15–19 章</td><td>✅ 讲</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info" style="margin-top:12px">
+    <b>关键</b>：<b>集合论在前、数理逻辑在最后</b>。所以「第 6 章集合代数」不是逻辑课的内容，而是集合论的收尾。第 4 章和第 10–11 章这门课不讲，别浪费时间。
+  </div>
+</section>
+
+<!-- 代价 -->
+<section>
+  <h2 class="o">方案 A 的代价，说清楚</h2>
+  <div class="card">
+    <ul class="plain">
+      <li><b>平时分</b>：不去上课，出勤分和课堂表现分要放弃（通常占 10–20%）。</li>
+      <li><b>划重点信息</b>：期末老师划重点时你不在场，<b>要靠同学转达</b>——建议提前跟一个靠谱的同学打好招呼。</li>
+      <li><b>换回来的是 10 月的 12 小时</b>，全部给了数竞摸底。这个交换在当时是对的。</li>
+      <li><b>但 11 月之后必须补上</b>，否则期末会很难看——离散是定义密集型科目，临时抱佛脚无效。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 五章 -->
+<section>
+  <h2>五章，按依赖排（不是按章号）</h2>
+  <p class="sub">顺序很重要：第 7 章要用第 6 章的运算律，第 9 章要用第 7 章的关系概念。</p>
+
+  <div class="ch">
+    <div class="ch-h">
+      <span class="ch-no">第 6 章</span>
+      <span class="ch-t">集合代数</span>
+      <span class="ch-time">11/15 – 11/16 · 2h</span>
+    </div>
+    <div class="ch-b">
+      <ul>
+        <li><b>子集与幂集</b>：幂集有 2ⁿ 个元素，这个必考</li>
+        <li><b>笛卡尔积</b>：有序对，(a,b) ≠ (b,a)</li>
+        <li><b>交并差补、对称差</b>：对称差 A⊕B = (A−B)∪(B−A)</li>
+        <li><b>运算律</b>：分配律、德摩根、吸收律、排中律</li>
+        <li><span class="key">重点</span>：<b>恒等式证明两种套路</b>——元素法（证 A⊆B 且 B⊆A）与运算律法（从复杂端化到简单端）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-h">
+      <span class="ch-no">第 7 章</span>
+      <span class="ch-t">二元关系</span>
+      <span class="ch-time">11/17 – 11/19 · 6h（最重要）</span>
+    </div>
+    <div class="ch-b">
+      <ul>
+        <li><b>关系矩阵与关系图</b>：两种表示法要会互相转换</li>
+        <li><span class="key">核心</span>：<b>五种性质判定</b>——自反、反自反、对称、反对称、传递（用矩阵或图快速判断）</li>
+        <li><b>复合与逆</b>：R∘S 的顺序容易搞反</li>
+        <li><b>三种闭包</b>：自反闭包 r(R)、对称闭包 s(R)、传递闭包 t(R)，<b>Warshall 算法手算一遍</b></li>
+        <li><b>等价关系与划分</b>：等价类、商集</li>
+        <li><b>偏序与哈斯图</b>：极大元/极小元/最大元/最小元、上界下界、格</li>
+      </ul>
+      <div class="warn" style="margin-top:11px">
+        <b>这一章必须一次打通</b>：六个知识点是串起来的——性质判定用矩阵，闭包要用性质，等价关系是闭包的特例，哈斯图要用偏序。切成三天每次都要重新捡，<b>连续 6 小时反而更快</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-h">
+      <span class="ch-no">第 8 章</span>
+      <span class="ch-t">函数</span>
+      <span class="ch-time">11/20 – 11/21 · 3h（最容易速通）</span>
+    </div>
+    <div class="ch-b">
+      <ul>
+        <li><b>单射 / 满射 / 双射</b>：判定方法要熟</li>
+        <li><b>复合与反函数</b>：双射才有反函数</li>
+        <li><b>集合的基数</b>：有限集、可数集、不可数集</li>
+        <li><b>康托对角线法</b>：证明实数不可数，这个证明要会写</li>
+        <li><span class="key">提示</span>：<b>本章内容最少，如果前面超时就从这里借时间</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-h">
+      <span class="ch-no">第 9 章</span>
+      <span class="ch-t">图的基本概念</span>
+      <span class="ch-time">11/22 – 11/24 · 5h</span>
+    </div>
+    <div class="ch-b">
+      <ul>
+        <li><span class="key">必考送分</span>：<b>度与握手定理</b>——所有顶点度数之和 = 2×边数</li>
+        <li><b>子图与补图</b>、通路与回路</li>
+        <li><b>连通性</b>：点割集、边割集、连通度</li>
+        <li><b>邻接矩阵与关联矩阵</b></li>
+        <li><b>欧拉图与哈密顿图判定</b>：欧拉回路判定（所有顶点度数为偶）必考</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-h">
+      <span class="ch-no">第 10 章</span>
+      <span class="ch-t">欧拉图与哈密顿图 + 树与平面图</span>
+      <span class="ch-time">11/25 – 11/28 · 4h</span>
+    </div>
+    <div class="ch-b">
+      <ul>
+        <li><b>欧拉回路 / 欧拉通路</b>：判定条件要背熟</li>
+        <li><b>哈密顿图</b>：只有充分条件（无充要条件），注意区分</li>
+        <li><b>树</b>：定义与性质（n 个顶点的树有 n−1 条边）、最小生成树 Kruskal / Prim</li>
+        <li><b>平面图</b>：欧拉公式 v − e + f = 2</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 网课 -->
+<section>
+  <h2 class="o">网课怎么配（可选）</h2>
+  <p class="sub">北大离散全套课 <code>BV1BW411n7gw</code>（134P / 88h47m），只挑对应的几段。</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>内容</th><th>分P</th><th>时长</th></tr></thead>
+    <tbody>
+      <tr><td>集合论补段</td><td>P13–P14</td><td>约 2h</td></tr>
+      <tr><td>图论（第 5–10 章）</td><td>P20–P27</td><td>约 4h20m</td></tr>
+      <tr><td><b>合计</b></td><td>—</td><td><b>约 6h20m</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info" style="margin-top:12px">
+    <b>按内容类型分</b>：<b>图论和代数结构看课</b>（图多、需要看推导），<b>集合论和数理逻辑读书更快</b>（定义密集，看文字比听课效率高）。
+  </div>
+</section>
+
+<!-- 打法 -->
+<section>
+  <h2>最省时的打法</h2>
+  <div class="card">
+    <ul class="plain">
+      <li><b>先把定义和定理的「条件」抄成卡片</b>，再做 3–5 道典型题。这门课题型高度程式化，条件记准了题就会做。</li>
+      <li><b>必考送分题</b>：第 7 章的性质判定、第 9 章的握手定理——<b>练到条件反射</b>。</li>
+      <li><b>证明题只练两种</b>：元素法（证包含）和反证法（证不存在）。其余偏门证明期末不考。</li>
+      <li><b>哈斯图必画</b>：偏序题不画图很容易漏掉极大元和最大元的区别。</li>
+    </ul>
+  </div>
+  <div class="warn" style="margin-top:12px">
+    <b>和六级的冲突怎么处理</b>：11/15 起六级是主攻（每天 2 篇精听），离散是副手。所以离散按「一周一章 + 周末收尾」的节奏走，<b>不要试图一天啃完一章</b>。
+  </div>
+</section>
+
+<footer>
+  <div>依据：2026-10-21 七维讨论定稿（方案 A：不去上课、11 月后集中补）</div>
+  <div>教材：屈婉玲《离散数学》第 3 版 ｜ 网课：B 站 <code>BV1BW411n7gw</code></div>
+  <div>配套：<code>个人学习总规划_2026秋.html</code>（v5 总表 · 周计划表 11/15–12/12）</div>
+</footer>
+
+</div>
+</body>
+</html>
