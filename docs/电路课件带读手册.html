@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电路课件带读手册 · 9 份课件逐段导读</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --circ:#fb923c; --dm:#22d3ee; --ok:#2ecc8f; --warn:#f5a623; --red:#ff7a7a;
+    --code:#a97bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 90px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header{padding:52px 0 30px;border-bottom:1px solid var(--line);margin-bottom:34px}
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.16em;color:var(--circ);
+    border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:16px;
+  }
+  h1{font-size:29px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:14px;font-weight:400;color:var(--tx3);margin-top:11px;letter-spacing:0;line-height:1.7}
+  h2{font-size:19px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
+  h2 .tagx{font-size:11.5px;font-weight:400;color:var(--tx3);margin-left:10px;letter-spacing:.04em}
+  .sub{font-size:13px;color:var(--tx3);margin-bottom:18px;line-height:1.7}
+  section{margin-bottom:52px;padding-top:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 24px}
+  .plain{list-style:none}
+  .plain li{position:relative;padding-left:16px;margin:9px 0;font-size:13.5px;color:var(--tx2);line-height:1.78}
+  .plain li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .plain li b{color:var(--tx)}
+
+  /* 地图表 */
+  .map{width:100%;border-collapse:collapse;font-size:13px}
+  .map th{
+    text-align:left;padding:10px 12px;font-weight:600;font-size:12px;color:var(--tx3);
+    border-bottom:1px solid var(--line2);white-space:nowrap;letter-spacing:.03em;
+  }
+  .map td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--tx2)}
+  .map tr:last-child td{border-bottom:none}
+  .map tr:hover td{background:rgba(255,255,255,.018)}
+  .map .num{font-variant-numeric:tabular-nums;color:var(--tx3);white-space:nowrap}
+  .map .nm{color:var(--tx);font-weight:600;white-space:nowrap}
+  .map .hi td{background:rgba(251,146,60,.05)}
+  .map .hi .nm{color:#fdba74}
+
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:5px;white-space:nowrap;font-weight:600}
+  .p0{background:rgba(255,122,122,.14);color:#ff9d9d;border:1px solid rgba(255,122,122,.3)}
+  .p1{background:rgba(251,146,60,.14);color:#fdba74;border:1px solid rgba(251,146,60,.3)}
+  .p2{background:rgba(34,211,238,.12);color:#67e8f9;border:1px solid rgba(34,211,238,.28)}
+  .p3{background:rgba(124,134,153,.14);color:var(--tx3);border:1px solid var(--line2)}
+  .skip{background:rgba(124,134,153,.12);color:var(--tx3);border:1px solid var(--line);font-weight:400}
+
+  /* 带读节 */
+  .step{
+    display:grid;grid-template-columns:96px 1fr;gap:18px;
+    padding:16px 0;border-bottom:1px solid var(--line);
+  }
+  .step:last-child{border-bottom:none}
+  .step .pg{
+    font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--circ);
+    font-weight:600;line-height:1.5;padding-top:1px;
+  }
+  .step .pg em{display:block;font-style:normal;font-size:11px;color:var(--tx3);font-weight:400;margin-top:2px}
+  .step h4{font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.5;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .step p{font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:7px}
+  .step .must{
+    font-size:12.5px;color:var(--tx2);background:rgba(46,204,143,.055);
+    border-left:2px solid rgba(46,204,143,.5);padding:8px 12px;border-radius:0 7px 7px 0;margin-top:7px;
+  }
+  .step .must b{color:#7ee0b4}
+  .step.skipped{opacity:.55}
+  .step.skipped h4{color:var(--tx3)}
+
+  .note{border-left:3px solid var(--dm);background:rgba(34,211,238,.06);padding:14px 18px;border-radius:0 10px 10px 0;font-size:13px;color:var(--tx2);line-height:1.78;margin:16px 0}
+  .note b{color:#67e8f9}
+  .warn{border-left:3px solid var(--warn);background:rgba(245,166,35,.06);padding:14px 18px;border-radius:0 10px 10px 0;font-size:13px;color:var(--tx2);line-height:1.78;margin:16px 0}
+  .warn b{color:#ffc45e}
+
+  .quiz{background:var(--card2);border:1px solid var(--line2);border-radius:12px;padding:18px 22px;margin-top:16px}
+  .quiz h4{font-size:13.5px;font-weight:600;color:var(--dm);margin-bottom:10px}
+  .quiz ol{margin-left:18px;font-size:13px;color:var(--tx2);line-height:2}
+  .quiz ol li{padding-left:2px}
+
+  footer{margin-top:20px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--tx3);line-height:1.9}
+  @media print{
+    body{background:#fff;color:#111}
+    .card,.quiz{background:#fff;border-color:#ddd}
+    .plain li,.step p,.map td{color:#333}
+    .step .must{background:#f6fdf9}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">电路与电子技术（2） · 课件带读</div>
+  <h1>9 份课件，418 页，怎么一段一段看完
+    <small>不是知识点总结，是「导游」——告诉你现在翻到第几页、这几页只讲一件事、哪些必须记、哪些直接翻过去。<br>
+    教材：哈工大王淑娟《模拟电子技术基础》第三版 · 杨春玲《数字电子技术基础》第三版</small>
+  </h1>
+</header>
+
+<section>
+  <h2>先说全局：418 页里，真正要精读的只有 200 页左右</h2>
+  <p class="sub">按每页 1.5 分钟算，418 页是 10 小时纯阅读。但课件里有大量「发展史」「应用领域」「复习提示」页，考试一分不考。把水挤掉，真正要啃的约 200 页。</p>
+
+  <div class="card" style="padding:0;overflow:hidden">
+  <table class="map">
+    <thead>
+      <tr>
+        <th style="width:40px">#</th>
+        <th>课件</th>
+        <th style="width:58px">总页</th>
+        <th style="width:78px">可跳页</th>
+        <th style="width:64px">预计</th>
+        <th style="width:72px">优先级</th>
+        <th>一句话</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="hi">
+        <td class="num">1</td>
+        <td class="nm">绪论 + 半导体二极管</td>
+        <td class="num">47</td><td class="num">15</td><td class="num">1.5h</td>
+        <td><span class="pill p1">先看</span></td>
+        <td>器件的地基。PN 结 + 三种等效模型，后面每份课件都在用</td>
+      </tr>
+      <tr class="hi">
+        <td class="num">7</td>
+        <td class="nm">逻辑代数基础</td>
+        <td class="num">69</td><td class="num">约 12</td><td class="num">3.5h</td>
+        <td><span class="pill p0">最急</span></td>
+        <td><b>当前课堂的前置</b>。课在讲课件 8，卡诺图不会就没法听</td>
+      </tr>
+      <tr class="hi">
+        <td class="num">8</td>
+        <td class="nm">组合逻辑电路</td>
+        <td class="num">77</td><td class="num">约 15</td><td class="num">3h</td>
+        <td><span class="pill p0">同步</span></td>
+        <td>正在上的内容。设计不讲，只背功能表，实际负担比页数小很多</td>
+      </tr>
+      <tr>
+        <td class="num">9</td>
+        <td class="nm">触发器</td>
+        <td class="num">20</td><td class="num">约 3</td><td class="num">1.5h</td>
+        <td><span class="pill p1">紧跟</span></td>
+        <td>页数最少的一份，RS / D / JK / T 四个特性方程，背下来就行</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td class="nm">三极管及其放大电路</td>
+        <td class="num">90</td><td class="num">约 20</td><td class="num">6h</td>
+        <td><span class="pill p1">最重</span></td>
+        <td>整门课的地基。静态 Q → 微变等效 → Au/Ri/Ro，练到能默写</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td class="nm">场效应管及放大电路</td>
+        <td class="num">24</td><td class="num">约 4</td><td class="num">1.5h</td>
+        <td><span class="pill p3">最低</span></td>
+        <td>本校只要求「了解」。共源会算，共漏共栅看一眼比较表就够</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td class="nm">运放应用（滤波 + 非正弦波）</td>
+        <td class="num">58</td><td class="num">约 10</td><td class="num">3h</td>
+        <td><span class="pill p2">其次</span></td>
+        <td>虚短虚断是工具，比较器是重点。<b>有源滤波只需「会识别」</b></td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td class="nm">直流电源</td>
+        <td class="num">33</td><td class="num">约 6</td><td class="num">2h</td>
+        <td><span class="pill p2">其次</span></td>
+        <td>四个系数背下来（0.45 / 0.9 / 1.2 / √2），加串联稳压四部分</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <b>为什么建议的顺序是 1 → 7 → 8 → 9 → 3 → 4 → 5 → 6，而不是按编号 1 到 9</b><br>
+    · <b>课件 1 打底</b>：PN 结和二极管模型，是后面所有「非线性器件」的思维起点，1.5 小时换一个干净的地基，划算。<br>
+    · <b>7 → 8 → 9 连成一条链</b>：逻辑代数 → 组合逻辑 → 触发器，这是数字电路的一条完整主线，而且<b>你课正在讲 8</b>，补完 7 立刻就能听懂课。<br>
+    · <b>3 → 4 → 5 → 6 是模拟电路</b>，和当前课堂无关，11 月再补完全来得及（没有期中，只有期末）。<br>
+    · 课件 4（场效应管）本校只要求「了解」，<b>如果时间紧，它是第一个可以砍的</b>。
+  </div>
+</section>
+
+<section>
+  <h2>课件 1 · 绪论 + 半导体二极管 <span class="tagx">47 页 ｜ 建议 1.5 小时 ｜ 可跳 15 页</span></h2>
+  <p class="sub">这份课件的结构很典型：前 15 页是绪论和课程介绍，第 16 页才开始讲正题。<b>很多人就是在这 15 页上耗掉了耐心。</b>直接从 P16 开始。</p>
+
+  <div class="card">
+
+    <div class="step skipped">
+      <div class="pg">P1–P2<em>跳过</em></div>
+      <div>
+        <h4>课程信息、慕课资源、加群方式 <span class="pill skip">跳过</span></h4>
+        <p>只有一件事值得抄下来：<b>P1 列了慕课资源</b>——中国大学慕课哈工大王淑娟（模电）+ 齐明（数电），学堂在线清华华成英 + 王红。你之前说找不到合适网课，<b>这两个就是本校老师推荐的，和课件完全对得上</b>。</p>
+      </div>
+    </div>
+
+    <div class="step skipped">
+      <div class="pg">P3–P11<em>跳过</em></div>
+      <div>
+        <h4>电子技术发展史 + 六大应用领域 <span class="pill skip">跳过</span></h4>
+        <p>电子管 → 晶体管 → 集成电路的发展史，加上工业、农业、交通、医学、军事、能源六个领域的应用。9 页，<b>考试一分不考</b>。翻页速度可以快到 10 秒一页，扫一眼图就行。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P12–P13<em>2 分钟</em></div>
+      <div>
+        <h4>模拟信号 vs 数字信号 + 整门课的地图 <span class="pill p2">速览</span></h4>
+        <p>P12 给了一个「典型现代电子系统结构」：信号获取 → 放大 → A/D → 数字处理（CPU/FPGA）→ D/A → 功率放大 → 执行。<b>这张图值得记，它解释了为什么这门课先学模电再学数电</b>。</p>
+        <p>P13 是课程内容清单，标★的是重点：二极管、三极管放大、场效应管、集成运放应用。看一眼知道整门课学什么，就够了。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P14–P15<em>5 分钟</em></div>
+      <div>
+        <h4>课程特点 + 考核方式 <span class="pill p1">必看</span></h4>
+        <p>P14 讲这门课的两个特点：<b>工程性强</b>（允许合理近似和估算）、<b>实践性强</b>。这句话很重要——它意味着<b>这门课的答案允许有误差，不是数学题那种精确解</b>，做题时不要因为小数点纠结。</p>
+        <p>P15 是考核方式，<b>务必看清楚</b>：平时成绩占 30%（作业 + 课堂随测），剩下 70% 是期末。也就是说<b>作业不是可做可不做的，它直接进总分</b>。</p>
+        <div class="must"><b>必记：</b>平时 30%（作业 + 随测）＋ 期末 70%。作业必须留痕、必须交。</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P16–P18<em>8 分钟</em></div>
+      <div>
+        <h4>半导体是什么 + 为什么是硅和锗 <span class="pill p2">速览</span></h4>
+        <p>导电能力介于导体和绝缘体之间。关键逻辑链：<b>四价元素最合适</b> → 碳、硅、锗、锡都是四价 → 但碳燃点低、锡太活泼 → 最后选硅和锗。</p>
+        <p>这一段不用背，<b>只要理解「为什么是四价」</b>：因为四价元素要凑成 8 电子稳定结构，正好和邻居共用 4 个价电子形成共价键，晶格结构最规整。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P19–P23<em>12 分钟</em></div>
+      <div>
+        <h4>本征半导体 + 两种导电机理 <span class="pill p0">核心</span></h4>
+        <p>这是整门课第一个真正的概念，后面所有器件都建立在「自由电子 + 空穴」这两个载流子上。</p>
+        <p>逻辑顺序：完全纯净的晶体 → 相邻原子共用价电子形成<b>共价键</b> → 温度高于 0K 时，有些价电子挣脱束缚变成<b>自由电子</b>，原位留下一个<b>空穴</b>（这叫<b>本征激发</b>）→ 电子和空穴成对出现，数目相等 → 电子遇空穴会填补（<b>复合</b>）→ 一定温度下激发和复合达到<b>动态平衡</b>。</p>
+        <p>两种导电机理（P22–P23）：<b>自由电子导电</b>（和金属一样，电场下定向移动）；<b>空穴导电</b>（空穴吸引相邻原子的价电子来填补，自己「移动」到那个原子，等效于正电荷在移动）。</p>
+        <div class="must"><b>必记三条：</b>① 本征激发同时产生自由电子和空穴，成对、数目相等；② 两种载流子：自由电子（负）+ 空穴（正）；③ 空穴导电的本质是「价电子的反向填补」，不是真的有正电荷在跑。</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P24–P25<em>8 分钟</em></div>
+      <div>
+        <h4>N 型 / P 型半导体（掺杂） <span class="pill p0">核心</span></h4>
+        <p>本征半导体掺入<b>五价元素</b>（磷 P、砷 As）→ 多出一个电子 → <b>N 型</b>，自由电子是<b>多子</b>，空穴是<b>少子</b>。</p>
+        <p>掺入<b>三价元素</b>（硼 B、镓 Ga、铟 In）→ 缺一个电子 → <b>P 型</b>，空穴是<b>多子</b>，自由电子是<b>少子</b>。</p>
+        <div class="must"><b>必记：</b>N 型＝掺五价＝多子自由电子；P 型＝掺三价＝多子空穴。<b>「多子 / 少子」这两个词后面会反复出现，现在就要说顺。</b></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P26–P29<em>15 分钟</em></div>
+      <div>
+        <h4>PN 结的形成 + 单向导电性 <span class="pill p0">全课第一个重点</span></h4>
+        <p><b>形成过程（P26）</b>：P 区和 N 区接触 → 浓度差导致多子<b>扩散</b>（P 区的空穴往 N 区跑，N 区的电子往 P 区跑）→ 交界处留下不能移动的离子 → 形成<b>空间电荷区</b>（就是 PN 结）→ 产生<b>内电场</b>，方向阻止扩散 → 扩散和漂移达到平衡。</p>
+        <p><b>单向导电（P27–P28）</b>，这是本章第一个必考结论：</p>
+        <p>· <b>正向偏置</b>（P 接正、N 接负）：外电场削弱内电场 → 结变窄 → 多子扩散加强 → 正向电流大、正向电阻小 → <b>导通</b><br>
+           · <b>反向偏置</b>（P 接负、N 接正）：外电场加强内电场 → 结变宽 → 少子漂移形成很小的反向电流 → <b>截止</b></p>
+        <div class="must"><b>必记：</b>正偏 → 结变窄 → 导通；反偏 → 结变宽 → 截止。<b>「变窄 / 变宽」是答题时最好用的关键词</b>，比说「电阻变小」更准确。</div>
+        <p style="margin-top:8px">P29 是这一节的小结页，<b>建议停下来自己复述一遍再往下翻</b>。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P30–P31<em>10 分钟</em></div>
+      <div>
+        <h4>二极管的结构 + 伏安特性曲线 <span class="pill p0">核心</span></h4>
+        <p>结构很简单：<b>二极管 = PN 结 + 管壳 + 引线</b>，P 端是阳极，N 端是阴极（符号里三角形指向的那一端是阴极）。</p>
+        <p>P31 的伏安特性曲线是这张图必须看懂：<b>正向</b>有一段「死区」（电压不够大时不导通），过了死区电流急剧上升；<b>反向</b>电流很小且基本不变（反向饱和电流 I<sub>S</sub>），到某个电压突然击穿（U<sub>BR</sub>）。</p>
+        <div class="must"><b>必记数值：</b>硅管导通压降 <b>0.7V</b>（死区约 0.5V）；锗管 <b>0.3V</b>（死区约 0.1V）。<b>硅 0.7 / 锗 0.3 这两个数，后面每道题都要用，现在就要背死。</b></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P32–P35<em>20 分钟</em></div>
+      <div>
+        <h4>二极管的三种等效模型 <span class="pill p0">本章最核心 · 必考</span></h4>
+        <p>这是课件 1 最重要的四页，也是模电的思维方式入门——<b>同一个器件，在不同场合用不同精度的模型去近似</b>。</p>
+        <p><b>① 理想模型（P32）</b>：导通时压降为 0，截止时反向电流为 0，相当于一个<b>理想开关</b>。<br>
+           <b>什么时候用</b>：信号幅值远远大于二极管压降时（比如电源电压 10V，0.7V 可以忽略）。</p>
+        <p><b>② 恒压降模型（P33）</b>：导通时压降恒为 U<sub>D</sub>（硅 0.7V、锗 0.3V），相当于<b>理想二极管串联一个恒压源</b>。<br>
+           <b>什么时候用</b>：<b>最常用的一个</b>。信号幅值和压降可比时（比如 3V 信号），用它。</p>
+        <p><b>③ 小信号模型（P34–P35）</b>：把二极管在工作点 Q 附近看作一个电阻 r<sub>d</sub>，r<sub>d</sub> = U<sub>T</sub>/I<sub>D</sub> ≈ <b>26mV / I<sub>D</sub>(mA)</b>。<br>
+           <b>什么时候用</b>：分析交流小信号时。<b>关键前提：必须先有一个静态工作点 Q</b>，没有 Q 就没有 r<sub>d</sub>。</p>
+        <div class="must"><b>必记：</b>① 三种模型各自的适用场合（这是简答题常客）；② r<sub>d</sub> = 26mV / I<sub>D</sub>(mA)，<b>I<sub>D</sub> 的单位必须是 mA</b>；③ 「先有 Q 点才能算 r<sub>d</sub>」——这句话在课件 3 讲放大电路时会原封不动地再来一次。</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P36–P39<em>10 分钟</em></div>
+      <div>
+        <h4>整流电路（半波 / 桥式） <span class="pill p2">只懂概念</span></h4>
+        <p>半波整流：一个二极管，正半周导通、负半周截止，输出只有一半波形。<br>
+           桥式整流：四个二极管搭成桥，正负半周都有同方向的电流流过负载，输出全波波形。</p>
+        <div class="must"><b>这里只要求「看懂原理」，不要背系数。</b>0.45U<sub>2</sub>、0.9U<sub>2</sub>、√2U<sub>2</sub> 这些公式<b>在课件 6（直流电源）里会完整讲一遍</b>，那时再背。<b>现在背了也会忘，而且会和课件 6 的内容打架。</b></div>
+        <p style="margin-top:8px">判断标准：能说清楚「正半周哪两个管子导通、负半周哪两个导通」，就算过关。</p>
+      </div>
+    </div>
+
+    <div class="step skipped">
+      <div class="pg">P40<em>跳过</em></div>
+      <div>
+        <h4>限幅电路 <span class="pill skip">课件自己说先跳过</span></h4>
+        <p>课件原文写着「<b>恒压降模型，简单，后续电路中会多次出现，此处先不赘述</b>」。既然老师都说先不讲了，你也别在这里耗时间。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P41<em>8 分钟</em></div>
+      <div>
+        <h4>二极管开关电路 / 门电路 <span class="pill p1">看一眼</span></h4>
+        <p>用二极管的导通/截止实现逻辑运算：P41 展示了<b>二极管或门</b>（任一输入为高，输出就是高）。</p>
+        <p>这里不用深究，<b>只要记住「二极管可以当开关用，所以能搭逻辑门」</b>。这个认知在课件 7（逻辑代数）和课件 8（组合逻辑）会变成正式的「与门/或门」。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P42–P43<em>12 分钟</em></div>
+      <div>
+        <h4>稳压二极管 <span class="pill p0">核心 · 必考</span></h4>
+        <p>稳压管和普通二极管<b>结构一样，用法相反</b>——它工作在<b>反向击穿区</b>。反向电压达到 U<sub>Z</sub> 后，电流在很大范围内变化而电压几乎不变，这就是「稳压」。</p>
+        <p>P42 的伏安特性要记住三个位置：<b>U<sub>Z</sub></b>（稳定电压）、<b>I<sub>Zmin</sub></b>（最小工作电流，低于它稳不住）、<b>I<sub>Zmax</sub></b>（最大工作电流，超过它烧管子）。</p>
+        <p><b>P43 的限流电阻计算</b>是这一节唯一可能出计算题的地方。思路是<b>两个极端情况</b>：</p>
+        <p>· 当输入电压<b>最大</b>、负载电流<b>最小</b>时，稳压管电流最大 → 要求不超过 I<sub>Zmax</sub> → 得到 R 的<b>下限</b><br>
+           · 当输入电压<b>最小</b>、负载电流<b>最大</b>时，稳压管电流最小 → 要求不低于 I<sub>Zmin</sub> → 得到 R 的<b>上限</b></p>
+        <div class="must"><b>不要死背公式，记住「两个极端」这个思路就行</b>：R 上分掉的电压 = U<sub>I</sub> − U<sub>Z</sub>，流过 R 的电流 = I<sub>Z</sub> + I<sub>L</sub>，所以 R = (U<sub>I</sub> − U<sub>Z</sub>) / (I<sub>Z</sub> + I<sub>L</sub>)。把两种极端代进去，就得到 R 的范围。</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="pg">P44<em>5 分钟</em></div>
+      <div>
+        <h4>本章小结 <span class="pill p1">必看</span></h4>
+        <p>课件自己总结的四条，<b>就是考试可能出的简答题</b>。看完之后合上课件，试着把这四条复述一遍——复述不出来的，回去翻对应页。</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="quiz">
+    <h4>课件 1 自带的自测（P45–P46，老师给的，别浪费）</h4>
+    <ol>
+      <li>什么是半导体？半导体导电方式与导体导电方式的异同是什么？</li>
+      <li>P 型半导体和 N 型半导体是如何形成的？</li>
+      <li>PN 结的导电特点是什么？</li>
+      <li>二极管的伏安特性是什么样的？主要参数有哪些，各代表什么意义？</li>
+      <li>不同应用场合下，用什么模型构建二极管的等效电路？</li>
+      <li>稳压二极管的工作原理是什么？如何应用？</li>
+    </ol>
+    <p style="font-size:12.5px;color:var(--tx3);margin-top:12px;line-height:1.7">
+      这六题能<b style="color:var(--tx2)">不看课件口头答出来</b>，课件 1 就算过了。答不出来的，说明那一节只是「看过」而不是「学会」。
+    </p>
+  </div>
+
+  <div class="warn">
+    <b>作业清单（P47，必须做且要留痕）</b><br>
+    二版教材（第 2 章）：自我检测<b>全做</b>；习题 <b>2-1、2-3、2-7、2-8、2-9、2-10</b>。<br>
+    三版教材（第 4 章）：自我检测<b>全做</b>；习题 <b>4-1、4-3、4-7、4-8、4-9、4-10</b>。<br>
+    <b>课件原文注明：自我检测对照答案自己做，习题需要留痕，在作业本或课本上作答，后续会收。</b>平时分占 30%，这部分别丢。
+  </div>
+</section>
+
+<section>
+  <h2>这份手册怎么用</h2>
+  <div class="card">
+    <ul class="plain">
+      <li><b>一次只开一份课件，对着手册翻。</b>手册给你页码区间，你按区间读，读完看一眼「必记」，再往下走。不要一口气读完整份。</li>
+      <li><b>「必记」是底线，「跳过」是授权。</b>看到 <span class="pill skip">跳过</span> 就真的翻过去，不用有负罪感——那些页老师自己也知道不考。</li>
+      <li><b>读完一份，先做课件自带的自测题。</b>每份课件末尾都有老师留的「复习问题」和「练习题」，那是<b>最贴近考试的抓手</b>，比任何课外题都值。</li>
+      <li><b>顺序按 1 → 7 → 8 → 9 → 3 → 4 → 5 → 6 走。</b>课件 1 打完底，立刻进数字电路三件套（因为课正在讲），模拟电路四件套留到 11 月。</li>
+      <li><b>每份课件看完，回来跟我说一句「课件 X 过了」</b>，我把下一份的详细带读给你。这样手册是跟着你的进度长出来的，不会堆成一堆看不完的文档。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div>课件依据：桌面 <code>电子电路与技术（2）</code> 文件夹内 9 份 PDF，共 418 页（不含习题册 229 页）。</div>
+  <div>进度依据：《内容进度大致安排-电子技术自学和复习参考》17 个教学单元；当前课堂进度为课件 8（组合逻辑电路）。</div>
+  <div>课程无期中考试，仅期末。因此「11/1 前补完」不再是硬约束，改为按「先数字电路、后模拟电路」的知识链推进。</div>
+  <div>配套文件：<code>电子电路与技术2_补课辅助.html</code>（公式卡、例题、自测题）｜<code>个人学习总规划_2026秋.html</code>（总时间表）。</div>
+</footer>
+
+</div>
+</body>
+</html>
