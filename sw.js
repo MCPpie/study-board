@@ -1,5 +1,7 @@
-/* 学习看板 Service Worker */
-const CACHE = 'study-board-v6';
+/* 学习看板 Service Worker · v7
+   策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
+        图片等静态资源走「缓存优先」，保证离线可用。 */
+const CACHE = 'study-board-v7';
 
 const ASSETS = [
   './',
@@ -19,12 +21,12 @@ const ASSETS = [
   './docs/大物热学知识总结.html',
   './docs/大物模拟卷.html',
   './docs/六级听力专项.html',
+  './docs/六级写作翻译模板.html',
   './docs/离散集中补计划.html',
   './docs/离散知识点卡片.html',
   './docs/数竞公式与题型.html',
   './docs/数竞真题指南.html',
-  './docs/概率论期末专项.html',
-  './docs/六级写作翻译模板.html'
+  './docs/概率论期末专项.html'
 ];
 
 self.addEventListener('install', e => {
@@ -50,21 +52,26 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
-  // 每日数据：网络优先，保证内容是最新的
-  if (url.pathname.endsWith('note-data.json')) {
+  // 文档类：网络优先（有网时永远拿最新的）
+  const isDoc = req.destination === 'document'
+             || /\.(html|js|css|json)$/i.test(url.pathname);
+
+  if (isDoc) {
     e.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'reload' })
         .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+          if (res && res.status === 200) {
+            const copy = res.clone();
+            caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+          }
           return res;
         })
-        .catch(() => caches.match(req))
+        .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
     );
     return;
   }
 
-  // 其余：缓存优先，回退网络
+  // 图片等：缓存优先
   e.respondWith(
     caches.match(req).then(hit => {
       if (hit) return hit;
