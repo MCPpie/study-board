@@ -80,7 +80,8 @@
   + '.askcfg .tip{font-size:11.5px;color:#7c8699;line-height:1.85;margin-bottom:16px}'
   + '.askcfg .tip b{color:#aab3c4}'
   + '.askcfg .tip a{color:#38d0d8;text-decoration:none}'
-  + '.askcfg .row{display:flex;gap:9px}'
+  + '.askcfg .row{display:flex;gap:9px;position:sticky;bottom:0;background:#141821;'
+  + 'padding:10px 0 calc(4px + env(safe-area-inset-bottom));margin-top:-4px}'
   + '.askcfg .row button{flex:1;height:42px;border-radius:11px;font-family:inherit;'
   + 'font-size:13px;font-weight:600;border:1px solid #333b4d;background:#1e2431;color:#e8ebf2}'
   + '.askcfg .row button.pri{background:rgba(56,208,216,.14);border-color:rgba(56,208,216,.42);color:#38d0d8}';
@@ -356,14 +357,23 @@
     var cfg = getCfg();
     if (!cfg.key) {
       bodyEl.innerHTML = '<div class="askempty">'
-        + '<b>还没配置 AI 接口。</b><br>'
-        + '点右上角 <b>⚙</b> 填一个 API Key 就能用了。<br><br>'
-        + '配置好之后，你可以直接问：<br>'
-        + '· 这一段在讲什么<br>'
-        + '· 这个公式为什么这么写<br>'
-        + '· 帮我举个具体例子<br>'
-        + '· 和上一节什么关系'
+        + '<b>还差一步：填一个 API Key。</b><br>'
+        + '填一次就行，之后所有文档通用。'
+        + '</div>'
+        + '<button id="askSetup" style="display:block;width:100%;height:46px;'
+        + 'margin:6px 0 16px;border-radius:11px;border:1px solid rgba(56,208,216,.45);'
+        + 'background:rgba(56,208,216,.14);color:#38d0d8;font-size:14px;font-weight:700;'
+        + 'font-family:inherit">去填 API Key ›</button>'
+        + '<div class="askempty">'
+        + '<b>Key 从哪来</b><br>'
+        + '1. 打开 <span style="color:#38d0d8">platform.deepseek.com/api_keys</span><br>'
+        + '2. 注册（手机号即可）<br>'
+        + '3. 点「创建 API key」<br>'
+        + '4. 复制 <b>sk-</b> 开头那串，粘进来<br><br>'
+        + '充 10 块钱够问几千次。Key 只存在这台手机上，不上传任何服务器。'
         + '</div>';
+      var sb = document.getElementById('askSetup');
+      if (sb) sb.addEventListener('click', openCfg);
       return;
     }
     if (!history.length) {
