@@ -263,6 +263,25 @@
   + '.citem{cursor:pointer}'
   + '.citem:active{background:rgba(255,255,255,.03)}'
   + '.citem .pen{flex:0 0 auto;font-size:11px;color:#38d0d8;padding:4px 8px}'
+  + '.citem .ck{flex:0 0 20px;height:20px;border-radius:5px;border:1.5px solid #4a5262;'
+  + 'display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}'
+  + '.citem.sel{background:rgba(255,122,122,.08)}'
+  + '.citem.sel .ck{background:#ff6b6b;border-color:#ff6b6b;color:#fff}'
+  + '.citem.sel .tx b{color:#ff9d9d}'
+  + '.barbtn{font-size:11px;color:#aab3c4;border:1px solid #333b4d;background:#1e2431;'
+  + 'border-radius:7px;padding:4px 10px;font-family:inherit}'
+  + '.barbtn.on{background:rgba(255,122,122,.14);border-color:rgba(255,122,122,.4);'
+  + 'color:#ff9d9d;font-weight:600}'
+  + '.batchbar{position:sticky;bottom:0;background:#141821;border-top:1px solid #333b4d;'
+  + 'padding:11px 0 calc(2px + env(safe-area-inset-bottom));margin:14px -15px -26px;'
+  + 'padding-left:15px;padding-right:15px;display:flex;gap:8px;align-items:center}'
+  + '.batchbar .cnt{flex:1;font-size:12px;color:#aab3c4}'
+  + '.batchbar .cnt b{color:#ff9d9d;font-size:14px}'
+  + '.batchbar button{flex:0 0 auto;height:38px;padding:0 15px;border-radius:10px;'
+  + 'border:1px solid #333b4d;background:#1e2431;color:#aab3c4;font-size:12.5px;font-family:inherit}'
+  + '.batchbar button.del{background:rgba(255,122,122,.16);'
+  + 'border-color:rgba(255,122,122,.45);color:#ff9d9d;font-weight:700}'
+  + '.batchbar button:disabled{opacity:.4}'
   + '.editwrap{display:flex;flex-direction:column;gap:9px}'
   + '.editwrap input{background:#1e2431;border:1px solid #333b4d;border-radius:10px;'
   + 'padding:10px 12px;color:#e8ebf2;font-size:12.5px;font-family:inherit;width:100%}'
@@ -286,6 +305,40 @@
   var styleEl = document.createElement('style');
   styleEl.textContent = CSS;
   document.head.appendChild(styleEl);
+
+  /* ---------------- 确认框（不依赖 WebView 的 confirm） ---------------- */
+  function ask(title, msg, okText, cb) {
+    var m = document.createElement('div');
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:10070;'
+      + 'display:flex;align-items:center;justify-content:center;padding:24px';
+    m.innerHTML = '<div style="width:100%;max-width:330px;background:#1a1f2a;'
+      + 'border:1px solid #333b4d;border-radius:14px;padding:18px 18px 14px;'
+      + 'box-shadow:0 14px 40px rgba(0,0,0,.6)">'
+      + '<div style="font-size:14px;font-weight:700;color:#e8ebf2;margin-bottom:10px">'
+      + esc(title) + '</div>'
+      + '<div style="font-size:12.5px;color:#aab3c4;line-height:1.8;margin-bottom:16px">'
+      + esc(msg) + '</div>'
+      + '<div style="display:flex;gap:9px">'
+      + '<button id="ttAskNo" style="flex:1;height:42px;border-radius:10px;'
+      + 'border:1px solid #333b4d;background:#1e2431;color:#aab3c4;font-size:13px;'
+      + 'font-family:inherit">取消</button>'
+      + '<button id="ttAskYes" style="flex:1;height:42px;border-radius:10px;'
+      + 'border:1px solid rgba(255,122,122,.45);background:rgba(255,122,122,.16);'
+      + 'color:#ff9d9d;font-size:13px;font-weight:700;font-family:inherit">'
+      + esc(okText || '确定') + '</button>'
+      + '</div></div>';
+    document.body.appendChild(m);
+    var done = false;
+    function fin(v) {
+      if (done) return;
+      done = true;
+      if (m.parentNode) m.parentNode.removeChild(m);
+      cb(v);
+    }
+    m.querySelector('#ttAskYes').addEventListener('click', function () { fin(true); });
+    m.querySelector('#ttAskNo').addEventListener('click', function () { fin(false); });
+    m.addEventListener('click', function (e) { if (e.target === m) fin(false); });
+  }
 
   /* ---------------- 小工具 ---------------- */
   var toastEl = null, toastTimer = null;
@@ -501,9 +554,19 @@
 
     // 课程清单
     h += '<div style="margin-top:18px;font-size:11.5px;color:#7c8699;'
-      + 'margin-bottom:4px">全部课程（' + courses.length + '）</div>';
+    var selCount = Object.keys(selected).length;
+
+    h += '<div style="display:flex;align-items:center;margin-top:18px;margin-bottom:6px">'
+      + '<span style="font-size:11.5px;color:#7c8699">全部课程（' + courses.length + '）</span>'
+      + '<button class="barbtn' + (batchMode ? ' on' : '') + '" id="batchToggle" '
+      + 'style="margin-left:auto">'
+      + (batchMode ? '退出批量' : '批量删除')
+      + '</button></div>';
+
     h += courses.map(function (c, i) {
-      return '<div class="citem" data-edit="' + i + '">'
+      var isSel = !!selected[i];
+      return '<div class="citem' + (isSel ? ' sel' : '') + '" data-edit="' + i + '">'
+        + (batchMode ? '<span class="ck">✓</span>' : '')
         + '<span style="flex:0 0 auto;font-size:11px;color:#38d0d8">'
         + DAYS[c.day - 1] + '</span>'
         + '<div class="tx"><b>' + esc(c.name) + '</b>'
@@ -512,12 +575,21 @@
         + (c.room ? ' · ' + esc(c.room) : '')
         + (c.weeks ? ' · ' + esc(c.weeks) + '周' : '')
         + '</span></div>'
-        + '<span class="pen">改</span>'
+        + (batchMode ? '' : '<span class="pen">改</span>')
         + '</div>';
     }).join('');
 
-    h += '<div style="margin-top:10px;font-size:11px;color:#7c8699;text-align:center">'
-      + '点任意一行可以修改或删除</div>';
+    if (batchMode) {
+      h += '<div class="batchbar">'
+        + '<span class="cnt">已选 <b>' + selCount + '</b> 项</span>'
+        + '<button id="batchAll">全选</button>'
+        + '<button class="del" id="batchDel"' + (selCount ? '' : ' disabled') + '>'
+        + '删除</button>'
+        + '</div>';
+    } else {
+      h += '<div style="margin-top:10px;font-size:11px;color:#7c8699;text-align:center">'
+        + '点任意一行可以修改或删除</div>';
+    }
 
     // 设置
     var meta = getMeta();
@@ -576,8 +648,58 @@
 
     bodyEl.querySelectorAll('[data-edit]').forEach(function (el) {
       el.addEventListener('click', function () {
-        editCourse(+el.dataset.edit);
+        var i = +el.dataset.edit;
+        if (batchMode) {
+          if (selected[i]) delete selected[i];
+          else selected[i] = true;
+          renderSheet();       // 重渲染刷新计数与高亮
+          return;
+        }
+        editCourse(i);
       });
+    });
+
+    // 批量相关
+    var bt = document.getElementById('batchToggle');
+    if (bt) bt.addEventListener('click', function () {
+      batchMode = !batchMode;
+      selected = {};
+      renderSheet();
+    });
+
+    var ba = document.getElementById('batchAll');
+    if (ba) ba.addEventListener('click', function () {
+      var all = getCourses();
+      var n = Object.keys(selected).length;
+      if (n === all.length) {
+        selected = {};                      // 已全选 → 取消全选
+      } else {
+        selected = {};
+        all.forEach(function (c, i) { selected[i] = true; });
+      }
+      renderSheet();
+    });
+
+    var bd = document.getElementById('batchDel');
+    if (bd) bd.addEventListener('click', function () {
+      var idxs = Object.keys(selected).map(Number).sort(function (a, b) { return b - a; });
+      if (!idxs.length) return;
+      var n = idxs.length;
+
+      ask('删除 ' + n + ' 门课？',
+        '将从' + (isWeekMode() ? '第 ' + viewWeek() + ' 周' : '基准课表') + '中移除这 ' + n + ' 门，不能撤销。',
+        '删除',
+        function (ok) {
+          if (!ok) return;
+          var list = getCourses();
+          idxs.forEach(function (i) { list.splice(i, 1); });
+          setCourses(list);
+          selected = {};
+          batchMode = false;
+          renderSheet();
+          renderTodayCard();
+          say('已删除 ' + n + ' 门课');
+        });
     });
 
     var term = document.getElementById('ttTerm');
@@ -650,6 +772,8 @@
 
   /* ---------------- 导入流程 ---------------- */
   var importBusy = false;
+  var batchMode = false;
+  var selected = {};      // { 索引: true }
   var lastImage = '';   // 最近一次识别的图片（压缩后 dataURL），供「看原图」用
 
   function startImport() {
