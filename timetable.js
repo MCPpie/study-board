@@ -272,6 +272,8 @@
   + 'border-radius:7px;padding:4px 10px;font-family:inherit}'
   + '.barbtn.on{background:rgba(255,122,122,.14);border-color:rgba(255,122,122,.4);'
   + 'color:#ff9d9d;font-weight:600}'
+  + '.ttbtns button.dangerOn{background:rgba(255,122,122,.16);'
+  + 'border-color:rgba(255,122,122,.45);color:#ff9d9d;font-weight:700}'
   + '.batchbar{position:sticky;bottom:0;background:#141821;border-top:1px solid #333b4d;'
   + 'padding:11px 0 calc(2px + env(safe-area-inset-bottom));margin:14px -15px -26px;'
   + 'padding-left:15px;padding-right:15px;display:flex;gap:8px;align-items:center}'
@@ -510,6 +512,10 @@
     h += '<div class="ttbtns">'
       + '<button class="pri" id="ttImport">截屏导入</button>'
       + '<button id="ttManual">手动添加</button>'
+      + (courses.length
+          ? '<button id="batchToggle" class="' + (batchMode ? 'dangerOn' : '') + '">'
+            + (batchMode ? '退出批量' : '批量删除') + '</button>'
+          : '')
       + '</div>';
 
     if (!courses.length) {
@@ -553,15 +559,14 @@
     h += '</div>';
 
     // 课程清单
-    h += '<div style="margin-top:18px;font-size:11.5px;color:#7c8699;'
     var selCount = Object.keys(selected).length;
 
     h += '<div style="display:flex;align-items:center;margin-top:18px;margin-bottom:6px">'
       + '<span style="font-size:11.5px;color:#7c8699">全部课程（' + courses.length + '）</span>'
-      + '<button class="barbtn' + (batchMode ? ' on' : '') + '" id="batchToggle" '
-      + 'style="margin-left:auto">'
-      + (batchMode ? '退出批量' : '批量删除')
-      + '</button></div>';
+      + (batchMode
+          ? '<span style="margin-left:auto;font-size:11px;color:#ff9d9d">点行选中</span>'
+          : '')
+      + '</div>';
 
     h += courses.map(function (c, i) {
       var isSel = !!selected[i];
