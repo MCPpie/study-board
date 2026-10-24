@@ -621,14 +621,21 @@
 
         var parsed = extractJson(content);
         if (!parsed) {
-          // 内容有但不是 JSON，可能是纯文本解释
-          throw new Error('模型返回了内容，但不是 JSON 格式。\n'
+          throw new Error('模型返回了内容，但里面没找到课程数据。\n'
+            + 'finish_reason：' + (finish || '（空）') + '\n'
             + '原始内容（前 400 字）：\n' + content.slice(0, 400));
         }
-        return { courses: parsed.courses || [], raw: content, ms: Date.now() - t0 };
+        var cs = mergeCourses(parsed.courses || []);
+        return {
+          courses: cs,
+          partial: parsed.partial,
+          finish: finish,
+          raw: content,
+          ms: Date.now() - t0
+        };
       });
     }).then(function (r) {
-      showPreview(r.courses, r.ms);
+      showPreview(r.courses, r.ms, r.partial);
     }).catch(function (err) {
       var msg = String(err && err.message || err);
       var hint = '';
@@ -669,19 +676,93 @@
     });
   }
 
-  // 从模型输出里抠出 JSON（容忍 markdown 代码块、前后废话）
+  // 从模型输出里抠出 JSON（容忍 markdown 包裹、前后废话、以及被截断）
   function extractJson(text) {
     var s = String(text).trim();
     s = s.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
-    try { return JSON.parse(s); } catch (e) {}
+
+    // ① 完整 JSON
+    try {
+      var full = JSON.parse(s);
+      if (full && full.courses) return { courses: full.courses, partial: false };
+    } catch (e) {}
+
+    // ② 掐头去尾再试
     var a = s.indexOf('{'), b = s.lastIndexOf('}');
     if (a >= 0 && b > a) {
-      try { return JSON.parse(s.slice(a, b + 1)); } catch (e) {}
+      try {
+        var cut = JSON.parse(s.slice(a, b + 1));
+        if (cut && cut.courses) return { courses: cut.courses, partial: false };
+      } catch (e) {}
     }
+
+    // ③ 被截断：从每个 { 出发找它自己的配对 }，能闭合就尝试解析
+    //    （不能只等整体归零——最外层数组的 { 永远等不到闭合）
+    var objs = [];
+    var i = 0;
+    while (i < s.length) {
+      if (s.charAt(i) !== '{') { i++; continue; }
+
+      // 从这个 { 开始找匹配的 }
+      var depth = 0, inStr = false, esc = false, j = i, closeAt = -1;
+      for (; j < s.length; j++) {
+        var c = s.charAt(j);
+        if (inStr) {
+          if (esc) { esc = false; }
+          else if (c === '\\') { esc = true; }
+          else if (c === '"') { inStr = false; }
+          continue;
+        }
+        if (c === '"') { inStr = true; continue; }
+        if (c === '{') { depth++; }
+        else if (c === '}') {
+          depth--;
+          if (depth === 0) { closeAt = j; break; }
+        }
+      }
+
+      if (closeAt < 0) {
+        // 这个 { 没有闭合（截断处），往后挪一位继续找
+        i++;
+        continue;
+      }
+
+      var frag = s.slice(i, closeAt + 1);
+      if (frag.indexOf('"name"') >= 0) {
+        try {
+          var o = JSON.parse(frag);
+          if (o && o.name) objs.push(o);
+        } catch (e) {}
+      }
+      i = closeAt + 1;
+    }
+
+    if (objs.length) return { courses: objs, partial: true };
     return null;
   }
 
-  function showPreview(list, ms) {
+  // 合并同一天相邻节次、同名的课（模型常把 3、4 节拆成两条）
+  function mergeCourses(list) {
+    var byKey = {};
+    var order = [];
+    list.forEach(function (c) {
+      var k = c.name + '|' + c.day + '|' + (c.room || '') + '|' + (c.weeks || '');
+      if (!byKey[k]) {
+        byKey[k] = c;
+        order.push(k);
+      } else {
+        var e = byKey[k];
+        // 相邻或重叠则合并
+        if (+c.start <= +e.end + 1 && +c.end >= +e.start - 1) {
+          e.start = Math.min(+e.start, +c.start);
+          e.end = Math.max(+e.end, +c.end);
+        }
+      }
+    });
+    return order.map(function (k) { return byKey[k]; });
+  }
+
+  function showPreview(list, ms, partial) {
     if (!list.length) {
       bodyEl.innerHTML = '<div class="ttempty"><b>没识别出课程</b><br><br>'
         + '可能是图片太模糊，或者截图里没有表格。<br>'
@@ -719,8 +800,11 @@
     bodyEl.innerHTML = '<div style="font-size:12.5px;color:#aab3c4;margin-bottom:10px">'
       + '识别出 <b style="color:#38d0d8">' + fixed.length + '</b> 条'
       + '（用时 ' + ((ms || 0) / 1000).toFixed(1) + 's）'
-      + '<br><span style="font-size:11px;color:#7c8699">'
-      + '请核对一下，有错就取消后手动改</span></div>'
+      + (partial
+          ? '<br><span style="font-size:11px;color:#ffc48a">⚠️ 输出被截断了，'
+            + '可能只拿到一部分。建议分两次导入，或用手动添加补剩下的。</span>'
+          : '<br><span style="font-size:11px;color:#7c8699">请核对一下，有错就取消后手动改</span>')
+      + '</div>'
       + '<div class="prev">' + esc(lines) + '</div>'
       + '<div class="ttbtns">'
       + '<button class="pri" id="ttConfirm">确认导入</button>'
