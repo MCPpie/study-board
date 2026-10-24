@@ -10,6 +10,17 @@
 
   // ---------- 样式 ----------
   var CSS = ''
+  + '.sbr-back{position:fixed;left:11px;top:calc(11px + env(safe-area-inset-top));z-index:9997;'
+  + 'width:40px;height:40px;border-radius:50%;border:1px solid #333b4d;'
+  + 'background:rgba(24,28,36,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);'
+  + 'display:flex;align-items:center;justify-content:center;'
+  + 'box-shadow:0 3px 14px rgba(0,0,0,.4);transition:opacity .22s,transform .12s;'
+  + 'cursor:pointer;-webkit-tap-highlight-color:transparent}'
+  + '.sbr-back svg{width:19px;height:19px;fill:none;stroke:#e8ebf2;stroke-width:2.2;'
+  + 'stroke-linecap:round;stroke-linejoin:round;margin-left:-1px}'
+  + '.sbr-back:active{transform:scale(.9)}'
+  + '.sbr-back.dim{opacity:.42}'
+  + 'body.sbr-has-back header{padding-top:60px !important}'
   + '.sbr-bar{position:fixed;left:0;right:0;top:0;height:3px;z-index:9998;background:transparent;pointer-events:none}'
   + '.sbr-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38d0d8,#5b9bff);'
   + 'border-radius:0 2px 2px 0;transition:width .12s linear}'
@@ -78,6 +89,36 @@
     + '<button id="sbrBtnPos"><svg viewBox="0 0 24 24"><path d="M12 19V5m0 0l6 6m-6-6l-6 6"/></svg><span class="sbr-pct">0%</span></button>';
   document.body.appendChild(nav);
   document.body.classList.add('sbr-has-nav');
+
+  // ---------- 左上角返回 ----------
+  var backBtn = document.createElement('div');
+  backBtn.className = 'sbr-back';
+  backBtn.setAttribute('role', 'button');
+  backBtn.setAttribute('aria-label', '返回');
+  backBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>';
+  document.body.appendChild(backBtn);
+  document.body.classList.add('sbr-has-back');
+
+  backBtn.addEventListener('click', function () {
+    var base = location.pathname.indexOf('/docs/') >= 0 ? '../' : './';
+    var home = base + 'index.html';
+    var before = location.pathname + location.search;
+    var ref = document.referrer || '';
+    // 只有「确实是从本站点内点进来的」才回退历史，否则直接回首页
+    var fromInside = ref !== '' && ref.indexOf(location.host) >= 0;
+
+    if (window.history.length > 1 && fromInside) {
+      window.history.back();
+      // 兜底：420ms 后若仍停在本页，说明后退没生效，直接跳首页
+      setTimeout(function () {
+        if (location.pathname + location.search === before) {
+          location.href = home;
+        }
+      }, 420);
+    } else {
+      location.href = home;
+    }
+  });
 
   var mask = document.createElement('div');
   mask.className = 'sbr-mask';
@@ -220,6 +261,10 @@
       barFill.style.width = (p * 100).toFixed(1) + '%';
       pctEl.textContent = Math.round(p * 100) + '%';
       ticking = false;
+
+      // 滚动后按钮变淡，避免遮挡正文
+      if (window.pageYOffset > 80) backBtn.classList.add('dim');
+      else backBtn.classList.remove('dim');
 
       var now = Date.now();
       if (now - lastSave > 700) {
