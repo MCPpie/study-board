@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v20';
+const CACHE = 'study-board-v21';
 
 const ASSETS = [
   './',
@@ -10,6 +10,14 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png',
+  './vendor/morphicons/element.js',
+  './vendor/morphicons/controller--7SSBggk.js',
+  './vendor/morphicons/dom.js',
+  './vendor/morphicons/normalize-CYnN3Npw.js',
+  './vendor/morphicons/region-BjECuWZR.js',
+  './vendor/morphicons/resample-CXlaZ5ZQ.js',
+  './vendor/morphicons/spring-B_P92nf6.js',
+  './vendor/morphicons/adapters.js',
   './个人学习总规划_2026秋.html',
   './洛谷题单进度表.html',
   './编程能力建设路线图.html',

@@ -98,8 +98,9 @@
   .tick{flex:0 0 24px;height:24px;margin-top:1px;border-radius:50%;
     border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s}
-  .tick svg{width:12px;height:12px;stroke:#0b1017;stroke-width:3.4;fill:none;
-    stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .18s}
+  .tick svg{width:12px;height:12px;stroke:var(--tx3);stroke-width:2.6;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;transition:stroke .18s}
+  .item.done .tick svg{stroke:#0b1017}
   .item.done .tick{background:var(--cyan);border-color:var(--cyan)}
   .item.done .tick svg{opacity:1}
   .item.done .ttl{opacity:.42;text-decoration:line-through;text-decoration-thickness:1.5px}
@@ -129,7 +130,10 @@
   .stat span{font-size:10.5px;color:var(--tx3)}
   .btn-row{display:flex;gap:8px}
   .btn{flex:1;height:42px;border-radius:11px;border:1px solid var(--line);
-    background:var(--card2);color:var(--tx);font-size:13.5px;font-weight:600;font-family:inherit}
+    background:var(--card2);color:var(--tx);font-size:13.5px;font-weight:600;font-family:inherit;
+    display:flex;align-items:center;justify-content:center;gap:7px}
+  .btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.1;
+    stroke-linecap:round;stroke-linejoin:round}
   .btn:active{background:#252b3a}
   .btn.primary{background:rgba(56,208,216,.14);border-color:rgba(56,208,216,.4);color:var(--cyan)}
   .btn.ok{background:rgba(46,204,143,.14);border-color:rgba(46,204,143,.4);color:var(--ok)}
@@ -223,6 +227,8 @@
     background:var(--card);color:var(--tx3);font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;font-family:inherit}
   .gear:active{background:var(--card2);color:var(--cyan)}
+  .gear svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.9;
+    stroke-linecap:round;stroke-linejoin:round}
   .mrow{display:flex;align-items:center;gap:11px;padding:13px 15px;
     border-bottom:1px solid var(--line)}
   .mrow:last-child{border-bottom:none}
@@ -348,7 +354,7 @@
     <div class="top">
       <h1>学习看板</h1>
       <div class="date" id="todayDate">—</div>
-      <button class="gear" id="gearBtn" aria-label="维护">⚙</button>
+      <button class="gear" id="gearBtn" aria-label="维护"><morph-icon data-icon="settings" data-alt="x"></morph-icon></button>
     </div>
     <div class="countdown" id="cdBox"></div>
   </header>
@@ -384,7 +390,7 @@
         <div class="timerhint" id="focusHint">25 分钟倒计时</div>
 
         <div class="btn-row" style="margin-top:8px">
-          <button class="btn primary" id="focusStart">开始</button>
+          <button class="btn primary" id="focusStart"><morph-icon data-icon="play" data-alt="pause"></morph-icon><span id="focusStartLabel">开始</span></button>
           <button class="btn" id="focusEnd" disabled>结束并记录</button>
         </div>
       </div>
@@ -654,23 +660,23 @@
 
 <nav class="tabbar">
   <button class="tb on" data-tab="today">
-    <svg viewBox="0 0 24 24"><path d="M8 3v4M16 3v4M3 9h18"/><rect x="3" y="5" width="18" height="16" rx="2"/></svg>
+    <morph-icon data-icon="calendar" data-alt="calendar-check"></morph-icon>
     <span>今日</span>
   </button>
   <button class="tb" data-tab="log">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <morph-icon data-icon="clock" data-alt="alarm-clock-check"></morph-icon>
     <span>记录</span>
   </button>
   <button class="tb" data-tab="docs">
-    <svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h9l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 3v6h6"/></svg>
+    <morph-icon data-icon="folder" data-alt="folder-open"></morph-icon>
     <span>文档</span>
   </button>
   <button class="tb" data-tab="check">
-    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <morph-icon data-icon="clipboard-list" data-alt="clipboard-check"></morph-icon>
     <span>核对</span>
   </button>
   <button class="tb" data-tab="stats">
-    <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+    <morph-icon data-icon="chart-column" data-alt="chart-line"></morph-icon>
     <span>统计</span>
   </button>
 </nav>
@@ -730,7 +736,10 @@
       document.getElementById('v-'+x).classList.toggle('on', x===t);
     });
     document.querySelectorAll('.tb').forEach(function(b){
-      b.classList.toggle('on', b.dataset.tab===t);
+      var on = b.dataset.tab===t;
+      b.classList.toggle('on', on);
+      var mi = b.querySelector('morph-icon');
+      if(mi && window.MB) MB.apply(mi, on ? mi.dataset.alt : mi.dataset.icon);
     });
     if(t==='stats') renderStats();
     if(t==='check') renderCheck();
@@ -786,18 +795,22 @@
          (it.time?'<span class="qty">'+it.time+'</span>':'')+'</div>'+
          (it.title?'<div class="ttl">'+it.title+'</div>':'')+
          (it.text?'<div class="txt">'+it.text+'</div>':'')+
-         '</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div></div>';
+         '</div><div class="tick"><morph-icon data-icon="circle" data-alt="check"></morph-icon></div></div>';
     });
     h+='</div></div>';
     box.innerHTML=h;
 
     box.querySelectorAll('.item[data-i]').forEach(function(el){
+      var mi0=el.querySelector('morph-icon');
+      if(mi0 && window.MB) MB.apply(mi0, done[el.dataset.i] ? 'check' : 'circle');
       el.addEventListener('click',function(){
         var i=el.dataset.i;
         var cur2=LSget(checkKey(cur),{});
         if(cur2[i]){ delete cur2[i]; el.classList.remove('done'); }
         else { cur2[i]=1; el.classList.add('done'); if(navigator.vibrate) navigator.vibrate(12); }
         LSset(checkKey(cur),cur2);
+        var mi2=el.querySelector('morph-icon');
+        if(mi2 && window.MB) MB.apply(mi2, cur2[i] ? 'check' : 'circle');
         var nn=Object.keys(cur2).length;
         var bar=box.querySelector('.bar i');
         if(bar) bar.style.width=(nn/total*100)+'%';
@@ -931,7 +944,9 @@
     clearInterval(focusTick); focusTick=null;
     focusRunning=false; focusStartTs=0;
     lockDur(false);
-    document.getElementById('focusStart').textContent='开始';
+    document.getElementById('focusStartLabel').textContent='开始';
+    var mg=document.querySelector('#focusStart morph-icon');
+    if(mg && window.MB) MB.apply(mg,'play');
   }
 
   document.getElementById('focusStart').addEventListener('click',function(){
@@ -940,7 +955,9 @@
       focusAccum = elapsed();
       focusRunning=false; focusStartTs=0;
       clearInterval(focusTick); focusTick=null;
-      this.textContent='继续';
+      document.getElementById('focusStartLabel').textContent='继续';
+      var mp=document.querySelector('#focusStart morph-icon');
+      if(mp && window.MB) MB.apply(mp,'play');
       lockDur(false);
       focusRender();
       return;
@@ -948,7 +965,9 @@
     // 开始 / 继续
     focusRunning=true;
     focusStartTs=Date.now();
-    this.textContent='暂停';
+    document.getElementById('focusStartLabel').textContent='暂停';
+    var mp2=document.querySelector('#focusStart morph-icon');
+    if(mp2 && window.MB) MB.apply(mp2,'pause');
     lockDur(true);
     focusTick=setInterval(function(){
       if(focusMin > 0){
@@ -1008,7 +1027,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v20';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v21';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1020,8 +1039,12 @@
       ? '独立应用（全屏）'
       : '浏览器网页（建议添加到主屏幕）';
 
-    function openM(){ mask.classList.add('on'); sheet.classList.add('on'); }
-    function closeM(){ mask.classList.remove('on'); sheet.classList.remove('on'); }
+    function openM(){ mask.classList.add('on'); sheet.classList.add('on');
+      var g=document.querySelector('#gearBtn morph-icon');
+      if(g && window.MB) MB.apply(g,'x'); }
+    function closeM(){ mask.classList.remove('on'); sheet.classList.remove('on');
+      var g=document.querySelector('#gearBtn morph-icon');
+      if(g && window.MB) MB.apply(g,'settings'); }
 
     document.getElementById('gearBtn').addEventListener('click', openM);
     mask.addEventListener('click', closeM);
@@ -1340,6 +1363,54 @@
 
   focusRender();
 })();
+</script>
+
+<!-- ============ Morphicons 图标形变 ============ -->
+<script type="module">
+import { defineMorphIcon } from './vendor/morphicons/element.js';
+import { svgToIcon } from './vendor/morphicons/adapters.js';
+
+defineMorphIcon();
+
+/* Lucide 图标数据（ISC 协议）· 内联进页面，离线可用 */
+const RAW = {
+  "calendar": "<svg class=\"lucide lucide-calendar\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M8 2v3\" /> <path d=\"M16 2v3\" /> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" /> <path d=\"M3 9h18\" /> </svg>",
+  "calendar-check": "<svg class=\"lucide lucide-calendar-check\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M8 2v3\" /> <path d=\"M16 2v3\" /> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" /> <path d=\"M3 9h18\" /> <path d=\"m9 15 2 2 4-4\" /> </svg>",
+  "clock": "<svg class=\"lucide lucide-clock\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"M12 6v6l4 2\" /> </svg>",
+  "alarm-clock-check": "<svg class=\"lucide lucide-alarm-clock-check\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"13\" r=\"8\" /> <path d=\"M5 3 2 6\" /> <path d=\"m22 6-3-3\" /> <path d=\"M6.38 18.7 4 21\" /> <path d=\"M17.64 18.67 20 21\" /> <path d=\"m9 13 2 2 4-4\" /> </svg>",
+  "folder": "<svg class=\"lucide lucide-folder\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\" /> </svg>",
+  "folder-open": "<svg class=\"lucide lucide-folder-open\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\" /> </svg>",
+  "clipboard-list": "<svg class=\"lucide lucide-clipboard-list\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <rect width=\"8\" height=\"4\" x=\"8\" y=\"2\" rx=\"1\" ry=\"1\" /> <path d=\"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2\" /> <path d=\"M12 11h4\" /> <path d=\"M12 16h4\" /> <path d=\"M8 11h.01\" /> <path d=\"M8 16h.01\" /> </svg>",
+  "clipboard-check": "<svg class=\"lucide lucide-clipboard-check\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <rect width=\"8\" height=\"4\" x=\"8\" y=\"2\" rx=\"1\" ry=\"1\" /> <path d=\"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2\" /> <path d=\"m9 14 2 2 4-4\" /> </svg>",
+  "chart-column": "<svg class=\"lucide lucide-chart-column\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /> <path d=\"M18 17V9\" /> <path d=\"M13 17V5\" /> <path d=\"M8 17v-3\" /> </svg>",
+  "chart-line": "<svg class=\"lucide lucide-chart-line\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /> <path d=\"m19 9-5 5-4-4-3 3\" /> </svg>",
+  "settings": "<svg class=\"lucide lucide-settings\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\" /> <circle cx=\"12\" cy=\"12\" r=\"3\" /> </svg>",
+  "x": "<svg class=\"lucide lucide-x\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M18 6 6 18\" /> <path d=\"m6 6 12 12\" /> </svg>",
+  "play": "<svg class=\"lucide lucide-play\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z\" /> </svg>",
+  "pause": "<svg class=\"lucide lucide-pause\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <rect x=\"14\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\" /> <rect x=\"5\" y=\"3\" width=\"5\" height=\"18\" rx=\"1\" /> </svg>",
+  "circle": "<svg class=\"lucide lucide-circle\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <circle cx=\"12\" cy=\"12\" r=\"10\" /> </svg>",
+  "check": "<svg class=\"lucide lucide-check\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" > <path d=\"M20 6 9 17l-5-5\" /> </svg>"
+};
+
+const ICONS = {};
+for (const k of Object.keys(RAW)) ICONS[k] = svgToIcon(RAW[k]);
+
+/* 给页面主脚本用的小 API：MB.apply(元素, 图标名) 即触发形变动画 */
+window.MB = {
+  icons: ICONS,
+  apply(el, name){ if (el && ICONS[name]) el.icon = ICONS[name]; },
+  init(root){
+    (root || document).querySelectorAll('morph-icon[data-icon]').forEach(function(el){
+      el.icon = ICONS[el.dataset.icon];
+    });
+  }
+};
+window.MB.init();
+
+/* 初始激活的 Tab 用高亮变体 */
+document.querySelectorAll('.tb.on morph-icon[data-alt]').forEach(function(el){
+  el.icon = ICONS[el.dataset.alt];
+});
 </script>
 </body>
 </html>
