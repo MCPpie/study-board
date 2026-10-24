@@ -35,8 +35,94 @@
     try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {}
   }
 
-  function getCourses() { return load(K_COURSES, []); }
-  function setCourses(v) { save(K_COURSES, v); }
+  /* ---------- 基准课表 ---------- */
+  function getBaseCourses() { return load(K_COURSES, []); }
+  function setBaseCourses(v) { save(K_COURSES, v); }
+
+  /* ---------- 每周覆盖 ---------- */
+  function getWeekMap() { return load('sb-tt-weeks', {}); }
+  function setWeekMap(v) { save('sb-tt-weeks', v); }
+
+  function viewWeek() {
+    var m = getMeta();
+    if (m.viewWeek) return +m.viewWeek;
+    var w = currentWeek();
+    return w || 1;
+  }
+  function setViewWeek(w) {
+    var m = getMeta();
+    m.viewWeek = +w;
+    setMeta(m);
+  }
+
+  function hasWeekOverride(w) {
+    var map = getWeekMap();
+    return Object.prototype.hasOwnProperty.call(map, String(w));
+  }
+
+  /* 当前查看的是否为「本周单独修改」状态 */
+  function isWeekMode() { return hasWeekOverride(viewWeek()); }
+
+  /* 读：本周有覆盖用覆盖，否则用基准 */
+  function getCourses() {
+    var w = viewWeek();
+    var map = getWeekMap();
+    if (Object.prototype.hasOwnProperty.call(map, String(w))) {
+      return JSON.parse(JSON.stringify(map[String(w)] || []));
+    }
+    return JSON.parse(JSON.stringify(getBaseCourses()));
+  }
+
+  /* 写：本周已覆盖 → 写本周；否则 → 写基准 */
+  function setCourses(v) {
+    var w = viewWeek();
+    if (isWeekMode()) {
+      var map = getWeekMap();
+      map[String(w)] = JSON.parse(JSON.stringify(v));
+      setWeekMap(map);
+    } else {
+      setBaseCourses(v);
+    }
+  }
+
+  /* 把本周变成「单独修改」（复制基准） */
+  function forkWeek() {
+    var w = viewWeek();
+    if (hasWeekOverride(w)) return false;
+    var map = getWeekMap();
+    map[String(w)] = JSON.parse(JSON.stringify(getBaseCourses()));
+    setWeekMap(map);
+    return true;
+  }
+
+  /* 取消本周覆盖 */
+  function unforkWeek() {
+    var w = viewWeek();
+    var map = getWeekMap();
+    if (Object.prototype.hasOwnProperty.call(map, String(w))) {
+      delete map[String(w)];
+      setWeekMap(map);
+      return true;
+    }
+    return false;
+  }
+
+  /* 本周相对基准有几处不同 */
+  function diffCount() {
+    var w = viewWeek();
+    if (!hasWeekOverride(w)) return 0;
+    var cur = getCourses(), base = getBaseCourses();
+    var key = function (c) {
+      return c.name + '|' + c.day + '|' + c.start + '|' + c.end + '|' + (c.room || '');
+    };
+    var setB = {}, setC = {};
+    base.forEach(function (c) { setB[key(c)] = 1; });
+    cur.forEach(function (c) { setC[key(c)] = 1; });
+    var n = 0, k;
+    for (k in setB) if (!setC[k]) n++;
+    for (k in setC) if (!setB[k]) n++;
+    return n;
+  }
   function getMeta() { return load(K_META, { termStart: '' }); }
   function setMeta(v) { save(K_META, v); }
   function getPeriods() { return load(K_PREIODS, DEFAULT_PERIODS); }
@@ -143,6 +229,22 @@
   + '.grid .cell.today{outline:1px solid rgba(56,208,216,.55)}'
 
   /* 按钮组 */
+  + '.wkbar{display:flex;align-items:center;gap:9px;background:#1a1f2a;'
+  + 'border:1px solid #272d3a;border-radius:11px;padding:9px 11px;margin-bottom:10px}'
+  + '.wkbar button{flex:0 0 32px;height:32px;border-radius:8px;border:1px solid #333b4d;'
+  + 'background:#232a38;color:#aab3c4;font-size:15px;line-height:1;font-family:inherit}'
+  + '.wkbar button:active{background:#2c3446}'
+  + '.wkbar .mid{flex:1;text-align:center;min-width:0}'
+  + '.wkbar .mid b{display:block;font-size:13px;color:#e8ebf2;font-weight:700}'
+  + '.wkbar .mid span{font-size:10.5px;color:#7c8699;display:block;margin-top:1px}'
+  + '.wkmode{display:flex;gap:8px;margin-bottom:13px}'
+  + '.wkmode button{flex:1;height:38px;border-radius:10px;border:1px solid #333b4d;'
+  + 'background:#1e2431;color:#aab3c4;font-size:11.5px;font-family:inherit;line-height:1.3}'
+  + '.wkmode button.pri{background:rgba(255,180,80,.13);border-color:rgba(255,180,80,.4);'
+  + 'color:#ffc48a;font-weight:600}'
+  + '.wknote{background:rgba(255,180,80,.08);border:1px solid rgba(255,180,80,.28);'
+  + 'border-radius:9px;padding:9px 12px;font-size:11px;color:#ffc48a;line-height:1.7;'
+  + 'margin-bottom:11px}'
   + '.ttbtns{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}'
   + '.ttbtns button{flex:1;min-width:96px;height:42px;border-radius:11px;'
   + 'border:1px solid #333b4d;background:#1e2431;color:#aab3c4;font-size:12.5px;'
@@ -226,7 +328,14 @@
 
     var wk = currentWeek();
     var all = getCourses();
-    var list = coursesOnDay(todayDayIdx(), wk);
+    // 今日卡片始终用「本周」的课表，不受抽屉里翻看哪一周影响
+    var map = getWeekMap();
+    var todayList = Object.prototype.hasOwnProperty.call(map, String(wk))
+      ? map[String(wk)]
+      : getBaseCourses();
+    var list = todayList.filter(function (c) {
+      return +c.day === todayDayIdx();
+    }).sort(function (a, b) { return a.start - b.start; });
 
     var now = new Date();
     var curMin = now.getHours() * 60 + now.getMinutes();
@@ -302,12 +411,48 @@
   }
 
   function renderSheet() {
-    var wk = currentWeek();
+    var realWk = currentWeek();
+    var w = viewWeek();
     var el = document.getElementById('ttWk');
-    if (el) el.textContent = wk ? ('第 ' + wk + ' 周') : '未设置学期';
+    if (el) el.textContent = realWk ? ('本学期第 ' + realWk + ' 周') : '未设置学期';
 
     var courses = getCourses();
+    var inWeekMode = isWeekMode();
+    var diff = diffCount();
+    var isCurWeek = realWk && (w === realWk);
+
     var h = '';
+
+    // 周次切换
+    h += '<div class="wkbar">'
+      + '<button id="wkPrev">‹</button>'
+      + '<div class="mid"><b>第 ' + w + ' 周</b>'
+      + '<span>' + (isCurWeek ? '本周' : (realWk ? (w < realWk ? '已过去 ' + (realWk - w) + ' 周' : '还有 ' + (w - realWk) + ' 周') : '未设置学期'))
+      + ' · ' + (inWeekMode ? '单独修改' : '沿用基准') + '</span></div>'
+      + '<button id="wkNext">›</button>'
+      + '</div>';
+
+    // 模式提示
+    if (inWeekMode) {
+      h += '<div class="wknote">第 ' + w + ' 周有 <b>' + diff + '</b> 处与基准不同。'
+        + '在这里的修改<b>只影响这一周</b>，其他周仍是基准课表。</div>';
+    } else {
+      h += '<div class="wknote" style="background:rgba(56,208,216,.06);'
+        + 'border-color:rgba(56,208,216,.25);color:#8fbfc4">'
+        + '当前显示的是<b>基准课表</b>（每周默认）。'
+        + (realWk ? '如果第 ' + w + ' 周有几节课不一样，点下面的「本周单独修改」。' : '')
+        + '</div>';
+    }
+
+    // 模式按钮
+    h += '<div class="wkmode">';
+    if (inWeekMode) {
+      h += '<button id="wkUnfork">恢复沿用基准</button>';
+      h += '<button id="wkCopyNext">把这周复制到下周</button>';
+    } else {
+      h += '<button class="pri" id="wkFork">本周单独修改</button>';
+    }
+    h += '</div>';
 
     h += '<div class="ttbtns">'
       + '<button class="pri" id="ttImport">截屏导入</button>'
@@ -341,7 +486,10 @@
       h += '<div class="ph">' + p + '</div>';
       for (var dd = 1; dd <= 7; dd++) {
         var hit = courses.filter(function (c) {
-          return +c.day === dd && +c.start <= p && +c.end >= p && activeInWeek(c, wk);
+          if (+c.day !== dd || +c.start > p || +c.end < p) return false;
+          // 本周模式：课表就是这一周的，不再按 weeks 过滤
+          // 基准模式：按 weeks 字段过滤
+          return inWeekMode ? true : activeInWeek(c, w);
         });
         var cls = 'cell' + (hit.length ? ' has' : '') + (dd === todayIdx ? ' today' : '');
         h += '<div class="' + cls + '">'
@@ -386,6 +534,41 @@
   }
 
   function bindSheetBtns() {
+    var wp = document.getElementById('wkPrev');
+    if (wp) wp.addEventListener('click', function () {
+      var w = viewWeek();
+      setViewWeek(Math.max(1, w - 1));
+      renderSheet();
+    });
+    var wn = document.getElementById('wkNext');
+    if (wn) wn.addEventListener('click', function () {
+      setViewWeek(viewWeek() + 1);
+      renderSheet();
+    });
+    var wf = document.getElementById('wkFork');
+    if (wf) wf.addEventListener('click', function () {
+      forkWeek();
+      renderSheet();
+      say('第 ' + viewWeek() + ' 周已改为单独修改');
+    });
+    var wu = document.getElementById('wkUnfork');
+    if (wu) wu.addEventListener('click', function () {
+      unforkWeek();
+      renderSheet();
+      renderTodayCard();
+      say('已恢复沿用基准课表');
+    });
+    var wc = document.getElementById('wkCopyNext');
+    if (wc) wc.addEventListener('click', function () {
+      var w = viewWeek();
+      var map = getWeekMap();
+      map[String(w + 1)] = JSON.parse(JSON.stringify(getCourses()));
+      setWeekMap(map);
+      setViewWeek(w + 1);
+      renderSheet();
+      say('已复制到第 ' + (w + 1) + ' 周');
+    });
+
     var imp = document.getElementById('ttImport');
     if (imp) imp.addEventListener('click', startImport);
     var man = document.getElementById('ttManual');
