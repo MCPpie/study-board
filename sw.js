@@ -25,6 +25,7 @@ const ASSETS = [
   './docs/电路课件带读手册.html',
   './docs/reader.js',
   './docs/ask.js',
+  './timetable.js',
   './docs/电路课件3带读.html',
   './docs/电路课件4带读.html',
   './docs/电路课件5带读.html',
