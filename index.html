@@ -321,7 +321,7 @@
   /* Tab Bar */
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;
     display:grid;grid-template-columns:repeat(5,1fr);
-    background:rgba(20,24,32,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:#12161e;
     border-top:1px solid var(--line);
     padding-bottom:env(safe-area-inset-bottom)}
   .tb{border:none;background:none;color:var(--tx3);font-family:inherit;
@@ -1028,7 +1028,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v22';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v23';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1111,8 +1111,26 @@
   /* ================= 核对 ================= */
   var CKEY = 'sb-check-';
 
+  var _ckCache = null;      // 计算结果缓存
+  var _ckSig = '';          // 数据指纹，变了才重算
+
+  function ckSignature(){
+    // 用「打卡状态 + 数据版本」做指纹
+    var n = 0, parts = [];
+    for(var i=0;i<localStorage.length;i++){
+      var k = localStorage.key(i);
+      if(k && k.indexOf(CKEY) === 0){ n++; parts.push(k); }
+    }
+    parts.sort();
+    return todayKey + '|' + n + '|' + parts.join(',');
+  }
+
   function calcCheck(){
     if(!DATA || !DATA.days) return null;
+
+    var sig = ckSignature();
+    if(_ckCache && _ckSig === sig) return _ckCache;
+
     var keys = Object.keys(DATA.days).sort();
     var di = keys.indexOf(todayKey);
     if(di < 0) di = keys.length - 1;
@@ -1147,7 +1165,10 @@
       });
     });
 
-    return {per:per, debt:debt, allTotal:allTotal, allDone:allDone, todayIdx:di};
+    var out = {per:per, debt:debt, allTotal:allTotal, allDone:allDone, todayIdx:di};
+    _ckCache = out;
+    _ckSig = sig;
+    return out;
   }
 
   function renderCheck(){

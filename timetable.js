@@ -574,7 +574,7 @@
             { type: 'image_url', image_url: { url: dataUrl } }
           ]
         }],
-        max_tokens: 2000,
+        max_tokens: 4000,
         temperature: 0.1,
         stream: false
       };
@@ -593,14 +593,37 @@
           throw new Error('HTTP ' + res.status + '：' + t.slice(0, 200));
         }
         var j;
-        try { j = JSON.parse(t); } catch (e) { throw new Error('返回内容不是 JSON'); }
-        var content = j.choices && j.choices[0] && j.choices[0].message
-          && j.choices[0].message.content;
-        if (!content) throw new Error('模型没有返回内容');
+        try { j = JSON.parse(t); } catch (e) {
+          throw new Error('返回内容不是 JSON：' + t.slice(0, 300));
+        }
+
+        // 兼容各种返回结构
+        var msg = (j.choices && j.choices[0] && j.choices[0].message) || {};
+        var content = msg.content || '';
+        var reasoning = msg.reasoning_content || msg.reasoning || '';
+        var finish = (j.choices && j.choices[0] && j.choices[0].finish_reason) || '';
+
+        if (!content) {
+          // 没有正式内容，把能拿到的东西全摆出来，方便定位
+          var diag = '模型没有返回正文。\n';
+          diag += 'finish_reason：' + (finish || '（空）') + '\n';
+          if (reasoning) {
+            diag += '只有 reasoning_content（' + reasoning.length + ' 字），'
+                 + '说明模型的思考过程把 token 用完了。\n'
+                 + '这通常是 max_tokens 不够，或该模型不支持图片输入。';
+          }
+          if (j.error) {
+            diag += '\n错误字段：' + JSON.stringify(j.error).slice(0, 200);
+          }
+          diag += '\n\n原始返回（前 400 字）：\n' + t.slice(0, 400);
+          throw new Error(diag);
+        }
 
         var parsed = extractJson(content);
         if (!parsed) {
-          throw new Error('识别结果无法解析成 JSON。原始内容：' + String(content).slice(0, 300));
+          // 内容有但不是 JSON，可能是纯文本解释
+          throw new Error('模型返回了内容，但不是 JSON 格式。\n'
+            + '原始内容（前 400 字）：\n' + content.slice(0, 400));
         }
         return { courses: parsed.courses || [], raw: content, ms: Date.now() - t0 };
       });
@@ -609,14 +632,38 @@
     }).catch(function (err) {
       var msg = String(err && err.message || err);
       var hint = '';
-      if (/HTTP 401|unauthorized/i.test(msg)) hint = 'API Key 不对，去「问 AI」的 ⚙ 里重填。';
-      else if (/HTTP 404|model/i.test(msg)) hint = '\n\n多半是模型名不对。识图需要用支持图片的模型，'
-        + '默认是 deepseek-v4-flash-vision-exp。';
-      else if (/Failed to fetch/i.test(msg)) hint = '\n\n请求没发出去，检查网络或接口地址。';
-      bodyEl.innerHTML = '<div class="ttempty"><b>识别失败</b><br><br>'
-        + esc(msg) + (hint ? '<br><br>' + esc(hint) : '')
+      // 只在真正的 HTTP 状态码上做判断，不要用正文里的 "model" 字样（会误判）
+      if (/HTTP 401|HTTP 403|unauthorized/i.test(msg)) {
+        hint = 'API Key 不对，或这个 Key 没有该模型的权限。\n'
+             + '去「问 AI」的 ⚙ 里重新填一次。';
+      } else if (/HTTP 404/.test(msg)) {
+        hint = '接口地址或模型名不存在。\n'
+             + '识别课表要用支持图片的模型，DeepSeek 的是 deepseek-v4-flash-vision-exp。\n'
+             + '确认你的账号能调用这个模型。';
+      } else if (/HTTP 429/.test(msg)) {
+        hint = '请求太频繁，等一分钟再试。';
+      } else if (/HTTP 402|insufficient|balance/i.test(msg)) {
+        hint = '账户余额不足。';
+      } else if (/Failed to fetch/i.test(msg)) {
+        hint = '请求没发出去，检查网络或接口地址。';
+      } else if (/没有返回正文/.test(msg)) {
+        hint = '模型没有输出正文，通常是这两种情况：\n'
+             + '① 这个模型不支持图片输入（只支持纯文字）\n'
+             + '② 输出的 token 上限不够\n'
+             + '上面的原始返回里能看到具体原因。';
+      }
+
+      bodyEl.innerHTML = '<div class="ttempty" style="text-align:left">'
+        + '<b style="color:#ff9d9d">识别失败</b><br><br>'
+        + '<div style="background:#0f131b;border:1px solid #272d3a;border-radius:10px;'
+        + 'padding:11px 13px;font-size:11px;line-height:1.75;color:#aab3c4;'
+        + 'white-space:pre-wrap;word-break:break-all;max-height:240px;overflow:auto">'
+        + esc(msg) + '</div>'
+        + (hint ? '<div style="margin-top:11px;font-size:11.5px;line-height:1.8;'
+           + 'color:#ffc48a">' + esc(hint) + '</div>' : '')
         + '</div><div class="ttbtns" style="margin-top:16px">'
         + '<button class="pri" id="ttImport">重试</button>'
+        + '<button id="ttManual">手动添加</button>'
         + '<button id="ttCancel">返回</button></div>';
       bindFastBtns();
     });
@@ -791,7 +838,12 @@
     var t = null;
     var mo = new MutationObserver(function () {
       clearTimeout(t);
-      t = setTimeout(renderTodayCard, 60);
+      t = setTimeout(function () {
+        // 只在「今日」视图可见时重建，别的 tab 下没必要
+        var v = document.getElementById('v-today');
+        if (v && !v.classList.contains('on')) return;
+        renderTodayCard();
+      }, 120);
     });
     mo.observe(box, { childList: true });
   });

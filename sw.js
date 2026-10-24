@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v22';
+const CACHE = 'study-board-v23';
 
 const ASSETS = [
   './',
@@ -73,17 +73,39 @@ self.addEventListener('fetch', e => {
              || /\.(html|js|css|json)$/i.test(url.pathname);
 
   if (isDoc) {
-    e.respondWith(
-      fetch(req, { cache: 'reload' })
+    e.respondWith((async () => {
+      // 缓存兜底：网络慢或断网时先拿旧版顶上，避免白屏干等
+      const cached = await caches.match(req);
+      const netTask = fetch(req)
         .then(res => {
           if (res && res.status === 200) {
             const copy = res.clone();
             caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
           }
           return res;
-        })
-        .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
-    );
+        });
+
+      if (cached) {
+        // 已缓存：最多等 1.2 秒，超时先用缓存渲染，同时让网络继续在后台更新
+        return await new Promise(resolve => {
+          let settled = false;
+          const timer = setTimeout(() => {
+            if (!settled) { settled = true; resolve(cached); }
+          }, 1200);
+          netTask.then(res => {
+            if (!settled) { settled = true; clearTimeout(timer); resolve(res); }
+          }).catch(() => {
+            if (!settled) { settled = true; clearTimeout(timer); resolve(cached); }
+          });
+        });
+      }
+
+      try {
+        return await netTask;
+      } catch (err) {
+        return (await caches.match('./index.html')) || Response.error();
+      }
+    })());
     return;
   }
 
