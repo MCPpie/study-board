@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v27';
+const CACHE = 'study-board-v28';
 
 const ASSETS = [
   './',
@@ -26,6 +26,7 @@ const ASSETS = [
   './docs/reader.js',
   './docs/ask.js',
   './timetable.js',
+  './backup.js',
   './docs/电路课件3带读.html',
   './docs/电路课件4带读.html',
   './docs/电路课件5带读.html',

@@ -222,6 +222,49 @@
 
 
 
+  /* 计划编辑 */
+  .ed-bar{display:flex;gap:8px;margin-top:10px}
+  .ed-bar button{flex:1;height:38px;border-radius:10px;border:1px solid var(--line2);
+    background:var(--card2);color:var(--tx3);font-size:12px;font-family:inherit}
+  .ed-bar button.on{background:rgba(56,208,216,.13);border-color:rgba(56,208,216,.42);
+    color:var(--cyan);font-weight:600}
+  .ed-ops{display:flex;gap:6px;margin-top:8px;padding-top:8px;
+    border-top:1px dashed rgba(255,255,255,.08)}
+  .ed-ops button{flex:1;height:32px;border-radius:8px;border:1px solid var(--line2);
+    background:transparent;color:var(--tx3);font-size:11px;font-family:inherit}
+  .ed-ops button.del{color:#ff9d9d;border-color:rgba(255,122,122,.3)}
+  .ed-add{display:block;width:100%;height:42px;margin-top:10px;border-radius:10px;
+    border:1px dashed var(--line2);background:transparent;color:var(--tx3);
+    font-size:12.5px;font-family:inherit}
+  .ed-add:active{background:var(--card2)}
+  .ed-form{display:flex;flex-direction:column;gap:9px}
+  .ed-form input,.ed-form textarea,.ed-form select{
+    background:var(--card2);border:1px solid var(--line2);border-radius:10px;
+    padding:10px 12px;color:var(--tx);font-size:12.5px;font-family:inherit;width:100%}
+  .ed-form textarea{resize:vertical;min-height:64px;line-height:1.6}
+  .ed-form input:focus,.ed-form textarea:focus{outline:none;
+    border-color:rgba(56,208,216,.5)}
+  .ed-lab{font-size:11px;color:var(--tx3);margin:0 0 -4px 2px;font-weight:600}
+  .ed-row{display:flex;gap:8px}
+  .ed-row > *{flex:1}
+
+  /* 考试倒计时 */
+  .cd{display:flex;align-items:center;gap:11px;background:linear-gradient(100deg,
+    rgba(255,122,122,.11),rgba(255,122,122,.04));border:1px solid rgba(255,122,122,.3);
+    border-radius:12px;padding:11px 13px;margin-bottom:11px;cursor:pointer}
+  .cd:active{background:rgba(255,122,122,.16)}
+  .cd .big{flex:0 0 auto;text-align:center;min-width:44px}
+  .cd .big b{display:block;font-size:22px;font-weight:800;color:#ff8f8f;
+    line-height:1;font-variant-numeric:tabular-nums}
+  .cd .big span{font-size:9.5px;color:#c98a8a;display:block;margin-top:2px}
+  .cd .tx{flex:1;min-width:0}
+  .cd .tx b{display:block;font-size:12.5px;color:#e8ebf2;font-weight:600;margin-bottom:1px}
+  .cd .tx span{font-size:11px;color:#b89a9a;display:block;line-height:1.5}
+  .cd.hot{border-color:rgba(255,122,122,.55);background:linear-gradient(100deg,
+    rgba(255,122,122,.2),rgba(255,122,122,.07))}
+  .cd.hot .big b{color:#ff6b6b}
+  .cd .go{flex:0 0 auto;font-size:11px;color:#ff9d9d}
+
   /* 维护面板 */
   .gear{flex:0 0 auto;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);
     background:var(--card);color:var(--tx3);font-size:13px;line-height:1;
@@ -647,6 +690,11 @@
     <div class="tx"><b>强制刷新</b><span>清掉缓存重新下载，卡住时用这个</span></div>
     <div class="go">刷新 ›</div>
   </div>
+  <div class="mrow" id="mBackup">
+    <div class="ic">🛡</div>
+    <div class="tx"><b>数据安全</b><span>备份 · 恢复 · 快照 · 导出</span></div>
+    <div class="go">打开 ›</div>
+  </div>
   <div class="mrow" id="mClear">
     <div class="ic">🧹</div>
     <div class="tx"><b>清除全部缓存</b><span>不会删除打勾和笔记</span></div>
@@ -687,6 +735,7 @@
 </div>
 
 <script src="timetable.js" defer></script>
+<script src="backup.js" defer></script>
 <script>
 (function(){
   'use strict';
@@ -759,6 +808,35 @@
 
   function checkKey(k){ return 'sb-check-'+k; }
 
+  /* ---------- 计划覆盖层 ----------
+     sb-plan-override 结构：{ "10-24": [ {k,time,title,text}, ... ] }
+     存在即表示这一天被用户改过，优先于 note-data.json */
+  var PLAN_OV = 'sb-plan-override';
+
+  function getOverride(){
+    return LSget(PLAN_OV, {});
+  }
+  function setDayPlan(dk, items){
+    var ov = getOverride();
+    ov[dk] = items;
+    LSset(PLAN_OV, ov);
+  }
+  function resetDayPlan(dk){
+    var ov = getOverride();
+    delete ov[dk];
+    LSset(PLAN_OV, ov);
+  }
+
+  // 取某天的最终任务列表（覆盖层优先）
+  function planOf(dk){
+    var ov = getOverride();
+    if(ov[dk]) return ov[dk];
+    var d = DATA && DATA.days && DATA.days[dk];
+    return d ? (d.items || []) : [];
+  }
+
+  var editMode = false;
+
   function renderDay(){
     var day = DATA && DATA.days[cur];
     var d=parseKey(cur);
@@ -772,7 +850,7 @@
     }
 
     var done=LSget(checkKey(cur),{});
-    var items=day.items||[];
+    var items=planOf(cur);
     var total=day.exam?0:items.length;
     var n=Object.keys(done).length;
 
@@ -796,10 +874,76 @@
          (it.time?'<span class="qty">'+it.time+'</span>':'')+'</div>'+
          (it.title?'<div class="ttl">'+it.title+'</div>':'')+
          (it.text?'<div class="txt">'+it.text+'</div>':'')+
+         (editMode
+           ? '<div class="ed-ops">'
+             + '<button data-mv="'+i+'" data-dir="-1">上移</button>'
+             + '<button data-mv="'+i+'" data-dir="1">下移</button>'
+             + '<button data-ed="'+i+'">编辑</button>'
+             + '<button class="del" data-rm="'+i+'">删除</button>'
+             + '</div>'
+           : '')+
          '</div><div class="tick"><morph-icon data-icon="circle" data-alt="check"></morph-icon></div></div>';
     });
+
+    if(editMode){
+      h += '<button class="ed-add" id="edAdd">+ 加一条任务</button>';
+      if(getOverride()[cur]){
+        h += '<button class="ed-add" id="edReset" style="border-style:solid;color:#ff9d9d">'
+           + '还原成原始计划</button>';
+      }
+    }
+
     h+='</div></div>';
+
+    // 编辑模式切换条
+    h += '<div class="ed-bar">'
+       + '<button id="edToggle" class="'+(editMode?'on':'')+'">'
+       + (editMode ? '完成编辑' : '✎ 编辑今天的计划')
+       + '</button></div>';
     box.innerHTML=h;
+
+    // 编辑模式绑定
+    var tog = document.getElementById('edToggle');
+    if(tog) tog.addEventListener('click', function(){
+      editMode = !editMode;
+      renderDay();
+    });
+
+    if(editMode){
+      var addB = document.getElementById('edAdd');
+      if(addB) addB.addEventListener('click', function(){ editItem(-1); });
+      var rst = document.getElementById('edReset');
+      if(rst) rst.addEventListener('click', function(){
+        resetDayPlan(cur); renderDay(); say2('已还原为原始计划');
+      });
+      box.querySelectorAll('[data-ed]').forEach(function(b){
+        b.addEventListener('click', function(e){
+          e.stopPropagation(); editItem(+b.dataset.ed);
+        });
+      });
+      box.querySelectorAll('[data-rm]').forEach(function(b){
+        b.addEventListener('click', function(e){
+          e.stopPropagation();
+          var list = planOf(cur).slice();
+          list.splice(+b.dataset.rm, 1);
+          setDayPlan(cur, list);
+          renderDay();
+          say2('已删除');
+        });
+      });
+      box.querySelectorAll('[data-mv]').forEach(function(b){
+        b.addEventListener('click', function(e){
+          e.stopPropagation();
+          var i = +b.dataset.mv, d = +b.dataset.dir;
+          var list = planOf(cur).slice();
+          var j = i + d;
+          if(j < 0 || j >= list.length) return;
+          var t = list[i]; list[i] = list[j]; list[j] = t;
+          setDayPlan(cur, list);
+          renderDay();
+        });
+      });
+    }
 
     box.querySelectorAll('.item[data-i]').forEach(function(el){
       var mi0=el.querySelector('morph-icon');
@@ -817,6 +961,83 @@
         if(bar) bar.style.width=(nn/total*100)+'%';
       });
     });
+  }
+
+  /* ---------- 任务编辑表单 ---------- */
+  var SUBJ_LIST = ['phys','math','eng','circ','code','dm','prob'];
+
+  function editItem(idx){
+    var list = planOf(cur).slice();
+    var it = idx >= 0 ? list[idx] : { k:'phys', time:'', title:'', text:'' };
+
+    var h = '<div class="today" style="padding:14px">'
+      + '<div style="font-size:13px;font-weight:700;margin-bottom:12px">'
+      + (idx >= 0 ? '编辑任务' : '新增任务') + '</div>'
+      + '<div class="ed-form">'
+      + '<div class="ed-lab">科目</div>'
+      + '<select id="edK">'
+      + SUBJ_LIST.map(function(k){
+          return '<option value="'+k+'"'+(it.k===k?' selected':'')+'>'+TAG[k]+'</option>';
+        }).join('')
+      + '</select>'
+      + '<div class="ed-lab">标题（可空，显示为粗体一行）</div>'
+      + '<input id="edT" value="'+esc(it.title||'')+'" placeholder="如：热学公式表">'
+      + '<div class="ed-lab">具体内容</div>'
+      + '<textarea id="edX" placeholder="要做什么、做到什么程度">'+esc(it.text||'')+'</textarea>'
+      + '<div class="ed-row">'
+      + '<div><div class="ed-lab">时长</div>'
+      + '<input id="edTime" value="'+esc(it.time||'')+'" placeholder="如 1.5h"></div>'
+      + '</div>'
+      + '</div>'
+      + '<div class="ed-bar" style="margin-top:14px">'
+      + '<button id="edSave" style="background:rgba(56,208,216,.14);'
+      + 'border-color:rgba(56,208,216,.42);color:var(--cyan);font-weight:600">保存</button>'
+      + '<button id="edCancel">取消</button>'
+      + '</div></div>';
+
+    box.innerHTML = h;
+
+    document.getElementById('edSave').addEventListener('click', function(){
+      var obj = {
+        k: document.getElementById('edK').value,
+        time: (document.getElementById('edTime').value||'').trim(),
+        title: (document.getElementById('edT').value||'').trim(),
+        text: (document.getElementById('edX').value||'').trim()
+      };
+      if(!obj.title && !obj.text){ say2('标题和内容至少填一个'); return; }
+      var l = planOf(cur).slice();
+      if(idx >= 0) l[idx] = obj; else l.push(obj);
+      setDayPlan(cur, l);
+      renderDay();
+      say2(idx >= 0 ? '已保存修改' : '已添加');
+    });
+
+    document.getElementById('edCancel').addEventListener('click', function(){
+      renderDay();
+    });
+  }
+
+  function esc(t){
+    return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var sayTimer = null;
+  function say2(msg){
+    var el = document.getElementById('sbTip');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'sbTip';
+      el.style.cssText = 'position:fixed;left:50%;bottom:100px;transform:translateX(-50%);'
+        + 'z-index:9999;background:#243044;border:1px solid #38506e;color:#e8ebf2;'
+        + 'font-size:12px;padding:10px 18px;border-radius:100px;pointer-events:none;'
+        + 'max-width:84vw;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.5)';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    clearTimeout(sayTimer);
+    sayTimer = setTimeout(function(){ el.style.opacity = '0'; }, 1800);
   }
 
   function shiftDay(n){
@@ -1028,7 +1249,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v27';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v28';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1093,6 +1314,11 @@
     }
 
     // 清除缓存（保留 localStorage，打勾和笔记不动）
+    document.getElementById('mBackup').addEventListener('click', function(){
+      closeM();
+      if (window.SBBK) setTimeout(function(){ window.SBBK.open(); }, 260);
+    });
+
     document.getElementById('mClear').addEventListener('click', function(){
       var go = this.querySelector('.go');
       go.textContent = '清除中…';
@@ -1107,6 +1333,55 @@
       }).catch(function(){ go.textContent = '失败'; });
     });
   })();
+
+  /* ================= 考试倒计时 ================= */
+  var MILESTONES = [
+    {date:'10-31', name:'大物（二）期中', tip:'热学三章 · 15 条公式每天默写'},
+    {date:'11-14', name:'数学竞赛初赛', tip:'非数学 A 类 · 150 分钟 100 分'},
+    {date:'12-12', name:'英语六级', tip:'听力专项 · 目标 550+'}
+  ];
+
+  function renderCountdown(){
+    var host = document.querySelector('#v-today .dnav');
+    if(!host) return;
+    var old = document.getElementById('cdBox');
+    if(old && old.parentNode) old.parentNode.removeChild(old);
+
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // 找最近一个未过的里程碑
+    var target = null, days = 0;
+    for(var i=0;i<MILESTONES.length;i++){
+      var p = MILESTONES[i].date.split('-');
+      var d = new Date(now.getFullYear(), +p[0]-1, +p[1]);
+      var diff = Math.round((d - today) / 86400000);
+      if(diff >= 0){ target = MILESTONES[i]; days = diff; break; }
+    }
+    if(!target) return;
+
+    var el = document.createElement('div');
+    el.id = 'cdBox';
+    el.className = 'cd' + (days <= 7 ? ' hot' : '');
+    var dayTxt = days === 0 ? '今天' : (days === 1 ? '明天' : days + ' 天');
+
+    el.innerHTML = '<div class="big"><b>' + (days === 0 ? '今' : days) + '</b>'
+      + '<span>' + (days === 0 ? '天' : '天') + '</span></div>'
+      + '<div class="tx"><b>' + target.name + '</b>'
+      + '<span>' + target.tip + '</span></div>'
+      + '<span class="go">' + (days === 0 ? '就是今天' : '还剩') + ' ›</span>';
+
+    el.addEventListener('click', function(){
+      var d = DATA && DATA.days && DATA.days[target.date];
+      if(d){ cur = target.date; renderDay(); updateNavBtns(); window.scrollTo(0,0); }
+      else { showTab('check'); }
+    });
+
+    // 放在课表卡片之前（如果课表卡片存在）
+    var tt = document.getElementById('ttTodayCard');
+    if(tt){ tt.parentNode.insertBefore(el, tt); }
+    else { host.parentNode.insertBefore(el, host); }
+  }
 
   /* ================= 核对 ================= */
   var CKEY = 'sb-check-';
@@ -1360,6 +1635,7 @@
       var lt = null;
       try{ lt = localStorage.getItem('sb-tab'); }catch(e){}
       if(lt && lt !== 'today' && TABS.indexOf(lt) >= 0){ showTab(lt); }
+      renderCountdown();
     })
     .catch(function(){
       box.innerHTML='<div class="today"><div class="empty">数据加载失败，请联网后刷新</div></div>';
