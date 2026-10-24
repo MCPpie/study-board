@@ -458,7 +458,10 @@
     + '6. 忽略表头、时间轴、注释、空单元格';
 
   /* ---------------- 导入流程 ---------------- */
+  var importBusy = false;
+
   function startImport() {
+    if (importBusy) return;
     // 先检查配置
     var cfg = getAiCfg();
     if (!cfg.key) {
@@ -482,18 +485,73 @@
       return;
     }
 
+    importBusy = true;
+
+    var btn = document.getElementById('ttImport');
+    var oldLabel = btn ? btn.textContent : '';
+    if (btn) { btn.textContent = '正在打开相册…'; btn.disabled = true; }
+
     var input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
     input.style.display = 'none';
     document.body.appendChild(input);
+
+    var picked = false;
+    var opened = false;
+
+    // 页面被切到后台 = 文件选择器弹出来了
+    function onVis() {
+      if (document.hidden) opened = true;
+    }
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('blur', function () { opened = true; });
+
     input.addEventListener('change', function () {
+      picked = true;
       var f = input.files && input.files[0];
-      document.body.removeChild(input);
-      if (!f) return;
+      document.removeEventListener('visibilitychange', onVis);
+      if (input.parentNode) input.parentNode.removeChild(input);
+      importBusy = false;
+      if (btn) { btn.textContent = oldLabel; btn.disabled = false; }
+      if (!f) {
+        say('没选图片');
+        return;
+      }
       doImport(f);
     });
+
     input.click();
+
+    // 3.5 秒后既没选图、页面也没被切走 → 说明选择器根本没弹出来
+    setTimeout(function () {
+      if (picked) return;
+      importBusy = false;
+      if (btn) { btn.textContent = oldLabel; btn.disabled = false; }
+      if (opened) return;      // 弹出过，只是用户取消了
+
+      document.removeEventListener('visibilitychange', onVis);
+      if (input.parentNode) input.parentNode.removeChild(input);
+
+      var isApp = !!(window.StudyBoard && window.StudyBoard.appVersion);
+      var ver = isApp ? window.StudyBoard.appVersion() : '';
+      bodyEl.innerHTML = '<div class="ttempty">'
+        + '<b>点了没反应，选择器没弹出来</b><br><br>'
+        + (isApp
+            ? ('当前 App 版本：<b>' + esc(ver) + '</b><br>'
+               + '<b style="color:#ffc48a">这个版本不支持选图片。</b><br>'
+               + '需要装 v1.3 或更新的 APK（桌面上的「学习看板-v1.3.apk」），'
+               + '装完覆盖安装即可，数据不会丢。<br><br>'
+               + '在此之前，可以先用「手动添加」把课表录进去。')
+            : '当前是浏览器环境。<br>'
+              + '可能是浏览器不支持选文件，或者被权限拦了。<br><br>'
+              + '建议用 App 打开，或者先用「手动添加」。')
+        + '</div>'
+        + '<div class="ttbtns" style="margin-top:16px">'
+        + '<button class="pri" id="ttManual">手动添加</button>'
+        + '<button id="ttCancel">返回</button></div>';
+      bindFastBtns();
+    }, 3500);
   }
 
   function doImport(file) {
