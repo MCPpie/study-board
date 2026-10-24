@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>电路课件 5 · 带读手册</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --circ:#fb923c; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--circ);
+    border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+  .m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .m span{display:block;font-size:10.5px;color:var(--tx3)}
+  .m b{display:block;font-size:14px;font-weight:700;margin-top:1px}
+
+  .hl{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.28);
+    border-radius:11px;padding:13px 15px;margin-bottom:20px;font-size:12.5px;color:var(--tx2)}
+  .hl b{color:var(--tx)}
+
+  .part{margin:26px 0 4px;padding:11px 15px;border-radius:11px;
+    background:linear-gradient(90deg,rgba(251,146,60,.14),rgba(251,146,60,.02));
+    border:1px solid rgba(251,146,60,.3)}
+  .part b{font-size:13.5px;display:block}
+  .part span{font-size:11.5px;color:var(--tx3);display:block;margin-top:2px}
+
+  h2{font-size:14px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  h2::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--circ)}
+
+  .step{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:0;overflow:hidden;margin-bottom:10px}
+  .step-h{padding:11px 14px;background:var(--card2);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .step-n{flex:0 0 auto;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;
+    background:rgba(251,146,60,.15);color:var(--circ)}
+  .step-p{flex:1;font-size:12.5px;font-weight:700;min-width:120px}
+  .step-t{font-size:10.5px;color:var(--tx3)}
+  .step-b{padding:12px 14px}
+  .step-b .one{font-size:12.5px;color:var(--tx);font-weight:600;margin-bottom:6px}
+  .step-b ul{list-style:none}
+  .step-b li{position:relative;padding-left:15px;margin-bottom:5px;font-size:12.5px;color:var(--tx2)}
+  .step-b li:last-child{margin-bottom:0}
+  .step-b li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .step-b li b{color:var(--tx)}
+  .step-b li.k{color:#ffc48a}
+  .step-b li.k::before{background:var(--circ)}
+  .skip{font-size:11.5px;color:var(--tx3);margin-top:7px;padding-top:7px;
+    border-top:1px dashed rgba(255,255,255,.07)}
+  .skip b{color:#ff9d9d}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 13px;margin-bottom:8px}
+  .f .n{font-size:10.5px;color:var(--tx3);margin-bottom:2px}
+  .f .e{font-size:13.5px;font-family:"Cambria Math","Times New Roman",serif;line-height:1.9}
+  .f .c{font-size:11px;color:var(--tx3);margin-top:3px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--tx2);margin-top:10px}
+  .info b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">电路（2）· 课件 5 带读</div>
+  <h1>集成运算放大器的应用
+    <small>58 页 ｜ 必须拆成两次用 ｜ 第 1 次 70 分钟 / 第 2 次 60 分钟</small>
+  </h1>
+</header>
+
+<div class="meta">
+  <div class="m"><span>总页数</span><b>58 页</b></div>
+  <div class="m"><span>可跳</span><b>约 15 页</b></div>
+  <div class="m"><span>核心段</span><b>P4–P25 · P29–P55</b></div>
+  <div class="m"><span>预计</span><b>2 次共 2.5h</b></div>
+</div>
+
+<div class="hl">
+  <b>这份课件按「运放工作在哪一区」一刀切成两半</b>，两半的方法完全不同，绝不能混着学：<br>
+  · <b>线性区</b>（P1–P25）→ 有<b>深度负反馈</b>，用<b>虚短 + 虚断</b>算<br>
+  · <b>非线性区</b>（P28–P58）→ <b>开环或正反馈</b>，<b>没有虚短</b>，只能比 u<sub>P</sub> 和 u<sub>N</sub> 的大小<br><br>
+  <b>今天是第 1 次</b>（10/27）：只走 <b>P1–P25 滤波</b>，约 70 分钟。<br>
+  <b>关键尺度</b>：课件 P25 白纸黑字写了 —— 有源滤波<b>「识别滤波电路即可，习题可不做」</b>。所以<b>别去推传递函数</b>，把力气全花在「<b>看到电路能说出是哪种滤波、几阶</b>」上。
+</div>
+
+<!-- ============ PART 1 ============ -->
+<div class="part">
+  <b>第 1 次 · 线性应用：有源滤波（今天，10/27）</b>
+  <span>P1–P27 ｜ 70 分钟 ｜ 目标：能识别四种滤波 + 说出阶数</span>
+</div>
+
+<h2>第 1 段 · 理想运放与两个工作区 <span style="font-size:11px;color:var(--tx3);font-weight:400">P1–P3 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">01</span><span class="step-p">P1　理想运放的四个指标</span><span class="step-t">3 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：把运放理想化，分析才能用虚短虚断</div>
+    <ul>
+      <li class="k"><b>四条理想化</b>：A<sub>od</sub> = ∞、R<sub>id</sub> = ∞ 且 R<sub>o</sub> = 0、K<sub>CMR</sub> = ∞、BW = ∞</li>
+      <li><b>为什么要理想化</b>：只有 A<sub>od</sub> = ∞ 时，才能由「u<sub>o</sub> 有限」推出「u<sub>P</sub> − u<sub>N</sub> ≈ 0」→ 这就是虚短</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">02</span><span class="step-p">P2　线性区 vs 非线性区（全章总开关）</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：有没有负反馈，决定用哪套方法</div>
+    <ul>
+      <li class="k"><b>线性区</b>（有深度负反馈）：u<sub>P</sub> ≈ u<sub>N</sub>（<b>虚短</b>）+ i<sub>P</sub> ≈ i<sub>N</sub> ≈ 0（<b>虚断</b>）→ 用来算运算、滤波</li>
+      <li class="k"><b>非线性区</b>（开环或正反馈）：<b>只有虚断，没有虚短</b>！<br>
+        · u<sub>P</sub> &gt; u<sub>N</sub> → u<sub>o</sub> = +U<sub>OM</sub><br>
+        · u<sub>P</sub> &lt; u<sub>N</sub> → u<sub>o</sub> = −U<sub>OM</sub></li>
+      <li class="k"><b>判断口诀</b>：<b>看输出到输入有没有反馈电阻</b>。有 → 线性；没有（开环）或有正反馈 → 非线性</li>
+    </ul>
+    <div class="skip"><b>易错</b>：<b>比较器里绝不能写 u<sub>P</sub> = u<sub>N</sub></b>。这是本章最常见的整题作废错误</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">03</span><span class="step-p">P3　运算类型总览（扫过）</span><span class="step-t">2 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：时域算运算，频域做滤波</div>
+    <ul>
+      <li><b>时域</b>：比例、加减、乘除、微分、积分、对数、指数；变换类：V-I、I-V、阻抗变换</li>
+      <li><b>频域</b>：滤波</li>
+      <li class="k"><b>课件原话</b>：运算部分上学期已学，<b>本节只讲滤波电路</b> → 所以比例/加减/积分/微分只复习公式，不重推</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P3 右下的反相比例电路推导，你上学期做过，直接跳到 P4</div>
+  </div>
+</div>
+
+<h2>第 2 段 · 滤波器到底在滤什么 <span style="font-size:11px;color:var(--tx3);font-weight:400">P4–P7 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">04</span><span class="step-p">P4–P5　功能与四大类</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：让某些频率过、让某些频率死</div>
+    <ul>
+      <li class="k"><b>本质</b>：有源滤波器 = <b>具有特定频率响应的放大器</b>（所以它一定带运放，一定有增益）</li>
+      <li class="k"><b>四类</b>：低通 LPF、高通 HPF、带通 BPF、带阻 BEF</li>
+      <li><b>理想幅频特性</b>：通带内增益恒为 A<sub>0</sub>，通带外<b>立刻掉到 0</b>——是个矩形</li>
+      <li><b>怎么记四类的名字</b>：<b>名字里的「通」就是能过的频段</b>。低通 = 低频能过</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">05</span><span class="step-p">P6–P7　实际特性：三个关键词</span><span class="step-t">6 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：通带、过渡带、阻带</div>
+    <ul>
+      <li class="k"><b>截止频率的定义</b>：增益降到 <b>0.707A<sub>0</sub></b>（即下降 3dB）那一点的频率。低通叫 f<sub>H</sub>，高通叫 f<sub>L</sub></li>
+      <li><b>三个区</b>：通带（A ≥ 0.707A<sub>0</sub>）→ 过渡带 → 阻带（A ≤ 0.1A<sub>0</sub>）</li>
+      <li class="k"><b>为什么有过渡带</b>：实际电路不可能从「全通」瞬间变「全不通」，中间必然有一段斜坡</li>
+      <li class="k"><b>滤波器好坏的唯一标准</b>：<b>过渡带越窄越好</b>（阻带增益掉得越快，选择性越好）→ 这就是为什么要做二阶、甚至更高阶</li>
+      <li><b>阶数与衰减速度</b>：一阶 = −20dB/十倍频程，二阶 = −40dB/十倍频程</li>
+    </ul>
+  </div>
+</div>
+
+<h2>第 3 段 · 低通滤波器（四种里最重要） <span style="font-size:11px;color:var(--tx3);font-weight:400">P8–P15 · 18 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">06</span><span class="step-p">P8–P9　一阶无源 RC 低通</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：一个 RC，三个缺点</div>
+    <ul>
+      <li><b>传递函数</b>：A(jω) = 1/(1 + jω/ω<sub>0</sub>)，特征频率 <b>ω<sub>0</sub> = 1/RC</b></li>
+      <li class="k"><b>三个缺点（背下来，这就是有源滤波存在的理由）</b>：<br>
+        ① <b>带负载能力差</b>　② <b>无放大作用</b>（A<sub>0</sub> 最大只有 1）　③ <b>特性不理想、边沿不陡</b></li>
+      <li><b>衰减速率</b>：ω ≫ ω<sub>0</sub> 时，每十倍频下降 20dB → 记作 <b>−20dB/dec</b></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P9 右下角的折线近似（波特图画法），只要知道「−20dB/dec」这个结论</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">07</span><span class="step-p">P10–P11　一阶有源低通</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：加个同相放大器，缺点① ② 解决</div>
+    <ul>
+      <li class="k"><b>通带增益</b>：<b>A<sub>0</sub> = 1 + R<sub>f</sub>/R<sub>1</sub></b>（不再是 1，解决了「无放大」）</li>
+      <li class="k"><b>截止频率</b>：<b>ω<sub>H</sub> = ω<sub>0</sub> = 1/RC</b>（和增益无关，加运放不改变转折点）</li>
+      <li class="k"><b>传递函数</b>：A(jω) = (1+R<sub>f</sub>/R<sub>1</sub>)/(1 + jω/ω<sub>0</sub>)</li>
+      <li class="k"><b>还剩的缺点</b>：<b>阻带衰减太慢，仍是 −20dB/dec</b> → 所以要上二阶</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">08</span><span class="step-p">P12–P15　二阶有源低通（重点看 P15）</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：多一级 RC，衰减快一倍，但会自激</div>
+    <ul>
+      <li><b>结构</b>：两级 RC 串起来 + 同相放大 → 比一阶多一个 C</li>
+      <li class="k"><b>衰减速率</b>：<b>−40dB/dec</b>（一阶的两倍，过渡带明显变窄）</li>
+      <li class="k"><b>品质因数</b>：<b>Q = 1/(3 − A<sub>0</sub>)</b>，其中 A<sub>0</sub> = 1 + R<sub>f</sub>/R<sub>1</sub></li>
+      <li class="k"><b>三条必须记住的结论</b>：<br>
+        · <b>A<sub>0</sub> &lt; 3 → 电路稳定</b>（Q 为正）<br>
+        · <b>Q = 0.707 → 幅频特性最平坦</b>（巴特沃斯，工程上最常用）<br>
+        · <b>A<sub>0</sub> ≥ 3 → 自激振荡，滤波器直接坏掉</b></li>
+      <li><b>P13 提到的问题</b>：简单二阶在 f<sub>H</sub>→f<sub>0</sub> 之间掉得还不够快，所以在 f→f<sub>0</sub> 附近<b>适当提升增益</b>（就是压控电压源型，P14–P15）来拉近 f<sub>H</sub> 和 f<sub>0</sub></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P12、P14 的传递函数推导过程（两页全是代数），<b>只要结论</b>：A<sub>0</sub>&lt;3 稳定、Q=0.707 平坦、−40dB/dec</div>
+  </div>
+</div>
+
+<h2>第 4 段 · 高通 = 低通的对偶 <span style="font-size:11px;color:var(--tx3);font-weight:400">P16–P18 · 8 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">09</span><span class="step-p">P16–P18　对偶关系 + 一阶/二阶高通</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：R 和 C 换个位置，低通就变高通</div>
+    <ul>
+      <li class="k"><b>对偶怎么做</b>：把低通里的 <b>R ↔ C 互换</b>（串联的 R 换成 C、接地的 C 换成 R），传递函数也跟着对偶</li>
+      <li class="k"><b>一阶高通</b>：A<sub>0</sub> = 1 + R<sub>f</sub>/R<sub>1</sub>，<b>ω<sub>L</sub> = 1/RC</b>，衰减速率 <b>20dB/dec</b></li>
+      <li class="k"><b>二阶高通</b>：衰减速率 <b>−40dB/dec</b>，同样 <b>A<sub>0</sub> ≥ 3 会自激</b>，Q = 1/(3−A<sub>0</sub>)</li>
+      <li><b>记忆捷径</b>：<b>低通和高通的公式长得一模一样，只把 f<sub>H</sub> 换成 f<sub>L</sub>、把「高频衰减」换成「低频衰减」</b></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P17 的波特图细节，看图确认「左边掉、右边平」即可</div>
+  </div>
+</div>
+
+<h2>第 5 段 · 带通与带阻 <span style="font-size:11px;color:var(--tx3);font-weight:400">P19–P23 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">10</span><span class="step-p">P19–P20　带通 = 低通串高通</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：两个滤波器串起来，取交集</div>
+    <ul>
+      <li class="k"><b>做法</b>：低通（截止 ω<sub>1</sub>）<b>串联</b>高通（截止 ω<sub>2</sub>）→ 只有两者都放行的频段能过</li>
+      <li class="k"><b>成立条件</b>：<b>ω<sub>1</sub> &gt; ω<sub>2</sub></b>（低通的截止频率要更高），通带就是 ω<sub>2</sub> &lt; ω &lt; ω<sub>1</sub></li>
+      <li><b>带宽</b>：BW = ω<sub>1</sub> − ω<sub>2</sub>。两个截止频率差得越远，通带越宽</li>
+      <li><b>想窄通带怎么办</b>：串联法做不出窄带 → 用 <b>P20 的二阶压控型 BPF</b></li>
+    </ul>
+    <div class="skip"><b>易错</b>：串联的方向别搞反 —— <b>带通是「低通在前、高通在后」都行，但 ω<sub>1</sub> 必须大于 ω<sub>2</sub></b>，写成 ω<sub>1</sub> &lt; ω<sub>2</sub> 就变成带阻了</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">11</span><span class="step-p">P21–P23　带阻 = 低通并高通（求和）</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：两个滤波器并联相加，取并集</div>
+    <ul>
+      <li class="k"><b>做法</b>：低通和高通的输出<b>求和</b> → 低频走低通、高频走高通，<b>中间那段没人管</b> = 阻带</li>
+      <li class="k"><b>成立条件</b>：<b>ω<sub>1</sub> &lt; ω<sub>2</sub></b>（低通截止更低），阻带是 ω<sub>1</sub> &lt; ω &lt; ω<sub>2</sub></li>
+      <li class="k"><b>双 T 带阻网络</b>：P22 那个「两个 C 一个 R」的 T 型 + 「两个 R 一个 C」的 T 型并联 →<br>
+        · 高频时 C 容抗小 ≈ 短路，走上面的 T 网络<br>
+        · 低频时 C 容抗大 ≈ 开路，走下面的 T 网络<br>
+        · <b>中间频段两个网络都不通</b> → 形成阻带</li>
+      <li><b>常见用途</b>：滤掉 50Hz 工频干扰（陷波器）</li>
+    </ul>
+  </div>
+</div>
+
+<h2>第 6 段 · 小结 + 识别练习（今天的验收） <span style="font-size:11px;color:var(--tx3);font-weight:400">P24–P27 · 10 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">12</span><span class="step-p">P24–P25　小结与内容要求</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：运算和滤波的异同</div>
+    <ul>
+      <li class="k"><b>相同</b>：都引深度负反馈、运放都在线性区、都有虚短虚断、都能用节点电流法解</li>
+      <li class="k"><b>不同</b>：<b>运算研究时域，滤波研究频域</b>；测试方法也不同（运算测「频率固定时的 U<sub>o</sub>–U<sub>i</sub>」，滤波测「幅值固定时增益随频率的变化」）</li>
+      <li class="k"><b>课件原话（P25）</b>：<b>「识别滤波电路即可，习题可不做」</b>。自我检测 二版三版相同，<b>第 9 章 1–3</b>；习题 <b>第 9 章 1–5</b>（选做）</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">13</span><span class="step-p">P26–P27　识别练习（今天必做）</span><span class="step-t">6 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：给你电路，说出是什么滤波、几阶</div>
+    <ul>
+      <li class="k"><b>P27 的题目就是考试题型</b>：「定性分析下列各电路属于哪种类型滤波电路，并说明是几阶滤波」——一共 5 个电路</li>
+      <li><b>做法</b>：先数电容和电阻组成几个 RC 环节（= 阶数），再看电容是「串在信号路上」还是「接到地/反馈」</li>
+      <li class="k"><b>答案自己先写，再翻 P27 的标注</b>。这一页做对，滤波这块就过关了</li>
+    </ul>
+  </div>
+</div>
+
+<div class="info">
+  <b>识别三步法（考试就靠这三步）</b><br><br>
+  <b>第 1 步 · 数阶数</b>：有几个独立的 RC 环节就是几阶。一阶 = 1 个 C，二阶 = 2 个 C。<br><br>
+  <b>第 2 步 · 定类型（看 C 的位置）</b><br>
+  · C <b>串在信号通路</b>上（与输入或级间串联）→ <b>高通</b>（低频时 C 容抗大，信号过不去）<br>
+  · C <b>接在地或反馈支路</b>上（对地旁路）→ <b>低通</b>（高频时 C 容抗小，信号被旁路掉）<br>
+  · 一个串、一个接地，且两级串联 → 可能是<b>带通</b><br>
+  · 双 T 网络（两个 C 一个 R + 两个 R 一个 C 并联）→ <b>带阻</b><br><br>
+  <b>第 3 步 · 看有没有运放</b>：有运放 = 有源（有增益、带载能力强）；只有 R 和 C = 无源。<br><br>
+  <b>一句话口诀</b>：<b>「串高通、地低通、串加地是带通、双 T 是带阻」</b>
+</div>
+
+<!-- ============ PART 2 ============ -->
+<div class="part">
+  <b>第 2 次 · 非线性应用：比较器 + 非正弦波（10/29）</b>
+  <span>P28–P58 ｜ 60 分钟 ｜ 目标：会算阈值、会画波形</span>
+</div>
+
+<h2>第 7 段 · 比较器基础 <span style="font-size:11px;color:var(--tx3);font-weight:400">P28–P33 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">14</span><span class="step-p">P28–P29　非线性区的三条铁律</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：比大小，不看差值</div>
+    <ul>
+      <li class="k"><b>u<sub>P</sub> &gt; u<sub>N</sub> → u<sub>o</sub> = +U<sub>OM</sub>；u<sub>P</sub> &lt; u<sub>N</sub> → u<sub>o</sub> = −U<sub>OM</sub></b></li>
+      <li class="k"><b>只有虚断（i<sub>P</sub> = i<sub>N</sub> = 0），没有虚短</b></li>
+      <li><b>三种接法</b>：开环 → 单限比较器；开环 + 多门限 → 窗口比较器（<b>大纲不要求</b>）；<b>正反馈 → 滞回比较器</b></li>
+      <li><b>为什么必须限幅</b>：±U<sub>OM</sub> 通常 ±12V 左右，和后面电路的电平不匹配 → 用 <b>R + 双向稳压管 D<sub>Z</sub></b> 限成 ±U<sub>Z</sub></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P29 里的窗口比较器（课件注明「不在大纲内，课上不讲」）</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">15</span><span class="step-p">P30–P33　单限比较器 + 阈值怎么算</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：只有一个门限，比它高就翻</div>
+    <ul>
+      <li><b>基本型</b>：u<sub>I</sub> 接一端、U<sub>REF</sub> 接另一端 → <b>阈值 U<sub>TH</sub> = U<sub>REF</sub></b>，一个门限</li>
+      <li class="k"><b>带电阻网络的单限（P33 例题）</b>：阈值不是 U<sub>REF</sub> 本身，要用<b>叠加定理</b>算：<br>
+        ① 由虚断，u<sub>P</sub> 只由所接电阻分压决定（常为 0）<br>
+        ② 用叠加定理写出 u<sub>N</sub> 关于 u<sub>I</sub> 和 U<sub>REF</sub> 的表达式<br>
+        ③ 令 <b>u<sub>N</sub> = u<sub>P</sub></b>，解出的 u<sub>I</sub> 就是 <b>U<sub>TH</sub></b></li>
+      <li><b>两个用途</b>：<b>波形变换/整形</b>（把正弦削成方波，P31）和 <b>PWM 脉宽调制</b>（P32）</li>
+    </ul>
+    <div class="skip"><b>易错</b>：<b>阈值解出来后一定要写「u<sub>I</sub> 大于/小于 U<sub>TH</sub> 时 u<sub>o</sub> 取什么」</b>，只写一个数不给分。判断方法：随便代一个 u<sub>I</sub> 试试 u<sub>P</sub> 和 u<sub>N</sub> 谁大</div>
+  </div>
+</div>
+
+<h2>第 8 段 · 滞回比较器（考得最多） <span style="font-size:11px;color:var(--tx3);font-weight:400">P34–P40 · 18 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">16</span><span class="step-p">P34–P37　两个阈值怎么来的</span><span class="step-t">10 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：输出自己参与了阈值计算 → 两个门限</div>
+    <ul>
+      <li class="k"><b>核心结构</b>：输出经 R<sub>2</sub> 反馈到<b>同相端 P</b>（<b>正反馈</b>），这是和单限比较器的唯一区别</li>
+      <li class="k"><b>算法（三步，固定套路）</b>：<br>
+        ① 用叠加定理写出 u<sub>P</sub> = f(u<sub>o</sub>, U<sub>REF</sub>)<br>
+        ② 令 u<sub>P</sub> = u<sub>N</sub> = u<sub>I</sub>，解出 u<sub>I</sub><br>
+        ③ <b>代 u<sub>o</sub> = +U<sub>Z</sub> 得 U<sub>TH1</sub>；代 u<sub>o</sub> = −U<sub>Z</sub> 得 U<sub>TH2</sub></b></li>
+      <li class="k"><b>UREF = 0 的特例（P40 原文，可以直接背）</b>：<br>
+        <b>U<sub>TH</sub> = ±U<sub>Z</sub>·R<sub>1</sub>/R<sub>2</sub></b>，且 U<sub>TH1</sub> = −U<sub>TH2</sub>（纵轴对称），<b>回差 ΔU = 2U<sub>Z</sub>·R<sub>1</sub>/R<sub>2</sub></b></li>
+      <li><b>U<sub>REF</sub> 的作用</b>：<b>只平移回差的位置，不改变回差大小</b>（P36 原话）</li>
+      <li class="k"><b>P38 例题</b>：R<sub>1</sub>=10kΩ、R<sub>2</sub>=20kΩ、U<sub>REF</sub>=+3V、±U<sub>Z</sub>=±6V，答案 <b>U<sub>TH1</sub>=1.5V、U<sub>TH2</sub>=7.5V</b> —— 自己按上面三步算一遍，对上了才算会</li>
+    </ul>
+    <div class="skip"><b>易错</b>：<b>阈值必须先算 u<sub>P</sub>，别拿 u<sub>N</sub> 当阈值</b>。这个电路里 u<sub>N</sub> 就是 u<sub>I</sub>（输入），阈值在 P 那一侧</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">17</span><span class="step-p">P35–P36　为什么要有回差</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：抗干扰</div>
+    <ul>
+      <li><b>问题</b>：单限比较器在阈值附近，输入稍有噪声，输出就会<b>来回翻转</b>（抖动）</li>
+      <li class="k"><b>解决</b>：设两个阈值，<b>上升沿翻一次、下降沿翻一次，中间那段「不动」</b> → 噪声只要小于回差就翻不动</li>
+      <li class="k"><b>代价</b>：<b>回差越大越抗干扰，但灵敏度越低</b>（输入要变化更多才响应）→ 这是一对矛盾，题目常问「R<sub>1</sub> 增大回差怎么变」</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">18</span><span class="step-p">P37–P40　电压传输特性怎么画</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：一个「<b>Z</b>」字形的折线</div>
+    <ul>
+      <li class="k"><b>画法</b>：横轴 u<sub>I</sub>、纵轴 u<sub>O</sub>。左边一条水平线在 +U<sub>Z</sub>（u<sub>I</sub> 小时输出高），到 U<sub>TH1</sub> 处<b>竖直掉到 −U<sub>Z</sub></b>，往右走到 U<sub>TH2</sub> 处<b>竖直跳回 +U<sub>Z</sub></b></li>
+      <li class="k"><b>关键：箭头方向</b>！上升沿在 U<sub>TH1</sub> 翻、下降沿在 U<sub>TH2</sub> 翻，两个门限不一样，<b>所以要标箭头，否则图是错的</b></li>
+      <li><b>检验</b>：P39 给了输入三角波 → 输出方波的对照图，你的输出波形应该在两个阈值处才翻转</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P35–P36 两页的「抗干扰示意」图重复度很高，看 P35 一张就够</div>
+  </div>
+</div>
+
+<h2>第 9 段 · 矩形波发生器 <span style="font-size:11px;color:var(--tx3);font-weight:400">P41–P46 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">19</span><span class="step-p">P41–P43　电路组成与振荡过程</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：电容充到阈值就翻，翻了就反着充</div>
+    <ul>
+      <li class="k"><b>两块拼起来</b>：<b>滞回比较器</b>（决定什么时候翻）+ <b>RC 定时电路</b>（决定多久翻一次）</li>
+      <li><b>充电过程</b>：u<sub>o</sub> = +U<sub>Z</sub> → 经 R 给 C 充电 → u<sub>C</sub> 上升 → <b>u<sub>C</sub> 碰到 +U<sub>TH</sub> 时输出翻到 −U<sub>Z</sub></b></li>
+      <li><b>放电过程</b>：u<sub>o</sub> = −U<sub>Z</sub> → C 反向充电（放电）→ u<sub>C</sub> 下降 → <b>碰到 −U<sub>TH</sub> 时又翻回 +U<sub>Z</sub></b></li>
+      <li class="k"><b>注意</b>：这里 u<sub>N</sub> = u<sub>C</sub>（电容电压），u<sub>P</sub> 是阈值 → <b>和滞回比较器的角色正好对调</b>，别记反</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">20</span><span class="step-p">P44–P46　周期公式与占空比</span><span class="step-t">7 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：T = 2RC·ln(1+2R<sub>1</sub>/R<sub>2</sub>)</div>
+    <ul>
+      <li class="k"><b>振荡周期</b>：<b>T = 2RC·ln(1 + 2R<sub>1</sub>/R<sub>2</sub>)</b>，频率 f = 1/T</li>
+      <li class="k"><b>占空比 50%</b>：因为充放电走同一条 R，时间常数相同 → 方波对称</li>
+      <li class="k"><b>怎么改占空比（P45–P46 的讨论）</b>：用<b>电位器 R<sub>W</sub> + 两个二极管 V<sub>D1</sub>/V<sub>D2</sub></b> 把充电和放电分开走两条路 →<br>
+        · 充电时间常数 <b>τ<sub>1</sub> = (R′ + r<sub>d1</sub> + R<sub>W</sub>′)C</b><br>
+        · 放电时间常数 <b>τ<sub>2</sub> = (R″ + r<sub>d2</sub> + R<sub>W</sub>″)C</b><br>
+        · <b>D = τ<sub>1</sub>/(τ<sub>1</sub>+τ<sub>2</sub>) × 100%</b></li>
+      <li><b>两个二极管的作用</b>：让电流充和放走不同的电阻路径 → 两条路阻值不同 → 占空比可调</li>
+    </ul>
+    <div class="skip"><b>易错</b>：<b>ln 里面是 1 + 2R<sub>1</sub>/R<sub>2</sub>，不是 1 + R<sub>1</sub>/R<sub>2</sub></b>。R<sub>1</sub> 是接到输出（±U<sub>Z</sub>）的那只，R<sub>2</sub> 是接到地的那只</div>
+  </div>
+</div>
+
+<h2>第 10 段 · 三角波与锯齿波 <span style="font-size:11px;color:var(--tx3);font-weight:400">P47–P55 · 18 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">21</span><span class="step-p">P47–P48　为什么不能「矩形波 + 积分」</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：开环积分会跑偏饱和</div>
+    <ul>
+      <li><b>想法</b>：方波积分应该得到三角波 —— 理论上对</li>
+      <li class="k"><b>实际不行</b>：矩形波的 <b>+U<sub>Z</sub> 和 −U<sub>Z</sub> 不可能完全对称</b>（U<sub>Z1</sub> ≠ U<sub>Z2</sub>），积分器会<b>累积直流偏移</b> → 输出一路偏上去 → <b>运放饱和，波形废掉</b></li>
+      <li class="k"><b>正确做法（P49）</b>：用<b>同相滞回比较器 + 积分器闭环</b>，让积分器的输出反过来控制比较器的翻转 → 自动纠正偏移</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">22</span><span class="step-p">P49–P51　三角波电路与参数</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：两个运放互相咬住，自己振荡</div>
+    <ul>
+      <li><b>组成</b>：A<sub>1</sub> = 滞回比较器（输出 u<sub>o1</sub> 是方波，±U<sub>Z</sub>）；A<sub>2</sub> = 积分器（输出 u<sub>o</sub> 是三角波）</li>
+      <li class="k"><b>闭环关系</b>：u<sub>o</sub> 反馈到比较器的 P 端当阈值；u<sub>o1</sub> 送进积分器积分 → <b>方波↔三角波互相锁死，形成稳定振荡</b></li>
+      <li class="k"><b>三角波幅值</b>：<b>U<sub>om</sub> = (R<sub>1</sub>/R<sub>2</sub>)·U<sub>Z</sub></b></li>
+      <li class="k"><b>振荡周期</b>：<b>T = 4R<sub>1</sub>R<sub>4</sub>C/R<sub>2</sub></b>（R<sub>4</sub> 是积分器的输入电阻）</li>
+      <li><b>波形关系</b>：u<sub>o1</sub> 是方波、u<sub>o</sub> 是三角波，<b>两者同周期，三角波的峰谷正好对应方波的跳变时刻</b></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P50 的 u<sub>P</sub> 表达式推导，只记「阈值由 u<sub>o</sub> 和 U<sub>Z</sub> 共同决定」这个结论</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">23</span><span class="step-p">P52–P55　怎么变成锯齿波</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：让充电和放电快慢不一样</div>
+    <ul>
+      <li class="k"><b>方法一（P52–P54）</b>：积分器输入串<b>电位器 R<sub>W</sub> + 两个二极管</b> → 正负半周走不同阻值 → <b>积分斜率不同</b> → 三角波变锯齿波</li>
+      <li class="k"><b>方法二（P55）</b>：给积分器<b>叠加一个直流 U<sub>S</sub></b>（由 V<sub>CC</sub> 分压得到）→ 充电电压 (+U<sub>Z</sub>−U<sub>S</sub>) 和放电电压 (−U<sub>Z</sub>−U<sub>S</sub>) 不等 → 斜率不等</li>
+      <li><b>两种方法的共同本质</b>：<b>让上升和下降的速率不同，波形就不对称了</b></li>
+      <li><b>锯齿波的特点</b>：周期 T = T<sub>1</sub> + T<sub>2</sub>，其中 T<sub>1</sub>、T<sub>2</sub> 分别是缓升段和陡降段</li>
+    </ul>
+  </div>
+</div>
+
+<h2>第 11 段 · 小结与作业 <span style="font-size:11px;color:var(--tx3);font-weight:400">P56–P58 · 8 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">24</span><span class="step-p">P56–P58　小结 + 综合练习</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：三条线索收口</div>
+    <ul>
+      <li class="k"><b>三条总结（P56 原文）</b>：<br>
+        ① 开环或正反馈 → 非线性区；判断用「u<sub>+</sub>&gt;u<sub>−</sub> 则 +U<sub>OM</sub>」，配合<b>虚断</b><br>
+        ② 比较器是比较两个模拟量的电路，<b>滞回比较器有回差特性</b><br>
+        ③ 矩形波/三角波/锯齿波发生器的核心运放都在非线性区，电路由<b>滞回比较器 + 定时或积分环节</b>组成</li>
+      <li class="k"><b>作业（P57 原文）</b>：<br>
+        · 二版：第 8 章自我检测 <b>8–12</b>，习题 <b>8</b><br>
+        · 三版：第 8 章自我检测 <b>9–15</b>，习题 <b>10</b></li>
+      <li><b>P58 是挑战题</b>：给定「R<sub>1</sub> 增大 / R<sub>W1</sub> 上移 / R<sub>W2</sub> 上移」三种情况，判断占空比、频率、幅值怎么变。做这题的方法是<b>回到公式</b>：R<sub>1</sub>↑ → 回差↑ → 幅值↑；τ 变 → 频率变。时间够就试</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 必记点 -->
+<h2>必记点汇总（14 条）</h2>
+<div class="f"><div class="n">1</div><div class="e">线性区：虚短 + 虚断；非线性区：<b>只有虚断</b></div></div>
+<div class="f"><div class="n">2</div><div class="e">非线性区判据：u<sub>P</sub>&gt;u<sub>N</sub> → +U<sub>OM</sub>；u<sub>P</sub>&lt;u<sub>N</sub> → −U<sub>OM</sub></div></div>
+<div class="f"><div class="n">3</div><div class="e">截止频率定义：增益降到 0.707A<sub>0</sub>（−3dB）处的频率</div></div>
+<div class="f"><div class="n">4</div><div class="e">一阶：−20dB/dec　　二阶：−40dB/dec　　（阶数越高过渡带越窄）</div></div>
+<div class="f"><div class="n">5</div><div class="e">一阶有源低通：A<sub>0</sub>=1+R<sub>f</sub>/R<sub>1</sub>，ω<sub>H</sub>=1/RC</div></div>
+<div class="f"><div class="n">6</div><div class="e">二阶：Q=1/(3−A<sub>0</sub>)；A<sub>0</sub>&lt;3 稳定，Q=0.707 最平坦，<b>A<sub>0</sub>≥3 自激</b></div></div>
+<div class="f"><div class="n">7</div><div class="e">高通 = 低通对偶（R↔C 互换），ω<sub>L</sub>=1/RC</div></div>
+<div class="f"><div class="n">8</div><div class="e">带通：低通串高通，<b>ω<sub>1</sub>&gt;ω<sub>2</sub></b>　　带阻：低通并高通求和，<b>ω<sub>1</sub>&lt;ω<sub>2</sub></b></div></div>
+<div class="f"><div class="n">9</div><div class="e">单限比较器：一个阈值，U<sub>TH</sub> 由 u<sub>P</sub>=u<sub>N</sub> 解出</div></div>
+<div class="f"><div class="n">10</div><div class="e">滞回比较器：正反馈，代 u<sub>o</sub>=±U<sub>Z</sub> 分别得 U<sub>TH1</sub>、U<sub>TH2</sub></div></div>
+<div class="f"><div class="n">11</div><div class="e">UREF=0 时：U<sub>TH</sub>=±U<sub>Z</sub>R<sub>1</sub>/R<sub>2</sub>，回差 ΔU=2U<sub>Z</sub>R<sub>1</sub>/R<sub>2</sub></div></div>
+<div class="f"><div class="n">12</div><div class="e">矩形波：<b>T = 2RC·ln(1+2R<sub>1</sub>/R<sub>2</sub>)</b>，占空比 50%</div></div>
+<div class="f"><div class="n">13</div><div class="e">三角波：U<sub>om</sub>=(R<sub>1</sub>/R<sub>2</sub>)U<sub>Z</sub>，T=4R<sub>1</sub>R<sub>4</sub>C/R<sub>2</sub></div></div>
+<div class="f"><div class="n">14</div><div class="e">锯齿波 = 让充放电时间常数不同（电位器+二极管 或 叠直流 U<sub>S</sub>）</div></div>
+
+<!-- 自测 -->
+<h2>看完自测（6 题）</h2>
+<div class="info">
+  <b>1.</b> 拿到一个运放电路，怎么用 3 秒判断它是「线性应用」还是「非线性应用」？<br><br>
+  <b>2.</b> 一个二阶有源低通的 A<sub>0</sub> = 2.5，Q 是多少？若把 R<sub>f</sub> 调大让 A<sub>0</sub> 变成 3.2，会发生什么？<br><br>
+  <b>3.</b> 只用「看电容位置」的方法，判断下列三种电路各是什么滤波：① C 串在输入和运放之间　② C 接在运放同相端到地　③ 两个 C 一个 R 的 T 网 + 两个 R 一个 C 的 T 网并联<br><br>
+  <b>4.</b> 滞回比较器中 R<sub>1</sub>=20kΩ、R<sub>2</sub>=100kΩ、U<sub>REF</sub>=0、U<sub>Z</sub>=6V。求 U<sub>TH1</sub>、U<sub>TH2</sub>、回差 ΔU，并画出电压传输特性（记得标箭头方向）。<br><br>
+  <b>5.</b> 矩形波发生器 R=10kΩ、C=0.01μF、R<sub>1</sub>=10kΩ、R<sub>2</sub>=20kΩ。求周期 T 和频率 f。<br><br>
+  <b>6.</b> 三角波发生器中，如果把 R<sub>1</sub> 调大，三角波的幅值会变大还是变小？频率会变高还是变低？请用公式说明。
+</div>
+
+<footer>
+  <div>课件：<code>5.集成运算放大器的应用（滤波+非正弦波发生器）.pdf</code>（58 页）</div>
+  <div>第 1 次（10/27）：P1–P27，约 70 分钟 ｜ 第 2 次（10/29）：P28–P58，约 60 分钟</div>
+  <div>作业：滤波 第 9 章 自测 1–3（习题 1–5 选做）｜ 非正弦波 二版第 8 章 自测 8–12 / 习题 8；三版第 8 章 自测 9–15 / 习题 10</div>
+  <div>配套：<code>电路课件4带读.html</code>（场效应管）· <code>电路课件3带读.html</code>（三极管）</div>
+</footer>
+
+</div>
+</body>
+</html>
