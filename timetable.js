@@ -636,14 +636,21 @@
   /* ---------------- 识别 prompt ---------------- */
   // 注意：deepseek-flash 这类推理模型会先长篇思考，把 token 预算吃光。
   // 所以指令必须极短，并明确禁止分析过程。
-  var PROMPT = '直接输出课程表 JSON，不要分析、不要复述题目、不要思考过程。\n'
+  // 平衡：既要够短（不触发长篇思考），又要给出表格结构常识（否则模型瞎猜）
+  var PROMPT = '直接输出课程表 JSON。不要分析、不要复述题目、不要思考过程，第一行就写 {。\n'
     + '格式：{"courses":[{"name":"","room":"","day":1,"start":1,"end":2,"weeks":""}]}\n'
-    + 'day 1-7 表示周一到周日；start/end 为节次数字；weeks 看不清留空。\n'
-    + '相邻节次的同一门课合并成一条（start 到 end）。忽略表头和时间轴。\n'
-    + '第一行就写 {，最后一行写 }。';
+    + '读图规则：\n'
+    + '· 每一列是一天：day 1=周一 … 7=周日\n'
+    + '· 每一行是一个节次：start/end 填节次序号（看左侧时间轴最左边的数字）\n'
+    + '· 一个格子里的文字全部读出来：通常第一行是课程名，第二行是教室\n'
+    + '· 同一门课占多个连续格子时，合并成一条（start 到 end）\n'
+    + '· 格子是空的就跳过；表头、时间轴文字、周次标注不要当课程\n'
+    + '· 文字模糊看不清就照最像的字写，不确定的字段留空字符串\n'
+    + '· 最后一行写 }';
 
   /* ---------------- 导入流程 ---------------- */
   var importBusy = false;
+  var lastImage = '';   // 最近一次识别的图片（压缩后 dataURL），供「看原图」用
 
   function startImport() {
     if (importBusy) return;
@@ -749,30 +756,9 @@
     var cfg = getAiCfg();
     var t0 = Date.now();
 
-    compressImage(file, 1600, 0.86).then(function (dataUrl) {
+    compressImage(file, 2400, 0.92).then(function (dataUrl) {
+      lastImage = dataUrl;   // 留着给「看原图」用
       return requestOnce(cfg, dataUrl).then(function (r) {
-        // 关键：如果正文为空、但思考内容很长 → 自动切半重试
-        if (r.empty && r.reasoningLen > 3000) {
-          bodyEl.innerHTML = '<div class="ttempty">'
-            + '<b>模型思考太长，一次读不完</b><br><br>'
-            + '正在把课表切成上下两半分别识别…<br>'
-            + '（这是思考型模型的常见问题，会自动处理）'
-            + '</div>';
-          return splitImage(dataUrl).then(function (halves) {
-            return Promise.all(halves.map(function (h) {
-              return requestOnce(cfg, h).catch(function () { return { courses: [] }; });
-            })).then(function (rs) {
-              var all = [];
-              var anyPartial = false;
-              rs.forEach(function (x) {
-                all = all.concat(x.courses || []);
-                if (x.partial) anyPartial = true;
-              });
-              if (!all.length) throw new Error(r.diag);
-              return { courses: all, partial: anyPartial, ms: Date.now() - t0 };
-            });
-          });
-        }
         if (r.empty) throw new Error(r.diag);
         return r;
       });
@@ -1040,13 +1026,36 @@
       + (partial
           ? '<br><span style="font-size:11px;color:#ffc48a">⚠️ 输出被截断了，'
             + '可能只拿到一部分。建议分两次导入，或用手动添加补剩下的。</span>'
-          : '<br><span style="font-size:11px;color:#7c8699">请核对一下，有错就取消后手动改</span>')
+          : '<br><span style="font-size:11px;color:#7c8699">'
+            + '导入后每条都能单独修改，不用在这里纠结</span>')
       + '</div>'
       + '<div class="prev">' + esc(lines) + '</div>'
       + '<div class="ttbtns">'
       + '<button class="pri" id="ttConfirm">确认导入</button>'
-      + '<button id="ttCancel">取消</button>'
+      + '<button id="ttPeek">看原图对照</button>'
+      + '</div>'
+      + '<div class="ttbtns" style="margin-top:-4px">'
+      + '<button id="ttCancel">取消，重新截一张</button>'
+      + '</div>'
+      + '<div id="ttImgBox" style="display:none;margin-top:10px">'
+      + '<img id="ttImg" style="width:100%;border-radius:10px;border:1px solid #272d3a">'
       + '</div>';
+
+    var peek = document.getElementById('ttPeek');
+    if (peek) peek.addEventListener('click', function () {
+      var box = document.getElementById('ttImgBox');
+      var img = document.getElementById('ttImg');
+      if (!box || !img) return;
+      if (box.style.display === 'none') {
+        if (lastImage && !img.src) img.src = lastImage;
+        box.style.display = 'block';
+        peek.textContent = '收起原图';
+        setTimeout(function () { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+      } else {
+        box.style.display = 'none';
+        peek.textContent = '看原图对照';
+      }
+    });
 
     document.getElementById('ttConfirm').addEventListener('click', function () {
       var old = getCourses();
