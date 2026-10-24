@@ -445,17 +445,13 @@
   }
 
   /* ---------------- 识别 prompt ---------------- */
-  var PROMPT = '这是一张大学课程表截图。请提取所有课程信息。\n'
-    + '严格只输出 JSON，不要任何解释文字、不要 markdown 代码块。\n\n'
-    + '输出格式：\n'
-    + '{"courses":[{"name":"课程名","teacher":"","room":"","day":1,"start":3,"end":4,"weeks":"1-16"}]}\n\n'
-    + '规则：\n'
-    + '1. day：1=周一 2=周二 … 7=周日\n'
-    + '2. start/end：第几节课，填数字\n'
-    + '3. weeks：周次，如 "1-16"、"1-16单"、"3-8,10-14"；看不清就填空字符串\n'
-    + '4. 一门课如果一周多次，拆成多条记录\n'
-    + '5. teacher / room 看不清就填空字符串\n'
-    + '6. 忽略表头、时间轴、注释、空单元格';
+  // 注意：deepseek-flash 这类推理模型会先长篇思考，把 token 预算吃光。
+  // 所以指令必须极短，并明确禁止分析过程。
+  var PROMPT = '直接输出课程表 JSON，不要分析、不要复述题目、不要思考过程。\n'
+    + '格式：{"courses":[{"name":"","room":"","day":1,"start":1,"end":2,"weeks":""}]}\n'
+    + 'day 1-7 表示周一到周日；start/end 为节次数字；weeks 看不清留空。\n'
+    + '相邻节次的同一门课合并成一条（start 到 end）。忽略表头和时间轴。\n'
+    + '第一行就写 {，最后一行写 }。';
 
   /* ---------------- 导入流程 ---------------- */
   var importBusy = false;
@@ -565,74 +561,31 @@
     var t0 = Date.now();
 
     compressImage(file, 1600, 0.86).then(function (dataUrl) {
-      var payload = {
-        model: cfg.model,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'text', text: PROMPT },
-            { type: 'image_url', image_url: { url: dataUrl } }
-          ]
-        }],
-        max_tokens: 4000,
-        temperature: 0.1,
-        stream: false
-      };
-
-      return fetch(cfg.base, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + cfg.key
-        },
-        body: JSON.stringify(payload)
-      });
-    }).then(function (res) {
-      return res.text().then(function (t) {
-        if (!res.ok) {
-          throw new Error('HTTP ' + res.status + '：' + t.slice(0, 200));
+      return requestOnce(cfg, dataUrl).then(function (r) {
+        // 关键：如果正文为空、但思考内容很长 → 自动切半重试
+        if (r.empty && r.reasoningLen > 3000) {
+          bodyEl.innerHTML = '<div class="ttempty">'
+            + '<b>模型思考太长，一次读不完</b><br><br>'
+            + '正在把课表切成上下两半分别识别…<br>'
+            + '（这是思考型模型的常见问题，会自动处理）'
+            + '</div>';
+          return splitImage(dataUrl).then(function (halves) {
+            return Promise.all(halves.map(function (h) {
+              return requestOnce(cfg, h).catch(function () { return { courses: [] }; });
+            })).then(function (rs) {
+              var all = [];
+              var anyPartial = false;
+              rs.forEach(function (x) {
+                all = all.concat(x.courses || []);
+                if (x.partial) anyPartial = true;
+              });
+              if (!all.length) throw new Error(r.diag);
+              return { courses: all, partial: anyPartial, ms: Date.now() - t0 };
+            });
+          });
         }
-        var j;
-        try { j = JSON.parse(t); } catch (e) {
-          throw new Error('返回内容不是 JSON：' + t.slice(0, 300));
-        }
-
-        // 兼容各种返回结构
-        var msg = (j.choices && j.choices[0] && j.choices[0].message) || {};
-        var content = msg.content || '';
-        var reasoning = msg.reasoning_content || msg.reasoning || '';
-        var finish = (j.choices && j.choices[0] && j.choices[0].finish_reason) || '';
-
-        if (!content) {
-          // 没有正式内容，把能拿到的东西全摆出来，方便定位
-          var diag = '模型没有返回正文。\n';
-          diag += 'finish_reason：' + (finish || '（空）') + '\n';
-          if (reasoning) {
-            diag += '只有 reasoning_content（' + reasoning.length + ' 字），'
-                 + '说明模型的思考过程把 token 用完了。\n'
-                 + '这通常是 max_tokens 不够，或该模型不支持图片输入。';
-          }
-          if (j.error) {
-            diag += '\n错误字段：' + JSON.stringify(j.error).slice(0, 200);
-          }
-          diag += '\n\n原始返回（前 400 字）：\n' + t.slice(0, 400);
-          throw new Error(diag);
-        }
-
-        var parsed = extractJson(content);
-        if (!parsed) {
-          throw new Error('模型返回了内容，但里面没找到课程数据。\n'
-            + 'finish_reason：' + (finish || '（空）') + '\n'
-            + '原始内容（前 400 字）：\n' + content.slice(0, 400));
-        }
-        var cs = mergeCourses(parsed.courses || []);
-        return {
-          courses: cs,
-          partial: parsed.partial,
-          finish: finish,
-          raw: content,
-          ms: Date.now() - t0
-        };
+        if (r.empty) throw new Error(r.diag);
+        return r;
       });
     }).then(function (r) {
       showPreview(r.courses, r.ms, r.partial);
@@ -673,6 +626,97 @@
         + '<button id="ttManual">手动添加</button>'
         + '<button id="ttCancel">返回</button></div>';
       bindFastBtns();
+    });
+  }
+
+  // 发一次识别请求，返回 {courses, partial, empty, reasoningLen, diag}
+  function requestOnce(cfg, dataUrl) {
+    var payload = {
+      model: cfg.model,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: PROMPT },
+          { type: 'image_url', image_url: { url: dataUrl } }
+        ]
+      }],
+      max_tokens: 8000,
+      temperature: 0.1,
+      stream: false
+    };
+
+    return fetch(cfg.base, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + cfg.key
+      },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.text().then(function (t) {
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status + '：' + t.slice(0, 200));
+        }
+        var j;
+        try { j = JSON.parse(t); } catch (e) {
+          throw new Error('返回内容不是 JSON：' + t.slice(0, 300));
+        }
+
+        var msg = (j.choices && j.choices[0] && j.choices[0].message) || {};
+        var content = msg.content || '';
+        var reasoning = msg.reasoning_content || msg.reasoning || '';
+        var finish = (j.choices && j.choices[0] && j.choices[0].finish_reason) || '';
+
+        if (!content) {
+          var diag = '模型没有返回正文。\n';
+          diag += 'finish_reason：' + (finish || '（空）') + '\n';
+          if (reasoning) {
+            diag += '思考内容 ' + reasoning.length + ' 字，把输出额度用完了。';
+          }
+          if (j.error) {
+            diag += '\n错误：' + JSON.stringify(j.error).slice(0, 200);
+          }
+          diag += '\n\n原始返回（前 300 字）：\n' + t.slice(0, 300);
+          return { courses: [], empty: true, reasoningLen: reasoning.length, diag: diag };
+        }
+
+        var parsed = extractJson(content);
+        if (!parsed) {
+          return {
+            courses: [], empty: false, reasoningLen: reasoning.length,
+            diag: '模型有输出，但没找到课程数据。\n原始内容：\n' + content.slice(0, 300)
+          };
+        }
+        return {
+          courses: mergeCourses(parsed.courses || []),
+          partial: parsed.partial,
+          empty: false,
+          reasoningLen: reasoning.length,
+          finish: finish
+        };
+      });
+    });
+  }
+
+  // 把图片从中间切成上下两半，降低单次识别量
+  function splitImage(dataUrl) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        var h = Math.floor(img.height / 2);
+        var out = [];
+        for (var k = 0; k < 2; k++) {
+          var cv = document.createElement('canvas');
+          cv.width = img.width;
+          cv.height = h;
+          var ctx = cv.getContext('2d');
+          ctx.drawImage(img, 0, k * h, img.width, h, 0, 0, img.width, h);
+          out.push(cv.toDataURL('image/jpeg', 0.86));
+        }
+        resolve(out);
+      };
+      img.onerror = function () { resolve([dataUrl]); };
+      img.src = dataUrl;
     });
   }
 
