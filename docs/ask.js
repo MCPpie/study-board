@@ -35,7 +35,10 @@
         '选一个豆包模型，创建后得到 <b>ep-</b> 开头的 ID',
         '左侧「API Key 管理」→ 创建一个，复制'
       ],
-      note: '豆包的「模型」要填 <b>ep-</b> 开头的接入点 ID，不是 doubao-pro-32k 这种名字。这是最容易卡住的一步。'
+      note: '豆包的「模型」要填 <b>ep-</b> 开头的接入点 ID，不是 doubao-pro-32k 这种名字。<br>'
+          + '<span style="color:#ff9d9d">注意：豆包出错时不返回跨域头，'
+          + '配置有任何不对，App 里都只会显示「Failed to fetch」，'
+          + '看着像网络问题，其实是 Key 或接入点不对。</span>'
     },
     custom: {
       name: '自定义',
@@ -229,6 +232,12 @@
     toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, 1800);
   }
 
+  // 豆包（火山方舟）的报错响应不带跨域头，浏览器只能拿到 Failed to fetch，
+  // 所以必须单独提示，否则会被误判成「网络不通」。
+  function isVolces(base) {
+    return /volces\.com|volcengine/i.test(base || '');
+  }
+
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
@@ -359,12 +368,30 @@
     }).catch(function (err) {
       var msg = String(err && err.message || err);
       var hint = '';
-      if (/HTTP 401|unauthorized/i.test(msg)) hint = '\n\nAPI Key 不对，点右上角 ⚙ 重新填。';
-      else if (/HTTP 402|insufficient|balance/i.test(msg)) hint = '\n\n账户余额不足，去平台充值。';
-      else if (/HTTP 429|rate/i.test(msg)) hint = '\n\n请求太快了，等一会儿再问。';
-      else if (/Failed to fetch|NetworkError/i.test(msg)) hint = '\n\n网络不通，或者接口地址填错了。';
+      if (/HTTP 401|unauthorized/i.test(msg)) hint = 'API Key 不对，点右上角 ⚙ 重新填。';
+      else if (/HTTP 402|insufficient|balance/i.test(msg)) hint = '账户余额不足，去平台充值。';
+      else if (/HTTP 404|not found|NotFound|model/i.test(msg)) hint = '模型名或接入点 ID 不对，检查一下。';
+      else if (/HTTP 429|rate/i.test(msg)) hint = '请求太快了，等一会儿再问。';
+      else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
+        if (isVolces(cfg.base)) {
+          hint = '豆包这个接口有个坑：出错时不返回跨域头，浏览器只能显示 Failed to fetch。\n'
+               + '所以不一定是网络问题，更可能是配置不对：\n'
+               + '① API Key 复制不完整，或不属于这个账号\n'
+               + '② 模型栏没填 ep- 开头的接入点 ID\n'
+               + '③ 接入点还没创建好，或模型没开通\n'
+               + '先换回 DeepSeek 确认能用，再慢慢调豆包。';
+        } else {
+          hint = '请求没能发出去。\n'
+               + '① 手机没联网，或校园网需要先登录\n'
+               + '② 接口地址填错了\n'
+               + '③ 当前网络屏蔽了这个域名\n'
+               + '点右上角 ⚙ →「测试连接」可以看详细原因。';
+        }
+      }
       aEl.className = 'a err';
-      aEl.textContent = '出错了：' + msg + hint;
+      aEl.textContent = '出错了：' + msg
+        + (hint ? '\n\n' + hint : '')
+        + '\n\n（接口地址：' + cfg.base + '）';
       sendBtn.disabled = false;
     });
   }
@@ -390,6 +417,12 @@
       + '<label>模型 <span id="cfgModelWhat" style="color:#7c8699;font-weight:400">'
       + esc(PROVIDERS[curProv].modelHint) + '</span></label>'
       + '<input id="cfgModel" placeholder="' + esc(PROVIDERS[curProv].model) + '" value="' + esc(cfg.model) + '">'
+      + '<button id="cfgTest" style="display:block;width:100%;height:42px;margin:4px 0 12px;'
+      + 'border-radius:11px;border:1px solid #333b4d;background:#1e2431;color:#aab3c4;'
+      + 'font-size:13px;font-family:inherit">测试连接</button>'
+      + '<div id="cfgTestOut" style="display:none;font-size:11.5px;line-height:1.85;'
+      + 'color:#aab3c4;background:#0f131b;border:1px solid #272d3a;border-radius:10px;'
+      + 'padding:11px 13px;margin-bottom:12px;white-space:pre-wrap;word-break:break-all"></div>'
       + '<div class="row"><button id="cfgCancel">取消</button>'
       + '<button class="pri" id="cfgSave">保存</button></div>'
       + '</div>';
@@ -397,6 +430,10 @@
     ctxEl.style.display = 'none';
 
     renderProvTabs(cfg);
+
+    document.getElementById('cfgTest').addEventListener('click', function () {
+      runTest();
+    });
 
     document.getElementById('cfgCancel').addEventListener('click', closeCfg);
     document.getElementById('cfgSave').addEventListener('click', function () {
@@ -460,6 +497,118 @@
     }
     h += '</div>';
     el.innerHTML = h;
+  }
+
+  function runTest() {
+    var out = document.getElementById('cfgTestOut');
+    var btn = document.getElementById('cfgTest');
+    if (!out || !btn) return;
+
+    var key = (document.getElementById('cfgKey').value || '').trim();
+    var base = (document.getElementById('cfgBase').value || '').trim();
+    var model = (document.getElementById('cfgModel').value || '').trim();
+
+    var lines = [];
+    function show(color) {
+      out.style.display = 'block';
+      out.style.color = color || '#aab3c4';
+      out.textContent = lines.join('\n');
+    }
+
+    lines.push('① 检查表单');
+    if (!key) { lines.push('   ✗ API Key 是空的'); show('#ff9d9d'); return; }
+    if (!base) { lines.push('   ✗ 接口地址是空的'); show('#ff9d9d'); return; }
+    if (!model) { lines.push('   ✗ 模型 / 接入点 ID 是空的'); show('#ff9d9d'); return; }
+    if (!/^https:\/\//.test(base)) {
+      lines.push('   ✗ 接口地址必须以 https:// 开头');
+      show('#ff9d9d'); return;
+    }
+    lines.push('   ✓ 三项都填了');
+    lines.push('   Key 长度 ' + key.length + ' 位，开头 ' + key.slice(0, 4) + '…');
+    lines.push('   地址 ' + base);
+    lines.push('   模型 ' + model);
+
+    btn.textContent = '测试中…';
+    btn.disabled = true;
+    show('#8f99ab');
+
+    // 先测一个最简单的 GET，判断域名通不通
+    var host;
+    try { host = new URL(base).origin; } catch (e) { host = ''; }
+
+    var t0 = Date.now();
+
+    fetch(base, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({
+        model: model,
+        messages: [{ role: 'user', content: '你好' }],
+        max_tokens: 4,
+        stream: false
+      })
+    }).then(function (res) {
+      var ms = Date.now() - t0;
+      lines.push('');
+      lines.push('② 网络连接');
+      lines.push('   ✓ 请求已发出（' + ms + 'ms），HTTP ' + res.status);
+      return res.text().then(function (t) {
+        lines.push('');
+        lines.push('③ 服务器返回');
+        if (res.ok) {
+          lines.push('   ✓ 成功！配置没问题，可以正常提问了。');
+          show('#8fe3b8');
+        } else {
+          var brief = t.replace(/\s+/g, ' ').slice(0, 200);
+          lines.push('   ✗ ' + brief);
+          var why = '';
+          if (res.status === 401 || res.status === 403) {
+            why = '→ Key 不对或没有权限。检查是否复制完整、是否有该模型的权限。';
+          } else if (res.status === 404) {
+            why = '→ 模型名/接入点 ID 不存在。豆包要填 ep- 开头的接入点 ID。';
+          } else if (res.status === 429) {
+            why = '→ 请求太频繁或额度用完了。';
+          } else if (res.status >= 500) {
+            why = '→ 服务端出问题了，稍后再试。';
+          } else if (/model/i.test(brief)) {
+            why = '→ 多半是模型名/接入点填错了。';
+          }
+          if (why) lines.push('   ' + why);
+          show('#ff9d9d');
+        }
+        btn.textContent = '测试连接';
+        btn.disabled = false;
+      });
+    }).catch(function (err) {
+      var ms = Date.now() - t0;
+      var name = (err && err.name) || 'Error';
+      var msg = (err && err.message) || String(err);
+      lines.push('');
+      lines.push('② 网络连接');
+      lines.push('   ✗ 失败（' + ms + 'ms）');
+      lines.push('   类型 ' + name + '：' + msg);
+      lines.push('');
+      if (isVolces(base)) {
+        lines.push('③ 注意：豆包出错时不返回跨域头');
+        lines.push('   所以服务器到底报什么错，前端拿不到，');
+        lines.push('   只能看到 Failed to fetch。');
+        lines.push('');
+        lines.push('   这多半不是网络问题，重点查三项：');
+        lines.push('   ① API Key 是否完整、是否属于当前账号');
+        lines.push('   ② 模型栏是否为 ep- 开头的接入点 ID');
+        lines.push('   ③ 接入点是否已创建、模型是否已开通');
+      } else {
+        lines.push('③ 这说明请求根本没发到服务器，和 Key 无关');
+        lines.push('   请依次检查：');
+        lines.push('   · 手机能不能上网（打开别的网站试试）');
+        lines.push('   · 是否连着校园网但没登录认证');
+        lines.push('   · 地址有没有手误（' + host + '）');
+        lines.push('   · 换个网络试试：关掉 WiFi 用流量');
+      }
+      show('#ff9d9d');
+      btn.textContent = '测试连接';
+      btn.disabled = false;
+    });
   }
 
   function closeCfg() {
