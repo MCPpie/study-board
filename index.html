@@ -249,6 +249,19 @@
   .sbhead span{margin-left:auto;font-size:10.5px;color:var(--tx3);
     font-family:"Cascadia Code",Consolas,monospace}
 
+
+  /* 专注计时增强 */
+  .fldlab{font-size:11px;color:var(--tx3);margin:0 0 7px 2px;font-weight:600;letter-spacing:.04em}
+  .dur{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .dur button{padding:7px 13px;border-radius:9px;border:1px solid var(--line);
+    background:var(--card2);color:var(--tx3);font-size:12px;font-family:inherit;
+    font-variant-numeric:tabular-nums}
+  .dur button.on{border-color:rgba(56,208,216,.45);background:rgba(56,208,216,.12);
+    color:var(--cyan);font-weight:600}
+  .dur button:disabled{opacity:.4}
+  .timerhint{text-align:center;font-size:11px;color:var(--tx3);margin-top:-2px;margin-bottom:4px}
+  .sumrow2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+
   /* 核对页 */
   .sumrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
   .sm{background:var(--card);border:1px solid var(--line);border-radius:11px;
@@ -359,33 +372,20 @@
   <!-- 记录 -->
   <div class="view" id="v-log">
     <section>
-      <h2>刷题计时</h2>
-      <div class="box">
-        <div class="timer" id="probTimer">00:00</div>
-        <div class="stat-row" style="margin-top:10px">
-          <div class="stat"><b id="pCount">0</b><span>题数</span></div>
-          <div class="stat"><b id="pWrong">0</b><span>错题</span></div>
-          <div class="stat"><b id="pRate">—</b><span>正确率</span></div>
-        </div>
-        <div class="btn-row" id="probStartRow">
-          <button class="btn primary" id="probStart">开始做题</button>
-        </div>
-        <div class="btn-row" id="probRunRow" style="display:none">
-          <button class="btn ok" id="pAddOk">✓ 对</button>
-          <button class="btn bad" id="pAddBad">✗ 错</button>
-          <button class="btn" id="probStop">完成</button>
-        </div>
-      </div>
-    </section>
-
-    <section>
       <h2>专注计时</h2>
       <div class="box">
+        <div class="fldlab">科目</div>
         <div class="subj" id="subjRow"></div>
+
+        <div class="fldlab">时长</div>
+        <div class="dur" id="durRow"></div>
+
         <div class="timer" id="focusTimer">25:00</div>
-        <div class="btn-row" style="margin-top:10px">
+        <div class="timerhint" id="focusHint">25 分钟倒计时</div>
+
+        <div class="btn-row" style="margin-top:8px">
           <button class="btn primary" id="focusStart">开始</button>
-          <button class="btn" id="focusReset">重置</button>
+          <button class="btn" id="focusEnd" disabled>结束并记录</button>
         </div>
       </div>
     </section>
@@ -591,13 +591,12 @@
     </section>
 
     <section>
-      <h2>行为数据</h2>
-      <div class="sumrow">
-        <div class="sm"><b id="sDays">0</b><span>有记录天数</span></div>
-        <div class="sm"><b id="sProbs">0</b><span>刷题总数</span></div>
-        <div class="sm"><b id="sFocus">0</b><span>专注分钟</span></div>
+      <h2>专注时长</h2>
+      <div class="sumrow2">
+        <div class="sm"><b id="ckDays">0</b><span>有记录天数</span></div>
+        <div class="sm"><b id="ckFocus">0</b><span>累计分钟</span></div>
       </div>
-      <div class="box"><div class="bars" id="probBars"><div class="empty">还没有记录</div></div></div>
+      <div class="box"><div class="bars" id="ckBars"><div class="empty">还没有记录</div></div></div>
     </section>
   </div>
 
@@ -608,16 +607,9 @@
       <div class="box">
         <div class="stat-row">
           <div class="stat"><b id="sDays">0</b><span>有记录天数</span></div>
-          <div class="stat"><b id="sProbs">0</b><span>刷题总数</span></div>
           <div class="stat"><b id="sFocus">0</b><span>专注分钟</span></div>
+          <div class="stat"><b id="sSess">0</b><span>专注次数</span></div>
         </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>刷题速度</h2>
-      <div class="box">
-        <div class="bars" id="probBars"><div class="empty">还没有记录</div></div>
       </div>
     </section>
 
@@ -847,65 +839,28 @@
     dPrev.disabled=true; dNext.disabled=true;
   });
 
-  /* ================= 刷题计时 ================= */
-  var probStart=document.getElementById('probStart');
-  var probStop=document.getElementById('probStop');
-  var probStartRow=document.getElementById('probStartRow');
-  var probRunRow=document.getElementById('probRunRow');
-  var probTimer=document.getElementById('probTimer');
-  var pCountEl=document.getElementById('pCount');
-  var pWrongEl=document.getElementById('pWrong');
-  var pRateEl=document.getElementById('pRate');
-
-  var prob={run:false,t0:0,count:0,wrong:0,tick:null};
-
-  function probRender(){
-    probTimer.textContent = mmss(prob.run ? Math.floor((Date.now()-prob.t0)/1000) : 0);
-    pCountEl.textContent = prob.count;
-    pWrongEl.textContent = prob.wrong;
-    pRateEl.textContent = prob.count ? Math.round((prob.count-prob.wrong)/prob.count*100)+'%' : '—';
-  }
-
-  probStart.addEventListener('click',function(){
-    prob={run:true,t0:Date.now(),count:0,wrong:0,tick:null};
-    probStartRow.style.display='none';
-    probRunRow.style.display='flex';
-    probTimer.classList.add('run');
-    probRender();
-    prob.tick=setInterval(probRender,1000);
-  });
-
-  document.getElementById('pAddOk').addEventListener('click',function(){
-    prob.count++; probRender(); if(navigator.vibrate) navigator.vibrate(10);
-  });
-  document.getElementById('pAddBad').addEventListener('click',function(){
-    prob.count++; prob.wrong++; probRender(); if(navigator.vibrate) navigator.vibrate([10,40,10]);
-  });
-
-  probStop.addEventListener('click',function(){
-    clearInterval(prob.tick);
-    var sec=Math.floor((Date.now()-prob.t0)/1000);
-    var rec=LSget('sb-prob-'+cur,{list:[]});
-    rec.list.push({count:prob.count,wrong:prob.wrong,sec:sec,at:Date.now()});
-    LSset('sb-prob-'+cur,rec);
-    prob={run:false,t0:0,count:0,wrong:0,tick:null};
-    probTimer.classList.remove('run');
-    probStartRow.style.display='flex';
-    probRunRow.style.display='none';
-    probRender();
-    var avg = prob.count ? Math.round(sec/prob.count) : 0;
-    alert('已保存：'+rec.list[rec.list.length-1].count+' 题，用时 '+mmss(sec)+
-          (avg?'，平均每题 '+avg+' 秒':''));
-  });
-
   /* ================= 专注计时 ================= */
   var SUBJ=['prob','phys','math','eng','code','dm','circ'];
+  var DURS=[
+    {m:15,  t:'15 分钟'},
+    {m:25,  t:'25 分钟'},
+    {m:45,  t:'45 分钟'},
+    {m:60,  t:'60 分钟'},
+    {m:0,   t:'不限时'}
+  ];
   var focusSubj='math';
+  var focusMin=25;          // 0 = 不限时（正计时）
   var focusLeft=25*60;
   var focusTick=null;
   var focusRunning=false;
+  var focusStartTs=0;       // 本轮开始时间戳（用于算实际时长）
+  var focusAccum=0;         // 已累计秒数（暂停后继续时累加）
+
   var focusTimerEl=document.getElementById('focusTimer');
+  var focusHintEl=document.getElementById('focusHint');
+  var focusEndBtn=document.getElementById('focusEnd');
   var subjRow=document.getElementById('subjRow');
+  var durRow=document.getElementById('durRow');
 
   SUBJ.forEach(function(k){
     var b=document.createElement('button');
@@ -913,43 +868,125 @@
     if(k===focusSubj) b.classList.add('on');
     b.addEventListener('click',function(){
       focusSubj=k;
-      subjRow.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x.dataset.k===k); });
+      subjRow.querySelectorAll('button').forEach(function(x){
+        x.classList.toggle('on', x.dataset.k===k);
+      });
     });
     subjRow.appendChild(b);
   });
 
+  DURS.forEach(function(d){
+    var b=document.createElement('button');
+    b.textContent=d.t; b.dataset.m=d.m;
+    if(d.m===focusMin) b.classList.add('on');
+    b.addEventListener('click',function(){
+      if(focusRunning) return;          // 计时中不允许改
+      focusMin=d.m;
+      focusLeft = d.m ? d.m*60 : 0;
+      focusAccum=0;
+      durRow.querySelectorAll('button').forEach(function(x){
+        x.classList.toggle('on', +x.dataset.m===d.m);
+      });
+      focusRender();
+    });
+    durRow.appendChild(b);
+  });
+
+  function elapsed(){
+    var base = focusAccum;
+    if(focusRunning && focusStartTs) base += Math.floor((Date.now()-focusStartTs)/1000);
+    return base;
+  }
+
   function focusRender(){
-    focusTimerEl.textContent=mmss(focusLeft);
-    focusTimerEl.classList.toggle('run',focusRunning);
+    if(focusMin === 0){
+      // 正计时
+      focusTimerEl.textContent = mmss(elapsed());
+      focusTimerEl.classList.toggle('run', focusRunning);
+      focusHintEl.textContent = '正计时 · 不限时';
+    } else {
+      var left = focusLeft;
+      focusTimerEl.textContent = mmss(Math.max(0,left));
+      focusTimerEl.classList.toggle('run', focusRunning);
+      focusHintEl.textContent = focusRunning
+        ? (focusMin + ' 分钟倒计时 · 剩 ' + Math.max(0,Math.ceil(focusLeft/60)) + ' 分钟')
+        : (focusMin + ' 分钟倒计时');
+    }
+    focusEndBtn.disabled = !focusRunning && elapsed() === 0;
+  }
+
+  function lockDur(on){
+    durRow.querySelectorAll('button').forEach(function(b){ b.disabled = on; });
+  }
+
+  function saveSession(sec){
+    var min=Math.max(1, Math.round(sec/60));
+    var rec=LSget('sb-focus-'+todayKey, []);
+    rec.push({k:focusSubj, min:min, at:Date.now()});
+    LSset('sb-focus-'+todayKey, rec);
+    return min;
+  }
+
+  function stopFocus(){
+    clearInterval(focusTick); focusTick=null;
+    focusRunning=false; focusStartTs=0;
+    lockDur(false);
+    document.getElementById('focusStart').textContent='开始';
   }
 
   document.getElementById('focusStart').addEventListener('click',function(){
     if(focusRunning){
-      clearInterval(focusTick); focusRunning=false;
-      this.textContent='继续'; focusRender(); return;
+      // 暂停
+      focusAccum = elapsed();
+      focusRunning=false; focusStartTs=0;
+      clearInterval(focusTick); focusTick=null;
+      this.textContent='继续';
+      lockDur(false);
+      focusRender();
+      return;
     }
-    focusRunning=true; this.textContent='暂停'; focusRender();
+    // 开始 / 继续
+    focusRunning=true;
+    focusStartTs=Date.now();
+    this.textContent='暂停';
+    lockDur(true);
     focusTick=setInterval(function(){
-      focusLeft--;
-      if(focusLeft<=0){
-        clearInterval(focusTick); focusRunning=false;
-        focusLeft=25*60; focusRender();
-        document.getElementById('focusStart').textContent='开始';
-        var rec=LSget('sb-focus-'+todayKey,[]);
-        rec.push({k:focusSubj,min:25,at:Date.now()});
-        LSset('sb-focus-'+todayKey,rec);
-        if(navigator.vibrate) navigator.vibrate([80,60,80,60,80]);
-        alert('专注 25 分钟完成，已记录');
-        return;
+      if(focusMin > 0){
+        var used=elapsed();
+        focusLeft = focusMin*60 - used;
+        if(focusLeft <= 0){
+          // 倒计时结束：自动记录
+          var m=saveSession(focusMin*60);
+          stopFocus();
+          focusAccum=0; focusLeft=focusMin*60;
+          focusRender();
+          if(navigator.vibrate) navigator.vibrate([80,60,80,60,80]);
+          if(window.StudyBoard && window.StudyBoard.toast) window.StudyBoard.toast('专注 '+m+' 分钟，已记录');
+          else alert('专注 '+m+' 分钟，已记录');
+          return;
+        }
       }
       focusRender();
     },1000);
+    focusRender();
   });
 
-  document.getElementById('focusReset').addEventListener('click',function(){
-    clearInterval(focusTick); focusRunning=false; focusLeft=25*60;
-    document.getElementById('focusStart').textContent='开始';
+  document.getElementById('focusEnd').addEventListener('click',function(){
+    var sec = elapsed();
+    if(sec < 60){
+      if(navigator.vibrate) navigator.vibrate([15,50,15]);
+      if(window.StudyBoard && window.StudyBoard.toast) window.StudyBoard.toast('不足 1 分钟，不记录');
+      else alert('不足 1 分钟，不记录');
+      return;
+    }
+    var m = saveSession(sec);
+    stopFocus();
+    focusAccum=0;
+    focusLeft = focusMin ? focusMin*60 : 0;
     focusRender();
+    if(navigator.vibrate) navigator.vibrate(20);
+    if(window.StudyBoard && window.StudyBoard.toast) window.StudyBoard.toast('已记录 '+m+' 分钟');
+    else alert('已记录 '+m+' 分钟');
   });
 
   /* ================= 笔记 ================= */
@@ -971,7 +1008,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v13';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v14';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1134,6 +1171,8 @@
     });
     document.getElementById('ckSubj').innerHTML = html;
 
+    renderCheckFocus();
+
     var bb = document.getElementById('smBehind');
     bb.querySelector('b').textContent = behind;
     bb.className = 'sm ' + (behind === 0 ? 'ok' : behind <= 2 ? 'warn' : 'bad');
@@ -1169,6 +1208,35 @@
     }
   }
 
+  function renderCheckFocus(){
+    var days=lastNDays(30);
+    var cnt=0, total=0, bySubj={};
+    days.forEach(function(k){
+      var fr=LSget('sb-focus-'+k,[]);
+      if(fr && fr.length){ cnt++; }
+      (fr||[]).forEach(function(x){
+        total+=x.min;
+        bySubj[x.k]=(bySubj[x.k]||0)+x.min;
+      });
+    });
+    var dEl=document.getElementById('ckDays');
+    var fEl=document.getElementById('ckFocus');
+    if(dEl) dEl.textContent=cnt;
+    if(fEl) fEl.textContent=total;
+
+    var bEl=document.getElementById('ckBars');
+    if(!bEl) return;
+    var ks=Object.keys(bySubj);
+    if(!ks.length){ bEl.innerHTML='<div class="empty">还没有记录</div>'; return; }
+    var mx=Math.max.apply(null,ks.map(function(k){return bySubj[k];}));
+    bEl.innerHTML=ks.map(function(k){
+      var pct=mx?(bySubj[k]/mx*100):0;
+      return '<div class="brow"><span class="n">'+(TAG[k]||k)+'</span>'+
+        '<span class="t"><i style="width:'+pct+'%;background:'+(COL[k]||'#38d0d8')+'"></i></span>'+
+        '<span class="v">'+bySubj[k]+'m</span></div>';
+    }).join('');
+  }
+
   function esc2(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -1185,43 +1253,25 @@
 
   function renderStats(){
     var days=lastNDays(7);
-    var daySet=0, probTotal=0, focusMin=0;
-    var probByDay=[], focusBySubj={};
+    var daySet=0, focusMin=0, sess=0;
+    var focusBySubj={};
 
     days.forEach(function(k){
-      var pr=LSget('sb-prob-'+k,{list:[]});
       var fr=LSget('sb-focus-'+k,[]);
       var ch=LSget(checkKey(k),{});
-      var has = (pr.list&&pr.list.length) || (fr&&fr.length) || Object.keys(ch).length;
+      var has = (fr&&fr.length) || Object.keys(ch).length;
       if(has) daySet++;
-
-      var c=0,w=0,s=0;
-      (pr.list||[]).forEach(function(x){ c+=x.count; w+=x.wrong; s+=x.sec; });
-      probTotal+=c;
-      if(c) probByDay.push({k:k,c:c,s:s,avg:Math.round(s/c)});
 
       (fr||[]).forEach(function(x){
         focusMin+=x.min;
+        sess++;
         focusBySubj[x.k]=(focusBySubj[x.k]||0)+x.min;
       });
     });
 
     document.getElementById('sDays').textContent=daySet;
-    document.getElementById('sProbs').textContent=probTotal;
     document.getElementById('sFocus').textContent=focusMin;
-
-    // 刷题速度
-    var pb=document.getElementById('probBars');
-    if(!probByDay.length){ pb.innerHTML='<div class="empty">还没有记录</div>'; }
-    else{
-      var maxAvg=Math.max.apply(null,probByDay.map(function(x){return x.avg;}));
-      pb.innerHTML=probByDay.map(function(x){
-        var pct=maxAvg?(x.avg/maxAvg*100):0;
-        return '<div class="brow"><span class="n">'+x.k+'</span>'+
-          '<span class="t"><i style="width:'+pct+'%;background:var(--math)"></i></span>'+
-          '<span class="v">'+x.avg+'s</span></div>';
-      }).join('');
-    }
+    document.getElementById('sSess').textContent=sess;
 
     // 专注分布
     var fb=document.getElementById('focusBars');
@@ -1288,7 +1338,7 @@
     try{ localStorage.setItem('sb-hint-off','1'); }catch(e){}
   });
 
-  probRender(); focusRender();
+  focusRender();
 })();
 </script>
 </body>
