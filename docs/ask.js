@@ -6,24 +6,69 @@
 
   /* ---------------- 配置 ---------------- */
   var CFG_KEY = 'sb-ai-cfg';
+
+  // 各服务商预设。model 提示里的 {} 会在界面上做说明
+  var PROVIDERS = {
+    deepseek: {
+      name: 'DeepSeek',
+      base: 'https://api.deepseek.com/chat/completions',
+      model: 'deepseek-chat',
+      modelHint: '模型名，一般填 deepseek-chat 就行',
+      keyPage: 'https://platform.deepseek.com/api_keys',
+      steps: [
+        '打开 platform.deepseek.com/api_keys',
+        '注册（手机号即可）',
+        '点「创建 API key」',
+        '复制 <b>sk-</b> 开头那串'
+      ],
+      note: '充 10 块钱够问几千次。'
+    },
+    doubao: {
+      name: '豆包',
+      base: 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
+      model: '',
+      modelHint: '这里要填「接入点 ID」，不是模型名',
+      keyPage: 'https://console.volcengine.com/ark',
+      steps: [
+        '打开 console.volcengine.com/ark（火山方舟）',
+        '左侧「在线推理」→「创建推理接入点」',
+        '选一个豆包模型，创建后得到 <b>ep-</b> 开头的 ID',
+        '左侧「API Key 管理」→ 创建一个，复制'
+      ],
+      note: '豆包的「模型」要填 <b>ep-</b> 开头的接入点 ID，不是 doubao-pro-32k 这种名字。这是最容易卡住的一步。'
+    },
+    custom: {
+      name: '自定义',
+      base: '',
+      model: '',
+      modelHint: '按你的服务商文档填',
+      keyPage: '',
+      steps: ['填你所用服务商的接口地址和模型名'],
+      note: '支持任何兼容 OpenAI 格式的接口（如硅基流动、Kimi、通义等）。'
+    }
+  };
+
   var DEFAULT_CFG = {
-    base: 'https://api.deepseek.com/chat/completions',
-    model: 'deepseek-chat',
+    provider: 'deepseek',
+    base: PROVIDERS.deepseek.base,
+    model: PROVIDERS.deepseek.model,
     key: ''
   };
 
   function getCfg() {
+    var d = JSON.parse(JSON.stringify(DEFAULT_CFG));
     try {
       var raw = localStorage.getItem(CFG_KEY);
-      if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CFG));
+      if (!raw) return d;
       var o = JSON.parse(raw);
       return {
-        base: o.base || DEFAULT_CFG.base,
-        model: o.model || DEFAULT_CFG.model,
+        provider: o.provider || d.provider,
+        base: o.base || d.base,
+        model: o.model || '',
         key: o.key || ''
       };
     } catch (e) {
-      return JSON.parse(JSON.stringify(DEFAULT_CFG));
+      return d;
     }
   }
   function setCfg(c) {
@@ -80,6 +125,16 @@
   + '.askcfg .tip{font-size:11.5px;color:#7c8699;line-height:1.85;margin-bottom:16px}'
   + '.askcfg .tip b{color:#aab3c4}'
   + '.askcfg .tip a{color:#38d0d8;text-decoration:none}'
+  + '.asktoast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);'
+  + 'z-index:10020;background:#243044;border:1px solid #38506e;color:#e8ebf2;font-size:12px;'
+  + 'padding:9px 16px;border-radius:100px;opacity:0;transition:opacity .2s,transform .2s;'
+  + 'pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.45)}'
+  + '.asktoast.on{opacity:1;transform:translateX(-50%) translateY(0)}'
+  + '.askcfg .prov{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}'
+  + '.askcfg .prov button{padding:8px 15px;border-radius:9px;border:1px solid #333b4d;'
+  + 'background:#1e2431;color:#7c8699;font-size:12.5px;font-family:inherit}'
+  + '.askcfg .prov button.on{border-color:rgba(56,208,216,.45);background:rgba(56,208,216,.12);'
+  + 'color:#38d0d8;font-weight:700}'
   + '.askcfg .row{display:flex;gap:9px;position:sticky;bottom:0;background:#141821;'
   + 'padding:10px 0 calc(4px + env(safe-area-inset-bottom));margin-top:-4px}'
   + '.askcfg .row button{flex:1;height:42px;border-radius:11px;font-family:inherit;'
@@ -160,6 +215,19 @@
 
   /* ---------------- 对话 ---------------- */
   var history = [];   // {role, content}
+
+  var toastEl = null, toastTimer = null;
+  function say(msg) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'asktoast';
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, 1800);
+  }
 
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -302,41 +370,96 @@
   }
 
   /* ---------------- 设置面板 ---------------- */
+  var curProv = 'deepseek';
+
   function openCfg() {
     var cfg = getCfg();
+    curProv = cfg.provider || 'deepseek';
+    if (!PROVIDERS[curProv]) curProv = 'deepseek';
+
     bodyEl.innerHTML = ''
       + '<div class="askcfg">'
-      + '<div class="tip">'
-      + '<b>这里用的是你自己的 AI 接口。</b><br>'
-      + '推荐 DeepSeek：<a href="https://platform.deepseek.com/api_keys" target="_blank">platform.deepseek.com</a> '
-      + '注册后在「API keys」里创建一个，复制 <b>sk-</b> 开头的字符串粘到下面。<br>'
-      + '充 10 块钱大约能问几千次。<br>'
-      + 'Key 只存在这台手机上，不会上传到任何服务器。'
-      + '</div>'
+      + '<div class="tip"><b>这里用的是你自己的 AI 接口，Key 只存在这台手机上。</b></div>'
+      + '<label>服务商</label>'
+      + '<div class="prov" id="cfgProv"></div>'
+      + '<div id="cfgGuide"></div>'
       + '<label>API Key</label>'
-      + '<input id="cfgKey" type="password" placeholder="sk-..." value="' + esc(cfg.key) + '">'
+      + '<input id="cfgKey" type="password" placeholder="粘贴你的 key" value="' + esc(cfg.key) + '">'
       + '<label>接口地址</label>'
-      + '<input id="cfgBase" placeholder="https://api.deepseek.com/chat/completions" value="' + esc(cfg.base) + '">'
-      + '<label>模型</label>'
-      + '<input id="cfgModel" placeholder="deepseek-chat" value="' + esc(cfg.model) + '">'
+      + '<input id="cfgBase" value="' + esc(cfg.base) + '">'
+      + '<label>模型 <span id="cfgModelWhat" style="color:#7c8699;font-weight:400">'
+      + esc(PROVIDERS[curProv].modelHint) + '</span></label>'
+      + '<input id="cfgModel" placeholder="' + esc(PROVIDERS[curProv].model) + '" value="' + esc(cfg.model) + '">'
       + '<div class="row"><button id="cfgCancel">取消</button>'
       + '<button class="pri" id="cfgSave">保存</button></div>'
       + '</div>';
     inEl.style.display = 'none';
     ctxEl.style.display = 'none';
 
+    renderProvTabs(cfg);
+
     document.getElementById('cfgCancel').addEventListener('click', closeCfg);
     document.getElementById('cfgSave').addEventListener('click', function () {
       var k = document.getElementById('cfgKey').value.trim();
-      var b = document.getElementById('cfgBase').value.trim() || DEFAULT_CFG.base;
-      var m = document.getElementById('cfgModel').value.trim() || DEFAULT_CFG.model;
-      setCfg({ key: k, base: b, model: m });
+      var b = document.getElementById('cfgBase').value.trim();
+      var m = document.getElementById('cfgModel').value.trim();
+      var pv = PROVIDERS[curProv];
+      if (!b) b = pv.base;
+      if (curProv !== 'custom' && !m) m = pv.model;
+
+      if (!k) { say('Key 不能空着'); return; }
+      if (!m) { say('模型 / 接入点 ID 不能空着'); return; }
+      if (!b) { say('接口地址不能空着'); return; }
+
+      setCfg({ provider: curProv, key: k, base: b, model: m });
       closeCfg();
       syncModelLabel();
-      if (k) {
-        say('已保存，可以开始提问了');
-      }
+      say('已保存，可以开始提问了');
     });
+  }
+
+  function renderProvTabs(cfg) {
+    var box = document.getElementById('cfgProv');
+    if (!box) return;
+    box.innerHTML = '';
+    Object.keys(PROVIDERS).forEach(function (k) {
+      var pv = PROVIDERS[k];
+      var b = document.createElement('button');
+      b.textContent = pv.name;
+      if (k === curProv) b.className = 'on';
+      b.addEventListener('click', function () {
+        curProv = k;
+        var baseEl = document.getElementById('cfgBase');
+        var modelEl2 = document.getElementById('cfgModel');
+        var whatEl = document.getElementById('cfgModelWhat');
+        if (baseEl) baseEl.value = pv.base;
+        if (modelEl2) { modelEl2.value = pv.model; modelEl2.placeholder = pv.model; }
+        if (whatEl) whatEl.textContent = pv.modelHint;
+        [].slice.call(box.children).forEach(function (x) {
+          x.className = (x === b) ? 'on' : '';
+        });
+        renderGuide();
+      });
+      box.appendChild(b);
+    });
+    renderGuide();
+  }
+
+  function renderGuide() {
+    var el = document.getElementById('cfgGuide');
+    if (!el) return;
+    var pv = PROVIDERS[curProv];
+    var h = '<div class="tip" style="margin-top:10px">';
+    h += '<b>怎么拿到 Key</b><br>';
+    pv.steps.forEach(function (st, i) {
+      h += (i + 1) + '. ' + st + '<br>';
+    });
+    if (pv.note) h += '<br>' + pv.note;
+    if (pv.keyPage) {
+      h += '<br><a href="' + pv.keyPage + '" target="_blank">打开 ' + pv.keyPage.replace(/^https?:\/\//, '').split('/')[0] + ' ›</a>';
+    }
+    h += '</div>';
+    el.innerHTML = h;
   }
 
   function closeCfg() {
@@ -347,7 +470,12 @@
 
   function syncModelLabel() {
     var c = getCfg();
-    modelEl.textContent = c.key ? c.model : '未配置';
+    if (!c.key) { modelEl.textContent = '未配置'; return; }
+    var pv = PROVIDERS[c.provider] || PROVIDERS.deepseek;
+    var m = c.model || '';
+    // 接入点 ID 太长，截短显示
+    if (m.length > 16) m = m.slice(0, 12) + '…';
+    modelEl.textContent = pv.name + (m ? ' · ' + m : '');
   }
 
   /* ---------------- 空态 ---------------- */
@@ -358,20 +486,12 @@
     if (!cfg.key) {
       bodyEl.innerHTML = '<div class="askempty">'
         + '<b>还差一步：填一个 API Key。</b><br>'
-        + '填一次就行，之后所有文档通用。'
+        + '支持 DeepSeek、豆包，或任何兼容 OpenAI 格式的接口。'
         + '</div>'
         + '<button id="askSetup" style="display:block;width:100%;height:46px;'
         + 'margin:6px 0 16px;border-radius:11px;border:1px solid rgba(56,208,216,.45);'
         + 'background:rgba(56,208,216,.14);color:#38d0d8;font-size:14px;font-weight:700;'
-        + 'font-family:inherit">去填 API Key ›</button>'
-        + '<div class="askempty">'
-        + '<b>Key 从哪来</b><br>'
-        + '1. 打开 <span style="color:#38d0d8">platform.deepseek.com/api_keys</span><br>'
-        + '2. 注册（手机号即可）<br>'
-        + '3. 点「创建 API key」<br>'
-        + '4. 复制 <b>sk-</b> 开头那串，粘进来<br><br>'
-        + '充 10 块钱够问几千次。Key 只存在这台手机上，不上传任何服务器。'
-        + '</div>';
+        + 'font-family:inherit">去填 API Key ›</button>';
       var sb = document.getElementById('askSetup');
       if (sb) sb.addEventListener('click', openCfg);
       return;
