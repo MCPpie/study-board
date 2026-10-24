@@ -216,9 +216,60 @@
   .doc2.pending{opacity:.45}
   .doc2.pending .t b{color:var(--tx3)}
 
+
+  /* 核对页 */
+  .sumrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+  .sm{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:11px 10px;text-align:center}
+  .sm b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+  .sm span{font-size:10.5px;color:var(--tx3);display:block;margin-top:2px}
+  .sm.ok b{color:var(--ok)} .sm.warn b{color:var(--warn)} .sm.bad b{color:var(--bad)}
+
+  .prow{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;margin-bottom:9px}
+  .prow-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .prow-h .nm{font-size:12.5px;font-weight:700;color:var(--tx)}
+  .prow-h .st{font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:auto}
+  .prow-h .num{font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
+  .st.ok{background:rgba(46,204,143,.14);color:var(--ok)}
+  .st.warn{background:rgba(245,166,35,.14);color:var(--warn)}
+  .st.bad{background:rgba(255,122,122,.14);color:var(--bad)}
+  .st.idle{background:rgba(124,134,153,.14);color:var(--tx3)}
+
+  .pbar{height:15px;background:var(--card2);border-radius:5px;position:relative;
+    overflow:hidden;border:1px solid var(--line)}
+  .pbar i{display:block;height:100%;border-radius:4px;transition:width .35s ease}
+  .pbar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.55);
+    border-radius:1px}
+
+  .debt{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .debt-i{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);
+    align-items:flex-start}
+  .debt-i:last-child{border-bottom:none}
+  .debt-i:active{background:var(--card2)}
+  .debt-d{flex:0 0 42px;font-size:11px;font-weight:700;color:var(--warn);
+    font-variant-numeric:tabular-nums;padding-top:1px}
+  .debt-b{flex:1;min-width:0}
+  .debt-b .t{font-size:12.5px;font-weight:600;color:var(--tx);margin-bottom:2px}
+  .debt-b .x{font-size:11.5px;color:var(--tx3);line-height:1.5}
+  .debt-go{flex:0 0 auto;font-size:10.5px;color:var(--cyan);padding-top:2px}
+  .none{padding:20px 14px;text-align:center;font-size:12.5px;color:var(--ok)}
+
+  /* 图书馆入口 */
+  .lib{display:flex;align-items:center;gap:12px;background:var(--card);
+    border:1px solid rgba(56,208,216,.3);border-radius:12px;padding:12px 14px;
+    margin-bottom:12px;text-decoration:none;color:inherit}
+  .lib:active{background:var(--card2)}
+  .lib .ic{flex:0 0 34px;height:34px;border-radius:9px;background:rgba(56,208,216,.13);
+    display:flex;align-items:center;justify-content:center;font-size:16px}
+  .lib .tx{flex:1;min-width:0}
+  .lib .tx b{display:block;font-size:13px;font-weight:600;margin-bottom:1px}
+  .lib .tx span{font-size:10.5px;color:var(--tx3);display:block}
+  .lib .go{font-size:11px;color:var(--cyan)}
+
   /* Tab Bar */
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;
-    display:grid;grid-template-columns:repeat(4,1fr);
+    display:grid;grid-template-columns:repeat(5,1fr);
     background:rgba(20,24,32,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border-top:1px solid var(--line);
     padding-bottom:env(safe-area-inset-bottom)}
@@ -226,7 +277,7 @@
     padding:9px 0 8px;display:flex;flex-direction:column;align-items:center;gap:2px}
   .tb svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;
     stroke-linecap:round;stroke-linejoin:round}
-  .tb span{font-size:10.5px;letter-spacing:.02em}
+  .tb span{font-size:9.5px;letter-spacing:0}
   .tb.on{color:var(--cyan)}
 
   .hint{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));
@@ -258,6 +309,11 @@
 
   <!-- 今日 -->
   <div class="view on" id="v-today">
+    <a class="lib" href="https://libspace.hitwh.edu.cn" target="_blank" rel="noopener">
+      <div class="ic">📚</div>
+      <div class="tx"><b>图书馆座位预约</b><span>libspace.hitwh.edu.cn · 需校园网</span></div>
+      <div class="go">打开 ›</div>
+    </a>
     <div class="dnav">
       <button id="dPrev" aria-label="前一天">‹</button>
       <div class="mid"><b id="dLabel">—</b><span id="dSub"></span></div>
@@ -481,6 +537,37 @@
 
   </div>
 
+  <!-- 核对 -->
+  <div class="view" id="v-check">
+    <section>
+      <h2>总体进度<span class="cnt" id="ckToday"></span></h2>
+      <div class="sumrow">
+        <div class="sm" id="smAll"><b>—</b><span>总完成率</span></div>
+        <div class="sm" id="smDebt"><b>—</b><span>欠账任务</span></div>
+        <div class="sm" id="smBehind"><b>—</b><span>滞后科目</span></div>
+      </div>
+      <div id="ckSubj"></div>
+    </section>
+
+    <section>
+      <h2>欠账清单<span class="cnt" id="ckDebtCnt"></span></h2>
+      <p style="font-size:11.5px;color:var(--tx3);margin:-4px 0 10px;padding-left:2px">
+        日期已过、但没打勾的任务。点一下跳到那天去看。
+      </p>
+      <div id="ckDebt"></div>
+    </section>
+
+    <section>
+      <h2>行为数据</h2>
+      <div class="sumrow">
+        <div class="sm"><b id="sDays">0</b><span>有记录天数</span></div>
+        <div class="sm"><b id="sProbs">0</b><span>刷题总数</span></div>
+        <div class="sm"><b id="sFocus">0</b><span>专注分钟</span></div>
+      </div>
+      <div class="box"><div class="bars" id="probBars"><div class="empty">还没有记录</div></div></div>
+    </section>
+  </div>
+
   <!-- 统计 -->
   <div class="view" id="v-stats">
     <section>
@@ -528,6 +615,10 @@
   <button class="tb" data-tab="docs">
     <svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h9l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 3v6h6"/></svg>
     <span>文档</span>
+  </button>
+  <button class="tb" data-tab="check">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <span>核对</span>
   </button>
   <button class="tb" data-tab="stats">
     <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
@@ -585,6 +676,7 @@
   /* ================= Tab 切换 ================= */
   var TABS=['today','log','docs','stats'];
   function showTab(t){
+    try{ localStorage.setItem('sb-tab', t); }catch(e){}
     TABS.forEach(function(x){
       document.getElementById('v-'+x).classList.toggle('on', x===t);
     });
@@ -592,6 +684,7 @@
       b.classList.toggle('on', b.dataset.tab===t);
     });
     if(t==='stats') renderStats();
+    if(t==='check') renderCheck();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('.tb').forEach(function(b){
@@ -817,6 +910,133 @@
     },600);
   });
 
+
+  /* ================= 核对 ================= */
+  var CKEY = 'sb-check-';
+
+  function calcCheck(){
+    if(!DATA || !DATA.days) return null;
+    var keys = Object.keys(DATA.days).sort();
+    var di = keys.indexOf(todayKey);
+    if(di < 0) di = keys.length - 1;
+
+    var per = {};       // 科目统计
+    var debt = [];      // 欠账
+    var allTotal = 0, allDone = 0;
+
+    keys.forEach(function(dk, idx){
+      var day = DATA.days[dk];
+      var items = day.items || [];
+      var chk = LSget(CKEY + dk, {});
+      items.forEach(function(it, i){
+        var k = it.k;
+        if(!per[k]) per[k] = {total:0, done:0, expect:0, debt:0, first:idx, last:idx};
+        var p = per[k];
+        p.total++;
+        if(idx < p.first) p.first = idx;
+        if(idx > p.last)  p.last  = idx;
+        allTotal++;
+
+        var isDone = !!chk[i];
+        if(isDone){ p.done++; allDone++; }
+        // 只统计「今天之前」的任务作为应完成基准
+        if(idx < di){
+          p.expect++;
+          if(!isDone){
+            p.debt++;
+            debt.push({d:dk, k:k, t:it.title || '', x:it.text || '', i:i});
+          }
+        }
+      });
+    });
+
+    return {per:per, debt:debt, allTotal:allTotal, allDone:allDone, todayIdx:di};
+  }
+
+  function renderCheck(){
+    var r = calcCheck();
+    if(!r) return;
+
+    document.getElementById('ckToday').textContent = '截至 ' + todayKey;
+
+    var rate = r.allTotal ? Math.round(r.allDone / r.allTotal * 100) : 0;
+    var a = document.getElementById('smAll');
+    a.querySelector('b').textContent = rate + '%';
+    a.className = 'sm ' + (rate >= 80 ? 'ok' : rate >= 50 ? 'warn' : 'bad');
+
+    var db = document.getElementById('smDebt');
+    db.querySelector('b').textContent = r.debt.length;
+    db.className = 'sm ' + (r.debt.length === 0 ? 'ok' : r.debt.length <= 5 ? 'warn' : 'bad');
+
+    // 科目进度
+    var ORDER = ['phys','math','eng','circ','code','dm','prob'];
+    var behind = 0, html = '';
+    ORDER.forEach(function(k){
+      var p = r.per[k];
+      if(!p) return;
+      var expRate = p.total ? p.expect / p.total : 0;
+      var actRate = p.total ? p.done / p.total : 0;
+      var gap = actRate - expRate;
+
+      var cls, label;
+      if(p.expect === 0){ cls = 'idle'; label = '未开始'; }
+      else if(gap >= -0.05){ cls = 'ok'; label = '正常'; }
+      else if(gap >= -0.2){ cls = 'warn'; label = '略滞后'; behind++; }
+      else { cls = 'bad'; label = '滞后'; behind++; }
+
+      html += '<div class="prow">'
+        + '<div class="prow-h">'
+        + '<span class="nm">' + (TAG[k] || k) + '</span>'
+        + '<span class="st ' + cls + '">' + label + '</span>'
+        + '<span class="num">' + p.done + '/' + p.total + ' 项 · ' + Math.round(actRate*100) + '%</span>'
+        + '</div>'
+        + '<div class="pbar">'
+        + '<i style="width:' + (actRate*100).toFixed(1) + '%;background:' + (COL[k] || '#38d0d8') + '"></i>'
+        + '<span class="mk" style="left:' + (expRate*100).toFixed(1) + '%"></span>'
+        + '</div>'
+        + '</div>';
+    });
+    document.getElementById('ckSubj').innerHTML = html;
+
+    var bb = document.getElementById('smBehind');
+    bb.querySelector('b').textContent = behind;
+    bb.className = 'sm ' + (behind === 0 ? 'ok' : behind <= 2 ? 'warn' : 'bad');
+
+    // 欠账清单
+    document.getElementById('ckDebtCnt').textContent = r.debt.length ? r.debt.length + ' 项' : '';
+    var dEl = document.getElementById('ckDebt');
+    if(!r.debt.length){
+      dEl.innerHTML = '<div class="debt"><div class="none">✓ 没有欠账，按计划走着</div></div>';
+    } else {
+      r.debt.sort(function(x, y){ return x.d < y.d ? 1 : -1; });  // 最近的在前
+      dEl.innerHTML = '<div class="debt">' + r.debt.map(function(x){
+        var d = parseKey(x.d);
+        var lbl = (d.getMonth()+1) + '/' + d.getDate();
+        var title = x.t ? x.t.replace(/[。，]$/, '') : (x.x || '').slice(0, 22);
+        return '<div class="debt-i" data-go="' + x.d + '">'
+          + '<div class="debt-d">' + lbl + '</div>'
+          + '<div class="debt-b">'
+          + '<div class="t"><span class="tag ' + x.k + '" style="margin-right:5px">' + (TAG[x.k]||x.k) + '</span>' + esc2(title) + '</div>'
+          + '<div class="x">' + esc2((x.x||'').slice(0, 46)) + '</div>'
+          + '</div><div class="debt-go">›</div></div>';
+      }).join('') + '</div>';
+
+      dEl.querySelectorAll('.debt-i').forEach(function(el){
+        el.addEventListener('click', function(){
+          var dk = el.dataset.go;
+          cur = dk;
+          renderDay(); updateNavBtns();
+          showTab('today');
+          window.scrollTo(0, 0);
+        });
+      });
+    }
+  }
+
+  function esc2(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
   /* ================= 统计 ================= */
   function lastNDays(n){
     var arr=[];
@@ -905,6 +1125,10 @@
       DATA=d;
       cur = (d.days && d.days[todayKey]) ? todayKey : Object.keys(d.days).sort()[0];
       renderDay(); updateNavBtns();
+      // 恢复上次停留的标签页（从文档返回时不会跳回「今日」）
+      var lt = null;
+      try{ lt = localStorage.getItem('sb-tab'); }catch(e){}
+      if(lt && lt !== 'today' && TABS.indexOf(lt) >= 0){ showTab(lt); }
     })
     .catch(function(){
       box.innerHTML='<div class="today"><div class="empty">数据加载失败，请联网后刷新</div></div>';
