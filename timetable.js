@@ -436,7 +436,7 @@
     try { chat = JSON.parse(localStorage.getItem('sb-ai-cfg') || '{}'); } catch (e) {}
 
     var base = own.base || 'https://api.deepseek.com/chat/completions';
-    var model = own.model || 'deepseek-v4-flash-vision-exp';
+    var model = own.model || 'deepseek-flash';
     var key = own.key || chat.key || '';
     // 如果复用的是聊天配置，接口地址也跟着聊天走（避免用户换了服务商）
     if (!own.base && chat.base) base = chat.base;
@@ -476,7 +476,7 @@
         + '你现在用的是豆包，它的识图模型需要在'
         + '火山方舟控制台单独开通并创建接入点。<br><br>'
         + '最简单的办法：临时切到 DeepSeek，'
-        + '它自带 <b>deepseek-v4-flash-vision-exp</b>，填个 key 就能识图。'
+        + '它自带 <b>deepseek-flash</b>，填个 key 就能识图。'
         + '</div>';
       return;
     }
@@ -598,7 +598,7 @@
              + '去「问 AI」的 ⚙ 里重新填一次。';
       } else if (/HTTP 404/.test(msg)) {
         hint = '接口地址或模型名不存在。\n'
-             + '识别课表要用支持图片的模型，DeepSeek 的是 deepseek-v4-flash-vision-exp。\n'
+             + '识别课表要用支持图片的模型，DeepSeek 的是 deepseek-flash。\n'
              + '确认你的账号能调用这个模型。';
       } else if (/HTTP 429/.test(msg)) {
         hint = '请求太频繁，等一分钟再试。';
@@ -641,8 +641,11 @@
         ]
       }],
       max_tokens: 8000,
-      temperature: 0.1,
-      stream: false
+      stream: false,
+      // 关键：DeepSeek 的 thinking 默认 enabled + effort=high，
+      // 会先输出上万字思维链，把输出额度吃光导致 content 为空。
+      // 识别课表是纯粹的机械提取，不需要推理，直接关掉。
+      thinking: { type: 'disabled' }
     };
 
     return fetch(cfg.base, {
@@ -671,7 +674,8 @@
           var diag = '模型没有返回正文。\n';
           diag += 'finish_reason：' + (finish || '（空）') + '\n';
           if (reasoning) {
-            diag += '思考内容 ' + reasoning.length + ' 字，把输出额度用完了。';
+            diag += '思考内容 ' + reasoning.length + ' 字，把输出额度用完了。\n'
+                 + '（说明本次请求的 thinking 没关掉）';
           }
           if (j.error) {
             diag += '\n错误：' + JSON.stringify(j.error).slice(0, 200);
