@@ -158,6 +158,16 @@
   + '.citem .tx b{display:block;font-size:12.5px;color:#e8ebf2;font-weight:600;margin-bottom:1px}'
   + '.citem .tx span{font-size:10.5px;color:#7c8699}'
   + '.citem .del{flex:0 0 auto;font-size:11px;color:#ff7a7a;padding:4px 8px}'
+  + '.citem{cursor:pointer}'
+  + '.citem:active{background:rgba(255,255,255,.03)}'
+  + '.citem .pen{flex:0 0 auto;font-size:11px;color:#38d0d8;padding:4px 8px}'
+  + '.editwrap{display:flex;flex-direction:column;gap:9px}'
+  + '.editwrap input{background:#1e2431;border:1px solid #333b4d;border-radius:10px;'
+  + 'padding:10px 12px;color:#e8ebf2;font-size:12.5px;font-family:inherit;width:100%}'
+  + '.editwrap input:focus{outline:none;border-color:rgba(56,208,216,.5)}'
+  + '.editrow{display:flex;gap:8px}'
+  + '.editrow select{flex:1;background:#1e2431;border:1px solid #333b4d;border-radius:10px;'
+  + 'padding:10px;color:#e8ebf2;font-size:12.5px;font-family:inherit}'
   + '.ttempty{text-align:center;padding:26px 16px;color:#7c8699;font-size:12.5px;line-height:1.9}'
   + '.ttempty b{color:#aab3c4}'
 
@@ -345,7 +355,7 @@
     h += '<div style="margin-top:18px;font-size:11.5px;color:#7c8699;'
       + 'margin-bottom:4px">全部课程（' + courses.length + '）</div>';
     h += courses.map(function (c, i) {
-      return '<div class="citem">'
+      return '<div class="citem" data-edit="' + i + '">'
         + '<span style="flex:0 0 auto;font-size:11px;color:#38d0d8">'
         + DAYS[c.day - 1] + '</span>'
         + '<div class="tx"><b>' + esc(c.name) + '</b>'
@@ -354,9 +364,12 @@
         + (c.room ? ' · ' + esc(c.room) : '')
         + (c.weeks ? ' · ' + esc(c.weeks) + '周' : '')
         + '</span></div>'
-        + '<span class="del" data-del="' + i + '">删除</span>'
+        + '<span class="pen">改</span>'
         + '</div>';
     }).join('');
+
+    h += '<div style="margin-top:10px;font-size:11px;color:#7c8699;text-align:center">'
+      + '点任意一行可以修改或删除</div>';
 
     // 设置
     var meta = getMeta();
@@ -378,16 +391,9 @@
     var man = document.getElementById('ttManual');
     if (man) man.addEventListener('click', startManual);
 
-    bodyEl.querySelectorAll('[data-del]').forEach(function (el) {
+    bodyEl.querySelectorAll('[data-edit]').forEach(function (el) {
       el.addEventListener('click', function () {
-        var i = +el.dataset.del;
-        var cs = getCourses();
-        var name = cs[i].name;
-        cs.splice(i, 1);
-        setCourses(cs);
-        renderSheet();
-        renderTodayCard();
-        say('已删除：' + name);
+        editCourse(+el.dataset.edit);
       });
     });
 
@@ -885,6 +891,74 @@
     if (b) b.addEventListener('click', startManual);
     var c = document.getElementById('ttCancel');
     if (c) c.addEventListener('click', renderSheet);
+  }
+
+  /* ---------------- 编辑课程 ---------------- */
+  function editCourse(idx) {
+    var cs = getCourses();
+    var c = cs[idx];
+    if (!c) return;
+
+    var h = '<div style="font-size:12.5px;color:#aab3c4;margin-bottom:12px">'
+      + '修改课程 <span style="color:#38d0d8">#' + (idx + 1) + '</span></div>'
+      + '<div class="editwrap">'
+      + '<input id="eName" placeholder="课程名" value="' + esc(c.name) + '">'
+      + '<input id="eRoom" placeholder="教室" value="' + esc(c.room || '') + '">'
+      + '<div class="editrow">'
+      + '<select id="eDay">'
+      + DAYS.map(function (d, i) {
+          return '<option value="' + (i + 1) + '"'
+            + (+c.day === i + 1 ? ' selected' : '') + '>' + d + '</option>';
+        }).join('')
+      + '</select>'
+      + '<input id="eStart" type="number" min="1" max="13" value="' + c.start + '" title="起始节">'
+      + '<input id="eEnd" type="number" min="1" max="13" value="' + c.end + '" title="结束节">'
+      + '</div>'
+      + '<input id="eWeeks" placeholder="周次，可空（如 1-16 或 1-16单）" value="' + esc(c.weeks || '') + '">'
+      + '</div>'
+      + '<div class="ttbtns" style="margin-top:14px">'
+      + '<button class="pri" id="eSave">保存修改</button>'
+      + '<button id="eCancel">取消</button>'
+      + '</div>'
+      + '<div class="ttbtns" style="margin-top:8px">'
+      + '<button id="eDel" style="color:#ff7a7a;border-color:rgba(255,122,122,.35)">'
+      + '删除这门课</button>'
+      + '</div>';
+
+    bodyEl.innerHTML = h;
+
+    document.getElementById('eSave').addEventListener('click', function () {
+      var name = (document.getElementById('eName').value || '').trim();
+      if (!name) { say('课程名不能空着'); return; }
+      var st = +document.getElementById('eStart').value || 1;
+      var en = +document.getElementById('eEnd').value || st;
+      var list = getCourses();
+      list[idx] = {
+        name: name,
+        teacher: c.teacher || '',
+        room: (document.getElementById('eRoom').value || '').trim(),
+        day: +document.getElementById('eDay').value,
+        start: Math.min(st, en),
+        end: Math.max(st, en),
+        weeks: (document.getElementById('eWeeks').value || '').trim()
+      };
+      setCourses(list);
+      renderSheet();
+      renderTodayCard();
+      say('已保存修改');
+    });
+
+    document.getElementById('eCancel').addEventListener('click', renderSheet);
+
+    document.getElementById('eDel').addEventListener('click', function () {
+      var list = getCourses();
+      var nm = list[idx].name;
+      list.splice(idx, 1);
+      setCourses(list);
+      renderSheet();
+      renderTodayCard();
+      say('已删除：' + nm);
+    });
   }
 
   /* ---------------- 手动添加 ---------------- */

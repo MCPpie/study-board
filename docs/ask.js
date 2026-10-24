@@ -69,7 +69,8 @@
         provider: o.provider || d.provider,
         base: o.base || d.base,
         model: o.model || '',
-        key: o.key || ''
+        key: o.key || '',
+        think: o.think === true      // 深度思考，默认关闭
       };
     } catch (e) {
       return d;
@@ -92,6 +93,7 @@
   + '.askhd b{font-size:13px;color:#e8ebf2;font-weight:700}'
   + '.askhd .m{margin-left:auto;font-size:10.5px;color:#7c8699}'
   + '.askhd .cfg{border:none;background:none;color:#7c8699;font-size:15px;padding:2px 4px;font-family:inherit}'
+  + '.askhd .cfg.on{color:#38d0d8;text-shadow:0 0 8px rgba(56,208,216,.6)}'
   + '.askctx{margin:0;padding:9px 15px;background:rgba(56,208,216,.055);'
   + 'border-bottom:1px solid #272d3a;font-size:10.5px;color:#8f99ab;line-height:1.55;flex:0 0 auto;'
   + 'max-height:76px;overflow:hidden;position:relative}'
@@ -158,6 +160,7 @@
   wrap.className = 'askwrap';
   wrap.innerHTML = ''
     + '<div class="askhd"><b>问 AI</b><span class="m" id="askModel"></span>'
+    + '<button class="cfg" id="askThinkBtn" title="深度思考">🧠</button>'
     + '<button class="cfg" id="askCfgBtn" title="设置">⚙</button></div>'
     + '<div class="askctx" id="askCtx"></div>'
     + '<div class="askbody" id="askBody"></div>'
@@ -294,9 +297,18 @@
       model: cfg.model,
       messages: buildMessages(q),
       stream: true,
-      temperature: 0.4,
-      max_tokens: 900
+      max_tokens: cfg.think ? 4000 : 1200
     };
+
+    if (cfg.think) {
+      // 深度思考：交给模型自己推理，不能传 temperature
+      payload.thinking = { type: 'enabled' };
+      payload.reasoning_effort = 'high';
+    } else {
+      // 默认：直接回答，快且省
+      payload.thinking = { type: 'disabled' };
+      payload.temperature = 0.4;
+    }
 
     fetch(cfg.base, {
       method: 'POST',
@@ -651,6 +663,8 @@
     if (!history.length) {
       var h = '<div class="askempty"><b>可以直接问，我会带上你正在看的内容。</b><br>'
         + '比如：</div>';
+      h += '<div style="font-size:11px;color:#7c8699;margin-top:2px">'
+        + '右上角 💬 可以切换深度思考（默认关，快且省）</div>';
       bodyEl.innerHTML = h + '';
       CHIPS.forEach(function (c) {
         var b = document.createElement('button');
@@ -671,6 +685,7 @@
   function open() {
     renderCtx();
     syncModelLabel();
+    syncThinkBtn();
     renderBody();
     mask.classList.add('on');
     wrap.classList.add('on');
@@ -682,6 +697,23 @@
   }
 
   mask.addEventListener('click', close);
+
+  function syncThinkBtn() {
+    var b = document.getElementById('askThinkBtn');
+    if (!b) return;
+    var on = getCfg().think;
+    b.classList.toggle('on', on);
+    b.textContent = on ? '🧠' : '💬';
+    b.title = on ? '深度思考：已开启（慢、贵，适合难题）' : '深度思考：已关闭（快、便宜）';
+  }
+
+  document.getElementById('askThinkBtn').addEventListener('click', function () {
+    var c = getCfg();
+    c.think = !c.think;
+    setCfg(c);
+    syncThinkBtn();
+    say(c.think ? '已开启深度思考，回答更慢但更准' : '已关闭深度思考，回答更快更省');
+  });
 
   document.getElementById('askCfgBtn').addEventListener('click', function () {
     if (bodyEl.querySelector('.askcfg')) closeCfg();
