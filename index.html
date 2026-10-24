@@ -731,7 +731,7 @@
   })();
 
   /* ================= Tab 切换 ================= */
-  var TABS=['today','log','docs','stats'];
+  var TABS=['today','log','docs','check','stats'];
   function showTab(t){
     try{ localStorage.setItem('sb-tab', t); }catch(e){}
     TABS.forEach(function(x){
@@ -971,7 +971,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v12';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v13';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
