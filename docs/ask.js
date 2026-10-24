@@ -36,9 +36,10 @@
         '左侧「API Key 管理」→ 创建一个，复制'
       ],
       note: '豆包的「模型」要填 <b>ep-</b> 开头的接入点 ID，不是 doubao-pro-32k 这种名字。<br>'
-          + '<span style="color:#ff9d9d">注意：豆包出错时不返回跨域头，'
-          + '配置有任何不对，App 里都只会显示「Failed to fetch」，'
-          + '看着像网络问题，其实是 Key 或接入点不对。</span>'
+          + '<span style="color:#ffc48a">豆包本身能用（配置对了就能正常回答），'
+          + '但它有个缺陷：<b>出错时不返回跨域头</b>，'
+          + '所以配错时 App 里只会显示「Failed to fetch」，看不到具体原因。'
+          + '想排查就去火山方舟控制台用「在线调试」跑一次，那里能看到真实报错。</span>'
     },
     custom: {
       name: '自定义',
@@ -374,12 +375,14 @@
       else if (/HTTP 429|rate/i.test(msg)) hint = '请求太快了，等一会儿再问。';
       else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
         if (isVolces(cfg.base)) {
-          hint = '豆包这个接口有个坑：出错时不返回跨域头，浏览器只能显示 Failed to fetch。\n'
-               + '所以不一定是网络问题，更可能是配置不对：\n'
+          hint = '豆包本身能用，但它出错时不返回跨域头，\n'
+               + '浏览器拿不到错误内容，只能显示 Failed to fetch。\n'
+               + '所以这多半是配置问题，不是网络断：\n'
                + '① API Key 复制不完整，或不属于这个账号\n'
                + '② 模型栏没填 ep- 开头的接入点 ID\n'
                + '③ 接入点还没创建好，或模型没开通\n'
-               + '先换回 DeepSeek 确认能用，再慢慢调豆包。';
+               + '想看到真实报错：去火山方舟控制台的「在线调试」跑一次，\n'
+               + '或者先用 DeepSeek 顶着。';
         } else {
           hint = '请求没能发出去。\n'
                + '① 手机没联网，或校园网需要先登录\n'
@@ -589,11 +592,11 @@
       lines.push('   类型 ' + name + '：' + msg);
       lines.push('');
       if (isVolces(base)) {
-        lines.push('③ 注意：豆包出错时不返回跨域头');
-        lines.push('   所以服务器到底报什么错，前端拿不到，');
-        lines.push('   只能看到 Failed to fetch。');
+        lines.push('③ 豆包本身能用，但它出错时不返回跨域头');
+        lines.push('   服务器报的真实原因，前端拿不到，');
+        lines.push('   所以只能显示 Failed to fetch。');
         lines.push('');
-        lines.push('   这多半不是网络问题，重点查三项：');
+        lines.push('   这多半是配置问题，重点查三项：');
         lines.push('   ① API Key 是否完整、是否属于当前账号');
         lines.push('   ② 模型栏是否为 ep- 开头的接入点 ID');
         lines.push('   ③ 接入点是否已创建、模型是否已开通');
