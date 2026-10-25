@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数竞 · 高数公式与题型</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --math:#5b9bff; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--math);
+    border:1px solid rgba(91,155,255,.35);background:rgba(91,155,255,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2);margin-bottom:18px}
+  .info b{color:var(--tx)}
+
+  section{margin-bottom:26px}
+  h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--math)}
+  h3{font-size:12.5px;font-weight:700;color:var(--cyan);margin:14px 0 7px}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 13px;margin-bottom:8px}
+  .f .n{font-size:10.5px;color:var(--tx3);margin-bottom:2px}
+  .f .e{font-size:13.5px;font-family:"Cambria Math","Times New Roman",serif;line-height:1.95}
+  .f .c{font-size:11px;color:var(--tx3);margin-top:4px}
+
+  ul{list-style:none}
+  ul li{position:relative;padding-left:16px;margin-bottom:6px;font-size:12.5px;color:var(--tx2)}
+  ul li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul li b{color:var(--tx)}
+
+  .warn{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--tx2);margin-top:10px}
+  .warn b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">数学竞赛 · 非数学 A 类</div>
+  <h1>高数公式与题型总结
+    <small>初赛只考高等数学 ｜ 150 分钟 / 100 分 ｜ 目标省二</small>
+  </h1>
+</header>
+
+<div class="info">
+  <b>省二意味着什么</b>：5–6 道大题里<b>稳定做出 3 道</b>。省二和省三的差距不在压轴题，在<b>基础题的手速和准确率</b>。<br>
+  所以这份总结只列<b>真正会考的</b>，偏门技巧一概不收——你的时间不够。
+</div>
+
+<!-- 极限 -->
+<section>
+  <h2>一、极限（必拿分）</h2>
+  <h3>七个等价无穷小（x→0）</h3>
+  <div class="f"><div class="e">sin x ~ x　　tan x ~ x　　arcsin x ~ x　　arctan x ~ x</div></div>
+  <div class="f"><div class="e">1−cos x ~ x²/2　　ln(1+x) ~ x　　e<sup>x</sup>−1 ~ x</div></div>
+  <div class="f"><div class="e">(1+x)<sup>α</sup>−1 ~ αx　　x−sin x ~ x³/6　　tan x−x ~ x³/3</div>
+    <div class="c">后两个是常考的「三阶」等价，遇到 sin 减 x 直接用，能省一半时间</div></div>
+
+  <h3>泰勒展开（三个必背）</h3>
+  <div class="f"><div class="e">e<sup>x</sup> = 1 + x + x²/2! + x³/3! + o(x³)</div></div>
+  <div class="f"><div class="e">sin x = x − x³/3! + x⁵/5! − o(x⁵)</div></div>
+  <div class="f"><div class="e">ln(1+x) = x − x²/2 + x³/3 − o(x³)</div></div>
+
+  <h3>题型套路</h3>
+  <ul>
+    <li><b>0/0 与 ∞/∞</b>：先等价无穷小替换化简，再洛必达。直接洛必达往往越算越乱。</li>
+    <li><b>1<sup>∞</sup> 型</b>：<b>必用</b> lim u<sup>v</sup> = e<sup>lim v(u−1)</sup>，不要硬套洛必达。</li>
+    <li><b>∞−∞ 型</b>：通分或倒代换（令 t = 1/x）。</li>
+    <li><b>0·∞ 型</b>：把其中一个写成倒数移到分母。</li>
+    <li><b>含根号的差</b>：分子有理化。</li>
+  </ul>
+  <div class="warn"><b>易错</b>：等价替换只能用于<b>乘除因子</b>，加减项里替换会出错。这是最高频的失分点。</div>
+</section>
+
+<!-- 导数 -->
+<section>
+  <h2>二、导数与中值定理</h2>
+  <h3>三个中值定理（考法固定）</h3>
+  <div class="f"><div class="n">拉格朗日</div><div class="e">f(b)−f(a) = f'(ξ)(b−a)</div>
+    <div class="c">证不等式、估界时用</div></div>
+  <div class="f"><div class="n">柯西</div><div class="e">[f(b)−f(a)]/[g(b)−g(a)] = f'(ξ)/g'(ξ)</div>
+    <div class="c">两个函数同时出现时优先想到它</div></div>
+  <div class="f"><div class="n">罗尔</div><div class="e">f(a)=f(b) ⟹ ∃ξ, f'(ξ)=0</div>
+    <div class="c">证「存在一点导数为零」的题，先造辅助函数</div></div>
+
+  <h3>辅助函数的造法（证明题关键）</h3>
+  <ul>
+    <li>要证 <b>f'(ξ) + f(ξ) = 0</b> → 造 F(x) = e<sup>x</sup>f(x)</li>
+    <li>要证 <b>f'(ξ) − f(ξ) = 0</b> → 造 F(x) = e<sup>−x</sup>f(x)</li>
+    <li>要证 <b>ξf'(ξ) + f(ξ) = 0</b> → 造 F(x) = x·f(x)</li>
+    <li>要证 <b>f'(ξ) = k</b> → 直接拉格朗日，或造 F(x) = f(x) − kx</li>
+  </ul>
+
+  <h3>导数应用</h3>
+  <ul>
+    <li><b>单调性 / 极值</b>：f' 变号处是极值点</li>
+    <li><b>凹凸性</b>：f'' > 0 凹（下凸），f'' < 0 凸</li>
+    <li><b>拐点</b>：f'' 变号处，<b>不是 f''=0 处</b></li>
+    <li><b>渐近线</b>：水平 lim f(x)、垂直 f→∞ 处、斜的算 lim f(x)/x = k</li>
+  </ul>
+</section>
+
+<!-- 积分 -->
+<section>
+  <h2>三、积分（分值最大）</h2>
+  <h3>不定积分三板斧</h3>
+  <div class="f"><div class="n">① 凑微分</div><div class="e">∫f(ax+b)dx = (1/a)∫f(u)du</div>
+    <div class="c">见到 f(kx+b) 先想这个，能解决一半的题</div></div>
+  <div class="f"><div class="n">② 分部积分</div><div class="e">∫u dv = uv − ∫v du</div>
+    <div class="c">选 u 的顺序：<b>反、对、幂、指、三</b>（谁在前谁当 u）</div></div>
+  <div class="f"><div class="n">③ 换元</div><div class="e">含 √(a²−x²) → x = a sin t；含 √(a²+x²) → x = a tan t</div></div>
+
+  <h3>定积分技巧</h3>
+  <div class="f"><div class="n">对称区间</div><div class="e">∫<sub>−a</sub><sup>a</sup> f(x)dx = 2∫<sub>0</sub><sup>a</sup> f(x)dx（f 为偶）　；　= 0（f 为奇）</div>
+    <div class="c">看到对称区间先判断奇偶，能省大量计算</div></div>
+  <div class="f"><div class="n">华里士公式（点火公式）</div>
+    <div class="e">∫<sub>0</sub><sup>π/2</sup> sin<sup>n</sup>x dx = (n−1)!!/n!! × (π/2 若 n 偶)</div>
+    <div class="c">高频，背下来直接写答案</div></div>
+  <div class="f"><div class="n">变上限积分求导</div><div class="e">d/dx ∫<sub>a</sub><sup>φ(x)</sup> f(t)dt = f(φ(x))·φ'(x)</div></div>
+
+  <div class="warn"><b>易错</b>：反常积分要先判断<b>收敛性</b>再算。∫<sub>1</sub><sup>∞</sup> 1/x<sup>p</sup> dx 只有 p>1 收敛。</div>
+</section>
+
+<!-- 多元 -->
+<section>
+  <h2>四、多元微分与重积分</h2>
+  <h3>偏导与全微分</h3>
+  <div class="f"><div class="e">dz = (∂z/∂x)dx + (∂z/∂y)dy</div></div>
+  <div class="f"><div class="n">复合函数链式法则</div><div class="e">z=f(u,v), u=u(x,y), v=v(x,y)</div>
+    <div class="c">∂z/∂x = f<sub>u</sub>·u<sub>x</sub> + f<sub>v</sub>·v<sub>x</sub>，别漏项</div></div>
+
+  <h3>二重积分</h3>
+  <ul>
+    <li><b>直角坐标</b>：先画区域图，再定积分次序。次序选错会算不出来。</li>
+    <li><b>交换次序</b>：画出区域，从另一个方向重新切。这是常考题型。</li>
+    <li><b>极坐标</b>：区域是圆或圆环时用。dxdy = r dr dθ，<b>别漏 r</b>。</li>
+  </ul>
+
+  <h3>极值</h3>
+  <div class="f"><div class="n">无条件极值</div><div class="e">令 f<sub>x</sub>=0, f<sub>y</sub>=0 求驻点，再用 AC−B² 判别</div>
+    <div class="c">A=f<sub>xx</sub>, B=f<sub>xy</sub>, C=f<sub>yy</sub>；AC−B²>0 且 A>0 极小，A<0 极大；&lt;0 非极值</div></div>
+  <div class="f"><div class="n">条件极值</div><div class="e">拉格朗日：L = f + λφ</div>
+    <div class="c">三个方程解出 x, y, λ</div></div>
+</section>
+
+<!-- 线面积分 -->
+<section>
+  <h2>五、曲线与曲面积分（A 类必看）</h2>
+  <div class="f"><div class="n">格林公式</div>
+    <div class="e">∮<sub>L</sub> Pdx+Qdy = ∬<sub>D</sub> (∂Q/∂x − ∂P/∂y)dxdy</div>
+    <div class="c">L 取<b>正向</b>（逆时针）。不是闭曲线要先补线</div></div>
+  <div class="f"><div class="n">高斯公式</div>
+    <div class="e">∯<sub>Σ</sub> P dydz+Q dzdx+R dxdy = ∭<sub>Ω</sub> (∂P/∂x+∂Q/∂y+∂R/∂z)dV</div>
+    <div class="c">Σ 取<b>外侧</b>。曲面不闭要先补面</div></div>
+  <div class="warn">
+    <b>两类曲线积分的区别</b>（最容易混）<br>
+    · <b>第一类</b>（对弧长）：∫<sub>L</sub> f ds，与方向无关<br>
+    · <b>第二类</b>（对坐标）：∫<sub>L</sub> Pdx+Qdy，<b>与方向有关，反向变号</b>
+  </div>
+</section>
+
+<!-- 级数 -->
+<section>
+  <h2>六、级数</h2>
+  <h3>判敛（按顺序试）</h3>
+  <ul>
+    <li><b>先看通项是否趋于 0</b>——不趋于 0 直接发散</li>
+    <li><b>p 级数</b>：Σ1/n<sup>p</sup>，p>1 收敛</li>
+    <li><b>比值法</b>：lim|a<sub>n+1</sub>/a<sub>n</sub>| = ρ，ρ&lt;1 收敛</li>
+    <li><b>交错级数</b>：莱布尼茨（递减 + 趋于 0）</li>
+  </ul>
+  <div class="f"><div class="n">幂级数收敛半径</div><div class="e">R = 1/lim|a<sub>n+1</sub>/a<sub>n</sub>|</div>
+    <div class="c">端点要<b>单独判断</b>——这是必考细节</div></div>
+  <div class="f"><div class="n">三个必记展开</div>
+    <div class="e">1/(1−x) = Σx<sup>n</sup>　　e<sup>x</sup> = Σx<sup>n</sup>/n!　　ln(1+x) = Σ(−1)<sup>n−1</sup>x<sup>n</sup>/n</div>
+    <div class="c">求和函数题就是靠这三个往回收</div></div>
+</section>
+
+<!-- 时间分配 -->
+<section>
+  <h2>考场时间分配</h2>
+  <div class="info">
+    <b>150 分钟 / 100 分，建议这样切：</b><br>
+    · <b>0–40 分钟</b>：填空 + 选择，<b>会做的立刻写，卡住超过 5 分钟就跳</b><br>
+    · <b>40–110 分钟</b>：常规大题，按「会做的先做」原则，<b>不按题号顺序</b><br>
+    · <b>110–140 分钟</b>：压轴题能写几步写几步，<b>公式摆上去也有分</b><br>
+    · <b>140–150 分钟</b>：检查计算，重点看符号和常数
+  </div>
+  <div class="warn">
+    <b>省二的关键不是做出压轴题，是基础题一分不丢。</b>把「极限 + 积分 + 多元」这三块练到不假思索，就已经够省二了。
+  </div>
+</section>
+
+<footer>
+  <div>范围：非数学 A 类初赛（理工类，只考高等数学）｜ 150 分钟 / 100 分</div>
+  <div>配套：<code>数竞30天冲刺计划_非数学A类.html</code> · <code>数竞真题索引.html</code></div>
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>

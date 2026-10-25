@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第十八届全国大学生数学竞赛 · 30天冲刺计划（非数学A类）</title>
+<style>
+  :root{
+    --bg:#0e1015;
+    --bg2:#14171e;
+    --card:#181c24;
+    --card2:#1e2330;
+    --line:#272d3a;
+    --line2:#333b4d;
+    --tx:#e8ebf2;
+    --tx2:#aab3c4;
+    --tx3:#7c8699;
+    --blue:#5b9bff;
+    --orange:#f5a623;
+    --green:#2ecc8f;
+    --purple:#a97bff;
+    --red:#ff5f5f;
+    --cyan:#38d0d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--tx);
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* ---------- header ---------- */
+  header{
+    padding:52px 0 34px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:34px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::before{
+    content:"";position:absolute;inset:-120px -40% auto -40%;height:340px;
+    background:radial-gradient(60% 100% at 50% 0%,rgba(91,155,255,.16),transparent 70%);
+    pointer-events:none;
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--blue);
+    border:1px solid rgba(91,155,255,.35);background:rgba(91,155,255,.08);
+    padding:4px 12px;border-radius:100px;margin-bottom:18px;
+  }
+  h1{font-size:33px;line-height:1.35;font-weight:700;letter-spacing:-.01em}
+  h1 small{display:block;font-size:15px;font-weight:400;color:var(--tx3);margin-top:10px;letter-spacing:0}
+  .meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px}
+  .meta div{font-size:13px;color:var(--tx3)}
+  .meta div b{display:block;font-size:19px;color:var(--tx);font-weight:600;margin-top:2px;letter-spacing:.01em}
+
+  /* ---------- sections ---------- */
+  section{margin-bottom:44px}
+  h2{
+    font-size:19px;font-weight:700;margin-bottom:6px;
+    display:flex;align-items:center;gap:10px;
+  }
+  h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--blue)}
+  h2.g::before{background:var(--green)}
+  h2.o::before{background:var(--orange)}
+  h2.p::before{background:var(--purple)}
+  h2.c::before{background:var(--cyan)}
+  .sub{font-size:13.5px;color:var(--tx3);margin-bottom:20px;padding-left:14px}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  /* ---------- score strategy ---------- */
+  .score{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .bar{display:flex;height:44px;border-radius:9px;overflow:hidden;margin:6px 0 18px;border:1px solid var(--line2)}
+  .bar span{
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:600;color:#0b0d11;
+  }
+  .b1{width:30%;background:linear-gradient(135deg,#5b9bff,#7fb4ff)}
+  .b2{width:40%;background:linear-gradient(135deg,#2ecc8f,#5fe0ae)}
+  .b3{width:20%;background:linear-gradient(135deg,#f5a623,#ffc45e)}
+  .b4{width:10%;background:linear-gradient(135deg,#a97bff,#c3a3ff)}
+  .legend{display:flex;flex-wrap:wrap;gap:20px;font-size:13px;color:var(--tx2)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:7px;vertical-align:middle;font-style:normal}
+
+  ul.plain{list-style:none}
+  ul.plain li{padding-left:20px;position:relative;font-size:14px;color:var(--tx2);margin-bottom:9px}
+  ul.plain li::before{content:"";position:absolute;left:4px;top:10px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul.plain li b{color:var(--tx)}
+
+  /* ---------- resource ---------- */
+  .res{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:820px){.res{grid-template-columns:1fr}}
+  .res .card{padding:18px 20px}
+  .res h4{font-size:15px;margin-bottom:6px;font-weight:600}
+  .res p{font-size:13px;color:var(--tx3);line-height:1.65}
+  .tag{
+    display:inline-block;font-size:11px;padding:2px 9px;border-radius:6px;
+    margin-bottom:9px;font-weight:600;letter-spacing:.03em;
+  }
+  .t-core{background:rgba(91,155,255,.14);color:#8dbcff;border:1px solid rgba(91,155,255,.3)}
+  .t-bonus{background:rgba(46,204,143,.12);color:#5fe0ae;border:1px solid rgba(46,204,143,.28)}
+  .t-warn{background:rgba(245,166,35,.12);color:#ffc45e;border:1px solid rgba(245,166,35,.28)}
+  code{
+    font-family:"Cascadia Code",Consolas,monospace;font-size:12.5px;
+    background:var(--card2);padding:2px 7px;border-radius:5px;color:var(--cyan);
+    border:1px solid var(--line);
+  }
+
+  /* ---------- phase overview ---------- */
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:900px){.phases{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.phases{grid-template-columns:1fr}}
+  .ph{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px;border-top:3px solid var(--line2)}
+  .ph.p0{border-top-color:var(--orange)}
+  .ph.p1{border-top-color:var(--blue)}
+  .ph.p2{border-top-color:var(--green)}
+  .ph.p3{border-top-color:var(--purple)}
+  .ph h4{font-size:14.5px;margin-bottom:4px}
+  .ph .rng{font-size:12px;color:var(--tx3);margin-bottom:12px;letter-spacing:.02em}
+  .ph p{font-size:12.5px;color:var(--tx2);line-height:1.7}
+
+  /* ---------- plan table ---------- */
+  .toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .prog{flex:1;min-width:200px;height:9px;background:var(--card2);border-radius:100px;overflow:hidden;border:1px solid var(--line)}
+  .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .3s}
+  .ptxt{font-size:13px;color:var(--tx3);white-space:nowrap}
+  button{
+    font:inherit;font-size:12.5px;color:var(--tx2);background:var(--card2);
+    border:1px solid var(--line2);border-radius:8px;padding:6px 14px;cursor:pointer;
+    transition:.18s;
+  }
+  button:hover{color:var(--tx);border-color:var(--blue);background:rgba(91,155,255,.1)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{
+    text-align:left;font-size:12px;font-weight:600;color:var(--tx3);
+    letter-spacing:.06em;padding:0 14px 11px;border-bottom:1px solid var(--line2);
+    white-space:nowrap;
+  }
+  tbody tr{border-bottom:1px solid var(--line)}
+  tbody tr:hover{background:rgba(255,255,255,.016)}
+  tbody td{padding:13px 14px;vertical-align:top;color:var(--tx2);line-height:1.62}
+  tbody td.d{color:var(--tx);font-weight:600;white-space:nowrap;font-size:13.5px}
+  tbody td.d em{display:block;font-style:normal;font-size:11.5px;color:var(--tx3);font-weight:400;margin-top:1px}
+  tbody td.t{white-space:nowrap;color:var(--tx3);font-size:12.5px;text-align:right}
+  tr.p0 td:first-child{box-shadow:inset 3px 0 0 var(--orange)}
+  tr.p1 td:first-child{box-shadow:inset 3px 0 0 var(--blue)}
+  tr.p2 td:first-child{box-shadow:inset 3px 0 0 var(--green)}
+  tr.p3 td:first-child{box-shadow:inset 3px 0 0 var(--purple)}
+  tr.rest td{background:rgba(169,123,255,.055)}
+  tr.exam td{background:rgba(255,95,95,.07)}
+  tr.exam td.d{color:#ff8f8f}
+  tr.done td:not(.t){opacity:.42}
+  tr.done td.d{text-decoration:line-through}
+  .cb{appearance:none;width:17px;height:17px;border:1.5px solid var(--line2);border-radius:5px;background:transparent;cursor:pointer;position:relative;flex:none;transition:.15s}
+  .cb:hover{border-color:var(--blue)}
+  .cb:checked{background:var(--green);border-color:var(--green)}
+  .cb:checked::after{content:"";position:absolute;left:4.6px;top:1.4px;width:4.5px;height:8.5px;border:solid #0b0d11;border-width:0 2px 2px 0;transform:rotate(43deg)}
+  td.ck{width:34px;padding-right:0}
+  .pill{display:inline-block;font-size:11px;padding:1px 8px;border-radius:5px;background:var(--card2);border:1px solid var(--line2);color:var(--tx3);margin-right:6px}
+  .pill.a{color:#ffc45e;border-color:rgba(245,166,35,.35);background:rgba(245,166,35,.09)}
+
+  /* ---------- p-index ---------- */
+  .pillgrid{display:flex;flex-wrap:wrap;gap:8px}
+  .pg{
+    display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--tx2);
+    background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 13px;
+  }
+  .pg b{color:var(--blue);font-weight:600;font-size:12px;min-width:22px}
+  .pg s{color:var(--tx3);font-size:11.5px;text-decoration:none}
+  .pg.skip{opacity:.5}
+  .pg.skip b{color:var(--tx3)}
+  .pg.hot{border-color:rgba(245,166,35,.3)}
+
+  /* ---------- tips ---------- */
+  .tips{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.tips{grid-template-columns:1fr}}
+  .tips .card h4{font-size:14.5px;margin-bottom:12px;color:var(--tx)}
+  .tips .card h4 span{color:var(--tx3);font-weight:400;font-size:12px;margin-left:6px}
+
+  .warn{
+    border-left:3px solid var(--orange);background:rgba(245,166,35,.07);
+    padding:15px 20px;border-radius:0 10px 10px 0;font-size:13.5px;color:var(--tx2);line-height:1.75;
+  }
+  .warn b{color:#ffc45e}
+
+  footer{
+    margin-top:60px;padding-top:26px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--tx3);line-height:1.9;
+  }
+  @media print{
+    body{background:#fff;color:#111;padding:0}
+    header::before{display:none}
+    .toolbar,button{display:none}
+    .card,.ph,.score,.pg{border-color:#ddd;background:#fff}
+    tbody td{color:#333}
+    h1,h2{color:#000}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">第十八届全国大学生数学竞赛 · 初赛</div>
+  <h1>30 天冲刺计划：非数学 A 类 → 省奖
+    <small>2026 年 10 月 16 日 — 11 月 14 日 ｜ 每日约 3 小时 ｜ 配套：33h 系统课（BV1qGJHzpEBM）+ 武忠祥《660 题》</small>
+  </h1>
+  <div class="meta">
+    <div>考试时间<b id="cd">—</b></div>
+    <div>初赛日期<b>11 月 14 日（周六）</b></div>
+    <div>考试时段<b>09:00 – 11:30</b></div>
+    <div>初赛内容<b>高等数学（A 类全范围）</b></div>
+    <div>获奖规则<b>不超过赛区参赛人数 30%</b></div>
+  </div>
+</header>
+
+<!-- ============ 得分策略 ============ -->
+<section>
+  <h2 class="o">先定策略：这 30 天到底在抢哪几分</h2>
+  <p class="sub">省奖不是"考高分"，是"把能拿的分全部拿住"。先看清分从哪来，再决定时间往哪投。</p>
+
+  <div class="score">
+    <div class="bar">
+      <span class="b1">填空 30 分</span>
+      <span class="b2">常规大题 40 分</span>
+      <span class="b3">中档大题 20 分</span>
+      <span class="b4">压轴 10 分</span>
+    </div>
+    <div class="legend">
+      <span><i style="background:#5b9bff"></i><b>填空 5 题 × 6 分</b>：纯计算，660 题练的就是这个，<b>必须全拿</b></span>
+      <span><i style="background:#2ecc8f"></i><b>解答题常规档</b>：极限、积分、微分方程、重积分，<b>稳拿</b></span>
+      <span><i style="background:#f5a623"></i><b>解答题中档</b>：级数、曲线曲面积分、不等式，<b>争取</b></span>
+      <span><i style="background:#a97bff"></i><b>压轴证明</b>：不会也要写步骤，<b>骗分</b></span>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card">
+      <h4 style="font-size:14.5px;margin-bottom:12px">底线目标（省三等奖 → 稳）</h4>
+      <ul class="plain">
+        <li>填空 30 分<b>全拿</b>，这是唯一"努力就一定能拿到"的 30 分</li>
+        <li>解答题拿下 2 道<b>常规计算型</b>（约 24–28 分）</li>
+        <li>其余 4 道题写出<b>第一步和关键公式</b>，蹭步骤分</li>
+        <li>合计约 <b>55–60 分</b>：多数赛区的省奖线在 40–60 分区间</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="font-size:14.5px;margin-bottom:12px">冲省二等奖要补的</h4>
+      <ul class="plain">
+        <li>把 <b>无穷级数</b>和<b>多元积分</b>吃透——这两块是竞赛相对考研"加码"最多的地方</li>
+        <li>中值定理证明题会<b>构造辅助函数</b>（课程 P9 与真题精讲会反复讲）</li>
+        <li>真题刷到 <b>近 10 年</b>，见过至少 90% 的题型套路</li>
+        <li>合计 <b>70+ 分</b>：省二等奖基本稳，省一有希望</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn" style="margin-top:16px">
+    <b>关于 660 题的定位，先说清楚：</b>它是考研基础选填题，难度低于竞赛。它的价值不在"押题"，而在<b>把填空 30 分和基础计算焊死</b>——公式不记错、换元不丢项、对称性会用。所以：<b>课程真题精讲 &gt; 真题套卷 &gt; 660 题</b>，三者冲突时按这个优先级砍。660 题做不完不慌，但<b>做错的题必须吃透</b>。
+  </div>
+</section>
+
+<!-- ============ 资源 ============ -->
+<section>
+  <h2 class="c">手上要有的东西</h2>
+  <p class="sub">前两项是主力，后两项是你收藏夹里现成的补充，别再去到处找资料了。</p>
+  <div class="res">
+    <div class="card">
+      <span class="tag t-core">主力 · 网课</span>
+      <h4>33h 系统课｜从"小白"到巨佬（非数学类 AB 专用）</h4>
+      <p>B 站 <code>BV1qGJHzpEBM</code>，UP：周老师带你学数竞。共 <b>43 个分 P、34.8 小时</b>。结构是"考点基础提升 + 竞赛真题精讲"配对，A 类需全部覆盖。建议 <b>1.25–1.5 倍速</b>。</p>
+    </div>
+    <div class="card">
+      <span class="tag t-core">主力 · 刷题</span>
+      <h4>武忠祥《基础过关 660 题》</h4>
+      <p>只做<b>高等数学部分</b>（数一版约 <b>340 题</b>）。<b>线性代数 + 概率论直接跳过</b>——非数学 A 类初赛不考，别浪费时间。</p>
+    </div>
+    <div class="card">
+      <span class="tag t-bonus">补充 · 你收藏夹里已有</span>
+      <h4>历年真题电子版（含答案详解）</h4>
+      <p><code>BV1fKNb6bENY</code> — 数学类 + 非数学类，初赛 + 决赛，AB 类题目都有，高清 PDF。你的真题周就靠它。</p>
+    </div>
+    <div class="card">
+      <span class="tag t-bonus">补充 · 你收藏夹里已有</span>
+      <h4>独孤九剑九式系列合集</h4>
+      <p><code>BV1PP4y1s79g</code> — 按题型切片的技巧专题（极限、中值定理、定积分、积分不等式、凹凸函数等）。哪块错得多，就去这里挑对应的一式补。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 阶段总览 ============ -->
+<section>
+  <h2>整体节奏：四个阶段</h2>
+  <p class="sub">29 天备考 + 考试当天。核心思路是"先补网、再实战、最后回炉"。</p>
+  <div class="phases">
+    <div class="ph p0">
+      <h4>阶段 0 · 摸底定位</h4>
+      <div class="rng">10/16 – 10/17 ｜ 2 天</div>
+      <p>限时做一套真题，把失分点归到板块上，得到属于你自己的"薄弱清单"。这一步决定后面 17 天的配速，不能省。</p>
+    </div>
+    <div class="ph p1">
+      <h4>阶段 1 · 板块强化</h4>
+      <div class="rng">10/18 – 11/04 ｜ 18 天</div>
+      <p>主线任务。网课按板块推进（约 29 小时内容），每个板块结束后立刻用 660 题同章节巩固。含 1 个复盘日 + 1 个缓冲日。</p>
+    </div>
+    <div class="ph p2">
+      <h4>阶段 2 · 真题实战周</h4>
+      <div class="rng">11/05 – 11/11 ｜ 7 天</div>
+      <p>停止推新课，进入"限时 150 分钟做套卷 + 逐题归因"的循环，共 5 套。这是提分最快的 7 天。</p>
+    </div>
+    <div class="ph p3">
+      <h4>阶段 3 · 收官</h4>
+      <div class="rng">11/12 – 11/14 ｜ 3 天</div>
+      <p>错题全回炉、做一页纸速查表、轻量模拟保持手感，不做新题。11/14 上午 9:00 上场。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 逐日计划 ============ -->
+<section>
+  <h2 class="g">逐日计划表</h2>
+  <p class="sub">勾选可以自动保存，下次打开还在。进度落后了不要熬夜补——用 11/04 的缓冲日和周末吸收。</p>
+
+  <div class="toolbar">
+    <div class="prog"><i id="pi"></i></div>
+    <div class="ptxt" id="pt">已完成 0 / 30 天</div>
+    <button id="btnPrint">打印</button>
+    <button id="btnReset">重置进度</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:34px"></th>
+        <th style="width:108px">日期</th>
+        <th>网课（B 站分 P）</th>
+        <th>刷题 / 当日任务</th>
+        <th style="text-align:right;width:66px">预计</th>
+      </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+  </table>
+</section>
+
+<!-- ============ 网课索引 ============ -->
+<section>
+  <h2 class="c">网课 43 个分 P 的去留</h2>
+  <p class="sub">这门课有 4 个"旧版"分 P 与新版重复、1 个许愿 P、1 个非数 B 专属 P，先看清哪些不用花时间。</p>
+  <div class="pillgrid" id="pgrid"></div>
+  <div class="warn" style="margin-top:18px">
+    <b>省时间的关键：</b>P10/P11（旧版一元微分）、P14/P15（旧版多元微分）与新版 P8/P9、P12/P13 内容重复，<b>可以 2 倍速扫一遍或直接跳过</b>，能省下约 2.6 小时。P43 是十六届<b>非数 B</b> 精讲，你是 A 类，不用看。P2 是许愿视频，跳过。
+  </div>
+</section>
+
+<!-- ============ 660 题参考 ============ -->
+<section>
+  <h2 class="c">《660 题》章节对照表（只做高数）</h2>
+  <p class="sub">题号基于较新版本，你的书如果版本不同，按章节标题对应即可，题量参考量级。</p>
+  <div class="card" style="padding:6px 0">
+    <table>
+      <thead>
+        <tr><th style="width:auto">章节</th><th style="width:auto">参考题号</th><th style="text-align:right;width:80px">题量</th><th style="width:180px">对应网课板块</th></tr>
+      </thead>
+      <tbody id="tb660"></tbody>
+    </table>
+  </div>
+  <div class="warn" style="margin-top:16px">
+    <b>注意版本差异：</b>如果你手上是<b>数学二版</b>，它<b>没有</b>无穷级数、三重积分、曲线曲面积分、空间解析几何这四块的题（数二不考这些）。这四块请用课程例题 + 历年真题代替，或者从真题里多找几道同类题练手。
+  </div>
+</section>
+
+<!-- ============ 应试技巧 ============ -->
+<section>
+  <h2 class="p">考场怎么用这 150 分钟</h2>
+  <p class="sub">竞赛是分步给分的，会多少写多少，空白页等于零分。</p>
+  <div class="tips">
+    <div class="card">
+      <h4>时间分配<span>150 分钟 / 100 分</span></h4>
+      <ul class="plain">
+        <li><b>0–40 分钟</b>：填空题 5 道。看到 3 分钟没思路就先跳过，回头再补</li>
+        <li><b>40–60 分钟</b>：解答题第 1、2 题（通常是极限/积分，最稳）</li>
+        <li><b>60–115 分钟</b>：解答题第 3–5 题（微分方程、重积分、级数/曲线曲面）</li>
+        <li><b>115–140 分钟</b>：压轴证明题，能写多少写多少</li>
+        <li><b>最后 10 分钟</b>：检查填空、补齐所有空着的步骤</li>
+        <li><b>单题上限 20 分钟</b>，超了立刻走，别赌</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>高频陷阱<span>竞赛比考研更爱挖的坑</span></h4>
+      <ul class="plain">
+        <li><b>换元与对称性</b>：定积分/重积分的奇偶性、轮换对称性用错，是失分重灾区</li>
+        <li><b>级数敛散性</b>：比值法失效时要用比较法/根值法，别硬套</li>
+        <li><b>中值定理证明</b>：先看结论需要什么，再倒推辅助函数（罗尔/拉格朗日/柯西）</li>
+        <li><b>曲线曲面积分</b>：格林公式/高斯公式的"补线补面"和方向，A 类必考方向</li>
+        <li><b>反常积分</b>：收敛性判断要先找瑕点，别直接算原函数</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card">
+      <h4 style="font-size:14.5px;margin-bottom:12px">考场物品清单（11/13 晚上就装好）</h4>
+      <ul class="plain">
+        <li>身份证、学生证、<b>准考证</b>（或学校通知的入场凭证）</li>
+        <li>黑色签字笔 ×2、2B 铅笔、橡皮、直尺</li>
+        <li>手表（无联网功能）；计算器按赛区规定，多数不允许，别抱侥幸</li>
+        <li>提前 40 分钟到考场，8:30 前入场；草稿纸一般由考场提供</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="font-size:14.5px;margin-bottom:12px">如果进度落后了</h4>
+      <ul class="plain">
+        <li>先砍 <b>660 题的次要章节</b>（定积分应用、空间解析几何的选填）</li>
+        <li>再砍 <b>网课的"考点基础提升"</b>，直接看真题精讲（真题精讲里会顺带讲考点）</li>
+        <li><b>绝对不砍</b>：真题套卷限时训练、真题精讲、错题回炉</li>
+        <li>11/04 缓冲日就是为这个准备的，落后了优先往那天塞</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>计划生成于 2026-10-16 ｜ 基于第十八届全国大学生数学竞赛初赛官方安排（11 月 14 日 09:00–11:30，非数学 A 类初赛内容为高等数学）。</div>
+  <div>奖项规则：按数学专业组与非数学专业组实际参赛人数分别评奖，获奖总人数不超过赛区总参赛人数的 30%（一等奖 ≤6%、二等奖 ≤9%、三等奖 ≤15%）。</div>
+  <div>分数线因赛区而异，本计划中的分数目标为经验性估计，请以你所在赛区的实际情况为准。</div>
+</footer>
+
+</div>
+
+<script>
+/* ================= 数据 ================= */
+const PLAN = [
+  {d:'10-16',w:'周五',p:0,n:'—',q:'<b>摸底套卷</b>：限时 150 分钟做完 <b>第十四届（2022）非数 A 真题</b>。做完先别深究答案，只记录每道题卡在哪一步。',h:'3h'},
+  {d:'10-17',w:'周六',p:0,n:'P1｜函数极限 · 考点基础提升（70min）',q:'660 第一章 函数极限连续 前 25 题。<br><b>同时做"失分归因表"</b>：把摸底每道题的失分归到板块，标出最弱的 3 块。',h:'3h'},
+  {d:'10-18',w:'周日',p:1,n:'P3 + P4｜函数极限 · 真题精讲（上/下）',q:'660 第一章 剩余约 23 题',h:'3h'},
+  {d:'10-19',w:'周一',p:1,n:'P5 + P6｜数列极限 · 考点基础 + 真题精讲（上）',q:'第一章错题回炉 + 660 第二章 导数与微分 前 20 题',h:'3h'},
+  {d:'10-20',w:'周二',p:1,n:'P7 数列极限 · 真题精讲（下）<br>P8 一元微分 · 基础精讲（上）',q:'660 第二章 剩余约 19 题',h:'3h'},
+  {d:'10-21',w:'周三',p:1,n:'P9 一元微分 · 基础精讲（下）<br>P16 不定积分 · 考点基础',q:'660 第三章 微分中值定理及导数应用（约 14 题）',h:'3h'},
+  {d:'10-22',w:'周四',p:1,n:'P17 + P18｜不定积分 · 真题精讲（上/中）',q:'660 第四章 不定积分（约 18 题）',h:'3h'},
+  {d:'10-23',w:'周五',p:1,n:'P19 不定积分 · 真题精讲（下）<br>P20 定积分 · 考点基础',q:'660 第五章 定积分与反常积分 前 20 题',h:'3h'},
+  {d:'10-24',w:'周六',p:1,n:'P21 + P22｜定积分 · 真题精讲（上/下）',q:'660 第五章 剩余约 20 题',h:'3.5h'},
+  {d:'10-25',w:'周日',p:1,n:'P23 反常积分 · 考点基础<br>P24 反常积分 · 真题精讲（上）',q:'660 第六章 定积分的应用（约 9 题）+ 第五章错题',h:'3h'},
+  {d:'10-26',w:'周一',p:1,n:'P25 反常积分 · 真题精讲（下）<br>P12 + P13｜多元微分 · 基础精讲（上/下）',q:'660 第八章 多元函数微分学 前 14 题',h:'3h'},
+  {d:'10-27',w:'周二',p:1,n:'P26 + P27｜二重积分 · 考点基础 + 真题精讲',q:'660 第八章 剩余约 14 题',h:'3h'},
+  {d:'10-28',w:'周三',p:1,n:'P28 + P29｜三重积分 · 考点基础 + 真题精讲<br>P36 常微分方程 · 考点基础',q:'660 第九章 二重积分 前 18 题',h:'3h'},
+  {d:'10-29',w:'周四',p:1,n:'P37 常微分方程 · 真题精讲<br>P38 无穷级数 · 考点基础（上）',q:'660 第七章 微分方程（约 28 题）',h:'3.5h'},
+  {d:'10-30',w:'周五',p:1,n:'P39 无穷级数 · 考点基础（下）<br>P40 无穷级数 · 真题精讲（上）',q:'660 第九章 剩余约 17 题',h:'3h'},
+  {d:'10-31',w:'周六',p:1,rest:1,n:'<b>复盘日</b>：不推新课',q:'① 把 10/17–10/30 所有错题二刷一遍<br>② 90 分钟限时小测：把已学板块近 5 年真题的大题重做<br>③ 补看旧版 P10/P11/P14/P15（2 倍速扫即可）',h:'3h'},
+  {d:'11-01',w:'周日',p:1,n:'P41 无穷级数 · 真题精讲（下）<br><b>P30 曲线积分 · 考点基础（A 类必看）</b>',q:'660 第十章 无穷级数 前 17 题',h:'3h'},
+  {d:'11-02',w:'周一',p:1,n:'<b>P31 曲线积分 · 真题精讲（A 类）</b><br><b>P32 + P33 曲面积分（A 类）</b>',q:'660 第十章 剩余 17 题 + 第十二章 前 10 题',h:'3.5h'},
+  {d:'11-03',w:'周二',p:1,n:'<b>P34 + P35｜向量与空间解析几何（A 类）</b>',q:'660 第十一章 空间解析几何（约 9 题）+ 第十二章 剩余约 27 题',h:'3.5h'},
+  {d:'11-04',w:'周三',p:1,rest:1,n:'<b>缓冲日</b>：补齐没看完的分 P、清理欠账',q:'660 错题总扫 + 开始整理"高频公式与技巧速查表"（一页纸）',h:'3h'},
+  {d:'11-05',w:'周四',p:2,n:'<b>套卷 1</b>：第十七届（2025，最新）非数 A 真题',q:'<b>严格限时 150 分钟</b>，完全闭卷，模拟真实考场。做完当天只做粗批（对答案 + 标出失分点）',h:'3h'},
+  {d:'11-06',w:'周五',p:2,n:'P42｜十六届初赛非数 A 精讲（83min）',q:'套卷 1 逐题精批：每道错题写清"错因 → 对应知识点 → 正确思路"。补看对应板块的网课片段',h:'3.5h'},
+  {d:'11-07',w:'周六',p:2,n:'<b>套卷 2</b>：第十五届（2023）非数 A 真题',q:'严格限时 150 分钟 + 当天粗批',h:'3h'},
+  {d:'11-08',w:'周日',p:2,n:'<b>套卷 3</b>：第十三届（2021）非数 A 真题',q:'上午精批套卷 2；下午限时 150 分钟做套卷 3（周末加量）',h:'4.5h'},
+  {d:'11-09',w:'周一',p:2,n:'<b>套卷 4</b>：第十二届（2020）非数 A 真题',q:'先精批套卷 3，再限时 150 分钟做套卷 4',h:'3.5h'},
+  {d:'11-10',w:'周二',p:2,n:'<b>套卷 5</b>：第十一届（2019）非数 A 真题',q:'先精批套卷 4，再限时 150 分钟做套卷 5',h:'3.5h'},
+  {d:'11-11',w:'周三',p:2,n:'—',q:'套卷 5 精批 + <b>五套真题错题横向归类</b>：看哪类题型反复错，只补那 2–3 类',h:'3h'},
+  {d:'11-12',w:'周四',p:3,n:'—',q:'660 题错题全回炉 + 真题错题重做 + 完成一页纸"高频公式 / 技巧速查表"',h:'3h'},
+  {d:'11-13',w:'周五',p:3,n:'—',q:'只看错题本 + 公式表 + 题型清单，<b>不做新题</b>；60 分钟轻量模拟（填空 5 题 + 前 2 道大题）保持手感；装好考场物品；22:30 前睡',h:'2h'},
+  {d:'11-14',w:'周六',p:3,exam:1,n:'—',q:'<b>09:00 – 11:30 考试。</b>按"填空 40 分钟 → 常规大题 → 压轴骗分 → 留 10 分钟检查"的节奏走。',h:'—'}
+];
+
+const P_LIST = [
+  {p:1,t:'函数极限 考点基础提升',s:70},
+  {p:2,t:'许愿视频',s:1,skip:1},
+  {p:3,t:'函数极限 真题精讲（上）',s:54},
+  {p:4,t:'函数极限 真题精讲（下）',s:66},
+  {p:5,t:'数列极限 考点基础提升',s:48},
+  {p:6,t:'数列极限 真题精讲（上）',s:47},
+  {p:7,t:'数列极限 真题精讲（下）',s:61},
+  {p:8,t:'一元微分 基础知识精讲（上·新版）',s:57},
+  {p:9,t:'一元微分 基础知识精讲（下·新版）',s:56},
+  {p:10,t:'一元微分 重点回顾（旧版·可跳过）',s:40,skip:1},
+  {p:11,t:'一元微分 真题点拨（旧版·可跳过）',s:55,skip:1},
+  {p:12,t:'多元微分 基础知识精讲（上·新版）',s:50},
+  {p:13,t:'多元微分 基础知识精讲（下·新版）',s:54},
+  {p:14,t:'多元微分 重点回顾（旧版·可跳过）',s:27,skip:1},
+  {p:15,t:'多元微分 真题点拨（旧版·可跳过）',s:33,skip:1},
+  {p:16,t:'不定积分 考点基础提升',s:34},
+  {p:17,t:'不定积分 真题精讲（上）',s:59},
+  {p:18,t:'不定积分 真题精讲（中）',s:51},
+  {p:19,t:'不定积分 真题精讲（下）',s:53},
+  {p:20,t:'定积分 考点基础提升',s:49},
+  {p:21,t:'定积分 真题精讲（上）',s:72},
+  {p:22,t:'定积分 真题精讲（下）',s:63},
+  {p:23,t:'反常积分 考点基础提升',s:52},
+  {p:24,t:'反常积分 真题精讲（上）',s:61},
+  {p:25,t:'反常积分 真题精讲（下）',s:25},
+  {p:26,t:'二重积分 考点基础提升',s:44},
+  {p:27,t:'二重积分 真题精讲',s:78},
+  {p:28,t:'三重积分 考点基础提升',s:27},
+  {p:29,t:'三重积分 真题精讲',s:41},
+  {p:30,t:'曲线积分 考点基础提升（A 类必看）',s:34,hot:1},
+  {p:31,t:'曲线积分 真题精讲（A 类必看）',s:57,hot:1},
+  {p:32,t:'曲面积分 考点基础提升（A 类必看）',s:21,hot:1},
+  {p:33,t:'曲面积分 真题精讲（A 类必看）',s:37,hot:1},
+  {p:34,t:'向量与空间解析几何 考点基础（A 类必看）',s:31,hot:1},
+  {p:35,t:'向量与空间解析几何 真题精讲（A 类必看）',s:66,hot:1},
+  {p:36,t:'常微分方程 考点基础提升',s:18},
+  {p:37,t:'常微分方程 真题精讲',s:71},
+  {p:38,t:'无穷级数 考点基础提升（上）',s:56},
+  {p:39,t:'无穷级数 考点基础提升（下）',s:45},
+  {p:40,t:'无穷级数 真题精讲（上）',s:51},
+  {p:41,t:'无穷级数 真题精讲（下）',s:67},
+  {p:42,t:'十六届初赛 非数 A 精讲',s:83},
+  {p:43,t:'十六届初赛 非数 B 精讲（A 类不看）',s:22,skip:1}
+];
+
+const Q660 = [
+  ['第一章 函数极限连续','1–19、162–190','≈48','函数极限 / 数列极限'],
+  ['第二章 导数与微分','20–37、191–211','≈39','一元微分'],
+  ['第三章 微分中值定理及导数应用','39–42、216–225','≈14','一元微分'],
+  ['第四章 不定积分','43–54、226–231','≈18','不定积分'],
+  ['第五章 定积分与反常积分','55–70、232–255','≈40','定积分 / 反常积分'],
+  ['第六章 定积分的应用','75–77、259–264','≈9','定积分'],
+  ['第七章 微分方程','81–93、265–279','≈28','常微分方程'],
+  ['第八章 多元函数微分学','94–103、280–297','≈28','多元微分'],
+  ['第九章 二重积分','104–120、298–315','≈35','二重 / 三重积分'],
+  ['第十章 无穷级数','121–134、316–335','≈34','无穷级数'],
+  ['第十一章 向量代数与空间解析几何','135–139、341–344','≈9','空间解析几何'],
+  ['第十二章 多元积分学及其应用','140–160、345–360','≈37','曲线 / 曲面积分']
+];
+
+/* ================= 渲染逐日表 ================= */
+const tb = document.getElementById('tb');
+const KEY = 'cmc-plan-2026-nonmathA';
+let saved = {};
+try{ saved = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){ saved = {}; }
+
+PLAN.forEach((it,i)=>{
+  const tr = document.createElement('tr');
+  tr.className = 'p'+it.p + (it.rest?' rest':'') + (it.exam?' exam':'');
+  tr.dataset.i = i;
+  const pills = it.rest ? '<span class="pill a">弹性</span>' : (it.exam ? '<span class="pill">考试</span>' : '');
+  tr.innerHTML =
+    '<td class="ck"><input type="checkbox" class="cb" data-i="'+i+'"'+(saved[i]?' checked':'')+'></td>'+
+    '<td class="d">'+pills+it.d+'<em>'+it.w+'</em></td>'+
+    '<td>'+it.n+'</td>'+
+    '<td>'+it.q+'</td>'+
+    '<td class="t">'+it.h+'</td>';
+  if(saved[i]) tr.classList.add('done');
+  tb.appendChild(tr);
+});
+
+function sync(){
+  let n=0;
+  document.querySelectorAll('.cb').forEach(c=>{ if(c.checked) n++; });
+  document.getElementById('pi').style.width = (n/PLAN.length*100)+'%';
+  document.getElementById('pt').textContent = '已完成 '+n+' / '+PLAN.length+' 天';
+}
+tb.addEventListener('change', e=>{
+  const cb = e.target;
+  if(!cb.classList.contains('cb')) return;
+  const i = cb.dataset.i;
+  const tr = cb.closest('tr');
+  if(cb.checked){ saved[i]=1; tr.classList.add('done'); }
+  else { delete saved[i]; tr.classList.remove('done'); }
+  try{ localStorage.setItem(KEY, JSON.stringify(saved)); }catch(e){}
+  sync();
+});
+sync();
+
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  if(!confirm('确定清空所有勾选进度吗？')) return;
+  saved = {};
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  document.querySelectorAll('.cb').forEach(c=>{ c.checked=false; c.closest('tr').classList.remove('done'); });
+  sync();
+});
+document.getElementById('btnPrint').addEventListener('click', ()=>window.print());
+
+/* ================= 渲染网课分P ================= */
+const pg = document.getElementById('pgrid');
+P_LIST.forEach(v=>{
+  const d = document.createElement('div');
+  d.className = 'pg' + (v.skip?' skip':'') + (v.hot?' hot':'');
+  d.innerHTML = '<b>P'+v.p+'</b><span>'+v.t+'</span><s>'+v.s+'min</s>';
+  pg.appendChild(d);
+});
+
+/* ================= 渲染 660 表 ================= */
+const t6 = document.getElementById('tb660');
+Q660.forEach(r=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td class="d" style="font-size:13px">'+r[0]+'</td><td style="font-family:Consolas,monospace;font-size:12.5px">'+r[1]+'</td><td class="t">'+r[2]+'</td><td>'+r[3]+'</td>';
+  t6.appendChild(tr);
+});
+
+/* ================= 倒计时 ================= */
+(function(){
+  const target = new Date('2026-11-14T09:00:00+08:00');
+  const now = new Date();
+  const days = Math.ceil((target - now)/86400000);
+  const el = document.getElementById('cd');
+  if(days > 1) el.textContent = '还剩 '+days+' 天';
+  else if(days === 1) el.textContent = '明天开考';
+  else if(days === 0) el.textContent = '今天开考';
+  else el.textContent = '已结束';
+})();
+</script>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数竞 · 真题使用指南</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --math:#5b9bff; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--math);
+    border:1px solid rgba(91,155,255,.35);background:rgba(91,155,255,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  section{margin-bottom:26px}
+  h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--math)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:14px 16px;margin-bottom:10px}
+  .card .t{font-size:13px;font-weight:700;margin-bottom:6px;color:var(--tx)}
+  .card p{font-size:12.5px;color:var(--tx2);margin-bottom:6px}
+  .card p:last-child{margin-bottom:0}
+  .card b{color:var(--tx)}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2);margin-bottom:14px}
+  .warn{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2)}
+  .info b,.warn b{color:var(--tx)}
+
+  .step{display:flex;gap:11px;margin-bottom:12px}
+  .step:last-child{margin-bottom:0}
+  .step .n{flex:0 0 22px;height:22px;border-radius:6px;background:rgba(91,155,255,.15);
+    color:var(--math);display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700}
+  .step .c{flex:1;min-width:0;font-size:12.5px;color:var(--tx2)}
+  .step .c b{color:var(--tx);display:block;margin-bottom:1px}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">数学竞赛 · 11/14</div>
+  <h1>真题使用指南
+    <small>三套真题怎么用，比刷多少题更重要</small>
+  </h1>
+</header>
+
+<div class="info">
+  <b>先说结论</b>：660 题打基础，<b>真题才是决定省二的东西</b>。因为 660 是「知识点分类练习」，真题是「限时综合输出」——这两件事练的是不同能力。
+</div>
+
+<!-- 真题来源 -->
+<section>
+  <h2>真题从哪来</h2>
+  <div class="card">
+    <div class="t">本地有的</div>
+    <p>桌面 <code>大二上\大学生数学竞赛\</code> 里有<b>第 1–8 届</b>。这些太老，题型和现在差别大，<b>不建议做</b>。</p>
+  </div>
+  <div class="card">
+    <div class="t">需要下载的（11 月初必须搞定）</div>
+    <p>B 站收藏的 <code>BV1fKNb6bENY</code> 里有<b>第 9–17 届</b>，含非数学 A 类。</p>
+    <p><b>要用的三套</b>：第 <b>17、15、13</b> 届（越近越贴近现在题型）。</p>
+    <p>下载后确认：<b>有完整题目 + 有答案</b>。没有答案的真题做不了批改，等于白做。</p>
+  </div>
+</section>
+
+<!-- 三套怎么排 -->
+<section>
+  <h2>三套的排法</h2>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:72px">日期</th><th>用哪套</th><th>目的</th></tr></thead>
+    <tbody>
+      <tr><td><b>11/07</b></td><td>第 17 届</td><td>摸底：知道自己现在能考多少分</td></tr>
+      <tr><td><b>11/10</b></td><td>第 15 届</td><td>验证：看前一次的补漏有没有生效</td></tr>
+      <tr><td><b>11/12</b></td><td>第 13 届</td><td>定心：确认节奏和速度已经稳了</td></tr>
+      <tr><td>11/13</td><td>三套横评</td><td>错题按题型归类，找重复犯的那两三个错</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn" style="margin-top:12px">
+    <b>不要做第 4 套。</b>时间只够 3 套 + 消化。<b>做 6 套但不批改，不如做 3 套每套批透。</b>
+  </div>
+</section>
+
+<!-- 怎么做 -->
+<section>
+  <h2>一套真题的正确用法</h2>
+  <div class="card">
+    <div class="step"><div class="n">1</div><div class="c">
+      <b>严格限时 150 分钟，一次做完</b>
+      手机放另一个房间，中途不查资料、不上厕所、不看答案。<b>这次不是学习，是模拟考试</b>。
+    </div></div>
+    <div class="step"><div class="n">2</div><div class="c">
+      <b>当天批完，不隔夜</b>
+      隔夜就记不清当时的思路了。<b>批改的重点不是对错，是「当时为什么这么想」</b>。
+    </div></div>
+    <div class="step"><div class="n">3</div><div class="c">
+      <b>每道错题归因到三类之一</b>
+      · <b>不会做</b>——知识点缺失，回去补对应章节<br>
+      · <b>算错</b>——熟练度不够，练同类题的手速<br>
+      · <b>看错题 / 想偏</b>——审题问题，下次读题时划关键词<br>
+      <b>三类错因对应三种完全不同的补法，混在一起补等于没补。</b>
+    </div></div>
+    <div class="step"><div class="n">4</div><div class="c">
+      <b>记录三个数</b>
+      得分 / 用时分布（填空用了多少分钟）/ 三类错因各几道。<b>第二套和第一套对比这三个数</b>，才知道有没有进步。
+    </div></div>
+  </div>
+</section>
+
+<!-- 分数目标 -->
+<section>
+  <h2>省二的分数参照</h2>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>题型</th><th>分值</th><th>省二目标</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td><b>填空题</b></td><td>约 30 分</td><td><b>拿 24+</b></td><td>基础题，不该丢</td></tr>
+      <tr><td><b>大题</b></td><td>约 70 分</td><td><b>拿 25–35</b></td><td>稳定做出 2–3 道</td></tr>
+      <tr><td><b>合计</b></td><td>100 分</td><td><b>50–60</b></td><td>多数赛区省二线附近</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info" style="margin-top:12px">
+    <b>关键认识</b>：省二不需要做出压轴题。<b>填空题一分不丢 + 三道常规大题做对</b>，就够省二了。所以策略是「<b>保基础、抓常规、放压轴</b>」。
+  </div>
+</section>
+
+<!-- 时间分配 -->
+<section>
+  <h2>150 分钟怎么切</h2>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th style="width:96px">时段</th><th>做什么</th></tr></thead>
+    <tbody>
+      <tr><td><b>0–40 分钟</b></td><td>填空 + 选择。<b>会做的立刻写，卡住超过 5 分钟就跳</b></td></tr>
+      <tr><td><b>40–110 分钟</b></td><td>常规大题。<b>不按题号顺序，先做最有把握的</b></td></tr>
+      <tr><td><b>110–140 分钟</b></td><td>回头啃跳过的题 + 压轴题<b>能写几步写几步</b></td></tr>
+      <tr><td><b>140–150 分钟</b></td><td>检查计算，重点看<b>符号和常数</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="warn" style="margin-top:12px">
+    <b>最忌讳的两种行为</b><br>
+    ① 在一道题上死磕 40 分钟——那 40 分钟够你做完两道常规题<br>
+    ② 压轴题完全空着——<b>写出关键公式和思路也有步骤分</b>，白纸是零分
+  </div>
+</section>
+
+<footer>
+  <div>三套真题：11/7 第 17 届 · 11/10 第 15 届 · 11/12 第 13 届 · 11/13 横评</div>
+  <div>真题来源：B 站 <code>BV1fKNb6bENY</code>（第 9–17 届）</div>
+  <div>配套：<code>数竞公式与题型.html</code> · <code>数竞30天冲刺计划_非数学A类.html</code></div>
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>
