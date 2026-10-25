@@ -217,6 +217,43 @@
   + '.ttbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 13px 24px}'
 
   /* 周网格 */
+  /* 按天列表 */
+  + '.daylist{display:flex;flex-direction:column;gap:14px}'
+  + '.daygrp{position:relative}'
+  + '.dayhd{display:flex;align-items:baseline;gap:7px;padding:0 2px 7px;'
+  + 'border-bottom:1px solid #222836;margin-bottom:8px}'
+  + '.dayhd b{font-size:12.5px;color:#aab3c4;font-weight:700;letter-spacing:.02em}'
+  + '.daygrp.today .dayhd{border-bottom-color:rgba(56,208,216,.4)}'
+  + '.daygrp.today .dayhd b{color:#38d0d8}'
+  + '.dayhd .now{font-size:9.5px;color:#0f131b;background:#38d0d8;'
+  + 'padding:1px 6px;border-radius:100px;font-weight:700}'
+  + '.dayhd em{margin-left:auto;font-style:normal;font-size:10.5px;color:#5d6675;'
+  + 'font-variant-numeric:tabular-nums}'
+  + '.daygrp.today .dayhd em{color:#3f8f95}'
+  + '.daynone{font-size:11px;color:#3f4653;padding:5px 2px 2px}'
+  /* 单节课卡片 */
+  + '.cc{display:flex;align-items:center;gap:11px;background:var(--card,#1a1f2a);'
+  + 'border:1px solid rgba(255,255,255,.055);border-radius:10px;'
+  + 'padding:10px 12px;margin-bottom:7px;cursor:pointer}'
+  + '.cc:last-child{margin-bottom:0}'
+  + '.cc:active{background:#232a38}'
+  + '.daygrp.today .cc{border-color:rgba(56,208,216,.24)}'
+  + '.cc .tm{flex:0 0 70px;text-align:left;line-height:1.3}'
+  + '.cc .tm b{display:block;font-size:12px;color:#38d0d8;font-weight:700;'
+  + 'font-variant-numeric:tabular-nums;letter-spacing:.01em}'
+  + '.cc .tm span{display:block;font-size:9px;color:#5d6675;'
+  + 'font-variant-numeric:tabular-nums;margin-top:3px;letter-spacing:-.02em;'
+  + 'white-space:nowrap}'
+  + '.cc .tx{flex:1;min-width:0}'
+  + '.cc .tx b{display:block;font-size:13px;color:#e8ebf2;font-weight:600;'
+  + 'line-height:1.35;margin-bottom:2px;word-break:break-word}'
+  + '.cc .tx span{display:block;font-size:10.5px;color:#7c8699;line-height:1.4}'
+  + '.cc .pen{flex:0 0 auto;font-size:15px;color:#3f4653;padding-left:2px}'
+  + '.cc.sel{background:rgba(255,122,122,.09);border-color:rgba(255,122,122,.4)}'
+  + '.cc.sel .tx b{color:#ff9d9d}'
+  + '.cc .ck{flex:0 0 20px;height:20px;border-radius:5px;border:1.5px solid #4a5262;'
+  + 'display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}'
+  + '.cc.sel .ck{background:#ff6b6b;border-color:#ff6b6b;color:#fff}'
   + '.grid{display:grid;grid-template-columns:38px repeat(7,1fr);gap:4px;font-size:10.5px}'
   + '.grid .gh{text-align:center;color:#7c8699;font-weight:600;padding:4px 0;font-size:10px}'
   + '.grid .ph{color:#7c8699;display:flex;align-items:center;justify-content:center;'
@@ -538,60 +575,83 @@
       return;
     }
 
-    // 周网格
-    var ps = getPeriods();
-    var maxP = 0;
-    courses.forEach(function (c) { if (+c.end > maxP) maxP = +c.end; });
-    var nP = Math.max(maxP, 8);
-
-    h += '<div class="grid">';
-    h += '<div class="gh"></div>';
-    for (var d = 0; d < 7; d++) h += '<div class="gh">' + DAYS[d].slice(1) + '</div>';
-
+    // ===== 按天分组课表（替代原 7 列网格 + 课程清单）=====
     var todayIdx = todayDayIdx();
-    for (var p = 1; p <= nP; p++) {
-      h += '<div class="ph">' + p + '</div>';
-      for (var dd = 1; dd <= 7; dd++) {
-        var hit = courses.filter(function (c) {
-          if (+c.day !== dd || +c.start > p || +c.end < p) return false;
-          // 本周模式：课表就是这一周的，不再按 weeks 过滤
-          // 基准模式：按 weeks 字段过滤
-          return inWeekMode ? true : activeInWeek(c, w);
-        });
-        var cls = 'cell' + (hit.length ? ' has' : '') + (dd === todayIdx ? ' today' : '');
-        h += '<div class="' + cls + '">'
-          + (hit.length ? esc(hit[0].name.slice(0, 5)) : '')
-          + '</div>';
-      }
-    }
-    h += '</div>';
-
-    // 课程清单
     var selCount = Object.keys(selected).length;
 
-    h += '<div style="display:flex;align-items:center;margin-top:18px;margin-bottom:6px">'
-      + '<span style="font-size:11.5px;color:#7c8699">全部课程（' + courses.length + '）</span>'
-      + (batchMode
-          ? '<span style="margin-left:auto;font-size:11px;color:#ff9d9d">点行选中</span>'
-          : '')
-      + '</div>';
+    // 按天归集（索引保留原数组下标，编辑/删除才对得上）
+    var byDay = {};
+    courses.forEach(function (c, i) {
+      if (!inWeekMode && !activeInWeek(c, w)) return;
+      if (!byDay[c.day]) byDay[c.day] = [];
+      byDay[c.day].push({ c: c, idx: i });
+    });
+    Object.keys(byDay).forEach(function (k) {
+      byDay[k].sort(function (a, b) { return a.c.start - b.c.start; });
+    });
 
-    h += courses.map(function (c, i) {
-      var isSel = !!selected[i];
-      return '<div class="citem' + (isSel ? ' sel' : '') + '" data-edit="' + i + '">'
-        + (batchMode ? '<span class="ck">✓</span>' : '')
-        + '<span style="flex:0 0 auto;font-size:11px;color:#38d0d8">'
-        + DAYS[c.day - 1] + '</span>'
-        + '<div class="tx"><b>' + esc(c.name) + '</b>'
-        + '<span>' + periodLabel(c.start, c.end)
-        + (periodTime(c.start, c.end) ? ' · ' + periodTime(c.start, c.end) : '')
-        + (c.room ? ' · ' + esc(c.room) : '')
-        + (c.weeks ? ' · ' + esc(c.weeks) + '周' : '')
-        + '</span></div>'
-        + (batchMode ? '' : '<span class="pen">改</span>')
+    var totalCourses = 0;
+    Object.keys(byDay).forEach(function (k) { totalCourses += byDay[k].length; });
+
+    h += '<div class="daylist">';
+
+    // 排序：今天 → 明天 → …（循环），让「今天」永远在最上面
+    var dayOrder = [];
+    for (var k = 0; k < 7; k++) {
+      dayOrder.push(((todayIdx - 1 + k) % 7) + 1);
+    }
+
+    for (var oi = 0; oi < dayOrder.length; oi++) {
+      var d = dayOrder[oi];
+      var list = byDay[d] || [];
+      var isToday = (d === todayIdx);
+      var isWeekend = (d >= 6);
+
+      // 周末没课且不是今天，就跳过（减少噪音）
+      if (isWeekend && !list.length && !isToday) continue;
+
+      h += '<div class="daygrp' + (isToday ? ' today' : '') + '">';
+
+      // 天标题
+      h += '<div class="dayhd">'
+        + '<b>' + DAYS[d - 1] + '</b>'
+        + (isToday ? '<span class="now">今天</span>' : '')
+        + '<em>' + (list.length ? list.length + ' 节' : '没课') + '</em>'
         + '</div>';
-    }).join('');
 
+      if (!list.length) {
+        h += '<div class="daynone">— 没课 —</div>';
+      } else {
+        list.forEach(function (x) {
+          var c = x.c, i = x.idx;
+          var isSel = !!selected[i];
+          var meta = [];
+          if (c.room) meta.push(esc(c.room));
+          if (c.weeks) meta.push(esc(c.weeks) + '周');
+
+          h += '<div class="cc' + (isSel ? ' sel' : '') + '" data-edit="' + i + '">'
+            + (batchMode ? '<span class="ck">✓</span>' : '')
+            + '<div class="tm">'
+            + '<b>第' + c.start + (c.end > c.start ? '-' + c.end : '') + '节</b>'
+            + (periodTime(c.start, c.end)
+                ? '<span>' + periodTime(c.start, c.end) + '</span>'
+                : '<span>第' + c.start + '节</span>')
+            + '</div>'
+            + '<div class="tx">'
+            + '<b>' + esc(c.name) + '</b>'
+            + (meta.length ? '<span>' + meta.join(' · ') + '</span>' : '')
+            + '</div>'
+            + (batchMode ? '' : '<span class="pen">›</span>')
+            + '</div>';
+        });
+      }
+
+      h += '</div>';
+    }
+
+    h += '</div>';
+
+    // 底部说明 / 批量条
     if (batchMode) {
       h += '<div class="batchbar">'
         + '<span class="cnt">已选 <b>' + selCount + '</b> 项</span>'
@@ -600,8 +660,8 @@
         + '删除</button>'
         + '</div>';
     } else {
-      h += '<div style="margin-top:10px;font-size:11px;color:#7c8699;text-align:center">'
-        + '点任意一行可以修改或删除</div>';
+      h += '<div style="margin-top:12px;font-size:11px;color:#7c8699;text-align:center">'
+        + '共 ' + totalCourses + ' 门 · 点任意一节课可修改或删除</div>';
     }
 
     // 设置
