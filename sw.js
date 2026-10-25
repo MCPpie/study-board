@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v36';
+const CACHE = 'study-board-v37';
 
 const ASSETS = [
   './',
@@ -42,6 +42,7 @@ const ASSETS = [
   './docs/离散知识点卡片.html',
   './docs/数竞公式与题型.html',
   './docs/数竞真题指南.html',
+  './docs/CMC第16届_2024_非数学A类_题目与答案.pdf',
   './docs/概率论期末专项.html'
 ];
 
