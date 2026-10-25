@@ -292,6 +292,13 @@
   + '.editrow select{flex:1;background:#1e2431;border:1px solid #333b4d;border-radius:10px;'
   + 'padding:10px;color:#e8ebf2;font-size:12.5px;font-family:inherit}'
   + '.ttempty{text-align:center;padding:26px 16px;color:#7c8699;font-size:12.5px;line-height:1.9}'
+  + '.pst{width:100%;min-height:180px;background:#0f131b;border:1px solid #333b4d;'
+  + 'border-radius:11px;padding:12px 13px;color:#e8ebf2;font-size:12.5px;'
+  + 'font-family:inherit;line-height:1.75;resize:vertical}'
+  + '.pst:focus{outline:none;border-color:rgba(56,208,216,.5)}'
+  + '.pst-hint{font-size:11px;color:#7c8699;line-height:1.8;margin:8px 0 0 2px;'
+  + 'white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;background:#12161e;'
+  + 'border-radius:8px;padding:9px 11px;border:1px solid #222836}'
   + '.ttempty b{color:#aab3c4}'
 
   /* 导入预览 */
@@ -510,7 +517,8 @@
     h += '</div>';
 
     h += '<div class="ttbtns">'
-      + '<button class="pri" id="ttImport">截屏导入</button>'
+      + '<button class="pri" id="ttPaste">粘贴文字导入</button>'
+      + '<button id="ttImport">截屏识别</button>'
       + '<button id="ttManual">手动添加</button>'
       + (courses.length
           ? '<button id="batchToggle" class="' + (batchMode ? 'dangerOn' : '') + '">'
@@ -646,6 +654,9 @@
       say('已复制到第 ' + (w + 1) + ' 周');
     });
 
+    var pst = document.getElementById('ttPaste');
+    if (pst) pst.addEventListener('click', startPaste);
+
     var imp = document.getElementById('ttImport');
     if (imp) imp.addEventListener('click', startImport);
     var man = document.getElementById('ttManual');
@@ -719,6 +730,117 @@
         say(wk ? ('现在是第 ' + wk + ' 周') : '已清除学期设置');
       });
     }
+  }
+
+  /* ---------------- 粘贴文字导入 ---------------- */
+  var SAMPLE = [
+    '周一 1-2节 电子电路与技术(2) 明理楼302',
+    '周二 5-6节 大学物理(二) 博学楼101',
+    '周四 3-4节 离散数学 致远楼205 1-8周',
+    '周五 7-8节 英语六级'
+  ].join('\n');
+
+  function startPaste() {
+    var h = '<div style="font-size:12.5px;color:#aab3c4;line-height:1.75;margin-bottom:10px">'
+      + '把课表文字粘进来，<b style="color:#38d0d8">一行一门课</b>。'
+      + '不用排版，认得的格式很多。<br>'
+      + '<span style="font-size:11px;color:#7c8699">'
+      + '从微信小程序或教务系统长按复制即可</span></div>'
+
+      + '<textarea class="pst" id="pstBox" placeholder="'
+      + '周一 1-2节 电子电路 明理楼302&#10;'
+      + '周二 5-6节 大物 博学楼101&#10;'
+      + '..."></textarea>'
+
+      + '<div class="pst-hint">支持的写法（随便哪种都行）：\n'
+      + '周一 1-2节 电路 明理楼302\n'
+      + '周一 第1-2节 电路 302\n'
+      + '电路 周一 1-2 明理楼302\n'
+      + '电路,周一,1,2,明理楼302\n'
+      + '周一 1-2节 电路 302 1-16周</div>'
+
+      + '<div class="ttbtns" style="margin-top:12px">'
+      + '<button class="pri" id="pstGo">解析</button>'
+      + '<button id="pstDemo">填入示例</button>'
+      + '<button id="pstBack">返回</button></div>';
+
+    bodyEl.innerHTML = h;
+
+    document.getElementById('pstGo').addEventListener('click', function () {
+      var txt = (document.getElementById('pstBox').value || '').trim();
+      if (!txt) { say('先把课表文字粘进来'); return; }
+      if (!window.TTParse) { say('解析器没加载，刷新一下'); return; }
+      var r = window.TTParse.parseText(txt);
+      if (!r.courses.length) {
+        bodyEl.innerHTML = '<div class="ttempty" style="text-align:left">'
+          + '<b style="color:#ff9d9d">一条也没解析出来</b><br><br>'
+          + '通常是这几行的写法我还不认识：<br><br>'
+          + '<div class="pst-hint">' + esc(r.failed.slice(0, 8).join('\n') || '（空）') + '</div>'
+          + '<br>每行至少要包含<b>星期</b>（周一 / 星期一 / Mon）。'
+          + '</div><div class="ttbtns" style="margin-top:14px">'
+          + '<button class="pri" id="ttPaste">重试</button>'
+          + '<button id="ttManual">手动添加</button></div>';
+        bindFastBtns();
+        return;
+      }
+      showPastePreview(r);
+    });
+
+    document.getElementById('pstDemo').addEventListener('click', function () {
+      var b = document.getElementById('pstBox');
+      b.value = SAMPLE;
+      b.focus();
+    });
+
+    document.getElementById('pstBack').addEventListener('click', renderSheet);
+  }
+
+  function showPastePreview(r) {
+    var list = r.courses;
+    var lines = list.map(function (c) {
+      return DAYS[c.day - 1] + ' ' + periodLabel(c.start, c.end) + '　' + c.name
+        + (c.room ? '　' + c.room : '')
+        + (c.weeks ? '　' + c.weeks + '周' : '');
+    }).join('\n');
+
+    var h = '<div style="font-size:12.5px;color:#aab3c4;margin-bottom:10px">'
+      + '解析出 <b style="color:#38d0d8">' + list.length + '</b> 门课'
+      + (r.failed.length
+          ? '<br><span style="font-size:11px;color:#ffc48a">'
+            + '有 ' + r.failed.length + ' 行没认出来，已跳过</span>'
+          : '')
+      + '</div>'
+      + '<div class="prev">' + esc(lines) + '</div>';
+
+    if (r.failed.length) {
+      h += '<div style="font-size:11px;color:#7c8699;margin:8px 0 4px">没认出的行：</div>'
+        + '<div class="pst-hint">' + esc(r.failed.slice(0, 6).join('\n')) + '</div>';
+    }
+
+    h += '<div class="ttbtns" style="margin-top:12px">'
+      + '<button class="pri" id="pstConfirm">确认导入</button>'
+      + '<button id="pstRetry">改一下再试</button>'
+      + '</div>';
+
+    bodyEl.innerHTML = h;
+
+    document.getElementById('pstConfirm').addEventListener('click', function () {
+      var old = getCourses();
+      var seen = {};
+      old.forEach(function (c) { seen[c.name + '|' + c.day + '|' + c.start] = 1; });
+      var added = 0;
+      list.forEach(function (c) {
+        var k = c.name + '|' + c.day + '|' + c.start;
+        if (!seen[k]) { old.push(c); seen[k] = 1; added++; }
+      });
+      setCourses(old);
+      renderSheet();
+      renderTodayCard();
+      say('已导入 ' + added + ' 门课'
+        + (added < list.length ? '（' + (list.length - added) + ' 门重复跳过）' : ''));
+    });
+
+    document.getElementById('pstRetry').addEventListener('click', startPaste);
   }
 
   /* ---------------- 图片压缩 ---------------- */
