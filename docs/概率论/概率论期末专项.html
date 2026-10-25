@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>概率论 · 期末专项</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --prob:#ff7a7a; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--prob);
+    border:1px solid rgba(255,122,122,.35);background:rgba(255,122,122,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2);margin-bottom:18px}
+  .info b{color:var(--tx)}
+
+  section{margin-bottom:26px}
+  h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--prob)}
+  h3{font-size:12.5px;font-weight:700;color:var(--cyan);margin:14px 0 7px}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 13px;margin-bottom:8px}
+  .f .n{font-size:10.5px;color:var(--tx3);margin-bottom:2px}
+  .f .e{font-size:13.5px;font-family:"Cambria Math","Times New Roman",serif;line-height:1.95}
+  .f .c{font-size:11px;color:var(--tx3);margin-top:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  ul{list-style:none}
+  ul li{position:relative;padding-left:16px;margin-bottom:6px;font-size:12.5px;color:var(--tx2)}
+  ul li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  ul li b{color:var(--tx)}
+
+  .warn{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.22);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--tx2);margin-top:10px}
+  .warn b{color:var(--tx)}
+  .step{background:var(--card2);border-left:2px solid var(--cyan);border-radius:0 8px 8px 0;
+    padding:10px 13px;font-size:12.5px;color:var(--tx2);margin-bottom:8px}
+  .step b{color:var(--tx)}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">概率论 · 期末</div>
+  <h1>期末专项：第 3 章 + 第 6 章
+    <small>期中 17/20，这两章是唯一的新风险</small>
+  </h1>
+</header>
+
+<div class="info">
+  <b>为什么只做这两章</b>：你期中 17/20，说明第 1–2 章（古典概型、条件概率、一维随机变量）已经通了。<b>期末考全书，但新增的风险只在这两章</b>——第 3 章要算二重积分，第 6 章概念密集。第 4、5 章（数字特征、大数定律）套路固定，跟着课上走就行。
+</div>
+
+<!-- 第3章 -->
+<section>
+  <h2>第 3 章 · 多维随机变量</h2>
+  <p style="font-size:12.5px;color:var(--tx3);margin-bottom:12px">这一章的难点不是概念，是<b>二重积分的计算量</b>。很多人思路对但算错。</p>
+
+  <h3>基本工具</h3>
+  <div class="f"><div class="n">联合分布函数</div><div class="e">F(x,y) = P(X≤x, Y≤y)</div>
+    <div class="c">性质：关于 x、y 均单调不减；F(−∞,y)=F(x,−∞)=0；F(+∞,+∞)=1</div></div>
+  <div class="f"><div class="n">联合概率密度</div><div class="e">F(x,y) = ∫<sub>−∞</sub><sup>x</sup>∫<sub>−∞</sub><sup>y</sup> f(u,v)dudv　，　∬f(x,y)dxdy = 1</div></div>
+  <div class="f"><div class="n">边缘密度（最重要）</div><div class="e">f<sub>X</sub>(x) = ∫<sub>−∞</sub><sup>+∞</sup> f(x,y)dy　，　f<sub>Y</sub>(y) = ∫<sub>−∞</sub><sup>+∞</sup> f(x,y)dx</div>
+    <div class="c"><b>积分限是这章的命门</b>：必须按区域画出积分范围，不能一律 −∞ 到 +∞</div></div>
+  <div class="f"><div class="n">独立性</div><div class="e">f(x,y) = f<sub>X</sub>(x)·f<sub>Y</sub>(y)</div>
+    <div class="c">等价于「联合密度能分解成只含 x 的函数乘只含 y 的函数，且区域是矩形」</div></div>
+
+  <h3>两个高频题型</h3>
+  <div class="step">
+    <b>① 求边缘密度</b><br>
+    三步：<b>画出非零区域 → 固定 x 找 y 的范围 → 积分</b>。<br>
+    例：f(x,y)=c 在三角形 0&lt;y&lt;x&lt;1 上。求 f<sub>X</sub>(x) 时 y 从 0 到 x；求 f<sub>Y</sub>(y) 时 x 从 y 到 1。<b>两个方向的范围不一样</b>，这就是最容易错的地方。
+  </div>
+  <div class="step">
+    <b>② 求 Z = X+Y 的分布（卷积）</b><br>
+    <div class="e" style="font-size:13px;margin:6px 0">f<sub>Z</sub>(z) = ∫<sub>−∞</sub><sup>+∞</sup> f(x, z−x)dx</div>
+    关键还是<b>确定积分限</b>：把 z 当常数，找出使 f(x,z−x)≠0 的 x 范围。<b>通常要对 z 分段讨论</b>。
+  </div>
+
+  <h3>协方差与相关系数</h3>
+  <div class="f"><div class="n">协方差</div><div class="e">Cov(X,Y) = E(XY) − E(X)E(Y)</div></div>
+  <div class="f"><div class="n">相关系数</div><div class="e">ρ<sub>XY</sub> = Cov(X,Y) / (σ<sub>X</sub>σ<sub>Y</sub>)　，　|ρ| ≤ 1</div></div>
+  <div class="f"><div class="n">重要关系</div><div class="e">D(X±Y) = DX + DY ± 2Cov(X,Y)</div>
+    <div class="c">独立时 Cov=0，退化成 D(X±Y) = DX + DY</div></div>
+
+  <div class="warn">
+    <b>必考概念题：不相关 ≠ 独立</b><br>
+    不相关只说明<b>没有线性关系</b>，还可能有非线性关系。<b>但二维正态分布是例外</b>——对正态分布，不相关等价于独立。这个例外一定要记住。
+  </div>
+</section>
+
+<!-- 第6章 -->
+<section>
+  <h2>第 6 章 · 数理统计</h2>
+  <p style="font-size:12.5px;color:var(--tx3);margin-bottom:12px">这一章概念多、公式杂，但<b>题型高度固定</b>。背下来就能拿分。</p>
+
+  <h3>三大抽样分布</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>分布</th><th>构造</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><b>χ²(n)</b></td><td>n 个标准正态的平方和</td><td>方差的区间估计与检验</td></tr>
+      <tr><td><b>t(n)</b></td><td>Z / √(χ²(n)/n)</td><td>均值检验（方差未知）</td></tr>
+      <tr><td><b>F(m,n)</b></td><td>(χ²(m)/m) / (χ²(n)/n)</td><td>两个方差之比的检验</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="f" style="margin-top:9px"><div class="n">三个常用结论（正态总体 X~N(μ,σ²)）</div>
+    <div class="e">(n−1)S²/σ² ~ χ²(n−1)　　√n(X̄−μ)/S ~ t(n−1)</div>
+    <div class="c">这两个是区间估计和假设检验的出发点，必须记牢</div></div>
+
+  <h3>参数估计两法</h3>
+  <div class="step">
+    <b>① 矩估计</b>（简单，先做这个）<br>
+    <b>用样本矩代替总体矩</b>：令 E(X) = X̄（或 E(X²) = 样本二阶矩），解出参数。<br>
+    一个参数用一个方程，两个参数用两个方程。
+  </div>
+  <div class="step">
+    <b>② 极大似然估计</b>（必考）<br>
+    四步：<b>写似然函数 L(θ) = ∏f(x<sub>i</sub>;θ) → 取对数 lnL → 对 θ 求导令其为 0 → 解出 θ̂</b><br>
+    注意：<b>取对数是关键一步</b>，直接对乘积求导几乎算不出来。
+  </div>
+  <div class="warn">
+    <b>似然函数的坑</b>：如果 f(x;θ) 里 θ 出现在<b>积分限或指示函数</b>上（比如均匀分布 U(0,θ)），求导法失效，要直接看 L 的单调性取端点。
+  </div>
+
+  <h3>评价标准</h3>
+  <ul>
+    <li><b>无偏性</b>：E(θ̂) = θ</li>
+    <li><b>有效性</b>：两个无偏估计里，方差小的更有效</li>
+    <li><b>一致性</b>：n→∞ 时 θ̂ 依概率收敛到 θ</li>
+  </ul>
+
+  <h3>区间估计（背公式即可）</h3>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>估计对象</th><th>条件</th><th>置信区间</th></tr></thead>
+    <tbody>
+      <tr><td>均值 μ</td><td>σ² 已知</td><td>X̄ ± z<sub>α/2</sub>·σ/√n</td></tr>
+      <tr><td>均值 μ</td><td>σ² 未知</td><td>X̄ ± t<sub>α/2</sub>(n−1)·S/√n</td></tr>
+      <tr><td>方差 σ²</td><td>μ 未知</td><td>[(n−1)S²/χ²<sub>α/2</sub>, (n−1)S²/χ²<sub>1−α/2</sub>]</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>假设检验（四步走）</h3>
+  <div class="step">
+    <b>① 提出原假设 H₀ 与备择假设 H₁</b> → <b>② 选统计量</b>（U / t / χ²）→ <b>③ 定拒绝域</b>（查分位数）→ <b>④ 比较并下结论</b>
+  </div>
+  <div class="warn">
+    <b>两类错误（可能考简答）</b><br>
+    · <b>第一类错误（弃真）</b>：H₀ 为真却拒绝了，概率 = α<br>
+    · <b>第二类错误（取伪）</b>：H₀ 为假却接受了，概率 = β<br>
+    样本量固定时，α 减小则 β 增大，<b>不能同时减小</b>。
+  </div>
+</section>
+
+<!-- 复习节奏 -->
+<section>
+  <h2>什么时候看这份</h2>
+  <div class="info">
+    <b>现在别看。</b>期末在一月初，现在看会忘。<br>
+    <b>12 月中下旬</b>开始，配合这三步：<br>
+    ① 先把第 3 章的<b>二重积分</b>单独练 10 道（计算能力，不是概念）<br>
+    ② 第 6 章把<b>三大分布的构造</b>和<b>两种估计的四步流程</b>背下来<br>
+    ③ 做 2 套期末真题，重点看第 3、6 章的题占多少分
+  </div>
+  <div class="warn">
+    <b>最省力的做法</b>：这两章的题型高度程式化，<b>把公式和步骤抄成卡片，考前一周每天过一遍</b>，比反复看书有效得多。
+  </div>
+</section>
+
+<footer>
+  <div>范围：期末考全书，但新增风险集中在第 3 章（多维随机变量）与第 6 章（数理统计）</div>
+  <div>基线：期中 17/20，第 1–2 章已通 ｜ 建议 12 月中下旬开始</div>
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>

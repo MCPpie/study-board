@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v38';
+const CACHE = 'study-board-v39';
 
 const ASSETS = [
   './',
@@ -22,28 +22,29 @@ const ASSETS = [
   './洛谷题单进度表.html',
   './编程能力建设路线图.html',
   './本学期竞赛机会清单_2026秋.html',
-  './docs/电路课件带读手册.html',
+  './docs/电路/电路课件带读手册.html',
   './docs/reader.js',
   './docs/ask.js',
   './tt-parse.js',
   './timetable.js',
   './backup.js',
-  './docs/电路课件3带读.html',
-  './docs/电路课件4带读.html',
-  './docs/电路课件5带读.html',
-  './docs/电子电路与技术2_补课辅助.html',
-  './docs/数竞30天冲刺计划_非数学A类.html',
-  './docs/大物速成课目录.html',
-  './docs/大物热学知识总结.html',
-  './docs/大物模拟卷.html',
-  './docs/六级听力专项.html',
-  './docs/六级写作翻译模板.html',
-  './docs/离散集中补计划.html',
-  './docs/离散知识点卡片.html',
-  './docs/数竞公式与题型.html',
-  './docs/数竞真题指南.html',
+  './docs/电路/电路课件3带读.html',
+  './docs/电路/电路课件4带读.html',
+  './docs/电路/电路课件5带读.html',
+  './docs/电路/电子电路与技术2_补课辅助.html',
+  './docs/数竞/数竞30天冲刺计划_非数学A类.html',
+  './docs/大物/大物速成课目录.html',
+  './docs/大物/大物热学知识总结.html',
+  './docs/大物/大物模拟卷.html',
+  './docs/六级/六级听力专项.html',
+  './docs/六级/六级写作翻译模板.html',
+  './docs/离散/离散集中补计划.html',
+  './docs/离散/离散知识点卡片.html',
+  './docs/数竞/数竞公式与题型.html',
+  './docs/数竞/数竞真题指南.html',
   './docs/CMC第16届_2024_非数学A类_题目与答案.pdf',
-  './docs/概率论期末专项.html'
+  './docs/概率论/概率论期末专项.html',
+  './docs/资料/index.html',
 ];
 
 self.addEventListener('install', e => {
