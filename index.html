@@ -47,6 +47,13 @@
 
   .view{display:none}
   .view.on{display:block}
+  /* 今日视图重排：任务优先，入口下沉 */
+  #v-today.on{display:flex;flex-direction:column}
+  #v-today .dnav{order:1;margin-bottom:10px}
+  #v-today #todayBox{order:2}
+  #v-today #ttTodayCard{order:3}
+  #v-today #cdBox{order:4}
+  #v-today .lib{order:5;margin-top:14px}
 
   section{margin-bottom:20px}
   h2{font-size:12.5px;font-weight:700;color:var(--tx3);letter-spacing:.08em;
@@ -473,7 +480,7 @@
         </a>
         <a class="doc2" href="docs/大物模拟卷.html">
           <span class="idx">03</span>
-          <div class="t"><b>模拟卷（两套）</b><span>基础卷 + 提高卷 · 含详细解析</span></div>
+          <div class="t"><b>模拟卷（两套）</b><span>各 12 题 / 满分 100 · 90 分钟限时 · 含详细解析</span></div>
           <span class="arrow">›</span>
         </a>
       </div>
@@ -1249,7 +1256,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v32';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v33';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
