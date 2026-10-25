@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v37';
+const CACHE = 'study-board-v38';
 
 const ASSETS = [
   './',
@@ -107,6 +107,16 @@ self.addEventListener('fetch', e => {
         return (await caches.match('./index.html')) || Response.error();
       }
     })());
+    return;
+  }
+
+  // 资料类（PDF/DOC 等大文件）：不缓存，直接走网络
+  // 避免 100MB+ 的资料把手机缓存撑爆
+  const isMaterial = /\.(pdf|docx?|xlsx?|pptx?|zip)$/i.test(url.pathname)
+                  || url.pathname.indexOf('/资料/') >= 0;
+  if (isMaterial) {
+    e.respondWith(fetch(req).catch(() => new Response('离线状态下打不开资料，请联网后重试',
+      { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } })));
     return;
   }
 
