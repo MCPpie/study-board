@@ -46,6 +46,7 @@ const ASSETS = [
   './docs/CMC第16届_2024_非数学A类_题目与答案.pdf',
   './docs/概率论/概率论期末专项.html',
   './docs/资料/index.html',
+  './docs/编程/记账本计划.html',
 ];
 
 self.addEventListener('install', e => {
