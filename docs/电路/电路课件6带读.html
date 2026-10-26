@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>电路课件 6 · 带读手册</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --circ:#fb923c; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px;
+    font-variant-numeric:tabular-nums}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--circ);
+    border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4;text-wrap:balance}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+  .m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .m span{display:block;font-size:10.5px;color:var(--tx3)}
+  .m b{display:block;font-size:14px;font-weight:700;margin-top:1px}
+
+  .hl{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.28);
+    border-radius:11px;padding:13px 15px;margin-bottom:20px;font-size:12.5px;color:var(--tx2)}
+  .hl b{color:var(--tx)}
+
+  h2{font-size:14px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:8px;
+    padding-bottom:7px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  h2::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--circ)}
+
+  .step{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:0;overflow:hidden;margin-bottom:10px}
+  .step-h{padding:11px 14px;background:var(--card2);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .step-n{flex:0 0 auto;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;
+    background:rgba(251,146,60,.15);color:var(--circ)}
+  .step-p{flex:1;font-size:12.5px;font-weight:700;min-width:120px}
+  .step-t{font-size:10.5px;color:var(--tx3)}
+  .step-b{padding:12px 14px}
+  .step-b .one{font-size:12.5px;color:var(--tx);font-weight:600;margin-bottom:6px}
+  .step-b ul{list-style:none}
+  .step-b li{position:relative;padding-left:15px;margin-bottom:5px;font-size:12.5px;color:var(--tx2)}
+  .step-b li:last-child{margin-bottom:0}
+  .step-b li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line2)}
+  .step-b li b{color:var(--tx)}
+  .step-b li.k{color:#ffc48a}
+  .step-b li.k::before{background:var(--circ)}
+  .skip{font-size:11.5px;color:var(--tx3);margin-top:7px;padding-top:7px;
+    border-top:1px dashed rgba(255,255,255,.07)}
+  .skip b{color:#ff9d9d}
+
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:10px 13px;margin-bottom:8px}
+  .f .n{font-size:10.5px;color:var(--tx3);margin-bottom:2px}
+  .f .e{font-size:13.5px;font-family:"Cambria Math","Times New Roman",serif;line-height:1.9}
+  .f .c{font-size:11px;color:var(--tx3);margin-top:3px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:10.5px;color:var(--tx3);font-weight:600;border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;background:var(--card);
+    -webkit-overflow-scrolling:touch}
+  td b{color:var(--tx)}
+
+  .info{background:rgba(56,208,216,.06);border:1px solid rgba(56,208,216,.22);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:var(--tx2);margin-top:10px}
+  .info b{color:var(--tx)}
+
+  .warn{background:rgba(255,122,122,.07);border:1px solid rgba(255,122,122,.25);
+    border-radius:11px;padding:12px 14px;font-size:12.5px;color:#ffc9c9;margin-top:10px}
+  .warn b{color:#ff9d9d}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+  code{font-size:11px;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">电路（2）· 课件 6 带读</div>
+  <h1>直流电源
+    <small>33 页 ｜ 全课最短、最像「背多分」的一份 ｜ 预计 70 分钟</small>
+  </h1>
+</header>
+
+<div class="meta">
+  <div class="m"><span>总页数</span><b>33 页</b></div>
+  <div class="m"><span>可跳</span><b>约 6 页</b></div>
+  <div class="m"><span>核心段</span><b>P3–P17 · P19–P31</b></div>
+  <div class="m"><span>预计</span><b>70 分钟</b></div>
+</div>
+
+<div class="hl">
+  <b>这份为什么短却重要</b>：整章几乎没有推导，全是「<b>几个数字 + 几个引脚顺序</b>」。<br>
+  <b>0.45 / 0.9 / 1.2 / √2</b> 这四个系数和 <b>78xx 与 79xx 引脚顺序相反</b>，是这一章唯一真正会扣分的地方。<br>
+  它也是唯一一份<b>可以边看边默写</b>的课件——看两遍不如合上书默一遍。
+</div>
+
+<!-- 第一段 -->
+<h2>第 1 段 · 全章地图 <span style="font-size:11px;color:var(--tx3);font-weight:400">P1–P2 · 8 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">01</span><span class="step-p">P1　两类稳压电源</span><span class="step-t">3 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：线性 vs 开关，本章只考线性</div>
+    <ul>
+      <li><b>线性稳压</b>：调整管工作在<b>放大区</b>，靠「吃掉多余的电压」来稳压，效率低但纹波小</li>
+      <li><b>开关稳压</b>：调整管当开关用，效率高，但<b>课件明说「不在大纲内，课上不讲」</b></li>
+      <li class="k"><b>考试范围就是线性</b>，别在开关电源上花时间</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">02</span><span class="step-p">P2　四大环节 ★必背</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：u1→u2→u3→u4→uo 这条链</div>
+    <ul>
+      <li class="k"><b>变压器</b>：u<sub>1</sub>（220V）→ u<sub>2</sub>，把电网电压降到合适值</li>
+      <li class="k"><b>整流</b>：u<sub>2</sub>（交流）→ u<sub>3</sub>（<b>脉动</b>直流）——靠二极管的单向导电性</li>
+      <li class="k"><b>滤波</b>：u<sub>3</sub> → u<sub>4</sub>（<b>较平滑</b>的直流）</li>
+      <li class="k"><b>稳压</b>：u<sub>4</sub> → u<sub>o</sub>，<b>抵抗电网波动和负载变化</b>，让输出不变</li>
+      <li><b>记法</b>：<b>变压 → 整流 → 滤波 → 稳压</b>，四步顺序不能乱，问答题常直接考这条链</li>
+    </ul>
+    <div class="info"><b>这一页是整章的目录。</b>后面 6.3 整流、6.4 滤波、6.5 稳压，就是这条链的后三段。</div>
+  </div>
+</div>
+
+<!-- 第二段 -->
+<h2>第 2 段 · 整流电路 ★数值必考 <span style="font-size:11px;color:var(--tx3);font-weight:400">P3–P13 · 25 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">03</span><span class="step-p">P3　四个量各用什么表示 ★易错</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：谁用有效值、谁用平均值、谁用最大值</div>
+    <ul>
+      <li class="k"><b>输入（交流）</b>→ 用<b>有效值 U<sub>2</sub></b> 或最大值 √2U<sub>2</sub></li>
+      <li class="k"><b>输出（直流）</b>→ 用<b>平均值 U<sub>O(AV)</sub></b></li>
+      <li class="k"><b>流过二极管的电流</b>→ 用<b>平均值 I<sub>D(AV)</sub></b></li>
+      <li class="k"><b>二极管承受的反向电压</b>→ 用<b>最大值 U<sub>RM</sub></b></li>
+      <li>实际二极管有正向压降，整流后幅度会比理论值<b>少 0.6~1V</b>（工程估算时通常忽略）</li>
+    </ul>
+    <div class="warn"><b>易错</b>：题目给「u<sub>2</sub>=20V」指的是<b>有效值</b>；写 U<sub>RM</sub> 时一定要乘 √2，写成 20V 就是错的。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">04</span><span class="step-p">P4–P5　半波整流的波形</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：正半周通、负半周断</div>
+    <ul>
+      <li>u<sub>2</sub> <b>正半周</b>：二极管正偏导通，负载上得到半个正弦波</li>
+      <li>u<sub>2</sub> <b>负半周</b>：二极管反偏截止，i<sub>O</sub> ≈ 0，<b>整个负半周都加在二极管上</b></li>
+      <li class="k"><b>所以二极管承受的最大反向电压 = u<sub>2</sub> 的峰值 = √2U<sub>2</sub></b>——这是 U<sub>RM</sub> 的来源</li>
+      <li>「半个周期有电流」→ 所以叫<b>半波</b>，输出是「缺了一半」的脉动波形</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P5 的波形作图过程，只要能在脑子里画出「一半有、一半平」就够了</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">05</span><span class="step-p">P6–P7　半波三个参数 ★必背</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：0.45、0.45、√2 这三个数</div>
+    <ul>
+      <li class="k"><b>U<sub>O(AV)</sub> = 0.45U<sub>2</sub></b>（输出电压平均值）</li>
+      <li class="k"><b>I<sub>D(AV)</sub> = I<sub>O(AV)</sub> = 0.45U<sub>2</sub>/R<sub>L</sub></b>（二极管正向平均电流）</li>
+      <li class="k"><b>U<sub>RM</sub> = √2U<sub>2</sub></b>（最大反向电压）</li>
+      <li><b>0.45 怎么来的</b>：一个周期只通了半个周期，所以是「全波平均值 0.9」的一半</li>
+      <li>选管原则：<b>耐压要高于 U<sub>RM</sub></b>，否则反向击穿</li>
+    </ul>
+    <div class="info"><b>半波 ↔ 桥式的换算关系</b>：桥式的 U<sub>O</sub> 是半波的 2 倍，但 U<sub>RM</sub> 两者<b>相同</b>（都是 √2U<sub>2</sub>）。这一点最容易记混。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">06</span><span class="step-p">P8–P11　桥式整流的导通路径</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：每半个周期都是「一对管」导通</div>
+    <ul>
+      <li><b>正半周</b>：<b>VD1、VD3</b> 导通，VD2、VD4 截止 → 负载「上正下负」</li>
+      <li><b>负半周</b>：<b>VD2、VD4</b> 导通，VD1、VD3 截止 → 负载<b>还是「上正下负」</b></li>
+      <li class="k"><b>关键结论</b>：两个半周负载电流<b>方向相同</b>，所以输出是<b>全波</b>脉动波形，不再是「缺一半」</li>
+      <li><b>怎么记导通对</b>：<b>对着的那一对</b>——正半周走 VD1→负载→VD3，负半周走 VD2→负载→VD4，画箭头比背表快</li>
+      <li>P11 把四只管子的电流波形画在一起：<b>每个管子只导通了半个周期</b></li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P11 的多波形叠图细节，抓住「每管半周导通、负载全周有电流」即可</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">07</span><span class="step-p">P12–P13　桥式参数 + 整流桥符号 ★必背</span><span class="step-t">6 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：0.9、0.45、√2</div>
+    <ul>
+      <li class="k"><b>U<sub>O(AV)</sub> = 0.9U<sub>2</sub></b></li>
+      <li class="k"><b>I<sub>D(AV)</sub> = 0.45U<sub>2</sub>/R<sub>L</sub> = ½·I<sub>O(AV)</sub></b>——<b>每个管子只承担负载电流的一半</b>，这是桥式的额外好处</li>
+      <li class="k"><b>U<sub>RM</sub> = √2U<sub>2</sub></b>（与半波相同）</li>
+      <li>P13：四个管子做成一体 → <b>整流桥</b>，符号是菱形 + 两个「~」+「+」「−」，四个端子</li>
+      <li><b>桥式 vs 半波</b>：输出电压翻倍、每管电流减半、耐压相同 → <b>桥式全面占优，实际都用桥式</b></li>
+    </ul>
+    <div class="warn"><b>易错</b>：很多人以为桥式的 U<sub>RM</sub> 是 2√2U<sub>2</sub>。<b>不是。</b>任一时刻只有两个管子截止，每个截止管承受的反压仍是 √2U<sub>2</sub>。</div>
+  </div>
+</div>
+
+<!-- 第三段 -->
+<h2>第 3 段 · 滤波电路 <span style="font-size:11px;color:var(--tx3);font-weight:400">P14–P18 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">08</span><span class="step-p">P14　两种基本形式</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：C 并联、L 串联</div>
+    <ul>
+      <li class="k"><b>电容 C 并联在负载两端</b>——因为 C 对直流开路、对交流阻抗小，<b>把交流旁路掉</b></li>
+      <li class="k"><b>电感 L 串联在负载前面</b>——因为 L 对直流阻抗小、对交流阻抗大，<b>把交流挡住</b></li>
+      <li><b>一句话记</b>：<b>电容「旁路」，电感「扼流」</b>，一个并联一个串联，方向正好相反</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">09</span><span class="step-p">P15–P17　电容滤波 ★核心必考</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：充放电 + 1.2U<sub>2</sub></div>
+    <ul>
+      <li><b>工作机制</b>：u<sub>2</sub> &gt; u<sub>C</sub> 时二极管导通、C 充电；u<sub>2</sub> &lt; u<sub>C</sub> 时二极管截止、C 通过 R<sub>L</sub> 放电</li>
+      <li class="k"><b>空载（R<sub>L</sub>=∞）</b>：没有放电回路，C 一直保持 → <b>U<sub>L</sub> = √2U<sub>2</sub> ≈ 1.4U<sub>2</sub></b>（最大值）</li>
+      <li class="k"><b>无电容（纯桥式）</b>：U<sub>L</sub> = 0.9U<sub>2</sub>（最小值）</li>
+      <li class="k"><b>工程估算：U<sub>L</sub> ≈ 1.2U<sub>2</sub></b>——正好是 0.9 和 1.4 的平均值，<b>这个 1.2 必背</b></li>
+      <li class="k"><b>R<sub>L</sub>C ≥ (3~5)·T/2</b>，T 是电源电压周期。<b>R<sub>L</sub>C 越大 → 放电越慢 → U<sub>L</sub> 越高越平</b></li>
+      <li class="k"><b>代价</b>：整流管<b>导通时间变短 → 瞬时峰值电流 i<sub>D</sub> 很大</b>，选管要留余量（P16–P17 的 i<sub>D</sub> 尖峰波形就是讲这个）</li>
+    </ul>
+    <div class="warn"><b>易错</b>：1.2U<sub>2</sub> 是「<b>有负载、且 R<sub>L</sub>C 足够大</b>」时的估算值，不是精确值。空载时会升到 1.4U<sub>2</sub>——<b>所以电容耐压要按 1.4U<sub>2</sub> 选</b>，这是常考的设计陷阱。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">10</span><span class="step-p">P18　电感滤波</span><span class="step-t">3 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：还是 0.9U<sub>2</sub>，但适合大电流</div>
+    <ul>
+      <li class="k"><b>U<sub>O(AV)</sub> ≈ 0.9U<sub>2</sub></b>（和纯桥式一样，因为 L 对直流相当于短路）</li>
+      <li><b>I<sub>O(AV)</sub> = 0.9U<sub>2</sub>/R<sub>L</sub></b></li>
+      <li>谐波分量 f 越高，X<sub>L</sub>=ωL 越大 → 交流大部分降在 L 上 → 输出平滑</li>
+      <li class="k"><b>适用场合</b>：<b>负载电流较大且变化较大</b>（L 越大、R<sub>L</sub> 越小，滤波效果越好）</li>
+      <li><b>对比</b>：电容滤波适合<b>小电流</b>（输出高但冲击大）；电感滤波适合<b>大电流</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第四段 -->
+<h2>第 4 段 · 串联型稳压电路 ★原理必考 <span style="font-size:11px;color:var(--tx3);font-weight:400">P19–P24 · 20 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">11</span><span class="step-p">P19–P20　四个组成部分 ★必背</span><span class="step-t">7 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：基准 + 调整 + 取样 + 比较放大</div>
+    <ul>
+      <li class="k"><b>基准电压源</b>（稳压管 D<sub>Z</sub> + R）：提供<b>不动的参考 U<sub>Z</sub></b></li>
+      <li class="k"><b>取样电路</b>（R<sub>1</sub>、R<sub>2</sub>、R<sub>P</sub> 串联分压）：把 U<sub>o</sub> 取一部分出来变成 U<sub>f</sub></li>
+      <li class="k"><b>误差放大器 A</b>：比较 U<sub>f</sub> 与 U<sub>Z</sub>，把差值放大</li>
+      <li class="k"><b>调整管 T</b>：串在输入与输出之间，<b>受误差放大器控制，改变自己的 U<sub>CE</sub></b></li>
+      <li><b>记法</b>：<b>基准、取样、比较、调整</b>——四个字一组，问答题按这四个说就有分</li>
+      <li>整体关系：<b>U<sub>I</sub> = U<sub>CE</sub> + U<sub>O</sub></b>——多余电压全被调整管吃掉</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">12</span><span class="step-p">P21–P22　稳压过程 ★最常考的问答题</span><span class="step-t">8 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：用箭头链把负反馈走一遍</div>
+    <ul>
+      <li class="k"><b>输入电压升高时</b>：<br>
+        U<sub>I</sub>↑ → U<sub>o</sub>↑ → U<sub>f</sub>↑ → (U<sub>Z</sub>−U<sub>f</sub>)↓ → A 输出↓ → I<sub>B</sub>↓ → U<sub>CE</sub>↑ → <b>U<sub>o</sub> = U<sub>I</sub> − U<sub>CE</sub> 基本不变</b></li>
+      <li class="k"><b>负载电流增大时</b>：<br>
+        R<sub>L</sub>↓ → U<sub>o</sub>↓ → U<sub>f</sub>↓ → (U<sub>Z</sub>−U<sub>f</sub>)↑ → A 输出↑ → I<sub>B</sub>↑ → U<sub>CE</sub>↓ → <b>U<sub>o</sub> 回升</b></li>
+      <li class="k"><b>本质：电压负反馈</b>（P21 原文就写了这四个字，答题时一定要写出来）</li>
+      <li><b>为什么要这么绕</b>：调整管是「用电流控制电压降」的器件，必须靠反馈才知道该吃多少</li>
+    </ul>
+    <div class="info"><b>这两条箭头链背下来就够应付问答题。</b>注意方向别写反：<b>输出低了要让它「多吃少」</b>——U<sub>o</sub>↓ → U<sub>CE</sub>↓。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">13</span><span class="step-p">P23–P24　输出范围 + 性能因素</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：R<sub>P</sub> 调到哪里最大、哪里最小</div>
+    <ul>
+      <li class="k"><b>U<sub>o</sub> = U<sub>Z</sub>·(R<sub>1</sub>+R<sub>2</sub>+R<sub>P</sub>)/(R<sub>2</sub>+R<sub>P</sub>′)</b>，R<sub>P</sub>′ 是<b>下臂</b>那一段</li>
+      <li class="k"><b>R<sub>P</sub> 全在上臂</b>（R<sub>P</sub>′=0）→ 取样比最小 → <b>U<sub>o(max)</sub> = U<sub>Z</sub>(R<sub>1</sub>+R<sub>2</sub>+R<sub>P</sub>)/R<sub>2</sub></b></li>
+      <li class="k"><b>R<sub>P</sub> 全在下臂</b>（R<sub>P</sub>′=R<sub>P</sub>）→ 取样比最大 → <b>U<sub>o(min)</sub> = U<sub>Z</sub>(R<sub>1</sub>+R<sub>2</sub>+R<sub>P</sub>)/(R<sub>2</sub>+R<sub>P</sub>)</b></li>
+      <li><b>四个影响稳压性能的因素（P24 原文四条）</b>：<br>
+        ① <b>U<sub>I</sub> &gt; U<sub>o</sub></b>，且 U<sub>CE</sub> &gt; U<sub>CES</sub>，否则调整管进饱和、失去调节能力<br>
+        ② <b>基准 U<sub>REF</sub> 越稳越好</b>——U<sub>REF</sub> 变了，差值就不可靠<br>
+        ③ 误差放大器<b>零点漂移越小越好</b>（选温度稳定性好的器件）<br>
+        ④ 误差放大器<b>放大倍数 A<sub>u</sub> 和反馈系数 F<sub>u</sub> 越大越好</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 第五段 -->
+<h2>第 5 段 · 三端集成稳压器 <span style="font-size:11px;color:var(--tx3);font-weight:400">P25–P31 · 15 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">14</span><span class="step-p">P25–P27　78xx 与 79xx ★引脚顺序易错</span><span class="step-t">6 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：两个系列的引脚顺序正好相反</div>
+    <ul>
+      <li><b>三端</b> = 输入端、输出端、公共端；内部带<b>过流 / 二次击穿 / 热过载保护</b></li>
+      <li class="k"><b>W78xx（正电压）</b>：<b>1 输入　2 公共　3 输出</b></li>
+      <li class="k"><b>W79xx（负电压）</b>：<b>1 公共　2 输入　3 输出</b></li>
+      <li><b>型号末两位就是电压</b>：7805=+5V、7809=+9V、7812=+12V、7815=+15V；7905=−5V … 7915=−15V</li>
+      <li>封装 TO-220，加散热片；C<sub>1</sub> 抑制高频、C<sub>2</sub> 改善瞬态</li>
+    </ul>
+    <div class="warn"><b>这是本章最阴的一个坑</b>：78 和 79 <b>只有「公共端」和「输入端」位置对调</b>。接线接反 = 直接烧。判断口诀：<b>78 是「进—地—出」，79 是「地—进—出」</b>。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">15</span><span class="step-p">P28–P29　正负双电源</span><span class="step-t">4 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：78 和 79 挂在同一组变压器上</div>
+    <ul>
+      <li>u<sub>2</sub> 正半周：VD1、VD3 导通 → C<sub>1</sub> 滤波 → 供 <b>+U<sub>I1</sub></b> 给 CW78xx → 输出 <b>+U<sub>O1</sub></b></li>
+      <li>u<sub>2</sub> 负半周：VD2、VD4 导通 → C<sub>2</sub> 滤波 → 供 <b>−U<sub>I2</sub></b> 给 CW79xx → 输出 <b>−U<sub>O2</sub></b></li>
+      <li class="k"><b>要点</b>：<b>正负两路各自整流、各自滤波、各自稳压</b>，共用一个二次绕组和公共地</li>
+      <li><b>用途</b>：运放需要 ± 双电源——正好接上你 10-27 学的运放那一章</li>
+    </ul>
+    <div class="skip"><b>可跳</b>：P29 是 P28 的负半周重复说明，扫一眼确认「换成 VD2/VD4」即可</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">16</span><span class="step-p">P30–P31　三端可调 317 / 337</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：输出 = 1.25V × (1 + R<sub>2</sub>/R<sub>1</sub>)</div>
+    <ul>
+      <li class="k"><b>CW317（正压可调）</b>：输出端与调整端之间固定 <b>1.25V</b><br>
+        <b>U<sub>o</sub> = 1.25 × (1 + R<sub>2</sub>/R<sub>1</sub>)</b>（严格式还要加 I<sub>Adj</sub>R<sub>2</sub>，一般可忽略）</li>
+      <li class="k"><b>CW337（负压可调）</b>：输出端与调整端之间 <b>−1.25V</b>，公式同理取负</li>
+      <li><b>为什么是 1.25V</b>：芯片内部基准就是 1.25V，外部只用两个电阻分压就能设定输出</li>
+      <li><b>和固定式的区别</b>：固定式靠换型号改电压，可调式靠改电阻改电压</li>
+      <li>P30–P31 的 C<sub>1</sub>/C<sub>2</sub>：<b>防止自激、改善纹波</b></li>
+    </ul>
+    <div class="info"><b>317 的最小输出就是 1.25V</b>，做不到 0V。要 0V 起调得用别的方案——这是常考的选择题干扰项。</div>
+  </div>
+</div>
+
+<!-- 第六段 -->
+<h2>第 6 段 · 小结与作业 <span style="font-size:11px;color:var(--tx3);font-weight:400">P32–P33 · 5 分钟</span></h2>
+
+<div class="step">
+  <div class="step-h"><span class="step-n">17</span><span class="step-p">P32–P33　小结 + 练习</span><span class="step-t">5 分钟</span></div>
+  <div class="step-b">
+    <div class="one">这一页只讲一件事：把四个系数串成一张表</div>
+    <ul>
+      <li>P32 的小结就是本章唯一的公式清单，<b>建议照抄一遍</b>，抄时自己补上适用条件</li>
+      <li class="k"><b>作业（P33 原文）</b>：二版三版课本相同，<b>第 10 章</b>。自我检测<b>都可以做</b>；习题<b>都可以做</b>，<b>重点 2、5、8、11、12 题</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 必记点 -->
+<h2>必记点汇总（14 条）</h2>
+<div class="f"><div class="n">1</div><div class="e">四个环节：<b>变压 → 整流 → 滤波 → 稳压</b></div></div>
+<div class="f"><div class="n">2</div><div class="e">半波：U<sub>O(AV)</sub> = 0.45U<sub>2</sub>　I<sub>D(AV)</sub> = 0.45U<sub>2</sub>/R<sub>L</sub>　U<sub>RM</sub> = √2U<sub>2</sub></div></div>
+<div class="f"><div class="n">3</div><div class="e">桥式：U<sub>O(AV)</sub> = 0.9U<sub>2</sub>　I<sub>D(AV)</sub> = 0.45U<sub>2</sub>/R<sub>L</sub>（每管半个负载电流）　U<sub>RM</sub> = √2U<sub>2</sub></div></div>
+<div class="f"><div class="n">4</div><div class="e">半波与桥式的 U<sub>RM</sub> <b>相同</b>，都是 √2U<sub>2</sub>——最容易记错的一点</div></div>
+<div class="f"><div class="n">5</div><div class="e">桥式导通对：正半周 VD1+VD3，负半周 VD2+VD4；负载电流方向始终不变</div></div>
+<div class="f"><div class="n">6</div><div class="e">输入用有效值、输出用平均值、二极管电流用平均值、反向电压用最大值</div></div>
+<div class="f"><div class="n">7</div><div class="e">电容滤波（桥式）：U<sub>L</sub> ≈ <b>1.2U<sub>2</sub></b>；空载 1.4U<sub>2</sub>；纯桥式 0.9U<sub>2</sub></div></div>
+<div class="f"><div class="n">8</div><div class="e">R<sub>L</sub>C ≥ (3~5)·T/2；电容耐压要按 <b>1.4U<sub>2</sub></b> 选</div></div>
+<div class="f"><div class="n">9</div><div class="e">电容滤波缺点：导通角小 → <b>i<sub>D</sub> 峰值冲击电流大</b></div></div>
+<div class="f"><div class="n">10</div><div class="e">电感滤波（桥式）：U<sub>O</sub> ≈ 0.9U<sub>2</sub>，适合<b>大电流且变化大</b>的负载</div></div>
+<div class="f"><div class="n">11</div><div class="e">串联型稳压四部分：<b>基准、取样、比较放大、调整管</b>；本质是<b>电压负反馈</b></div></div>
+<div class="f"><div class="n">12</div><div class="e">稳压过程链：U<sub>o</sub>↑ → U<sub>f</sub>↑ → 差值↓ → I<sub>B</sub>↓ → U<sub>CE</sub>↑ → U<sub>o</sub> 回落</div></div>
+<div class="f"><div class="n">13</div><div class="e">引脚：<b>78xx = 1 输入 / 2 公共 / 3 输出</b>；<b>79xx = 1 公共 / 2 输入 / 3 输出</b></div></div>
+<div class="f"><div class="n">14</div><div class="e">CW317：U<sub>o</sub> = 1.25(1+R<sub>2</sub>/R<sub>1</sub>)；CW337 同理取负</div></div>
+
+<!-- 自测 -->
+<h2>看完自测（6 题）</h2>
+<div class="info">
+  <b>1.</b> 直流电源的四个环节分别起什么作用？各自把什么变成什么？<br><br>
+  <b>2.</b> 单相桥式整流，u<sub>2</sub> = 20V（有效值），R<sub>L</sub> = 100Ω。求 U<sub>O(AV)</sub>、I<sub>O(AV)</sub>、每个二极管的 I<sub>D(AV)</sub> 和 U<sub>RM</sub>。<br><br>
+  <b>3.</b> 上题若在负载两端并一个足够大的电容，输出电压大约变成多少？电容耐压至少要选多少伏？<br><br>
+  <b>4.</b> 桥式整流中，正半周和负半周分别是哪两个二极管导通？为什么负载上的电压方向不变？<br><br>
+  <b>5.</b> 串联型稳压电路中，当电网电压升高导致 U<sub>o</sub> 上升时，用箭头链写出它怎么把 U<sub>o</sub> 拉回来。<br><br>
+  <b>6.</b> 手上有 W7805 和 W7905 各一只，要搭 ±5V 双电源。两只芯片的 1、2、3 脚分别接什么？接反会怎样？
+</div>
+
+<footer>
+  <div>课件：<code>6.直流电源.pdf</code>（33 页）｜ 建议一次走完，全章 70 分钟</div>
+  <div>作业：第 10 章（二版三版相同），自我检测全做；习题全做，重点 <b>2、5、8、11、12</b></div>
+  <div>配套：<code>电路课件5带读.html</code>（运放与比较器）· <code>电子电路与技术2_补课辅助.html</code></div>
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>
