@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>08 无穷级数 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>08 · 无穷级数</h1>
+  <p class="sub">填空 + 解答都有 · 约 12 分</p>
+  <div class="meta">
+    <span>真题 <b>4 道</b></span>
+    <span>题型 <b>3 类</b></span>
+    <span>建议 <b>1 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>这章的特点是「考得不多，但每次都考得不简单」。</b>第十七届的判敛题（<span class="m">Σ sin²x·sin²2x⋯sin²(2<sup>n</sup>x)</span>）是典型的 CMC 风格——不是套比值判别法，而是要你<strong>先求被乘函数的最大值，再做几何级数估计</strong>。这类题考研很少见。</div>
+
+<h2>一、真题清单</h2>
+
+<h3>A. 幂级数收敛域</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">15届 第4题</td><td><span class="m">Σ<sub>n=1</sub><sup>∞</sup> (−1)<sup>n−1</sup>x<sup>2n</sup>/(n(2n−1))</span> 的收敛域</td></tr>
+</table>
+<div class="tip"><b>解法：</b>用比值法求半径 <span class="m">R</span>，得 <span class="m">|x|<1</span>；再分别检查端点 <span class="m">x=±1</span>。代入后是交错级数，用莱布尼茨判别法确认收敛。<strong>答案是 [−1, 1]</strong>，注意是闭区间。</div>
+
+<h3>B. 幂级数求和函数</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">14届 第3题</td><td>先求 <span class="m">Σ n²x<sup>n</sup></span> 的和函数，再算 <span class="m">lim(1+1/n)<sup>n</sup></span> 型极限</td></tr>
+</table>
+<div class="tip"><b>求和函数的三板斧：</b><br>
+① <strong>逐项求导</strong>——系数里有 <span class="m">n</span>、<span class="m">n²</span> 时用<br>
+② <strong>逐项积分</strong>——系数里有 <span class="m">1/n</span> 时用<br>
+③ <strong>先积后导 / 先导后积</strong>——凑成已知级数（<span class="m">Σx<sup>n</sup> = 1/(1−x)</span>）</div>
+
+<h3>C. 数项级数判敛（CMC 特色）</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">17届 第9题（解答）</td><td><span class="m">Σ a<sub>n</sub></span>，其中 <span class="m">a<sub>n</sub> = sin²x·sin²2x⋯sin²(2<sup>n</sup>x)</span>，<span class="m">x∈(−∞,+∞)</span>，判断收敛性</td></tr>
+</table>
+<div class="box">
+<p><strong>这题的思路（值得完整看一遍）：</strong></p>
+<p><strong>第一步：令 <span class="m">f(x)=sin²x·sin 2x</span>，求它的最大值。</strong>求导得 <span class="m">f′(x) = 2sin²x(3−4sin²x)</span>，在 <span class="m">(0,π)</span> 内驻点为 <span class="m">π/3, 2π/3</span>。</p>
+<p><strong>第二步：算出 <span class="m">|f| ≤ 3√3/8</span>。</strong></p>
+<p><strong>第三步：把 <span class="m">a<sub>n</sub></span> 拆成可估计的形式。</strong></p>
+<p style="padding-left:18px"><span class="m">a<sub>n</sub><sup>3/2</sup> = |sin x|·|f(x)f(2x)⋯f(2<sup>n−1</sup>x)|·|sin²2<sup>n</sup>x| ≤ (3√3/8)<sup>n</sup></span></p>
+<p style="margin-bottom:0"><strong>第四步：</strong>右边是公比小于 1 的几何级数，收敛，故 <span class="m">Σa<sub>n</sub><sup>3/2</sup></span> 收敛。再由比较判别法得 <span class="m">Σa<sub>n</sub></span> 收敛。</p>
+</div>
+<div class="note"><b>这题的关键洞察：</b>不是直接对 <span class="m">a<sub>n</sub></span> 判敛，而是先<strong>把连乘拆成「每个因子都小于某个常数」</strong>，凑成几何级数。<strong>看到连乘形式的级数，第一反应就该是「求单个因子的上界」。</strong></div>
+
+<h3>D. 傅里叶级数</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">8届 第6题（解答）</td><td><span class="m">f(x) = f(x+2) = f(x+√3)</span>，用傅里叶级数理论证明 <span class="m">f(x)</span> 为常数</td></tr>
+</table>
+<div class="tip"><b>这题很巧：</b>两个周期 2 和 <span class="m">√3</span> 不可公度，说明 <span class="m">f</span> 的周期可以任意小，即 <span class="m">f</span> 是常数。用傅里叶的语言说：所有傅里叶系数都为 0。<strong>这是「周期理论」的经典应用</strong>，值得看一眼原解答。</div>
+
+<h2>二、判敛方法速查</h2>
+
+<div class="box">
+<table>
+  <tr><th style="width:26%">方法</th><th style="width:30%">适用</th><th>判据</th></tr>
+  <tr><td class="k">比值法</td><td>含 <span class="m">n!</span>、<span class="m">a<sup>n</sup></span>、<span class="m">n<sup>n</sup></span></td><td class="m">lim a<sub>n+1</sub>/a<sub>n</sub> = ρ</td></tr>
+  <tr><td class="k">根值法</td><td>含 <span class="m">n</span> 次方</td><td class="m">lim <sup>n</sup>√a<sub>n</sub> = ρ</td></tr>
+  <tr><td class="k">比较法</td><td>与 <span class="m">1/n<sup>p</sup></span> 比</td><td><span class="m">p>1</span> 收敛，<span class="m">p≤1</span> 发散</td></tr>
+  <tr><td class="k">莱布尼茨</td><td>交错级数</td><td><span class="m">a<sub>n</sub></span> 单调递减且趋于 0</td></tr>
+  <tr><td class="k">绝对收敛</td><td>含 <span class="m">sin</span>、<span class="m">cos</span>、<span class="m">(−1)<sup>n</sup></span></td><td>先判 <span class="m">Σ|a<sub>n</sub>|</span></td></tr>
+</table>
+</div>
+
+<div class="note"><b>易错：</b>比值法失效（<span class="m">ρ=1</span>）时不能下结论，要换方法。比如 <span class="m">Σ1/n</span> 和 <span class="m">Σ1/n²</span> 的比值极限都是 1，但一个发散一个收敛。</div>
+
+<h2>三、练习顺序</h2>
+
+<div class="ok">
+<b>一天：</b><br>
+① <strong>15届4</strong>（收敛域，最基础也最常考）<br>
+② <strong>14届3</strong>（求和函数，练三板斧）<br>
+③ <strong>17届9</strong>（CMC 特色判敛，重点看思路）<br>
+④ <strong>8届6</strong>（傅里叶，看一眼原解答就够，不用深挖）
+</div>
+
+<div class="note"><b>取舍建议：</b>如果时间只剩一天，<strong>优先保「收敛域」和「求和函数」</strong>——这两个是填空题的常客，套路固定。17届那种连乘判敛属于「见了就赚，不见不亏」，不必专门花时间。<strong>傅里叶级数同理，十年只出现过一次（第八届），优先级最低。</strong></div>
+
+<footer>
+  CMC 分章练习 · 08 无穷级数　|　巴蒂整理 2026-10-26
+</footer>
+</div>
+</body>
+</html>

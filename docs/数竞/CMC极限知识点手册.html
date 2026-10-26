@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMC 极限知识点系统梳理</title>
+<style>
+:root{
+  --bg:#0e1015; --card:#181c24FFF; --ink:#e8ebf2; --ink2:#aab3c4; --ink3:#7c8699;
+  --line:#272d3a; --line2:#333b4d; --accent:#5b9bff; --accent-l:rgba(91,155,255,.10);
+  --warn:#f5a623; --warn-l:rgba(245,166,35,.10); --star:#ff8a5c; --ok:#2ecc8f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:15px; line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+.wrap{display:flex; max-width:1180px; margin:0 auto; gap:36px; padding:0 28px}
+aside{width:196px; flex:0 0 196px; padding-top:44px}
+nav{position:sticky; top:32px}
+nav .nt{font-size:11px; letter-spacing:.14em; color:var(--ink3); text-transform:uppercase; margin-bottom:14px}
+nav a{display:block; font-size:13px; color:var(--ink2); text-decoration:none; padding:5px 0 5px 11px; border-left:2px solid transparent; transition:.15s}
+nav a:hover{color:var(--accent); border-left-color:var(--accent); background:var(--accent-l)}
+main{flex:1; min-width:0; padding:44px 0 100px}
+
+header{border-bottom:2px solid var(--ink); padding-bottom:20px; margin-bottom:8px}
+h1{font-size:26px; font-weight:600; margin:0 0 10px; letter-spacing:-.01em; font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px; color:var(--ink2); margin:0}
+.meta{display:flex; gap:20px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:var(--ink3)}
+.meta b{color:var(--accent); font-weight:600}
+
+.legend{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:26px 0 8px; font-size:13px; color:var(--ink2)}
+.legend span{margin-right:18px; white-space:nowrap}
+
+h2{font-size:19px; font-weight:600; margin:52px 0 6px; padding-top:14px; border-top:1px solid var(--line2); letter-spacing:-.01em}
+h2 .n{color:var(--accent); font-family:Georgia,serif; margin-right:9px; font-weight:400}
+h3{font-size:15px; font-weight:600; margin:26px 0 8px; color:var(--ink)}
+p{margin:9px 0}
+
+.k{background:var(--card); border:1px solid var(--line); border-radius:9px; padding:15px 19px; margin:12px 0}
+.kh{display:flex; align-items:flex-start; gap:9px; margin-bottom:6px}
+.kh input{margin:5px 0 0; accent-color:var(--accent); cursor:pointer; flex:0 0 auto; width:15px; height:15px}
+.kt{font-size:14.5px; font-weight:600; cursor:pointer; user-select:none; flex:1}
+.kh input:checked + .kt{color:var(--ink3); text-decoration:line-through; text-decoration-color:var(--line2)}
+.tag{font-size:10.5px; padding:1px 7px; border-radius:3px; flex:0 0 auto; margin-top:3px; font-weight:500; letter-spacing:.03em}
+.t-star{background:#FBEDE7; color:var(--star)}
+.t-warn{background:var(--warn-l); color:var(--warn)}
+.t-cmc{background:var(--accent-l); color:var(--accent)}
+.kb{padding-left:24px; font-size:14px; color:var(--ink2)}
+.kb p:first-child{margin-top:0}
+.kb p:last-child{margin-bottom:0}
+
+.m{font-family:Cambria,"Times New Roman",Georgia,serif; font-size:1.06em; color:var(--ink)}
+.m i{font-style:italic}
+.frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.9em; margin:0 .18em; line-height:1.22}
+.frac .num{border-bottom:1px solid currentColor; padding:0 .3em}
+.frac .den{padding:0 .3em}
+
+table{width:100%; border-collapse:collapse; margin:12px 0; font-size:13.5px}
+th{text-align:left; font-weight:600; color:var(--ink); border-bottom:1.5px solid var(--line2); padding:8px 10px; background:#1e2330}
+td{border-bottom:1px solid var(--line); padding:7px 10px; color:var(--ink2); vertical-align:top}
+td.m,th.m{font-family:Cambria,"Times New Roman",serif; color:var(--ink)}
+tr:last-child td{border-bottom:none}
+
+.warnbox{background:var(--warn-l); border-left:3px solid var(--warn); border-radius:0 6px 6px 0; padding:11px 16px; margin:12px 0; font-size:13.5px; color:#f5a623}
+.warnbox b{color:var(--warn)}
+.tipbox{background:var(--accent-l); border-left:3px solid var(--accent); border-radius:0 6px 6px 0; padding:11px 16px; margin:12px 0; font-size:13.5px; color:#9dc0ff}
+.tipbox b{color:var(--accent)}
+
+.q{counter-increment:q; margin:14px 0; padding-left:34px; position:relative; font-size:14px}
+.q::before{content:counter(q); position:absolute; left:0; top:1px; width:22px; height:22px; border-radius:50%; background:var(--accent-l); color:var(--accent); font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center}
+#quiz{counter-reset:q}
+
+details{margin-top:20px; border:1px solid var(--line); border-radius:8px; background:var(--card); padding:0}
+summary{padding:13px 19px; cursor:pointer; font-size:14px; font-weight:600; color:var(--accent); list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ "; color:var(--ink3)}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+.ans{padding:6px 19px 16px; font-size:13.5px; color:var(--ink2)}
+.ans div{padding:6px 0; border-bottom:1px dashed var(--line)}
+.ans div:last-child{border-bottom:none}
+
+footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--line2); font-size:12.5px; color:var(--ink3)}
+
+#prog{position:fixed; top:0; left:0; height:2px; background:var(--accent); width:0; z-index:99; transition:width .1s}
+
+@media(max-width:900px){
+  aside{display:none}
+  .wrap{padding:0 18px}
+  h1{font-size:22px}
+}
+@media print{
+  aside,#prog{display:none}
+  body{background:#fff; font-size:11pt}
+  .k{break-inside:avoid; box-shadow:none}
+  details{display:block}
+  details>.ans{display:block}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="wrap">
+
+<aside>
+  <nav>
+    <div class="nt">目录</div>
+    <a href="#s0">使用说明</a>
+    <a href="#s1">一 · 概念地基</a>
+    <a href="#s2">二 · 计算工具箱</a>
+    <a href="#s3">三 · 数列极限</a>
+    <a href="#s4">四 · 连续性</a>
+    <a href="#s5">五 · CMC 特色题型</a>
+    <a href="#s6">六 · 易错清单</a>
+    <a href="#s7">七 · 自测十题</a>
+  </nav>
+</aside>
+
+<main>
+<header>
+  <h1>极限 · 知识点系统梳理</h1>
+  <p class="sub">全国大学生数学竞赛（非数学 A 类）· 只考高等数学</p>
+  <div class="meta">
+    <span>初赛分值 <b>约 13 分</b></span>
+    <span>更新 <b>2026-10-23</b></span>
+    <span>考试 <b>11-14</b></span>
+  </div>
+</header>
+
+<div class="legend">
+  <span><span class="tag t-star">必背</span> 背到条件反射</span>
+  <span><span class="tag t-warn">陷阱</span> 高频失分点</span>
+  <span><span class="tag t-cmc">数竞</span> CMC 特色考法</span>
+  <span>标题前的方框可以打勾，记录掌握进度</span>
+</div>
+
+<h2 id="s0"><span class="n">0</span>使用说明</h2>
+<p>这份手册按「概念 → 工具 → 数列 → 连续 → 题型 → 易错」六层组织。极限这一章在 CMC 里的特点是：<strong>填空题靠它拿分，解答题靠它开胃</strong>。它是后面所有章节的地基——导数定义、定积分定义、级数判敛，本质上全是极限。</p>
+<p>建议的读法：第一遍通读，不追求全懂；第二遍只看打了「必背」和「陷阱」标记的卡片；考前只看第六节。</p>
+
+<h2 id="s1"><span class="n">一</span>概念地基</h2>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-1"><span class="kt">1.1　极限的定义</span></div>
+  <div class="kb">
+    <p><strong>数列极限</strong>：<span class="m">∀<i>ε</i>&gt;0, ∃<i>N</i>, 当 <i>n</i>&gt;<i>N</i> 时, |<i>a<sub>n</sub></i> − <i>a</i>| &lt; <i>ε</i></span></p>
+    <p><strong>函数极限</strong>：<span class="m">∀<i>ε</i>&gt;0, ∃<i>δ</i>&gt;0, 当 0&lt;|<i>x</i>−<i>x</i><sub>0</sub>|&lt;<i>δ</i> 时, |<i>f</i>(<i>x</i>)−<i>A</i>| &lt; <i>ε</i></span></p>
+    <p>CMC 几乎不考用定义证明极限，但要理解一句话：<strong>极限描述的是「趋势」，不是「取值」</strong>。函数在 <span class="m"><i>x</i><sub>0</sub></span> 处有没有定义、取什么值，与极限无关。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-2"><span class="kt">1.2　极限的四条性质</span></div>
+  <div class="kb">
+    <table>
+      <tr><th style="width:26%">性质</th><th>内容</th></tr>
+      <tr><td>唯一性</td><td>极限若存在，必唯一</td></tr>
+      <tr><td>局部有界性</td><td>极限存在 ⇒ 在去心邻域内有界</td></tr>
+      <tr><td>局部保号性</td><td>若 <span class="m">lim <i>f</i> = <i>A</i> &gt; 0</span>，则在某去心邻域内 <span class="m"><i>f</i>(<i>x</i>) &gt; 0</span></td></tr>
+      <tr><td>四则运算</td><td>两个极限<strong>都存在</strong>时，和差积商的极限等于极限的和差积商</td></tr>
+    </table>
+    <div class="warnbox"><b>陷阱：</b>四则运算的前提是「两个极限都存在」。很多人在拆开 <span class="m">lim(<i>f</i>−<i>g</i>)</span> 后算出 <span class="m">∞−∞</span>，就下结论「极限不存在」——其实只是<strong>不能拆</strong>，原式可能是有极限的。</div>
+    <p>保号性在<strong>求参数</strong>时极其好用：由极限的符号可以反推函数在邻域内的符号。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-3"><span class="kt">1.3　左右极限</span><span class="tag t-warn">陷阱</span></div>
+  <div class="kb">
+    <p><span class="m">lim<sub><i>x</i>→<i>x</i><sub>0</sub></sub> <i>f</i>(<i>x</i>) 存在 ⟺ <i>f</i>(<i>x</i><sub>0</sub><sup>−</sup>) = <i>f</i>(<i>x</i><sub>0</sub><sup>+</sup>)</span></p>
+    <p>出现下列信号，<strong>必须分左右</strong>：</p>
+    <table>
+      <tr><th style="width:34%">信号</th><th>在 <span class="m"><i>x</i>=0</span> 处的情况</th></tr>
+      <tr><td class="m">e<sup>1/x</sup></td><td>右极限 +∞，左极限 0 → 极限不存在</td></tr>
+      <tr><td class="m">arctan(1/x)</td><td>右 π/2，左 −π/2 → 极限不存在</td></tr>
+      <tr><td class="m">|x| / x</td><td>右 1，左 −1 → 极限不存在</td></tr>
+      <tr><td>分段函数的分段点</td><td>按定义分别求</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-4"><span class="kt">1.4　无穷小与无穷大</span></div>
+  <div class="kb">
+    <p><strong>无穷小</strong>：以 0 为极限的变量。注意它是「变量」，不是「很小的数」。</p>
+    <p>三条运算性质：</p>
+    <p>① 有限个无穷小之和仍是无穷小<br>
+       ② 有界函数 × 无穷小 = 无穷小（<span class="m">sin <i>x</i></span>、<span class="m">arctan <i>x</i></span> 都有界）<br>
+       ③ 有限个无穷小之积仍是无穷小</p>
+    <div class="warnbox"><b>陷阱：</b>「有限个」这三个字是考点。<strong>无限个无穷小之和不一定是无穷小</strong>。<br>
+    反例：<span class="m">lim<sub><i>n</i>→∞</sub> (<span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span> + <span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span> + ⋯ + <span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span>)</span>（<span class="m"><i>n</i></span> 项）<span class="m">= lim 1 = 1</span>，不是 0。</div>
+    <p><strong>无穷大</strong>：<span class="m">|f(x)|</span> 无限增大。无穷大一定无界，但无界不一定是无穷大（如 <span class="m"><i>x</i> sin <i>x</i></span>）。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-5"><span class="kt">1.5　无穷小的阶与比较</span></div>
+  <div class="kb">
+    <p>设 <span class="m"><i>α</i>, <i>β</i></span> 都是无穷小，<span class="m">lim <i>α</i>/<i>β</i> = <i>c</i></span>：</p>
+    <table>
+      <tr><th style="width:22%">结果</th><th>关系</th><th>记号</th></tr>
+      <tr><td class="m">c ≠ 0</td><td>同阶无穷小</td><td class="m">α = O(β)</td></tr>
+      <tr><td class="m">c = 1</td><td>等价无穷小</td><td class="m">α ~ β</td></tr>
+      <tr><td class="m">c = 0</td><td><span class="m">α</span> 是 <span class="m">β</span> 的高阶无穷小</td><td class="m">α = o(β)</td></tr>
+      <tr><td class="m">c = ∞</td><td><span class="m">α</span> 是 <span class="m">β</span> 的低阶无穷小</td><td>—</td></tr>
+    </table>
+    <p><strong>k 阶无穷小</strong>：若 <span class="m">lim <i>α</i>/<i>β</i><sup>k</sup> = <i>c</i> ≠ 0</span>，则称 <span class="m">α</span> 是 <span class="m">β</span> 的 <span class="m">k</span> 阶无穷小。这是「求 <span class="m">α</span>」类题目的理论基础（见 5.2）。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="1-6"><span class="kt">1.6　等价无穷小表</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p>全部在 <span class="m"><i>x</i> → 0</span> 时成立。前六行是一阶，后四行是三阶——<strong>后四行是速通卡，很多人不知道它们存在</strong>。</p>
+    <table>
+      <tr><th style="width:44%">表达式</th><th>等价于</th></tr>
+      <tr><td class="m">sin x　tan x　arcsin x　arctan x</td><td class="m">x</td></tr>
+      <tr><td class="m">1 − cos x</td><td class="m">x² / 2</td></tr>
+      <tr><td class="m">e<sup>x</sup> − 1</td><td class="m">x</td></tr>
+      <tr><td class="m">ln(1 + x)</td><td class="m">x</td></tr>
+      <tr><td class="m">(1 + x)<sup>α</sup> − 1</td><td class="m">αx</td></tr>
+      <tr><td class="m">a<sup>x</sup> − 1</td><td class="m">x ln a</td></tr>
+      <tr><td class="m">x − sin x</td><td class="m">x³ / 6</td></tr>
+      <tr><td class="m">tan x − x</td><td class="m">x³ / 3</td></tr>
+      <tr><td class="m">x − arctan x</td><td class="m">x³ / 3</td></tr>
+      <tr><td class="m">tan x − sin x</td><td class="m">x³ / 2</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2 id="s2"><span class="n">二</span>计算工具箱</h2>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-1"><span class="kt">2.1　七种未定式总览</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p>做题第一步永远是<strong>判断类型</strong>。类型决定方法，不是反过来。</p>
+    <table>
+      <tr><th style="width:20%">类型</th><th style="width:38%">转化方式</th><th>主力工具</th></tr>
+      <tr><td class="m">0 / 0</td><td>直接处理</td><td>等价替换、泰勒、洛必达</td></tr>
+      <tr><td class="m">∞ / ∞</td><td>直接处理</td><td>洛必达、抓大头（同除最高次）</td></tr>
+      <tr><td class="m">0 · ∞</td><td>写成 <span class="m">0/(1/∞)</span> 或 <span class="m">∞/(1/0)</span></td><td>化为分式后用上面两种</td></tr>
+      <tr><td class="m">∞ − ∞</td><td>通分 / 有理化 / 提公因子</td><td>化为 0/0 或 0·∞</td></tr>
+      <tr><td class="m">1<sup>∞</sup></td><td><span class="m">e<sup>lim v(u−1)</sup></span></td><td>见 2.6，最快</td></tr>
+      <tr><td class="m">0<sup>0</sup></td><td>取对数 <span class="m">e<sup>v ln u</sup></span></td><td>指数化</td></tr>
+      <tr><td class="m">∞<sup>0</sup></td><td>取对数 <span class="m">e<sup>v ln u</sup></span></td><td>指数化</td></tr>
+    </table>
+    <div class="tipbox"><b>口诀：</b>乘除换等价，加减上泰勒；阶数看分母，抵消再升阶。</div>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-2"><span class="kt">2.2　等价无穷小替换</span><span class="tag t-warn">陷阱</span></div>
+  <div class="kb">
+    <p><strong>能换的地方</strong>：整个式子的<strong>乘除因子</strong>。也就是「整体乘以它」或「整体除以它」的位置。</p>
+    <p><strong>不能换的地方</strong>：加减项。原因是<strong>抵消</strong>——等价无穷小只保留最低阶非零项，两个最低阶一减就没了，被丢掉的高阶项恰恰是答案。</p>
+    <div class="warnbox"><b>经典反例：</b><span class="m">lim<sub><i>x</i>→0</sub> (tan <i>x</i> − sin <i>x</i>)/<i>x</i>³</span><br>
+    错误做法：<span class="m">tan x ~ x</span>、<span class="m">sin x ~ x</span>，得 <span class="m">(x−x)/x³ = 0</span>。错。<br>
+    正确做法：展开到三阶，<span class="m">(x + x³/3) − (x − x³/6) = x³/2</span>，答案 <span class="m">1/2</span>。</div>
+    <p>一句话理解：<strong>等价无穷小 = 泰勒展开去掉所有高阶项后剩下的最低阶那一项</strong>。它不是另一个公式，是泰勒的特例。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-3"><span class="kt">2.3　麦克劳林展开（泰勒在 0 处）</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <table>
+      <tr><th style="width:32%">函数</th><th>展开式（到三阶）</th></tr>
+      <tr><td class="m">e<sup>x</sup></td><td class="m">1 + x + x²/2 + x³/6 + o(x³)</td></tr>
+      <tr><td class="m">sin x</td><td class="m">x − x³/6 + o(x³)</td></tr>
+      <tr><td class="m">cos x</td><td class="m">1 − x²/2 + x⁴/24 + o(x⁴)</td></tr>
+      <tr><td class="m">ln(1 + x)</td><td class="m">x − x²/2 + x³/3 + o(x³)</td></tr>
+      <tr><td class="m">(1 + x)<sup>α</sup></td><td class="m">1 + αx + α(α−1)x²/2 + o(x²)</td></tr>
+      <tr><td class="m">tan x</td><td class="m">x + x³/3 + o(x³)</td></tr>
+      <tr><td class="m">arctan x</td><td class="m">x − x³/3 + o(x³)</td></tr>
+      <tr><td class="m">arcsin x</td><td class="m">x + x³/6 + o(x³)</td></tr>
+      <tr><td class="m">1/(1 − x)</td><td class="m">1 + x + x² + x³ + o(x³)</td></tr>
+    </table>
+    <p><strong>展开到几阶？</strong> 不要问「能不能替换」，问：<strong>分母是几阶，分子就展开到几阶</strong>。若展开后最低阶项仍被抵消，就再升一阶，直到抵消不掉。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-4"><span class="kt">2.4　洛必达法则</span><span class="tag t-warn">陷阱</span></div>
+  <div class="kb">
+    <p>三个前提，缺一不可：</p>
+    <p>① 是 <span class="m">0/0</span> 或 <span class="m">∞/∞</span> 型<br>
+       ② 在去心邻域内 <span class="m">f, g</span> 可导，且 <span class="m">g′(x) ≠ 0</span><br>
+       ③ <span class="m">lim f′/g′</span> 存在（或为 <span class="m">∞</span>）</p>
+    <div class="warnbox"><b>三种失效情形：</b><br>
+    ① <strong>求导后震荡</strong>：<span class="m">lim<sub><i>x</i>→∞</sub> (<i>x</i> + sin <i>x</i>)/<i>x</i> = 1</span>，但求导得 <span class="m">(1 + cos <i>x</i>)/1</span> 不存在。此时洛必达失效，<strong>不能反推原极限不存在</strong>。<br>
+    ② <strong>循环</strong>：<span class="m">e<sup>x</sup> sin <i>x</i></span> 类，反复求导回到自身。<br>
+    ③ <strong>不是未定式却硬用</strong>：非未定式直接代入即可，用了反而错。</div>
+    <p>实操判断：<strong>求导一次后如果式子变复杂了，说明方向错了</strong>，立刻换泰勒。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-5"><span class="kt">2.5　夹逼准则</span></div>
+  <div class="kb">
+    <p>若 <span class="m"><i>y<sub>n</sub></i> ≤ <i>x<sub>n</sub></i> ≤ <i>z<sub>n</sub></i></span> 且 <span class="m">lim <i>y<sub>n</sub></i> = lim <i>z<sub>n</sub></i> = <i>a</i></span>，则 <span class="m">lim <i>x<sub>n</sub></i> = <i>a</i></span>。</p>
+    <p><strong>什么时候用</strong>：<span class="m">n</span> 项和，且<strong>分母不同次</strong>、无法凑成黎曼和时。思路是把每一项都换成最大项和最小项：</p>
+    <p><span class="m">n · (最小项) ≤ 原式 ≤ n · (最大项)</span></p>
+    <p>若两端极限相等，中间就被夹住。</p>
+    <div class="tipbox"><b>与定积分定义的分工：</b>能凑成 <span class="m">(1/n)Σ f(i/n)</span> 的形式就用定积分定义（答案精确）；凑不成就用夹逼（只求极限值）。</div>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-6"><span class="kt">2.6　两个重要极限与 1<sup>∞</sup> 型速解</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">sin <i>x</i></span><span class="den"><i>x</i></span></span> = 1</span>　　　<span class="m">lim<sub><i>x</i>→∞</sub> (1 + 1/<i>x</i>)<sup><i>x</i></sup> = <i>e</i></span></p>
+    <p>变形：<span class="m">lim<sub><i>x</i>→0</sub> (1 + <i>x</i>)<sup>1/<i>x</i></sup> = <i>e</i></span>　，　<span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">ln(1+<i>x</i>)</span><span class="den"><i>x</i></span></span> = 1</span></p>
+    <p><strong>1<sup>∞</sup> 型标准解法</strong>（设 <span class="m">u → 1, v → ∞</span>）：</p>
+    <p><span class="m">lim <i>u</i><sup><i>v</i></sup> = <i>e</i><sup>lim <i>v</i> ln <i>u</i></sup> = <i>e</i><sup>lim <i>v</i>(<i>u</i>−1)</sup></span></p>
+    <p>最后一步用了 <span class="m">ln <i>u</i> ~ <i>u</i> − 1</span>（因 <span class="m">u → 1</span>，令 <span class="m">u = 1 + t</span> 即得）。<strong>直接算 <span class="m">lim v(u−1)</span> 是最快路径</strong>，比先取对数再洛必达省一半时间。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-7"><span class="kt">2.7　定积分定义（黎曼和）</span><span class="tag t-cmc">数竞</span></div>
+  <div class="kb">
+    <p><span class="m">lim<sub><i>n</i>→∞</sub> <span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span> <sup><i>n</i></sup>∑<sub><i>i</i>=1</sub> <i>f</i>(<span class="frac"><span class="num"><i>i</i></span><span class="den"><i>n</i></span></span>) = ∫<sub>0</sub><sup>1</sup> <i>f</i>(<i>x</i>) d<i>x</i></span></p>
+    <p><strong>识别特征</strong>（三个同时满足）：</p>
+    <p>① 求和号外有 <span class="m">1/n</span> 或 <span class="m">1/n²</span> 之类的因子<br>
+       ② 求和项是 <span class="m">i/n</span> 的函数<br>
+       ③ 项数随 <span class="m">n</span> 变化（<span class="m">n</span> 项）</p>
+    <div class="tipbox"><b>CMC 高频：</b>这类题在数竞里出现频率远高于考研。看到「<span class="m">n</span> 项和 + 极限」，第一反应就该是「能不能凑成黎曼和」。</div>
+    <p><strong>例：</strong><span class="m">lim<sub><i>n</i>→∞</sub> <span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span>(√(<span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span>) + √(<span class="frac"><span class="num">2</span><span class="den"><i>n</i></span></span>) + ⋯ + √(<span class="frac"><span class="num"><i>n</i></span><span class="den"><i>n</i></span></span>)) = ∫<sub>0</sub><sup>1</sup> √<i>x</i> d<i>x</i> = <span class="frac"><span class="num">2</span><span class="den">3</span></span></span></p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="2-8"><span class="kt">2.8　斯托尔兹定理（数列版洛必达）</span><span class="tag t-cmc">数竞</span></div>
+  <div class="kb">
+    <p>若 <span class="m"><i>y<sub>n</sub></i></span> 单调递增且趋于 <span class="m">+∞</span>，且</p>
+    <p><span class="m">lim <span class="frac"><span class="num"><i>x</i><sub><i>n</i>+1</sub> − <i>x<sub>n</sub></i></span><span class="den"><i>y</i><sub><i>n</i>+1</sub> − <i>y<sub>n</sub></i></span></span> = <i>a</i>　⇒　lim <span class="frac"><span class="num"><i>x<sub>n</sub></i></span><span class="den"><i>y<sub>n</sub></i></span></span> = <i>a</i></span></p>
+    <p>用于数列的 <span class="m">∞/∞</span> 型。数竞偶尔考，出现时通常是「<span class="m">n</span> 项和 / <span class="m">n</span>」这类结构。</p>
+    <p>CMC 中它不是必考项，但知道它能在一两道偏题上省时间。</p>
+  </div>
+</div>
+
+<h2 id="s3"><span class="n">三</span>数列极限专题</h2>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="3-1"><span class="kt">3.1　单调有界准则</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p>单调递增 + 有上界 ⇒ 收敛<br>单调递减 + 有下界 ⇒ 收敛</p>
+    <p>注意它<strong>只保证存在，不给值</strong>。值要靠「两边取极限解方程」求出（见 3.2）。</p>
+    <div class="warnbox"><b>陷阱：</b>有界但不单调（如 <span class="m">(−1)<sup>n</sup></span>），准则不适用，此时用夹逼或直接判断发散。</div>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="3-2"><span class="kt">3.2　递推数列四步法</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p>形如 <span class="m"><i>a</i><sub><i>n</i>+1</sub> = <i>f</i>(<i>a<sub>n</sub></i>)</span>，标准流程固定四步：</p>
+    <table>
+      <tr><th style="width:16%">步骤</th><th style="width:34%">做什么</th><th>常用手段</th></tr>
+      <tr><td>① 证有界</td><td>证明 <span class="m">a<sub>n</sub></span> 落在某区间</td><td>数学归纳法</td></tr>
+      <tr><td>② 证单调</td><td>判断递增或递减</td><td>作差 <span class="m">a<sub>n+1</sub> − a<sub>n</sub></span> 或作商</td></tr>
+      <tr><td>③ 求值</td><td>设 <span class="m">lim a<sub>n</sub> = A</span>，两边取极限</td><td>得 <span class="m">A = f(A)</span></td></tr>
+      <tr><td>④ 取舍</td><td>解方程，排除多余根</td><td>用单调性 / 界的范围筛掉</td></tr>
+    </table>
+    <div class="warnbox"><b>最常见的失分：</b>跳过第 ①② 步直接解方程。CMC 解答题里，<strong>存在性证明本身占一半分数</strong>，只写「设极限为 A，A = f(A)」通常拿不到几分。</div>
+    <p><strong>例：</strong><span class="m"><i>a</i><sub>1</sub> = 1, <i>a</i><sub><i>n</i>+1</sub> = √(2 + <i>a<sub>n</sub></i>)</span>。归纳可证 <span class="m">a<sub>n</sub> &lt; 2</span> 且递增，故收敛；设极限 <span class="m">A</span>，得 <span class="m">A² = 2 + A</span>，即 <span class="m">A = 2</span>（舍去 −1）。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="3-3"><span class="kt">3.3　压缩映射（进阶工具）</span></div>
+  <div class="kb">
+    <p>若存在 <span class="m">0 &lt; <i>k</i> &lt; 1</span> 使 <span class="m">|<i>f</i>(<i>x</i>) − <i>f</i>(<i>y</i>)| ≤ <i>k</i>|<i>x</i> − <i>y</i>|</span>，则递推数列必收敛。</p>
+    <p>它能<strong>一步跳过「证有界 + 证单调」</strong>，直接得到收敛性。判断条件通常是 <span class="m">|f′(x)| ≤ k &lt; 1</span>。</p>
+    <p>数竞里出现频率不高，但遇到递推式较复杂、单调性不好判断时，这是救命工具。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="3-4"><span class="kt">3.4　常用数列极限结论</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <table>
+      <tr><th style="width:46%">极限</th><th>值</th></tr>
+      <tr><td class="m">lim n<sup>1/n</sup></td><td class="m">1</td></tr>
+      <tr><td class="m">lim a<sup>1/n</sup>　(a &gt; 0)</td><td class="m">1</td></tr>
+      <tr><td class="m">lim (1 + 1/n)<sup>n</sup></td><td class="m">e</td></tr>
+      <tr><td class="m">lim (n!)<sup>1/n</sup></td><td class="m">+∞</td></tr>
+      <tr><td class="m">lim n<sup>k</sup> / a<sup>n</sup>　(a &gt; 1)</td><td class="m">0</td></tr>
+      <tr><td class="m">lim ln n / n<sup>k</sup>　(k &gt; 0)</td><td class="m">0</td></tr>
+    </table>
+    <p><span class="m">n<sup>1/n</sup></span> 的标准求法：取对数转成 <span class="m">(ln n)/n</span>，再用洛必达（先转成连续变量 <span class="m">x</span>）。</p>
+  </div>
+</div>
+
+<h2 id="s4"><span class="n">四</span>连续性</h2>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="4-1"><span class="kt">4.1　连续的定义</span></div>
+  <div class="kb">
+    <p><span class="m"><i>f</i></span> 在 <span class="m"><i>x</i><sub>0</sub></span> 连续 <span class="m">⟺ lim<sub><i>x</i>→<i>x</i><sub>0</sub></sub> <i>f</i>(<i>x</i>) = <i>f</i>(<i>x</i><sub>0</sub>)</span></p>
+    <p>三个条件：有定义、极限存在、极限等于函数值。缺一即间断。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="4-2"><span class="kt">4.2　间断点分类</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <table>
+      <tr><th style="width:20%">大类</th><th style="width:26%">小类</th><th>特征</th></tr>
+      <tr><td rowspan="2">第一类<br><span style="font-size:12px">左右极限都存在</span></td><td>可去间断点</td><td>左右极限相等，但不等于函数值（或无定义）</td></tr>
+      <tr><td>跳跃间断点</td><td>左右极限存在但不相等</td></tr>
+      <tr><td rowspan="2">第二类<br><span style="font-size:12px">至少一个不存在</span></td><td>无穷间断点</td><td>至少一侧极限为 ∞</td></tr>
+      <tr><td>振荡间断点</td><td>如 <span class="m">sin(1/x)</span> 在 <span class="m">x=0</span></td></tr>
+    </table>
+    <p><strong>找间断点的顺序</strong>：先找「可疑点」——分母零点、分段点、对数与根号的边界，再逐个求左右极限判断类型。</p>
+    <div class="warnbox"><b>陷阱：</b>分母零点不一定是间断点（可能约分后连续）。必须<strong>约分之后再判断</strong>，否则会把可去间断点误判成无穷间断点。</div>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="4-3"><span class="kt">4.3　闭区间连续函数四大定理</span><span class="tag t-star">必背</span></div>
+  <div class="kb">
+    <p>前提都是：<span class="m"><i>f</i></span> 在闭区间 <span class="m">[<i>a</i>, <i>b</i>]</span> 上连续。</p>
+    <table>
+      <tr><th style="width:26%">定理</th><th>内容</th></tr>
+      <tr><td>有界性</td><td><span class="m">f</span> 在 <span class="m">[a,b]</span> 上有界</td></tr>
+      <tr><td>最值定理</td><td><span class="m">f</span> 在 <span class="m">[a,b]</span> 上必取到最大值与最小值</td></tr>
+      <tr><td>介值定理</td><td>介于最小最大值之间的任何数都能取到</td></tr>
+      <tr><td>零点定理</td><td>若 <span class="m">f(a)·f(b) &lt; 0</span>，则存在 <span class="m">ξ ∈ (a,b)</span> 使 <span class="m">f(ξ) = 0</span></td></tr>
+    </table>
+    <div class="tipbox"><b>零点定理是证明题的地基。</b>后面中值定理那一章里，「构造辅助函数 + 用零点定理」是最常见的证明套路。这一条没吃透，中值定理就无从下手。</div>
+  </div>
+</div>
+
+<h2 id="s5"><span class="n">五</span>CMC 特色题型</h2>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="5-1"><span class="kt">5.1　含参数反求 a、b</span><span class="tag t-cmc">数竞</span></div>
+  <div class="kb">
+    <p>已知 <span class="m">lim<sub><i>x</i>→0</sub> <i>f</i>(<i>x</i>) = <i>c</i></span>（有限值），求参数。核心是一句话：</p>
+    <p><strong>分母趋于 0 而极限存在 ⇒ 分子也必须趋于 0。</strong></p>
+    <p>否则极限会是 <span class="m">∞</span>。由此得第一个方程；解出部分参数后，再用泰勒/洛必达确定剩余参数，使极限恰好等于给定值。</p>
+    <p><strong>例：</strong>已知 <span class="m">lim<sub><i>x</i>→0</sub> (sin <i>x</i> − <i>ax</i>)/<i>x</i>³ = <i>b</i></span>，求 <span class="m">a, b</span>。</p>
+    <p>分子展开：<span class="m">sin x − ax = (1−a)x − x³/6 + o(x³)</span>。若 <span class="m">1−a ≠ 0</span>，极限为 <span class="m">∞</span>，故 <span class="m">a = 1</span>；此时极限 <span class="m">= −1/6</span>，即 <span class="m">b = −1/6</span>。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="5-2"><span class="kt">5.2　求 α 使极限为非零常数</span><span class="tag t-cmc">数竞</span></div>
+  <div class="kb">
+    <p>形如：求 <span class="m">α</span> 使 <span class="m">lim<sub><i>x</i>→0</sub> <i>f</i>(<i>x</i>)/<i>x</i><sup><i>α</i></sup> = <i>c</i> ≠ 0</span>。</p>
+    <p><strong>解法固定</strong>：把 <span class="m">f(x)</span> 泰勒展开，找到<strong>最低阶非零项</strong>，它的阶数就是 <span class="m">α</span>，系数就是 <span class="m">c</span>。</p>
+    <p>这与 1.5 的「k 阶无穷小」定义完全对应——本质是在问「<span class="m">f</span> 是 <span class="m">x</span> 的几阶无穷小」。</p>
+    <div class="tipbox">这类题是数竞填空的高频款，特点是不需要复杂技巧，只需要<strong>展开不手抖</strong>。展开表背熟，这类题就是送分。</div>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="5-3"><span class="kt">5.3　变限积分 + 洛必达</span><span class="tag t-cmc">数竞</span></div>
+  <div class="kb">
+    <p>核心公式：<span class="m"><span class="frac"><span class="num">d</span><span class="den">d<i>x</i></span></span> ∫<sub><i>a</i></sub><sup><i>φ</i>(<i>x</i>)</sup> <i>f</i>(<i>t</i>) d<i>t</i> = <i>f</i>(<i>φ</i>(<i>x</i>)) <i>φ</i>′(<i>x</i>)</span></p>
+    <div class="warnbox"><b>陷阱：</b>上下限都含 <span class="m">x</span> 时必须拆成两个积分再求导，别漏了负号那一项。被积函数里含 <span class="m">x</span> 时，要先想办法把 <span class="m">x</span> 提到积分号外或做变量替换，<strong>不能直接求导</strong>。</div>
+    <p>常见组合：<span class="m">lim <span class="frac"><span class="num">∫<sub>0</sub><sup><i>x</i></sup> <i>f</i>(<i>t</i>)d<i>t</i></span><span class="den"><i>x</i><sup><i>n</i></sup></span></span></span> 型，直接洛必达 <span class="m">n</span> 次，或用一次洛必达后用等价替换。</p>
+  </div>
+</div>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="5-4"><span class="kt">5.4　渐近线</span></div>
+  <div class="kb">
+    <p>三种，按顺序找：</p>
+    <table>
+      <tr><th style="width:22%">类型</th><th>求法</th></tr>
+      <tr><td>垂直渐近线</td><td>找 <span class="m">x<sub>0</sub></span> 使 <span class="m">lim<sub>x→x<sub>0</sub></sub> f(x) = ∞</span>（通常是分母零点）</td></tr>
+      <tr><td>水平渐近线</td><td><span class="m">lim<sub>x→∞</sub> f(x) = b</span></td></tr>
+      <tr><td>斜渐近线</td><td><span class="m">k = lim<sub>x→∞</sub> f(x)/x</span>，<span class="m">b = lim<sub>x→∞</sub> [f(x) − kx]</span>（<span class="m">k ≠ 0</span> 且有限）</td></tr>
+    </table>
+    <div class="warnbox"><b>陷阱：</b>同一侧不可能同时有水平渐近线和斜渐近线。求斜渐近线时 <span class="m">x → +∞</span> 和 <span class="m">x → −∞</span> 要分别讨论，可能得到两条不同的斜渐近线（如 <span class="m">y = √(x²+1)</span>）。</div>
+  </div>
+</div>
+
+<h2 id="s6"><span class="n">六</span>易错清单</h2>
+<p>考前只看这一节。每条都对应前面某张卡片，出错时回去找。</p>
+
+<div class="k">
+  <div class="kh"><input type="checkbox" data-k="6-1"><span class="kt">八条高频失分点</span><span class="tag t-warn">陷阱</span></div>
+  <div class="kb">
+    <p><strong>① 加减中滥用等价替换。</strong>只在乘除因子上换，加减必须泰勒。<br>
+    <strong>② 洛必达用于非未定式。</strong>做题前先判断类型，这是第一步。<br>
+    <strong>③ 洛必达求导后震荡就判定极限不存在。</strong>失效 ≠ 不存在，换方法再试。<br>
+    <strong>④ 拆极限时没检查各自是否存在。</strong>四则运算的前提是都存在。<br>
+    <strong>⑤ 忽略左右极限。</strong>见到 <span class="m">e<sup>1/x</sup></span>、<span class="m">arctan(1/x)</span>、<span class="m">|x|</span> 立刻分左右。<br>
+    <strong>⑥ 把无限个无穷小之和当无穷小。</strong>「有限个」是硬条件。<br>
+    <strong>⑦ 递推数列只求值不证存在。</strong>存在性占一半分数，别省。<br>
+    <strong>⑧ 定积分定义与夹逼混淆。</strong>能凑黎曼和就用定积分，凑不上才夹逼。</p>
+  </div>
+</div>
+
+<h2 id="s7"><span class="n">七</span>自测十题</h2>
+<p>难度递增，前四题对应 2.2–2.3，后三题对应第三节。做完再展开答案，别偷看。</p>
+
+<div id="quiz">
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num"><i>e</i><sup><i>x</i></sup> − 1 − <i>x</i></span><span class="den"><i>x</i>²</span></span></span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">tan <i>x</i> − sin <i>x</i></span><span class="den"><i>x</i>³</span></span></span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">1 − cos <i>x</i> · cos 2<i>x</i></span><span class="den"><i>x</i>²</span></span></span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">√(1 + <i>x</i>) − √(1 − <i>x</i>)</span><span class="den"><i>x</i></span></span></span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→∞</sub> <i>x</i>[ln(<i>x</i> + 1) − ln <i>x</i>]</span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> ( <span class="frac"><span class="num">1</span><span class="den"><i>x</i>²</span></span> − <span class="frac"><span class="num">1</span><span class="den"><i>x</i> tan <i>x</i></span></span> )</span></div>
+  <div class="q">已知 <span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num">sin <i>x</i> − <i>ax</i></span><span class="den"><i>x</i>³</span></span> = <i>b</i></span>，求 <span class="m">a, b</span>。</div>
+  <div class="q"><span class="m"><i>a</i><sub>1</sub> = 1, <i>a</i><sub><i>n</i>+1</sub> = √(2 + <i>a<sub>n</sub></i>)</span>，求 <span class="m">lim <i>a<sub>n</sub></i></span>（要求写出存在性证明）。</div>
+  <div class="q"><span class="m">lim<sub><i>n</i>→∞</sub> <span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span>( √(<span class="frac"><span class="num">1</span><span class="den"><i>n</i></span></span>) + √(<span class="frac"><span class="num">2</span><span class="den"><i>n</i></span></span>) + ⋯ + √(<span class="frac"><span class="num"><i>n</i></span><span class="den"><i>n</i></span></span>) )</span></div>
+  <div class="q"><span class="m">lim<sub><i>x</i>→0</sub> <span class="frac"><span class="num"><i>e</i><sup><i>x</i></sup> sin <i>x</i> − <i>x</i>(1 + <i>x</i>)</span><span class="den"><i>x</i>³</span></span></span></div>
+</div>
+
+<details>
+<summary>展开答案与关键步骤</summary>
+<div class="ans">
+  <div><strong>1.</strong> <span class="m">1/2</span>　　<span class="m">e<sup>x</sup> = 1 + x + x²/2 + ⋯</span>，减去 <span class="m">1+x</span> 得 <span class="m">x²/2</span>。<em>踩坑点：若先替换 <span class="m">e<sup>x</sup>−1 ~ x</span>，会得到 <span class="m">(x−x)/x² = 0</span>，错。</em></div>
+  <div><strong>2.</strong> <span class="m">1/2</span>　　展开到三阶：<span class="m">(x + x³/3) − (x − x³/6) = x³/2</span>。</div>
+  <div><strong>3.</strong> <span class="m">5/2</span>　　<span class="m">cos x · cos 2x = (1 − x²/2)(1 − 2x²) = 1 − 5x²/2 + ⋯</span>，故 <span class="m">1 − 积 = 5x²/2</span>。</div>
+  <div><strong>4.</strong> <span class="m">1</span>　　有理化，或展开 <span class="m">(1+x)<sup>1/2</sup> − (1−x)<sup>1/2</sup> = (1 + x/2) − (1 − x/2) = x</span>。</div>
+  <div><strong>5.</strong> <span class="m">1</span>　　原式 <span class="m">= x ln(1 + 1/x) = x · (1/x) = 1</span>（用 <span class="m">ln(1+t) ~ t</span>，<span class="m">t = 1/x → 0</span>）。</div>
+  <div><strong>6.</strong> <span class="m">1/3</span>　　通分：<span class="m">(tan x − x)/(x² tan x)</span>，分子 <span class="m">~ x³/3</span>，分母 <span class="m">~ x³</span>。</div>
+  <div><strong>7.</strong> <span class="m">a = 1, b = −1/6</span>　　分子展开 <span class="m">(1−a)x − x³/6</span>；要极限有限，必须 <span class="m">1−a = 0</span>。</div>
+  <div><strong>8.</strong> <span class="m">2</span>　　归纳证 <span class="m">a<sub>n</sub> &lt; 2</span>（有界）；作差证递增；设极限 <span class="m">A</span> 得 <span class="m">A² = 2 + A</span>，<span class="m">A = 2</span>（舍 −1）。<em>证明过程不能省。</em></div>
+  <div><strong>9.</strong> <span class="m">2/3</span>　　黎曼和：<span class="m">∫<sub>0</sub><sup>1</sup> √x dx = 2/3</span>。</div>
+  <div><strong>10.</strong> <span class="m">1/3</span>　　两个展开相乘：<span class="m">e<sup>x</sup> sin x = x + x² + x³/3 + O(x⁴)</span>，减去 <span class="m">x + x²</span> 得 <span class="m">x³/3</span>。</div>
+</div>
+</details>
+
+<footer>
+  巴蒂整理 · 2026-10-23　|　对应初赛 2026-11-14<br>
+  极限之后建议接着啃：中值定理证明 → 一元积分技巧 → 多元积分换序。
+</footer>
+</main>
+</div>
+
+<script>
+var boxes = document.querySelectorAll('.kh input');
+boxes.forEach(function(b){
+  var key = 'cmc-lim-' + b.dataset.k;
+  if (localStorage.getItem(key) === '1') b.checked = true;
+  b.addEventListener('change', function(){
+    localStorage.setItem(key, b.checked ? '1' : '0');
+    update();
+  });
+});
+function update(){
+  var done = 0;
+  boxes.forEach(function(b){ if (b.checked) done++; });
+  var pct = boxes.length ? (done / boxes.length * 100) : 0;
+  document.getElementById('prog').style.width = pct + '%';
+}
+update();
+
+document.querySelectorAll('nav a').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var t = document.querySelector(a.getAttribute('href'));
+    if (t) window.scrollTo({ top: t.offsetTop - 24, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

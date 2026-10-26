@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>05 空间解析几何 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>05 · 向量代数与空间解析几何</h1>
+  <p class="sub">内容最少，但每年值 6 分 · 约 2–6 分</p>
+  <div class="meta">
+    <span>真题 <b>2 道</b></span>
+    <span>公式 <b>6 条</b></span>
+    <span>建议 <b>半天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>先撤回我之前的一个判断。</b>我一开始建议你「空间解析几何直接放弃」——这是错的。第十七届第 2 题、第十六届第 4 题都考了，都是填空题 6 分。<strong>这一章公式少、套路死，半天就能拿稳，是全卷性价比最高的一块。</strong></div>
+
+<h2>一、真题清单</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">17届 第2题</td><td>求过原点与点 <span class="m">(6,−3,2)</span>、且与平面 <span class="m">4x−y+2z−8=0</span> 垂直的平面方程</td></tr>
+  <tr><td class="k">16届 第4题</td><td>直线 <span class="m">(x−1)/1 = y/1 = (z−1)/(−1)</span> 与平面 <span class="m">π: x−y+2z−1=0</span>，求交点与投影</td></tr>
+</table>
+
+<h2>二、17届那题的完整解法</h2>
+
+<div class="box">
+<p><strong>第一步：设平面。</strong>过原点 → 常数项 <span class="m">D=0</span>，所以设 <span class="m">Ax+By+Cz=0</span>，法向量 <span class="m">n=(A,B,C)</span>。</p>
+<p><strong>第二步：用过点定一个方程。</strong>代入 <span class="m">(6,−3,2)</span>：</p>
+<p style="padding-left:18px"><span class="m">6A − 3B + 2C = 0</span>　…①</p>
+<p><strong>第三步：用垂直定第二个方程。</strong>所求平面 ⊥ 已知平面 <span class="m">4x−y+2z−8=0</span>，即两法向量垂直：</p>
+<p style="padding-left:18px"><span class="m">(A,B,C)·(4,−1,2) = 0　⇒　4A − B + 2C = 0</span>　…②</p>
+<p><strong>第四步：解比例。</strong>①−② 得 <span class="m">2A − 2B = 0 ⇒ A=B</span>。代回②：<span class="m">4A − A + 2C = 0 ⇒ C = −3A/2</span>。</p>
+<p>取 <span class="m">A=B=2, C=−3</span>，得 <strong><span class="m">2x + 2y − 3z = 0</span></strong>。</p>
+<p style="margin-bottom:0"><strong>关键洞察：</strong>两个条件 → 两个方程 → 三个未知数，只能定出<strong>比例</strong>。所以最后要「取一组整数」，不用纠结具体值。</p>
+</div>
+
+<h2>三、必背公式（就这六条）</h2>
+
+<div class="box">
+<table>
+  <tr><th style="width:34%">对象</th><th>公式</th></tr>
+  <tr><td class="k">平面 · 点法式</td><td class="m">A(x−x₀) + B(y−y₀) + C(z−z₀) = 0</td></tr>
+  <tr><td class="k">平面 · 一般式</td><td class="m">Ax + By + Cz + D = 0，法向量 <span class="m">n=(A,B,C)</span></td></tr>
+  <tr><td class="k">两平面垂直</td><td class="m">A₁A₂ + B₁B₂ + C₁C₂ = 0</td></tr>
+  <tr><td class="k">两平面平行</td><td class="m">A₁/A₂ = B₁/B₂ = C₁/C₂</td></tr>
+  <tr><td class="k">直线 · 对称式</td><td class="m">(x−x₀)/l = (y−y₀)/m = (z−z₀)/n，方向向量 <span class="m">s=(l,m,n)</span></td></tr>
+  <tr><td class="k">点到平面距离</td><td class="m">d = |Ax₀+By₀+Cz₀+D| / √(A²+B²+C²)</td></tr>
+</table>
+</div>
+
+<div class="note"><b>最容易混的两组：</b><br>
+① 平面的法向量是 <span class="m">(A,B,C)</span>（方程系数），直线的方向向量是 <span class="m">(l,m,n)</span>（分母）。<strong>别搞反。</strong><br>
+② 「直线 ⊥ 平面」是 <span class="m">s ∥ n</span>；「直线 ∥ 平面」是 <span class="m">s ⊥ n</span>。<strong>垂直和平行的对应关系是反的。</strong></div>
+
+<h2>四、16届那题的思路（直线与平面）</h2>
+
+<div class="box">
+<p><strong>求交点：</strong>把直线写成参数式 <span class="m">x=1+t, y=t, z=1−t</span>，代入平面方程解出 <span class="m">t</span>，回代得交点。</p>
+<p><strong>求投影直线：</strong>先过该直线作一个<strong>垂直于已知平面</strong>的平面（用直线方向向量 × 平面法向量得到新法向量），再与已知平面联立，即得投影直线。</p>
+<p style="margin-bottom:0"><strong>这类题的固定套路：</strong>直线 ⊥ 平面 → 平面束 / 参数代入。<strong>「投影」两个字出现时，一定是「作垂直平面 + 联立」。</strong></p>
+</div>
+
+<h2>五、练习顺序</h2>
+
+<div class="ok">
+<b>半天搞定：</b><br>
+① 先背上面六条公式（20 分钟）<br>
+② 独立重做 <strong>17届2</strong>（不看上面解法，做完再对）<br>
+③ 做 <strong>16届4</strong>（直线与平面）<br>
+④ 再补 2 道基础题：求点到平面距离、求两平面夹角
+</div>
+
+<div class="note"><b>提醒：</b>这一章不用深挖。CMC 里它只以填空题出现，不会出解答题。所以<strong>只练「求平面方程、求直线方程、求交点、求距离」这四件事就够了</strong>，不要去啃二次曲面的一般理论。</div>
+
+<footer>
+  CMC 分章练习 · 05 空间解析几何　|　巴蒂整理 2026-10-26
+</footer>
+</div>
+</body>
+</html>

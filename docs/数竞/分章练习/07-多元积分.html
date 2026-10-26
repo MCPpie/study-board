@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>07 多元函数积分学 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>07 · 多元函数积分学</h1>
+  <p class="sub">全表信号最强的一章 · 约 17 分</p>
+  <div class="meta">
+    <span>填空真题 <b>7 道</b></span>
+    <span>解答题 <b>3 道</b></span>
+    <span>建议 <b>2 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>全表最强的一条规律就在这里：近三年填空第 5 题，连续三年都是曲线/曲面积分。</b><br>
+第十五届：第一类曲面积分　·　第十六届：第二类曲线积分（格林）　·　第十七届：第一类曲线积分<br>
+<strong>位置固定、题型固定、6 分固定。</strong>这类题技巧性强但套路死，练三道就能拿稳。</div>
+
+<h2>一、近三年那三道题（优先刷）</h2>
+
+<table>
+  <tr><th style="width:12%">出处</th><th style="width:50%">题目</th><th>核心技巧</th></tr>
+  <tr><td class="k">17届 第5题</td><td class="m">∫<sub>L</sub>(x²+2xy)ds，L 为球面 x²+y²+z²=4 与平面 x+y+z=3 的交线</td><td>轮换对称性</td></tr>
+  <tr><td class="k">16届 第5题</td><td class="m">∮<sub>L</sub>(−y dx+x dy)/(4x²+y²)，L: x²+y²=9 逆时针</td><td>格林公式 + 换路径</td></tr>
+  <tr><td class="k">15届 第5题</td><td class="m">∬<sub>Σ</sub>(x+y+z)dS，Σ 为 y+z=5 被柱面 x²+y²=25 截得部分</td><td>投影 + 对称性</td></tr>
+</table>
+
+<h3>17届第 5 题的完整思路（这道最值得吃透）</h3>
+<div class="box">
+<p><strong>第一步：算出交线是圆，求周长。</strong>球心到平面 <span class="m">x+y+z=3</span> 的距离 <span class="m">d = 3/√3 = √3</span>，球半径 2，所以圆半径 <span class="m">√(4−3)=1</span>，周长 <span class="m">2π</span>。</p>
+<p><strong>第二步：拆成两部分。</strong><span class="m">∫(x²+2xy)ds = ∫x²ds + 2∫xy ds</span></p>
+<p><strong>第三步：用轮换对称处理 <span class="m">∫x²ds</span>。</strong>在 <span class="m">L</span> 上 <span class="m">x²+y²+z²=4</span> 恒成立，且 <span class="m">x,y,z</span> 地位对称：</p>
+<p style="padding-left:18px"><span class="m">∫x²ds = ∫y²ds = ∫z²ds = ⅓∫(x²+y²+z²)ds = ⅓·4·2π = 8π/3</span></p>
+<p><strong>第四步：用平方关系处理 <span class="m">∫xy ds</span>。</strong>由 <span class="m">x+y+z=3</span>：</p>
+<p style="padding-left:18px"><span class="m">(x+y+z)² = x²+y²+z² + 2(xy+yz+zx) = 9</span><br>
+<span class="m">⇒ xy+yz+zx = (9−4)/2 = 5/2</span></p>
+<p>再由轮换对称，<span class="m">∫xy ds = ∫yz ds = ∫zx ds = ⅓·(5/2)·2π = 5π/3</span>。</p>
+<p style="margin-bottom:0"><strong>结果：<span class="m">8π/3 + 2·5π/3 = 6π</span>。</strong></p>
+</div>
+
+<div class="tip"><b>这道题的通用套路：</b>遇到「球面与平面交线」上的第一类曲线积分，几乎一定是<strong>轮换对称 + 平方关系</strong>。记住两个抓手：<span class="m">x²+y²+z²=R²</span> 给出平方和，<span class="m">x+y+z=c</span> 给出一次和，两者一联立就能把交叉项全部求出来。</div>
+
+<h3>16届第 5 题的思路（格林公式的标准用法）</h3>
+<div class="box">
+<p>被积函数在原点处有奇点，不能直接用格林。<strong>换一条路径</strong>：令 <span class="m">L₁: 4x²+y²=4</span>（椭圆），在 <span class="m">L</span> 与 <span class="m">L₁</span> 围成的环形区域上用格林公式，得到 <span class="m">∮<sub>L+L₁</sub> = 0</span>，所以 <span class="m">∮<sub>L</sub> = −∮<sub>L₁</sub></span>。</p>
+<p style="margin-bottom:0">再对 <span class="m">L₁</span> 用格林，得 <span class="m">¼·2·σ(D) = ½·2π = π</span>。<strong>答案是 π。</strong></p>
+</div>
+
+<div class="note"><b>关键：</b>看到 <span class="m">(−y dx + x dy)/(x²+y²)</span> 这类形式，先检查 <span class="m">Q<sub>x</sub> − P<sub>y</sub></span> 是否为 0。为 0 说明「积分与路径无关」，可以直接换一条好算的路径。<strong>这是这类题的题眼。</strong></div>
+
+<h2>二、二重积分真题</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th><th style="width:20%">考点</th></tr>
+  <tr><td class="k">14届 第5题</td><td><span class="m">∬<sub>D</sub> sin(x+y)dxdy</span>，D 为三角形区域</td><td>对称性 / 三角公式</td></tr>
+  <tr><td class="k">16届 第2题</td><td><span class="m">lim<sub>r→0+</sub> ∬<sub>D</sub>(e<sup>x²+y²</sup>−1)dxdy / r⁴</span>，D: <span class="m">x²+y²≤r²</span></td><td>极坐标 + 极限</td></tr>
+  <tr><td class="k">12届 第4题</td><td>由 <span class="m">∫₀<sup>∞</sup>sin x/x dx = π/2</span> 求含参二重积分</td><td>换序</td></tr>
+</table>
+
+<div class="tip"><b>16届那题是个漂亮的小题：</b>极坐标后变成 <span class="m">2π∫₀<sup>r</sup>(e<sup>ρ²</sup>−1)ρdρ = π(e<sup>r²</sup>−1−r²)</span>，而 <span class="m">e<sup>r²</sup>−1−r² ~ r⁴/2</span>，所以答案是 <span class="m">π/2</span>。<strong>它同时考了极坐标、变上限积分、泰勒展开三件事</strong>，是很好的综合练习。</div>
+
+<h2>三、三重积分与曲面积分（解答题）</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th><th style="width:20%">方法</th></tr>
+  <tr><td class="k">17届 第8题</td><td><span class="m">∭<sub>Ω</sub>dxdydz/√(y²+z²)</span>，Ω 由 <span class="m">x=0, x=y, y=z, z=1, z=2</span> 围成</td><td>截面法（先二后一）</td></tr>
+  <tr><td class="k">16届 第8题</td><td><span class="m">∬<sub>S</sub>(x²−x)dydz + (y²−y)dzdx + (z²−z)dxdy</span>，S 为上半球面</td><td>高斯公式 + 补面</td></tr>
+  <tr><td class="k">15届 第7题</td><td>圆锥面与椭球面相切，求所围体积</td><td>空间几何 + 重积分</td></tr>
+  <tr><td class="k">9届 第6题</td><td>锥面 <span class="m">z²=x²+y²</span> 与球面 <span class="m">z=√(4−x²−y²)</span> 围成区域的三重积分</td><td>柱坐标 / 球坐标</td></tr>
+</table>
+
+<div class="tip"><b>17届第 8 题为什么用截面法：</b>被积函数只含 <span class="m">y,z</span>，与 <span class="m">x</span> 无关。所以固定 <span class="m">z</span> 后，先对 <span class="m">x,y</span> 积一层，再对 <span class="m">z</span> 积。这就是「先二后一」。<strong>判断信号：被积函数缺某个变量，或者积分区域在某个方向是柱状。</strong></div>
+
+<h2>四、四类积分的公式对照</h2>
+
+<div class="box">
+<table>
+  <tr><th style="width:24%">类型</th><th style="width:26%">记号</th><th>主力工具</th></tr>
+  <tr><td class="k">第一类曲线积分</td><td class="m">∫<sub>L</sub> f ds</td><td>参数化 + 对称性（轮换、奇偶）</td></tr>
+  <tr><td class="k">第二类曲线积分</td><td class="m">∫<sub>L</sub> P dx + Q dy</td><td>格林公式；或判断与路径无关</td></tr>
+  <tr><td class="k">第一类曲面积分</td><td class="m">∬<sub>Σ</sub> f dS</td><td>投影 + <span class="m">dS = √(1+z<sub>x</sub>²+z<sub>y</sub>²)dxdy</span> + 对称性</td></tr>
+  <tr><td class="k">第二类曲面积分</td><td class="m">∬<sub>Σ</sub> P dydz + Q dzdx + R dxdy</td><td>高斯公式（补面、注意方向）</td></tr>
+</table>
+<p style="margin-bottom:0"><strong>格林：</strong><span class="m">∮<sub>L</sub>P dx + Q dy = ∬<sub>D</sub>(Q<sub>x</sub> − P<sub>y</sub>)dxdy</span>　　<strong>高斯：</strong><span class="m">∬<sub>Σ</sub> = ∭<sub>Ω</sub>(P<sub>x</sub>+Q<sub>y</sub>+R<sub>z</sub>)dV</span></p>
+</div>
+
+<div class="note"><b>最容易错的三件事：</b><br>
+① <strong>方向。</strong>格林公式要求 <span class="m">L</span> 正向（逆时针），高斯要求外法向。方向反了要加负号。<br>
+② <strong>补面。</strong>用高斯时曲面必须封闭，不封闭要补一块，补的那块最后要减掉。<br>
+③ <strong>奇点。</strong>被积函数在区域内无定义时不能直接用格林/高斯，要挖洞或换路径（16届第 5 题就是典型）。</div>
+
+<h2>五、练习顺序</h2>
+
+<div class="ok">
+<b>两天，先啃信号题：</b><br>
+<strong>第 1 天（曲线曲面积分）</strong>：17届5（轮换对称）→ 16届5（格林 + 换路径）→ 15届5（投影 + 对称）<br>
+<strong>第 2 天（重积分）</strong>：16届2（极坐标 + 极限）→ 14届5（对称性）→ 17届8（截面法）→ 16届8（高斯 + 补面）
+</div>
+
+<div class="note"><b>提醒：</b>这一章的三道解答题（17届8、16届8、15届7）都是 14 分的大题，比填空值钱得多。但它们的解题框架和填空题完全一致——<strong>先把填空那三道吃透，解答题只是多几步计算。</strong></div>
+
+<footer>
+  CMC 分章练习 · 07 多元积分　|　巴蒂整理 2026-10-26<br>
+  填空真题题号已核实；解答题题号基于 PDF 提取，公式已交叉验证
+</footer>
+</div>
+</body>
+</html>

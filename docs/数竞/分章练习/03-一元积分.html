@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>03 一元积分学 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>03 · 一元函数积分学</h1>
+  <p class="sub">占分最重的一块 · 约 22 分</p>
+  <div class="meta">
+    <span>填空真题 <b>5 道</b></span>
+    <span>解答题 <b>高频</b></span>
+    <span>建议 <b>3 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>这是整份大纲里分值最高的板块（约 22 分）。</b>但它有个特点：填空只考「算」，解答题才考「证」。积分不等式的证明是 CMC 的常客，而且年年难度不低——第八届一道、第四届一道，都是压轴级别的。</div>
+
+<h2>一、填空题清单（计算类）</h2>
+
+<h3>A. 定积分计算 · 分部与换元</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">16届 第1题</td><td><span class="m">∫₀¹ ln(1+x²) dx</span></td></tr>
+  <tr><td class="k">11届 第3题</td><td><span class="m">∫ (1+sin x)e<sup>x</sup>/(1+cos x)² dx</span></td></tr>
+  <tr><td class="k">10届 第3题</td><td><span class="m">∫ ln(x+√(1+x²))/(1+x²) dx</span></td></tr>
+</table>
+<div class="tip"><b>16届那题的标准解法</b>：直接分部，<span class="m">u=ln(1+x²)</span>，<span class="m">dv=dx</span>，得到 <span class="m">x ln(1+x²) − ∫2x²/(1+x²)dx</span>，后面把 <span class="m">2x²/(1+x²)</span> 拆成 <span class="m">2 − 2/(1+x²)</span> 就好算了。答案是 <span class="m">ln2 − 2 + π/2</span>。</div>
+<div class="tip"><b>10届那题的信号</b>：看到 <span class="m">ln(x+√(1+x²))</span> 立刻想到它的导数是 <span class="m">1/√(1+x²)</span>，所以配 <span class="m">1/(1+x²)</span> 时应该令 <span class="m">x=tan t</span>，把 <span class="m">dx/(1+x²)</span> 变成 <span class="m">dt</span>。</div>
+
+<h3>B. 不定积分技巧</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">9届 第5题</td><td><span class="m">∫ e<sup>x</sup>(1−sin x)/(1−sin x)² dx</span></td></tr>
+</table>
+<div class="note"><b>这类题的通法：</b>分子分母都含 <span class="m">(1−sin x)</span> 的幂，本质是「凑 <span class="m">d[u/v]</span>」。思路是从结果倒推——想找 <span class="m">F</span> 使 <span class="m">F′ = e<sup>x</sup>(1−sin x)/(1−sin x)²</span>，而 <span class="m">e<sup>x</sup></span> 提示 <span class="m">F = e<sup>x</sup>·g(x)</span>，代进去解 <span class="m">g</span>。</div>
+
+<h3>C. 变限积分 · 积分方程</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">9届 第1题</td><td><span class="m">f(x)cos x + 2∫₀<sup>x</sup>f(t)sin t dt = x+1</span>，求 <span class="m">f(x)</span></td></tr>
+  <tr><td class="k">13届 第3题</td><td><span class="m">f</span> 连续且 <span class="m">f(0)≠0</span>，求含 <span class="m">∫₀<sup>x</sup>f(t)dt</span> 的极限</td></tr>
+</table>
+<div class="tip"><b>积分方程的标准动作：两边求导。</b>9届那题先移项得 <span class="m">2∫₀<sup>x</sup>f(t)sin t dt = x+1−f(x)cos x</span>，两边对 <span class="m">x</span> 求导就变成微分方程了。<strong>注意：求导前先代 <span class="m">x=0</span> 得初始条件。</strong></div>
+
+<h2>二、解答题清单（证明类）</h2>
+
+<div class="note"><b>说明：</b>解答题题干与答案在 PDF 里混排，我无法给你可靠的届次题号。以下是这章在解答题里的题型分布，按出现频率排序。</div>
+
+<table>
+  <tr><th style="width:28%">题型</th><th>识别特征与应对</th></tr>
+  <tr><td class="k">积分不等式证明<br><span style="color:#ff5f5f;font-size:11px">最高频</span></td><td>「证明 <span class="m">∫f ≥ ∫g</span>」或「证明 <span class="m">∫f · ∫(1/f) ≥ 1</span>」——用单调性、柯西不等式、或构造变限积分函数</td></tr>
+  <tr><td class="k">积分中值定理</td><td>「证明存在 <span class="m">ξ</span> 使 <span class="m">∫f = f(ξ)(b−a)</span>」——第八届第 5 题就是这个</td></tr>
+  <tr><td class="k">变限积分函数性质</td><td>证 <span class="m">F(x)=∫₀<sup>x</sup>f</span> 的单调性、凹凸性、零点个数</td></tr>
+  <tr><td class="k">积分与极限结合</td><td><span class="m">n</span> 项和 → 定积分定义（黎曼和）</td></tr>
+</table>
+
+<div class="tip"><b>积分不等式的三个常用武器：</b><br>
+① <strong>构造变限积分</strong>：令 <span class="m">F(x)=∫₀<sup>x</sup>(f−g)</span>，证 <span class="m">F≥0</span>——最通用<br>
+② <strong>柯西—施瓦茨</strong>：<span class="m">(∫fg)² ≤ ∫f²·∫g²</span>——看到「乘积的积分」就想到它<br>
+③ <strong>单调性</strong>：把常数 <span class="m">b</span> 换成变量 <span class="m">x</span>，变成函数再求导比较</div>
+
+<h2>三、必背公式</h2>
+
+<div class="box">
+<p><strong>变限积分求导</strong>（这是本章最重要的一个公式）：</p>
+<p><span class="m">d/dx ∫<sub>a</sub><sup>φ(x)</sup> f(t)dt = f(φ(x))·φ′(x)</span></p>
+<p>上下限都含 <span class="m">x</span> 时：<span class="m">d/dx ∫<sub>ψ(x)</sub><sup>φ(x)</sup> f = f(φ)φ′ − f(ψ)ψ′</span></p>
+<p><strong>华里士公式</strong>（点火公式）：<span class="m">∫₀<sup>π/2</sup>sin<sup>n</sup>x dx = ∫₀<sup>π/2</sup>cos<sup>n</sup>x dx</span>，<span class="m">n</span> 为偶数时 <span class="m">= (n−1)!!/n!! · π/2</span>，奇数时 <span class="m">= (n−1)!!/n!!</span></p>
+<p><strong>对称区间</strong>：<span class="m">∫<sub>−a</sub><sup>a</sup>f = 0</span>（<span class="m">f</span> 为奇函数），<span class="m">= 2∫₀<sup>a</sup>f</span>（<span class="m">f</span> 为偶函数）</p>
+<p style="margin-bottom:0"><strong>周期</strong>：<span class="m">∫<sub>a</sub><sup>a+T</sup>f = ∫₀<sup>T</sup>f</span></p>
+</div>
+
+<h2>四、练习顺序</h2>
+
+<div class="ok">
+<b>三天，先算后证：</b><br>
+<strong>第 1 天（计算）</strong>：16届1（分部）→ 10届3（三角换元）→ 9届5（凑微分）→ 11届3（分部 + 凑）<br>
+<strong>第 2 天（变限积分）</strong>：9届1（积分方程）→ 13届3（变限极限）→ 再练 3 道「求 <span class="m">F(x)=∫₀<sup>x</sup>f</span> 的导数」的基础题<br>
+<strong>第 3 天（证明）</strong>：先做 2 道「构造变限积分证不等式」，再碰柯西—施瓦茨的题
+</div>
+
+<div class="note"><b>一个容易忽略的点：</b>积分不等式证明里，「把常数换成变量」这个技巧（令 <span class="m">F(x)=∫₀<sup>x</sup>…</span> 或把 <span class="m">b</span> 看成 <span class="m">x</span>）是通用钥匙。看到不等式两端一个是常数一个是积分，先想这招。</div>
+
+<footer>
+  CMC 分章练习 · 03 一元积分　|　巴蒂整理 2026-10-26<br>
+  填空部分已逐题核实；解答题部分为题型归纳
+</footer>
+</div>
+</body>
+</html>

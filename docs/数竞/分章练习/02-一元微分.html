@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>02 一元微分学 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>02 · 一元函数微分学</h1>
+  <p class="sub">填空考计算，解答题考证明 · 约 20 分</p>
+  <div class="meta">
+    <span>填空真题 <b>5 道</b></span>
+    <span>题型 <b>5 类</b></span>
+    <span>建议 <b>2 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>先说最重要的一件事：中值定理不在这份清单里。</b>十年填空题里<strong>几乎没有</strong>考过中值定理——它只出现在解答题和证明题。所以「按章节练填空」练不到它，而它恰恰是这章 20 分里的主要来源。这一章必须两条腿走：<strong>填空练计算，解答练证明。</strong></div>
+
+<h2>一、填空题清单（计算类）</h2>
+
+<h3>A. 高阶导数 · 莱布尼茨公式</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">12届 第2题</td><td><span class="m">f(x)=(x+1)²e<sup>nx</sup></span>，求 <span class="m">f<sup>(n)</sup>(1)</span></td></tr>
+  <tr><td class="k">8届 第4题</td><td><span class="m">f(x)=e<sup>x</sup>sin 2x</span>，求 <span class="m">f<sup>(4)</sup>(0)</span></td></tr>
+</table>
+<div class="tip"><b>两个套路：</b><br>
+① 多项式 × 指数函数（12届）→ 用莱布尼茨，<span class="m">(x+1)²</span> 只有三阶以内非零，展开只剩 3 项。<br>
+② 指数 × 三角（8届）→ 也可以莱布尼茨，但更快的是把 <span class="m">e<sup>x</sup>sin 2x</span> 写成 <span class="m">Im[e<sup>(1+2i)x</sup>]</span>，四阶导数直接出来。</div>
+
+<h3>B. 高阶导数 · 有理函数拆分</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">15届 第3题</td><td><span class="m">f(x)=1/(x²−3x+2)</span>，求 <span class="m">f<sup>(n)</sup>(0)</span></td></tr>
+</table>
+<div class="tip"><b>解法：</b>先拆成部分分式 <span class="m">1/(x²−3x+2) = 1/(x−2) − 1/(x−1)</span>，再用 <span class="m">(1/(x−a))<sup>(n)</sup> = (−1)<sup>n</sup>n!/(x−a)<sup>n+1</sup></span>。<strong>看到分母能因式分解的有理函数求高阶导，一律先拆。</strong></div>
+
+<h3>C. 隐函数求导 · 切线</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">12届 第3题</td><td><span class="m">y=f(x)</span> 由 <span class="m">arctan(xy) = ln(...)</span> 确定，<span class="m">f(1)=1</span>，求 <span class="m">(1,1)</span> 处切线</td></tr>
+</table>
+<div class="tip"><b>解法：</b>两边对 <span class="m">x</span> 求导，把 <span class="m">y′</span> 解出来，代点 <span class="m">(1,1)</span> 得斜率。注意隐函数求导时 <span class="m">y</span> 是 <span class="m">x</span> 的函数，每遇到 <span class="m">y</span> 都要乘 <span class="m">y′</span>。</div>
+
+<h3>D. 参数方程求导 · 切线</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">10届 第2题</td><td>曲线由参数方程确定，求 <span class="m">t=0</span> 对应点处的切线</td></tr>
+</table>
+<div class="tip"><b>公式：</b><span class="m">dy/dx = y′(t)/x′(t)</span>。别忘了先算出 <span class="m">t=0</span> 对应的点坐标，切线方程需要点斜式。</div>
+
+<h3>E. 导数应用 · 单调性与最值</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">16届 第7题（解答）</td><td><span class="m">f(x)=1/ln(1+x) − 1/x</span>（<span class="m">0&lt;x≤1</span>），求 <span class="m">k</span> 使其在 <span class="m">x=0</span> 连续，并求最大最小值</td></tr>
+</table>
+<div class="tip"><b>这是一道标准题：</b>先求 <span class="m">lim<sub>x→0+</sub>f(x)</span> 定 <span class="m">k</span>（得 1/2），再求导判单调，最后取端点与驻点。<strong>它的价值在于示范「连续 + 单调 + 最值」的完整流程</strong>，建议整题抄一遍。</div>
+
+<h2>二、解答题清单（证明类 · 这才是重点）</h2>
+
+<div class="note"><b>这部分我无法给你精确的届次题号</b>——解答题的题干和答案在 PDF 里混排，公式错位严重，逐题确认会出错。以下是这章在解答题里的<strong>题型</strong>，你翻自己 PDF 时按这些形态去找。</div>
+
+<table>
+  <tr><th style="width:30%">题型</th><th>识别特征</th></tr>
+  <tr><td class="k">中值定理证明</td><td>「证明存在 <span class="m">ξ∈(a,b)</span> 使 …」——罗尔 / 拉格朗日 / 柯西 / 泰勒</td></tr>
+  <tr><td class="k">构造辅助函数</td><td>要证的式子里有 <span class="m">f′</span> 和 <span class="m">f</span> 混在一起，需要造 <span class="m">F(x)</span></td></tr>
+  <tr><td class="k">不等式证明</td><td>「证明当 <span class="m">x&gt;0</span> 时 …」——用单调性或拉格朗日</td></tr>
+  <tr><td class="k">零点个数</td><td>「证明方程 … 有且仅有 n 个根」——零点定理 + 单调性</td></tr>
+</table>
+
+<div class="tip"><b>中值定理的入门顺序（别跳）：</b><br>
+① 罗尔定理 → ② 拉格朗日 → ③ 柯西 → ④ 泰勒<br>
+每学完一个，立刻做 2 道「直接套用」的题，再碰「需要构造辅助函数」的题。<strong>辅助函数构造是分水岭，前面三步只是热身。</strong></div>
+
+<h2>三、必背</h2>
+
+<div class="box">
+<p><strong>莱布尼茨公式</strong>：<span class="m">(uv)<sup>(n)</sup> = Σ<sub>k=0</sub><sup>n</sup> C(n,k) u<sup>(n−k)</sup> v<sup>(k)</sup></span></p>
+<p><strong>常见高阶导</strong>：</p>
+<table>
+  <tr><td class="m" style="width:44%">(e<sup>ax</sup>)<sup>(n)</sup></td><td class="m">a<sup>n</sup>e<sup>ax</sup></td></tr>
+  <tr><td class="m">(sin x)<sup>(n)</sup></td><td class="m">sin(x + nπ/2)</td></tr>
+  <tr><td class="m">(cos x)<sup>(n)</sup></td><td class="m">cos(x + nπ/2)</td></tr>
+  <tr><td class="m">(ln x)<sup>(n)</sup></td><td class="m">(−1)<sup>n−1</sup>(n−1)!/x<sup>n</sup></td></tr>
+  <tr><td class="m">(1/(x−a))<sup>(n)</sup></td><td class="m">(−1)<sup>n</sup>n!/(x−a)<sup>n+1</sup></td></tr>
+</table>
+<p style="margin-bottom:0"><strong>参数方程</strong>：<span class="m">dy/dx = y′(t)/x′(t)</span>；<strong>隐函数</strong>：两边求导，把 <span class="m">y′</span> 当未知数解出来。</p>
+</div>
+
+<h2>四、练习顺序</h2>
+
+<div class="ok">
+<b>先计算后证明，两天：</b><br>
+<strong>第 1 天（计算）</strong>：15届3（有理拆分）→ 12届2（莱布尼茨）→ 8届4（指数×三角）→ 12届3（隐函数切线）→ 10届2（参数方程）<br>
+<strong>第 2 天（证明）</strong>：先读罗尔定理 + 做 2 道直接套用的题 → 拉格朗日 2 道 → 才开始碰构造辅助函数的题
+</div>
+
+<div class="note"><b>如果第 2 天卡住了，正常。</b>中值定理的辅助函数构造是整本高数里最难自学的部分，卡住不代表你笨。卡的时候把「要证的结论」倒着推——从结论反推 <span class="m">F(x)</span> 应该长什么样，比正着试有效得多。</div>
+
+<footer>
+  CMC 分章练习 · 02 一元微分　|　巴蒂整理 2026-10-26<br>
+  填空部分已逐题核实；解答题部分为题型归纳，未标注具体题号
+</footer>
+</div>
+</body>
+</html>

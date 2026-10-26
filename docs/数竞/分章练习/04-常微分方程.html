@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04 常微分方程 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>04 · 常微分方程</h1>
+  <p class="sub">占分不高，但规律极强 · 约 6 分</p>
+  <div class="meta">
+    <span>真题 <b>6 道</b></span>
+    <span>核心 <b>换元</b></span>
+    <span>建议 <b>1 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>这一章有个全表最干净的规律：近三年解答题连续考「一阶方程 + 换元」。</b>不是标准型，全是需要你先换个变量、化成标准型才能解的。三年三道，套路完全一致。<strong>这是投入产出比最高的一章</strong>——一天就能吃透。</div>
+
+<h2>一、近三年解答题：三道同型题</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th style="width:44%">原方程</th><th>换元方向</th></tr>
+  <tr><td class="k">17届 第7题</td><td class="m">y′x ln x sin y + (1−x cos y)cos y = 0</td><td>令 <span class="m">z=cos y</span> → Bernoulli，再令 <span class="m">u=z<sup>−1</sup></span> → 线性</td></tr>
+  <tr><td class="k">16届 第6题</td><td class="m">(x³−y²)dx + (x²y+xy)dy = 0</td><td>令 <span class="m">u=y²</span> → 一阶线性</td></tr>
+  <tr><td class="k">15届 第6题</td><td class="m">(x²+y²+3)dy/dx = 2x(2y−x²/y)</td><td>令 <span class="m">u=x², v=y²</span> → 齐次型</td></tr>
+</table>
+
+<div class="tip"><b>三题的共同点：</b>都不是「可分离 / 齐次 / 线性 / Bernoulli」四种标准型的原样，都需要先做一个<strong>形如 <span class="m">z = y²</span> 或 <span class="m">z = cos y</span> 的代换</strong>，把方程拍平成标准型。<br><br>
+<strong>换元的信号：</strong>看到 <span class="m">y²</span> 和 <span class="m">y dy</span> 同时出现 → 令 <span class="m">u=y²</span>；看到 <span class="m">sin y</span> 和 <span class="m">cos y</span> 混着 <span class="m">y′</span> → 令 <span class="m">z=cos y</span>。</div>
+
+<div class="note"><b>一个值得注意的复用：</b>17届第 7 题和 <strong>14届填空第 4 题</strong>几乎是同一道题——14届是 <span class="m">y′ln x sin y + (1−cos y)cos y = 0</span>，17届在每项上多乘了个 <span class="m">x</span>。这说明<strong>命题人会拿旧题做加强版</strong>。你刷旧题的时候，不妨想想「如果每项乘个 x 会怎样」。</div>
+
+<h2>二、填空题清单</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">14届 第4题</td><td><span class="m">y′ln x sin y + (1−cos y)cos y = 0</span> 的通解（17届7的母题）</td></tr>
+  <tr><td class="k">11届 第2题</td><td>一阶方程求解</td></tr>
+  <tr><td class="k">8届 第3题</td><td><span class="m">z=f(xy²)</span>，已知 <span class="m">∂z/∂x</span> 的表达式，反求 <span class="m">f(x)</span>——本质是解微分方程</td></tr>
+</table>
+
+<div class="tip"><b>8届那题容易被误判：</b>它看起来是多元微分题，但求出 <span class="m">f′</span> 之后要<strong>积分回去</strong>，实际考的是「由导数反求原函数」。这类「跨章」题在 CMC 里不少，别只按单一章节归类。</div>
+
+<h2>三、四种标准型与解法</h2>
+
+<div class="box">
+<table>
+  <tr><th style="width:26%">类型</th><th style="width:34%">标准形式</th><th>解法</th></tr>
+  <tr><td class="k">可分离变量</td><td class="m">y′ = f(x)g(y)</td><td>分离：<span class="m">dy/g(y) = f(x)dx</span>，两边积分</td></tr>
+  <tr><td class="k">齐次型</td><td class="m">y′ = φ(y/x)</td><td>令 <span class="m">u=y/x</span>，化为可分离</td></tr>
+  <tr><td class="k">一阶线性</td><td class="m">y′ + P(x)y = Q(x)</td><td>公式：<span class="m">y = e<sup>−∫P</sup>(∫Q e<sup>∫P</sup>dx + C)</span></td></tr>
+  <tr><td class="k">Bernoulli</td><td class="m">y′ + P(x)y = Q(x)y<sup>n</sup></td><td>令 <span class="m">z=y<sup>1−n</sup></span>，化为一阶线性</td></tr>
+</table>
+</div>
+
+<div class="note"><b>最容易记混的地方：</b>Bernoulli 的换元是 <span class="m">z = y<sup>1−n</sup></span>，不是 <span class="m">z = y<sup>n</sup></span>。17届那题先换 <span class="m">z=cos y</span> 得到 <span class="m">z′ − z/(x ln x) = −z²/ln x</span>，这是 <span class="m">n=2</span> 的 Bernoulli，所以再令 <span class="m">u = z<sup>1−2</sup> = z<sup>−1</sup></span>。<strong>两层换元，别在第二层搞错指数。</strong></div>
+
+<h2>四、二阶常系数线性（可能考）</h2>
+
+<div class="box">
+<p><strong>齐次</strong> <span class="m">y″ + py′ + qy = 0</span>：解特征方程 <span class="m">r² + pr + q = 0</span></p>
+<table>
+  <tr><th style="width:34%">判别式</th><th>通解</th></tr>
+  <tr><td>两不等实根 <span class="m">r₁≠r₂</span></td><td class="m">y = C₁e<sup>r₁x</sup> + C₂e<sup>r₂x</sup></td></tr>
+  <tr><td>重根 <span class="m">r₁=r₂=r</span></td><td class="m">y = (C₁ + C₂x)e<sup>rx</sup></td></tr>
+  <tr><td>共轭复根 <span class="m">α±βi</span></td><td class="m">y = e<sup>αx</sup>(C₁cos βx + C₂sin βx)</td></tr>
+</table>
+<p style="margin-bottom:0"><strong>非齐次</strong>：特解形式按右端项设。<span class="m">e<sup>λx</sup>P(x)</span> → 设 <span class="m">x<sup>k</sup>e<sup>λx</sup>Q(x)</span>，<span class="m">k</span> 是 <span class="m">λ</span> 作为特征根的重数。</p>
+</div>
+
+<h2>五、练习顺序</h2>
+
+<div class="ok">
+<b>一天搞定，按这个顺序：</b><br>
+① <strong>14届4</strong>（母题，先做填空版）→ ② <strong>17届7</strong>（同题加强版，检验是否真懂）<br>
+③ <strong>16届6</strong>（换元 <span class="m">u=y²</span>）→ ④ <strong>15届6</strong>（双换元）<br>
+⑤ <strong>8届3</strong>（跨章题，练手感）<br>
+⑥ 如果还有时间，把二阶常系数的三种情形各练 2 道
+</div>
+
+<div class="note"><b>做完自查：</b>能不能在 5 分钟内判断「这题该换什么元」？如果做不到，说明你还在背题型而不是理解结构。判断方法：看方程里<strong>哪个变量的幂次不对</strong>——出现 <span class="m">y²</span> 就想降次，出现三角函数就想用 <span class="m">cos</span> 或 <span class="m">tan</span> 换掉。</div>
+
+<footer>
+  CMC 分章练习 · 04 常微分方程　|　巴蒂整理 2026-10-26<br>
+  近三年解答题题号已核实；15届7「圆锥面与椭球面所围体积」因涉及空间几何，归入 07 多元积分
+</footer>
+</div>
+</body>
+</html>

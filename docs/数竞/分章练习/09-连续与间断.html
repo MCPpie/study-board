@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09 连续与间断 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>09 · 连续与间断</h1>
+  <p class="sub">十年只考两次，但一次就 6 分 · 约 1–6 分</p>
+  <div class="meta">
+    <span>真题 <b>2 道</b></span>
+    <span>题型 <b>2 类</b></span>
+    <span>建议 <b>半天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>这章内容最少，十年只在填空里出现过一次（第十四届第 2 题）。</b>但它的价值不止于此——闭区间连续函数的<strong>零点定理</strong>是后面中值定理证明的地基。所以这章「花半天，收益两处」。</div>
+
+<h2>一、真题清单</h2>
+
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th><th style="width:18%">考点</th></tr>
+  <tr><td class="k">14届 第2题</td><td><span class="m">f(x)=1 (x&gt;0), 0 (x≤0)</span>，<span class="m">g(x)=1−x (x≥1), 1−x (x&lt;1)</span>，求复合函数 <span class="m">f(g(x))</span> 的间断点</td><td>复合函数间断点</td></tr>
+  <tr><td class="k">16届 第7题（解答）</td><td><span class="m">f(x)=1/ln(1+x) − 1/x</span>，求 <span class="m">k</span> 使 <span class="m">f</span> 在 <span class="m">[0,1]</span> 连续，并求最大最小值</td><td>连续性 + 导数应用</td></tr>
+</table>
+
+<h3>14届那题的做法</h3>
+<div class="box">
+<p><strong>第一步：写出复合函数。</strong>先看内层 <span class="m">g(x)</span> 的分段点，再逐段判断 <span class="m">g(x)</span> 落在 <span class="m">f</span> 的哪一段。</p>
+<p><strong>第二步：找可疑点。</strong>复合函数的间断点只可能出现在两个地方：① 内层 <span class="m">g</span> 的分段点；② <span class="m">g(x)</span> 跨过外层 <span class="m">f</span> 的分段点的位置。</p>
+<p style="margin-bottom:0"><strong>答案是 <span class="m">x=1</span>。</strong>因为 <span class="m">x</span> 从小于 1 变到大于 1 时，<span class="m">g(x)</span> 从正变负，跨过了 <span class="m">f</span> 的分界点 0。</p>
+</div>
+
+<div class="tip"><b>通用方法：</b>复合函数求间断点，<strong>先求复合后的表达式，再找分段点</strong>，别试图用「内外层分段点取并集」这种偷懒办法——会多算也会漏算。</div>
+
+<h2>二、间断点分类（必背）</h2>
+
+<div class="box">
+<table>
+  <tr><th style="width:20%">大类</th><th style="width:24%">小类</th><th>特征</th></tr>
+  <tr><td rowspan="2">第一类<br><span style="font-size:11.5px;color:#7c8699">左右极限都存在</span></td><td>可去间断点</td><td>左右极限相等，但不等于函数值（或无定义）</td></tr>
+  <tr><td>跳跃间断点</td><td>左右极限存在但不相等</td></tr>
+  <tr><td rowspan="2">第二类<br><span style="font-size:11.5px;color:#7c8699">至少一个不存在</span></td><td>无穷间断点</td><td>至少一侧极限为 ∞</td></tr>
+  <tr><td>振荡间断点</td><td>如 <span class="m">sin(1/x)</span> 在 <span class="m">x=0</span></td></tr>
+</table>
+</div>
+
+<div class="note"><b>陷阱：</b>分母零点不一定是间断点。必须<strong>先约分，再判断</strong>——约掉之后可能连续。直接把分母零点当间断点，会把可去间断点误判成无穷间断点。</div>
+
+<h2>三、闭区间连续函数四大定理</h2>
+
+<div class="box">
+<p>前提都是：<span class="m">f</span> 在闭区间 <span class="m">[a,b]</span> 上连续。</p>
+<table>
+  <tr><th style="width:26%">定理</th><th>内容</th></tr>
+  <tr><td class="k">有界性</td><td><span class="m">f</span> 在 <span class="m">[a,b]</span> 上有界</td></tr>
+  <tr><td class="k">最值定理</td><td>必取到最大值与最小值</td></tr>
+  <tr><td class="k">介值定理</td><td>介于最小最大值之间的任何数都能取到</td></tr>
+  <tr><td class="k">零点定理</td><td>若 <span class="m">f(a)·f(b) &lt; 0</span>，则存在 <span class="m">ξ∈(a,b)</span> 使 <span class="m">f(ξ)=0</span></td></tr>
+</table>
+</div>
+
+<div class="hot"><b>零点定理是整本高数里最被低估的工具。</b>后面中值定理那一章，绝大多数证明题的骨架都是「构造辅助函数 <span class="m">F(x)</span> + 用零点定理」。<strong>这一条没吃透，中值定理就无从下手。</strong></div>
+
+<h2>四、16届第 7 题的完整流程（值得抄一遍）</h2>
+
+<div class="box">
+<p><strong>① 求极限定 <span class="m">k</span>。</strong><span class="m">lim<sub>x→0+</sub>[1/ln(1+x) − 1/x]</span>，通分后洛必达，得 <span class="m">k = 1/2</span>。</p>
+<p><strong>② 求导判单调。</strong><span class="m">f′(x) = −1/[(1+x)ln²(1+x)] + 1/x²</span>，通分后分子为 <span class="m">g(x) = (1+x)ln²(1+x) − x²</span>。</p>
+<p><strong>③ 再求导判断 <span class="m">g</span> 的符号。</strong><span class="m">g′(x) = ln²(1+x) + 2ln(1+x) − 2x</span>，<span class="m">g″(x) = 2[ln(1+x)−x]/(1+x) &lt; 0</span>，故 <span class="m">g′</span> 递减，<span class="m">g′(x) &lt; g′(0) = 0</span>，进而 <span class="m">g(x) &lt; g(0) = 0</span>。</p>
+<p style="margin-bottom:0"><strong>④ 得结论。</strong><span class="m">f′(x) &lt; 0</span>，<span class="m">f</span> 单调递减，所以最小值 <span class="m">f(1) = 1/ln2 − 1</span>，最大值 <span class="m">f(0) = 1/2</span>。</p>
+</div>
+
+<div class="tip"><b>这道题的价值：</b>它是「连续 + 求导 + 二阶导判号 + 最值」的完整链条，<strong>把一元微分学的核心流程全串了一遍</strong>。建议整题抄写一遍，比做十道零散小题有用。</div>
+
+<h2>五、练习顺序</h2>
+
+<div class="ok">
+<b>半天：</b><br>
+① 背间断点分类表（10 分钟）<br>
+② 做 <strong>14届2</strong>（复合函数间断点）<br>
+③ 抄一遍 <strong>16届7</strong> 的完整解答<br>
+④ 背四大定理，重点理解零点定理的用法
+</div>
+
+<footer>
+  CMC 分章练习 · 09 连续与间断　|　巴蒂整理 2026-10-26
+</footer>
+</div>
+</body>
+</html>

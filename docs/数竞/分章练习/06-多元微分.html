@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>06 多元函数微分学 · CMC 分章练习</title>
+<style>
+:root{--bg:#0e1015;--card:#181c24;--ink:#e8ebf2;--ink2:#aab3c4;--ink3:#7c8699;--line:#272d3a;--line2:#333b4d;--accent:#5b9bff;--accent-l:rgba(91,155,255,.10);--warn:#f5a623;--warn-l:rgba(245,166,35,.10);--hot:#ff5f5f;--hot-l:rgba(255,95,95,.10);--ok:#2ecc8f;--ok-l:rgba(46,204,143,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:40px 24px 90px}
+header{border-bottom:2px solid var(--ink);padding-bottom:18px}
+h1{font-size:24px;font-weight:600;margin:0 0 8px;font-family:Georgia,"Songti SC",serif}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+h2{font-size:17px;font-weight:600;margin:38px 0 4px;padding-top:12px;border-top:1px solid var(--line2)}
+h3{font-size:14px;font-weight:600;margin:20px 0 6px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+td.c{text-align:center;white-space:nowrap}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#f5a623}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#9dc0ff}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#ffb3b3}
+.ok{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:10px 15px;margin:12px 0;font-size:13.5px;color:#7fe0b8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}
+.back{font-size:12.5px;color:var(--ink3);text-decoration:none;display:inline-block;margin-bottom:14px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="00-总索引.html">← 返回总索引</a>
+
+<header>
+  <h1>06 · 多元函数微分学</h1>
+  <p class="sub">近三年年年考，题型高度固定 · 约 8 分</p>
+  <div class="meta">
+    <span>填空真题 <b>8 道</b></span>
+    <span>题型 <b>4 类</b></span>
+    <span>建议 <b>1 天</b></span>
+  </div>
+</header>
+
+<div class="hot"><b>信号：第十五届第 2 题、第十六届第 3 题、第十七届第 4 题，连续三年都考这一章。</b>位置在变（第 2、第 3、第 4 题），题型在「复合二阶偏导」和「隐函数求偏导」之间轮换。<strong>这章只要把「链式法则画树」练成肌肉记忆，6 分基本白送。</strong></div>
+
+<h2>一、真题清单</h2>
+
+<h3>A. 复合函数求偏导（含二阶）</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">16届 第3题</td><td><span class="m">z=f(xy, e<sup>x+y</sup>)</span>，求 <span class="m">∂²z/∂x∂y</span></td></tr>
+  <tr><td class="k">15届 第2题</td><td><span class="m">z=f(x²−y², xy)</span>，求 <span class="m">∂²z/∂x∂y</span></td></tr>
+  <tr><td class="k">9届 第3题</td><td><span class="m">ω=f(u,v)</span>，<span class="m">u=x−cy</span>，<span class="m">v=x+cy</span>，求二阶偏导组合</td></tr>
+</table>
+
+<h3>B. 隐函数求偏导</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">17届 第4题</td><td><span class="m">xz = f(2x−y, xyz)</span> 确定隐函数 <span class="m">z=z(x,y)</span>，求 <span class="m">∂z/∂x</span> 在 <span class="m">(x,y)=(1,0)</span> 的值</td></tr>
+  <tr><td class="k">13届 第2题</td><td><span class="m">x²+y²+z²sin(2x−3y) = 2x−3z</span>，求 <span class="m">z<sub>x</sub> + z<sub>y</sub></span></td></tr>
+</table>
+
+<h3>C. 全微分</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">11届 第4题</td><td>已知全微分表达式，反求原函数 <span class="m">u(x,y)</span></td></tr>
+</table>
+
+<h3>D. 几何应用（切平面 / 相切）</h3>
+<table>
+  <tr><th style="width:14%">出处</th><th>题目要点</th></tr>
+  <tr><td class="k">11届 第5题</td><td>曲面 <span class="m">xyz = a³</span> 与椭球面 <span class="m">x²/a²+y²/b²+z²/c² = 1</span> 相切，求参数关系</td></tr>
+  <tr><td class="k">8届 第5题</td><td>曲面 <span class="m">z=…</span> 平行于平面 <span class="m">2x+2y−z=0</span> 的切平面</td></tr>
+</table>
+
+<h2>二、核心方法：链式法则画树</h2>
+
+<div class="box">
+<p><strong>以 15届第2题 <span class="m">z=f(x²−y², xy)</span> 为例：</strong></p>
+<p>设 <span class="m">u = x²−y²</span>，<span class="m">v = xy</span>，则 <span class="m">z = f(u,v)</span>。</p>
+<p><strong>一阶：</strong></p>
+<p style="padding-left:18px"><span class="m">z<sub>x</sub> = f₁·u<sub>x</sub> + f₂·v<sub>x</sub> = f₁·2x + f₂·y</span></p>
+<p><strong>二阶：</strong>对 <span class="m">z<sub>x</sub></span> 再对 <span class="m">y</span> 求导。注意 <span class="m">f₁, f₂</span> 本身也是 <span class="m">u,v</span> 的函数，<strong>要对它们再用一次链式法则</strong>：</p>
+<p style="padding-left:18px"><span class="m">(f₁)<sub>y</sub> = f₁₁·u<sub>y</sub> + f₁₂·v<sub>y</sub> = f₁₁·(−2y) + f₁₂·x</span></p>
+<p style="padding-left:18px"><span class="m">(f₂)<sub>y</sub> = f₂₁·u<sub>y</sub> + f₂₂·v<sub>y</sub> = f₂₁·(−2y) + f₂₂·x</span></p>
+<p style="margin-bottom:0"><strong>这一步是绝大多数人出错的地方</strong>——忘了对 <span class="m">f₁, f₂</span> 二次展开。</p>
+</div>
+
+<div class="note"><b>记住一句话：</b><span class="m">f₁</span> 也是 <span class="m">x, y</span> 的复合函数，求导时它不能当常数。<strong>一阶求导时把 <span class="m">f₁, f₂</span> 看成符号；二阶求导时它们必须再展开一次。</strong></div>
+
+<h2>三、隐函数求偏导</h2>
+
+<div class="box">
+<p><strong>方法一（推荐）：两边直接求导。</strong>以 17届第4题 <span class="m">xz = f(2x−y, xyz)</span> 为例，两边对 <span class="m">x</span> 求偏导（<span class="m">y</span> 视为常数，<span class="m">z</span> 是 <span class="m">x</span> 的函数）：</p>
+<p style="padding-left:18px"><span class="m">z + x·z<sub>x</sub> = f₁·2 + f₂·(yz + xy·z<sub>x</sub>)</span></p>
+<p>整理出 <span class="m">z<sub>x</sub></span>，再代入 <span class="m">x=1, y=0, z=f(2,0)=3, f₁(2,0)=5</span>。</p>
+<p style="margin-bottom:0"><strong>答案是 7。</strong></p>
+</div>
+
+<div class="tip"><b>方法二（公式法）：</b>令 <span class="m">F(x,y,z) = xz − f(2x−y, xyz)</span>，则 <span class="m">z<sub>x</sub> = −F<sub>x</sub>/F<sub>z</sub></span>。<strong>公式法不容易漏项，但计算量大；两边求导更直观。考场上建议用两边求导。</strong></div>
+
+<h2>四、几何应用</h2>
+
+<div class="box">
+<p><strong>曲面 <span class="m">F(x,y,z)=0</span> 在点 <span class="m">P</span> 的法向量</strong>：<span class="m">n = (F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub>)</span> 在 <span class="m">P</span> 处取值</p>
+<p><strong>切平面</strong>：<span class="m">F<sub>x</sub>(x−x₀) + F<sub>y</sub>(y−y₀) + F<sub>z</sub>(z−z₀) = 0</span></p>
+<p><strong>「切平面平行于已知平面」的做法：</strong>令法向量与已知平面法向量成比例，解出切点坐标，再写切平面方程。</p>
+<p style="margin-bottom:0"><strong>「两曲面相切」的做法：</strong>在切点处两曲面的法向量平行，即梯度成比例。</p>
+</div>
+
+<h2>五、练习顺序</h2>
+
+<div class="ok">
+<b>一天，按这个顺序：</b><br>
+① <strong>17届4</strong>（隐函数，最新）→ ② <strong>15届2</strong>（复合二阶，最典型）<br>
+③ <strong>16届3</strong>（复合二阶，含指数，稍难）→ ④ <strong>13届2</strong>（隐函数，求 <span class="m">z<sub>x</sub>+z<sub>y</sub></span>）<br>
+⑤ <strong>8届5</strong>（切平面）→ ⑥ <strong>11届5</strong>（相切条件）<br>
+⑦ <strong>9届3</strong>（抽象 <span class="m">f(u,v)</span>，练符号运算）
+</div>
+
+<div class="note"><b>自查标准：</b>能不能在 8 分钟内、不看书、把 <span class="m">z=f(x²−y²,xy)</span> 的 <span class="m">∂²z/∂x∂y</span> 完整写出来（包括 <span class="m">f₁₁, f₁₂, f₂₂</span> 所有项）？做不到就再练两道同类题。<strong>这题会了，16届和17届的同类题都是换皮。</strong></div>
+
+<footer>
+  CMC 分章练习 · 06 多元微分　|　巴蒂整理 2026-10-26<br>
+  全部填空真题题号已核实
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMC 非数学类 · 十年真题章节分类表</title>
+<style>
+:root{
+  --bg:#0e1015; --card:#181c24FFF; --ink:#e8ebf2; --ink2:#aab3c4; --ink3:#7c8699;
+  --line:#272d3a; --line2:#333b4d; --accent:#5b9bff; --accent-l:rgba(91,155,255,.10);
+  --warn:#f5a623; --warn-l:rgba(245,166,35,.10); --ok:#2ecc8f; --ok-l:rgba(46,204,143,.10);
+  --hot:#ff5f5f; --hot-l:rgba(255,95,95,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:flex;max-width:1180px;margin:0 auto;gap:34px;padding:0 26px}
+aside{width:186px;flex:0 0 186px;padding-top:44px}
+nav{position:sticky;top:32px}
+nav .nt{font-size:11px;letter-spacing:.14em;color:var(--ink3);margin-bottom:14px}
+nav a{display:block;font-size:13px;color:var(--ink2);text-decoration:none;padding:5px 0 5px 11px;border-left:2px solid transparent}
+nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-l)}
+main{flex:1;min-width:0;padding:44px 0 100px}
+
+header{border-bottom:2px solid var(--ink);padding-bottom:20px}
+h1{font-size:25px;font-weight:600;margin:0 0 10px;font-family:Georgia,"Songti SC",serif;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--ink2);margin:0}
+.meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--ink3)}
+.meta b{color:var(--accent);font-weight:600}
+
+h2{font-size:19px;font-weight:600;margin:46px 0 6px;padding-top:14px;border-top:1px solid var(--line2)}
+h2 .n{color:var(--accent);font-family:Georgia,serif;margin-right:9px;font-weight:400}
+h3{font-size:14.5px;font-weight:600;margin:22px 0 6px}
+p{margin:9px 0}
+
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--ink);border-bottom:1.5px solid var(--line2);padding:7px 8px;background:#1e2330;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.c{text-align:center;white-space:nowrap}
+td.y{white-space:nowrap;color:var(--ink3);font-size:12px}
+td.k{color:var(--ink);font-weight:500;white-space:nowrap}
+
+.m{font-family:Cambria,"Times New Roman",Georgia,serif;font-size:1.05em;color:var(--ink)}
+.m i{font-style:italic}
+
+.note{background:var(--warn-l);border-left:3px solid var(--warn);border-radius:0 6px 6px 0;padding:11px 16px;margin:14px 0;font-size:13.5px;color:#f5a623}
+.note b{color:var(--warn)}
+.tip{background:var(--accent-l);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:11px 16px;margin:14px 0;font-size:13.5px;color:#9dc0ff}
+.tip b{color:var(--accent)}
+.hot{background:var(--hot-l);border-left:3px solid var(--hot);border-radius:0 6px 6px 0;padding:11px 16px;margin:14px 0;font-size:13.5px;color:#ffb3b3}
+.hot b{color:var(--hot)}
+.okbox{background:var(--ok-l);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:11px 16px;margin:14px 0;font-size:13.5px;color:#7fe0b8}
+.okbox b{color:var(--ok)}
+
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}
+.bar .nm{width:110px;flex:0 0 110px;color:var(--ink2)}
+.bar .tr{flex:1;height:16px;background:#EFEDE6;border-radius:2px;overflow:hidden}
+.bar .fi{height:100%;background:var(--accent);border-radius:2px}
+.bar .fi.h{background:#f5a623}
+.bar .vl{width:34px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;font-size:12.5px}
+
+ol{padding-left:22px;font-size:14px;color:var(--ink2)}
+ol li{margin:6px 0}
+footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--ink3)}
+@media(max-width:900px){aside{display:none}.wrap{padding:0 16px}h1{font-size:21px}table{font-size:12px}}
+@media print{aside{display:none}body{background:#fff;font-size:10.5pt}table{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<aside>
+<nav>
+  <div class="nt">目录</div>
+  <a href="#s1">一 数据来源</a>
+  <a href="#s2">二 十年填空总表</a>
+  <a href="#s3">三 按章节重排 ★</a>
+  <a href="#s4">四 频次与信号</a>
+  <a href="#s5">五 解答题归档</a>
+  <a href="#s6">六 怎么用</a>
+</nav>
+</aside>
+
+<main>
+<header>
+  <h1>十年真题 · 章节分类表</h1>
+  <p class="sub">全国大学生数学竞赛初赛 · 非数学类 / 非数学 A 类</p>
+  <div class="meta">
+    <span>覆盖 <b>第八至十七届（2016–2025）</b></span>
+    <span>整理 <b>2026-10-26</b></span>
+    <span>距初赛 <b>19 天</b></span>
+  </div>
+</header>
+
+<h2 id="s1"><span class="n">一</span>数据来源与精度说明</h2>
+
+<p>全部题目来自你本机的 PDF：<span class="m" style="font-size:.92em">Desktop\大二上\CMC\第8–17届…\（非数学类 / 非数学A类）.pdf</span>，用 pypdf 逐页提取文字后人工归类。</p>
+
+<table>
+  <tr><th style="width:14%">届次</th><th style="width:12%">年份</th><th style="width:18%">填空结构</th><th>提取精度</th></tr>
+  <tr><td class="k">第十七届</td><td class="y">2025</td><td>5 题 × 6 分</td><td>公式清晰，<b>完整</b></td></tr>
+  <tr><td class="k">第十六届</td><td class="y">2024</td><td>5 题 × 6 分</td><td>公式清晰，<b>完整</b></td></tr>
+  <tr><td class="k">第十五届</td><td class="y">2023</td><td>5 题 × 6 分</td><td>公式清晰，<b>完整</b></td></tr>
+  <tr><td class="k">第十四届</td><td class="y">2022</td><td>5 题 × 6 分</td><td>公式打散，<b>可辨</b></td></tr>
+  <tr><td class="k">第十三届</td><td class="y">2021</td><td>5 题 × 6 分</td><td>第 4、5 题未能识别</td></tr>
+  <tr><td class="k">第十二届</td><td class="y">2020</td><td>5 题 × 6 分</td><td>第 5 题未能识别</td></tr>
+  <tr><td class="k">第十一届</td><td class="y">2019</td><td>5 题 × 6 分</td><td>乱码较重，<b>可辨</b></td></tr>
+  <tr><td class="k">第十届</td><td class="y">2018</td><td><b>4 题 × 6 分</b></td><td>扫描件，可辨</td></tr>
+  <tr><td class="k">第九届</td><td class="y">2017</td><td><b>6 题 × 7 分</b></td><td>扫描件，可辨</td></tr>
+  <tr><td class="k">第八届</td><td class="y">2016</td><td>5 题 × 6 分</td><td>扫描件，可辨</td></tr>
+</table>
+
+<div class="note"><b>先看这个：填空结构在变。</b>第八届 5×6、第九届 6×7（42 分）、第十届 4×6（24 分）、第十一至十七届稳定为 5×6（30 分）。<strong>所以「填空 5 题」只是近七年的规律</strong>，别把 30 分当成铁板钉钉。但近七年稳定，按 30 分准备是合理的。</div>
+
+<h2 id="s2"><span class="n">二</span>十年填空题逐题总表</h2>
+
+<p>按届次排列，每行是一道填空题。「考点」列是归类后的结果。</p>
+
+<table>
+  <tr><th style="width:9%">届</th><th style="width:5%">题</th><th>题目要点</th><th style="width:16%">考点</th></tr>
+
+  <tr><td class="k" rowspan="5">第八届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2016</span></td>
+      <td class="c">1</td><td><span class="m">f</span> 在 <span class="m">a</span> 可导且 <span class="m">f(a)≠0</span>，求 <span class="m">lim [f(a+1/n)/f(a)]<sup>n</sup></span></td><td>极限 · 1<sup>∞</sup> 型</td></tr>
+  <tr><td class="c">2</td><td><span class="m">f(1)=0, f′(1)</span> 存在，求含 <span class="m">f(sin²x+cos x)</span> 的极限</td><td>极限 · 导数定义</td></tr>
+  <tr><td class="c">3</td><td><span class="m">z=f(xy²)</span>，已知 <span class="m">∂z/∂x</span> 反求 <span class="m">f(x)</span></td><td>多元微分 + 微分方程</td></tr>
+  <tr><td class="c">4</td><td><span class="m">f(x)=e<sup>x</sup>sin2x</span>，求 <span class="m">f<sup>(4)</sup>(0)</span></td><td>高阶导数 · 莱布尼茨</td></tr>
+  <tr><td class="c">5</td><td>曲面与已知平面平行的切平面方程</td><td>多元微分 · 几何应用</td></tr>
+
+  <tr><td class="k" rowspan="6">第九届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2017</span></td>
+      <td class="c">1</td><td><span class="m">f(x)cos x + 2∫₀<sup>x</sup>f(t)sin t dt = x+1</span>，求 <span class="m">f(x)</span></td><td>积分方程 · 变限积分</td></tr>
+  <tr><td class="c">2</td><td>含反三角与根式的极限</td><td>极限</td></tr>
+  <tr><td class="c">3</td><td><span class="m">ω=f(u,v), u=x−cy, v=x+cy</span>，求二阶偏导组合</td><td>多元微分 · 复合求导</td></tr>
+  <tr><td class="c">4</td><td><span class="m">f(0)=f′(0)=0, f″(0)=6</span>，求 <span class="m">lim f(sin²x)/x⁴</span></td><td>极限 · 泰勒</td></tr>
+  <tr><td class="c">5</td><td>不定积分 <span class="m">∫ e<sup>x</sup>(1−sin x)/(1−sin x)² dx</span></td><td>不定积分技巧</td></tr>
+  <tr><td class="c">6</td><td>锥面与球面围成区域的三重积分</td><td>三重积分</td></tr>
+
+  <tr><td class="k" rowspan="4">第十届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2018</span></td>
+      <td class="c">1</td><td><span class="m">lim[(n+1)<sup>α</sup> − n<sup>α</sup>]</span></td><td>数列极限 · 等价</td></tr>
+  <tr><td class="c">2</td><td>参数方程曲线在 <span class="m">t=0</span> 处的切线</td><td>一元微分 · 参数求导</td></tr>
+  <tr><td class="c">3</td><td><span class="m">∫ ln(x+√(1+x²))/(1+x²) dx</span></td><td>积分计算 · 换元</td></tr>
+  <tr><td class="c">4</td><td><span class="m">lim (1−cos x)/x²</span> 型</td><td>极限 · 等价无穷小</td></tr>
+
+  <tr><td class="k" rowspan="5">第十一届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2019</span></td>
+      <td class="c">1</td><td>含 <span class="m">ln(e<sup>sin x</sup>+∛(1−cos x))</span> 与反三角的复合极限</td><td>极限 · 等价无穷小组合</td></tr>
+  <tr><td class="c">2</td><td>一阶微分方程求解</td><td>常微分方程</td></tr>
+  <tr><td class="c">3</td><td><span class="m">∫ (1+sin x)e<sup>x</sup>/(1+cos x)² dx</span></td><td>积分计算 · 分部</td></tr>
+  <tr><td class="c">4</td><td>由全微分式反求原函数 <span class="m">u(x,y)</span></td><td>多元微分 · 全微分</td></tr>
+  <tr><td class="c">5</td><td>曲面 <span class="m">xyz=a³</span> 与椭球面相切求参数</td><td>多元微分 · 几何应用</td></tr>
+
+  <tr><td class="k" rowspan="4">第十二届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2020</span></td>
+      <td class="c">1</td><td><span class="m">lim (x−sin x)e<sup>x²</sup>/(∛(1−x³)−1)</span></td><td>极限 · 等价无穷小</td></tr>
+  <tr><td class="c">2</td><td><span class="m">f(x)=(x+1)²e<sup>nx</sup></span>，求 <span class="m">f<sup>(n)</sup>(1)</span></td><td>高阶导数 · 莱布尼茨</td></tr>
+  <tr><td class="c">3</td><td>隐函数确定曲线在 <span class="m">(1,1)</span> 的切线</td><td>一元微分 · 隐函数</td></tr>
+  <tr><td class="c">4</td><td>由 <span class="m">∫₀<sup>∞</sup>sin x/x dx=π/2</span> 求含参二重积分</td><td>重积分 · 换序</td></tr>
+
+  <tr><td class="k" rowspan="3">第十三届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2021</span></td>
+      <td class="c">1</td><td><span class="m">lim[√(x²+x+1) − x − ln(e<sup>x</sup>+x)]</span>（<span class="m">x→+∞</span>）</td><td>极限 · 泰勒/等价</td></tr>
+  <tr><td class="c">2</td><td>隐函数 <span class="m">x²+y²+z²sin(2x−3y)=2x−3z</span>，求 <span class="m">z<sub>x</sub>+z<sub>y</sub></span></td><td>多元微分 · 隐函数</td></tr>
+  <tr><td class="c">3</td><td><span class="m">f</span> 连续且 <span class="m">f(0)≠0</span>，求含 <span class="m">∫₀<sup>x</sup>f(t)dt</span> 的极限</td><td>极限 · 变限积分</td></tr>
+
+  <tr><td class="k" rowspan="5">第十四届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2022</span></td>
+      <td class="c">1</td><td>含 <span class="m">cos</span> 的 <span class="m">0/0</span> 型极限</td><td>极限 · 洛必达</td></tr>
+  <tr><td class="c">2</td><td>复合函数 <span class="m">f(g(x))</span> 的间断点</td><td>连续 · 间断点</td></tr>
+  <tr><td class="c">3</td><td><span class="m">lim(1+1/n)<sup>n</sup></span> 结合幂级数和函数</td><td>级数 + 极限</td></tr>
+  <tr><td class="c">4</td><td>微分方程 <span class="m">y′ln x sin y + (1−cos y)cos y = 0</span></td><td>常微分方程 · Bernoulli</td></tr>
+  <tr><td class="c">5</td><td><span class="m">∬<sub>D</sub> sin(x+y)dxdy</span>，三角形区域</td><td>二重积分 · 对称性</td></tr>
+
+  <tr><td class="k" rowspan="5">第十五届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2023 A</span></td>
+      <td class="c">1</td><td><span class="m">lim<sub>x→3</sub>[√(x³+9) − 3 − √(x³−23)]</span></td><td>极限 · 洛必达</td></tr>
+  <tr><td class="c">2</td><td><span class="m">z=f(x²−y², xy)</span>，求 <span class="m">∂²z/∂x∂y</span></td><td>多元微分 · 复合二阶</td></tr>
+  <tr><td class="c">3</td><td><span class="m">f(x)=1/(x²−3x+2)</span>，求 <span class="m">f<sup>(n)</sup>(0)</span></td><td>高阶导数 · 有理拆分</td></tr>
+  <tr><td class="c">4</td><td>幂级数 <span class="m">Σ(−1)<sup>n−1</sup>x<sup>2n</sup>/(n(2n−1))</span> 收敛域</td><td>幂级数 · 收敛域</td></tr>
+  <tr><td class="c">5</td><td><span class="m">∬<sub>Σ</sub>(x+y+z)dS</span>，<span class="m">Σ</span> 为 <span class="m">y+z=5</span> 被柱面所截</td><td><b>第一类曲面积分</b></td></tr>
+
+  <tr><td class="k" rowspan="5">第十六届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2024 A</span></td>
+      <td class="c">1</td><td><span class="m">∫₀¹ln(1+x²)dx</span></td><td>定积分计算</td></tr>
+  <tr><td class="c">2</td><td>极坐标二重积分 <span class="m">∬<sub>D</sub>(e<sup>x²+y²</sup>−1)dxdy / r⁴</span> 的极限</td><td>重积分 + 极限</td></tr>
+  <tr><td class="c">3</td><td><span class="m">z=f(xy, e<sup>x+y</sup>)</span>，求 <span class="m">∂²z/∂x∂y</span></td><td>多元微分 · 复合二阶</td></tr>
+  <tr><td class="c">4</td><td>直线与平面的交点/投影</td><td>空间解析几何</td></tr>
+  <tr><td class="c">5</td><td><span class="m">∮<sub>L</sub>(−y dx + x dy)/(4x²+y²)</span>，<span class="m">L: x²+y²=9</span> 逆时针</td><td><b>第二类曲线积分 · 格林</b></td></tr>
+
+  <tr><td class="k" rowspan="5">第十七届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2025 A</span></td>
+      <td class="c">1</td><td><span class="m">f=x−ln(1+x)−½x sin x</span>，<span class="m">g=ax³</span>，<span class="m">lim f/g=1</span>，求 <span class="m">a</span></td><td>极限 · 泰勒定阶</td></tr>
+  <tr><td class="c">2</td><td>过原点与定点、且垂直已知平面的平面方程</td><td>空间解析几何</td></tr>
+  <tr><td class="c">3</td><td><span class="m">lim ∫₀<sup>sin²x</sup>ln(1+t)dt / [(∛(1+x³)−1)sin x]</span></td><td>极限 + 变限积分</td></tr>
+  <tr><td class="c">4</td><td><span class="m">xz=f(2x−y, xyz)</span> 隐函数求 <span class="m">∂z/∂x</span></td><td>多元微分 · 隐函数</td></tr>
+  <tr><td class="c">5</td><td><span class="m">∫<sub>L</sub>(x²+2xy)ds</span>，<span class="m">L</span> 为球面与平面交线</td><td><b>第一类曲线积分</b></td></tr>
+</table>
+
+<h2 id="s3"><span class="n">三</span>按章节重排（练习用）</h2>
+
+<p>这一节是把上面的表倒过来——<strong>你想练哪一章，直接看这里该刷哪些题</strong>。</p>
+
+<h3>A. 极限（含泰勒、等价、洛必达）</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">泰勒定阶 / 求参数</td><td>17届1、9届4、8届2</td></tr>
+  <tr><td class="k">等价无穷小组合</td><td>12届1、10届4、11届1</td></tr>
+  <tr><td class="k">洛必达 / 根式</td><td>15届1、14届1、13届1</td></tr>
+  <tr><td class="k">变限积分型极限</td><td>17届3、13届3</td></tr>
+  <tr><td class="k">1<sup>∞</sup> 型</td><td>8届1、14届3</td></tr>
+  <tr><td class="k">数列极限</td><td>10届1</td></tr>
+</table>
+
+<h3>B. 一元函数微分学</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">高阶导数（莱布尼茨）</td><td>12届2、8届4</td></tr>
+  <tr><td class="k">高阶导数（有理函数拆分）</td><td>15届3</td></tr>
+  <tr><td class="k">隐函数 / 参数方程切线</td><td>12届3、10届2</td></tr>
+</table>
+<div class="note"><b>注意：填空里几乎没有中值定理。</b>中值定理只出现在解答题和证明题里。所以「按章节练填空」练不到它——那部分必须单独用解答题练。</div>
+
+<h3>C. 一元函数积分学</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">定积分计算（分部/换元）</td><td>16届1、11届3、10届3</td></tr>
+  <tr><td class="k">不定积分技巧</td><td>9届5</td></tr>
+  <tr><td class="k">积分方程 / 变限积分</td><td>9届1、13届3</td></tr>
+</table>
+
+<h3>D. 常微分方程</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">一阶（含 Bernoulli 换元）</td><td>14届4、11届2、8届3</td></tr>
+</table>
+
+<h3>E. 空间解析几何</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">平面方程</td><td>17届2</td></tr>
+  <tr><td class="k">直线与平面关系</td><td>16届4</td></tr>
+</table>
+
+<h3>F. 多元函数微分学</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">复合函数二阶偏导</td><td>16届3、15届2、9届3</td></tr>
+  <tr><td class="k">隐函数求偏导</td><td>17届4、13届2</td></tr>
+  <tr><td class="k">全微分反求原函数</td><td>11届4</td></tr>
+  <tr><td class="k">切平面 / 相切条件</td><td>11届5、8届5</td></tr>
+</table>
+
+<h3>G. 多元函数积分学</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k"><b>第一类曲线积分</b></td><td>17届5</td></tr>
+  <tr><td class="k"><b>第二类曲线积分（格林）</b></td><td>16届5</td></tr>
+  <tr><td class="k"><b>第一类曲面积分</b></td><td>15届5</td></tr>
+  <tr><td class="k">二重积分（对称性/换序/极坐标）</td><td>14届5、12届4、16届2</td></tr>
+  <tr><td class="k">三重积分</td><td>9届6</td></tr>
+</table>
+
+<h3>H. 无穷级数</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">幂级数收敛域</td><td>15届4</td></tr>
+  <tr><td class="k">幂级数和函数</td><td>14届3</td></tr>
+</table>
+
+<h3>I. 连续与间断</h3>
+<table>
+  <tr><th style="width:34%">题型</th><th>对应真题</th></tr>
+  <tr><td class="k">复合函数间断点</td><td>14届2</td></tr>
+</table>
+
+<h2 id="s4"><span class="n">四</span>频次统计与三条信号</h2>
+
+<p>十年填空共约 47 道题，按考点归类的分布：</p>
+
+<div class="bar"><span class="nm">极限</span><span class="tr"><span class="fi h" style="width:100%"></span></span><span class="vl">13</span></div>
+<div class="bar"><span class="nm">多元微分</span><span class="tr"><span class="fi h" style="width:62%"></span></span><span class="vl">8</span></div>
+<div class="bar"><span class="nm">多元积分</span><span class="tr"><span class="fi" style="width:54%"></span></span><span class="vl">7</span></div>
+<div class="bar"><span class="nm">一元积分</span><span class="tr"><span class="fi" style="width:38%"></span></span><span class="vl">5</span></div>
+<div class="bar"><span class="nm">一元微分</span><span class="tr"><span class="fi" style="width:31%"></span></span><span class="vl">4</span></div>
+<div class="bar"><span class="nm">级数</span><span class="tr"><span class="fi" style="width:15%"></span></span><span class="vl">2</span></div>
+<div class="bar"><span class="nm">微分方程</span><span class="tr"><span class="fi" style="width:15%"></span></span><span class="vl">2</span></div>
+<div class="bar"><span class="nm">空间解析几何</span><span class="tr"><span class="fi" style="width:15%"></span></span><span class="vl">2</span></div>
+<div class="bar"><span class="nm">连续</span><span class="tr"><span class="fi" style="width:8%"></span></span><span class="vl">1</span></div>
+
+<h3>信号一：近三年填空第 5 题，连续三年考曲线/曲面积分</h3>
+<table>
+  <tr><th style="width:16%">届</th><th>第 5 题内容</th></tr>
+  <tr><td class="k">第十五届</td><td>第一类曲面积分 <span class="m">∬(x+y+z)dS</span></td></tr>
+  <tr><td class="k">第十六届</td><td>第二类曲线积分 <span class="m">∮(−y dx+x dy)/(4x²+y²)</span>，格林公式</td></tr>
+  <tr><td class="k">第十七届</td><td>第一类曲线积分 <span class="m">∫(x²+2xy)ds</span></td></tr>
+</table>
+<div class="hot"><b>这是全表最强的一条规律。</b>连续三年，第 5 题位置固定、题型固定为「曲线/曲面积分」。这类题技巧性强但套路固定（第一类用对称性、第二类用格林/高斯），<strong>是投入产出比最高的 6 分</strong>。你现在必须把这两类积分的公式和对称性用法练到能直接写。</div>
+
+<h3>信号二：多元复合/隐函数求偏导，近三年年年有</h3>
+<p>15 届第 2 题、16 届第 3 题、17 届第 4 题，位置在变，题型不变。这类题只要把「链式法则画树」练熟，基本不丢分。</p>
+
+<h3>信号三：极限是填空的常驻，但形态在变</h3>
+<p>早期偏爱等价无穷小（10、11、12 届），近年转向泰勒定阶（17 届第 1 题）。<strong>泰勒那张展开表的价值在上升</strong>，不是可选项。</p>
+
+<h2 id="s5"><span class="n">五</span>解答题归档（近三年）</h2>
+
+<p>解答题提取精度低于填空（答案与题目混排），以下是能确认的部分。共 5 题 × 14 分 = 70 分。</p>
+
+<table>
+  <tr><th style="width:12%">届</th><th style="width:6%">题</th><th>内容</th><th style="width:18%">考点</th></tr>
+
+  <tr><td class="k" rowspan="4">第十七届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2025</span></td>
+      <td class="c">6</td><td>含 <span class="m">lim</span> 与 <span class="m">∫₀¹f</span> 的函数方程，求 <span class="m">f(x)</span></td><td>极限 + 变限积分</td></tr>
+  <tr><td class="c">7</td><td>一阶微分方程通解（<span class="m">z=cos y</span> 换元成 Bernoulli）</td><td>常微分方程</td></tr>
+  <tr><td class="c">8</td><td><span class="m">∭<sub>Ω</sub>dxdydz/√(y²+z²)</span>，平面围成区域</td><td>三重积分 · 截面法</td></tr>
+  <tr><td class="c">9</td><td>级数 <span class="m">Σ sin²x·sin²2x⋯sin²(2<sup>n</sup>x)</span> 判敛</td><td>数项级数 · 极值估计</td></tr>
+
+  <tr><td class="k" rowspan="3">第十六届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2024</span></td>
+      <td class="c">6</td><td><span class="m">(x³−y²)dx + (x²y+xy)dy = 0</span> 通解</td><td>常微分方程 · 换元</td></tr>
+  <tr><td class="c">7</td><td><span class="m">f(x)=1/ln(1+x) − 1/x</span>，求 <span class="m">k</span> 使其连续，并求最值</td><td>极限 + 导数应用</td></tr>
+  <tr><td class="c">8</td><td><span class="m">∬<sub>S</sub>(x²−x)dydz+⋯</span>，<span class="m">S</span> 为上半球面</td><td>第二类曲面积分 · 高斯</td></tr>
+
+  <tr><td class="k" rowspan="2">第十五届<br><span style="font-weight:400;font-size:11px;color:#7c8699">2023</span></td>
+      <td class="c">6</td><td><span class="m">(x²+y²+3)dy/dx = 2x(2y−x²/y)</span></td><td>常微分方程 · 齐次换元</td></tr>
+  <tr><td class="c">7</td><td>圆锥面与椭球面相切，求所围体积</td><td>空间几何 + 重积分</td></tr>
+</table>
+
+<div class="note"><b>诚实标注：</b>第十五、十六、十七届各还有 1–2 道解答/证明题，因提取文本里题目与解答混排、公式错位，我无法可靠确认考点，故未列入。要补全需直接翻 PDF 第 4–6 页。</div>
+
+<h2 id="s6"><span class="n">六</span>这张表怎么用</h2>
+
+<div class="okbox"><b>按章节练的正确顺序（19 天版）：</b><br>
+① <strong>曲线/曲面积分</strong>（信号一，17届5 → 16届5 → 15届5，三道题连着做，一次吃透）<br>
+② <strong>多元复合/隐函数偏导</strong>（17届4 → 16届3 → 15届2）<br>
+③ <strong>极限三件套</strong>（泰勒 17届1 → 等价 12届1 → 洛必达 15届1）<br>
+④ <strong>常微分方程</strong>（17届7 → 16届6 → 15届6，都是换元类，一起练效率高）<br>
+⑤ 剩下的按时间挑</div>
+
+<h3>三条使用提醒</h3>
+<ol>
+  <li><strong>先做近三年。</strong>2023 年之后才分 A/B 类，之前的卷子难度基准不同。近三年 30 分填空是你最该拿稳的。</li>
+  <li><strong>填空题要限时。</strong>5 道题 30 分，考场上应该 35–40 分钟做完。平时练就按 7 分钟一道卡表。</li>
+  <li><strong>中值定理别在这张表里找。</strong>它只在解答题里，必须单独拿解答题练。</li>
+</ol>
+
+<footer>
+  巴蒂整理 · 2026-10-26　|　数据源：本机 Desktop\大二上\CMC 下第八至十七届初赛 PDF<br>
+  提取工具 pypdf 6.19.0；扫描件年份存在 OCR 误差，已标注精度。
+</footer>
+</main>
+</div>
+</body>
+</html>
