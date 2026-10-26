@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>记账本 · 第一个完整程序</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --code:#8f9dff; --cyan:#38d0d8; --ok:#2ecc8f; --warn:#ff9d9d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.7;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px;
+    font-variant-numeric:tabular-nums}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--code);
+    border:1px solid rgba(143,157,255,.35);background:rgba(143,157,255,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+  .m{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .m span{display:block;font-size:10.5px;color:var(--tx3)}
+  .m b{display:block;font-size:14px;font-weight:700;margin-top:1px}
+
+  .hl{background:rgba(143,157,255,.07);border:1px solid rgba(143,157,255,.28);
+    border-radius:11px;padding:13px 15px;margin-bottom:18px;font-size:12.5px;color:var(--tx2)}
+  .hl b{color:var(--tx)}
+  .hl em{color:var(--code);font-style:normal;font-weight:700}
+
+  h2{font-size:14px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+  h2::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--code)}
+
+  p{font-size:12.5px;color:var(--tx2);margin-bottom:10px}
+  p b{color:var(--tx)}
+
+  /* 阶梯表 */
+  .steps{display:flex;flex-direction:column;gap:7px}
+  .st{display:flex;gap:11px;background:var(--card);border:1px solid rgba(255,255,255,.055);
+    border-radius:10px;padding:11px 13px;align-items:flex-start}
+  .st.key{border-color:rgba(143,157,255,.4);background:rgba(143,157,255,.06)}
+  .st .v{flex:0 0 46px;font-size:11.5px;font-weight:700;color:var(--code);
+    padding-top:1px;letter-spacing:.01em}
+  .st .tx{flex:1;min-width:0}
+  .st .tx b{display:block;font-size:13px;font-weight:600;line-height:1.4;margin-bottom:2px}
+  .st .tx span{display:block;font-size:11px;color:var(--tx3);line-height:1.5}
+  .st .tag{display:inline-block;font-size:9.5px;padding:1px 6px;border-radius:4px;
+    background:rgba(46,204,143,.15);color:var(--ok);margin-left:5px;vertical-align:1px}
+  .st.key .tag{background:rgba(143,157,255,.2);color:var(--code)}
+
+  /* 规则 */
+  .rules{display:flex;flex-direction:column;gap:9px}
+  .r{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+  .r .n{display:inline-block;font-size:10px;font-weight:700;color:var(--bg);
+    background:var(--code);border-radius:5px;padding:1px 7px;margin-bottom:7px}
+  .r b{display:block;font-size:12.5px;font-weight:700;margin-bottom:5px}
+  .r span{font-size:11.5px;color:var(--tx2);line-height:1.65}
+  .r code{background:#0b0e14;border:1px solid var(--line2);border-radius:5px;
+    padding:1px 5px;font-size:11px;color:var(--cyan);
+    font-family:ui-monospace,Menlo,Consolas,monospace}
+
+  /* 对照表 */
+  .cmp{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:6px}
+  .cmp .row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+  .cmp .row:last-child{border-bottom:none}
+  .cmp .h{background:var(--card2);font-size:10.5px;font-weight:700;color:var(--tx3)}
+  .cmp .c{padding:8px 11px;font-size:11.5px;color:var(--tx2)}
+  .cmp .c.no{color:var(--warn)}
+  .cmp .c.yes{color:var(--ok)}
+
+  .warnbox{background:rgba(255,157,157,.07);border:1px solid rgba(255,157,157,.3);
+    border-radius:11px;padding:12px 14px;font-size:12px;color:#ffc9c9;margin-bottom:16px;line-height:1.7}
+  .warnbox b{color:#ffdada}
+
+  footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
+    font-size:11px;color:var(--tx3);text-align:center;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="kicker">编程 · 第一个完整程序</span>
+  <h1>记账本
+    <small>用 Python 从零写一个能每天用的东西，分 9 个版本，每版都能跑</small>
+  </h1>
+</header>
+
+<div class="meta">
+  <div class="m"><span>语言</span><b>Python</b></div>
+  <div class="m"><span>目标</span><b>跑通「完整程序」</b></div>
+  <div class="m"><span>周期</span><b>10/26 – 10/29</b></div>
+  <div class="m"><span>规模</span><b>约 150 行</b></div>
+</div>
+
+<div class="hl">
+  <b>为什么是这个题目</b><br>
+  你的卡点是「能写小作业，<em>拼不成程序</em>」。小作业是局部逻辑，
+  完整程序要管数据、存文件、防崩溃、能反复用。<br><br>
+  记账本刚好把这四件事全占了，而且<em>你自己会天天用它</em>——
+  有真实用途，才不容易写到一半就扔。
+</div>
+
+<h2>九级阶梯</h2>
+<p>每一步都必须<b>能跑起来</b>再往下。不许出现「改到一半全崩」的状态。</p>
+
+<div class="steps">
+  <div class="st"><div class="v">v0.1</div><div class="tx">
+    <b>打印一行，跑通环境<span class="tag">10 分钟</span></b>
+    <span>写两行 print，看到字出现在屏幕上就算过</span></div></div>
+
+  <div class="st"><div class="v">v0.2</div><div class="tx">
+    <b>输入一笔，存进列表，打印出来</b>
+    <span>金额 + 分类 + 日期。先只在内存里，关掉就没了</span></div></div>
+
+  <div class="st key"><div class="v">v0.3</div><div class="tx">
+    <b>写进文件，关掉重开还能读回<span class="tag">分水岭</span></b>
+    <span>这是「小作业」和「程序」的真正区别——程序有记忆</span></div></div>
+
+  <div class="st"><div class="v">v0.4</div><div class="tx">
+    <b>算本月总额</b>
+    <span>读文件 → 过滤本月 → 累加</span></div></div>
+
+  <div class="st"><div class="v">v0.5</div><div class="tx">
+    <b>列出所有记录，带编号</b>
+    <span>编号是后面「改」和「删」的入口</span></div></div>
+
+  <div class="st"><div class="v">v0.6</div><div class="tx">
+    <b>按分类统计</b>
+    <span>餐饮 120、交通 30… 用字典聚合</span></div></div>
+
+  <div class="st"><div class="v">v0.7</div><div class="tx">
+    <b>输字母不崩溃</b>
+    <span>用 try/except 接住，提示重输而不是退出</span></div></div>
+
+  <div class="st key"><div class="v">v0.8</div><div class="tx">
+    <b>数据层与界面层分开<span class="tag">架构</span></b>
+    <span>把「读写文件」「算总额」抽成函数，主程序只负责菜单。
+    这一步之后你会第一次感觉到：程序是可以分层的</span></div></div>
+
+  <div class="st"><div class="v">v1.0</div><div class="tx">
+    <b>循环菜单，能反复用</b>
+    <span>不用每次重新打开。跑三次验收：正常输一次、故意输错一次、关掉重开一次</span></div></div>
+</div>
+
+<h2>三条规则</h2>
+<p>这三条是防「卡住 → 拖延 → 放弃」的，不是防懒。</p>
+
+<div class="rules">
+  <div class="r">
+    <span class="n">规则 1</span>
+    <b>卡住 20 分钟必须开口，但要说清三件事</b>
+    <span>① 我想做什么　② 我试了什么　③ 报错原文（复制粘贴，不要转述）<br>
+    不许「放着明天再说」——那是雪崩的起点。</span>
+  </div>
+  <div class="r">
+    <span class="n">规则 2</span>
+    <b>问 AI 时，只要三种东西</b>
+    <span>报错在说什么 / 伪代码 / <code>≤3 行</code> 的 API 用法。<br>
+    不要直接要完整代码——那会让你「看起来完成了」，但什么都没学会。</span>
+  </div>
+  <div class="r">
+    <span class="n">规则 3</span>
+    <b>每完成一个版本，自己跑三次再给人看</b>
+    <span>正常输一次、故意输错一次、关掉重开一次。扛住这三次才算完成。</span>
+  </div>
+</div>
+
+<h2>要 vs 不要</h2>
+<div class="cmp">
+  <div class="row h"><div class="c">给</div><div class="c">不给</div></div>
+  <div class="row"><div class="c yes">报错在说什么</div><div class="c no">完整函数</div></div>
+  <div class="row"><div class="c yes">伪代码 / 流程图</div><div class="c no">能直接粘贴运行的代码</div></div>
+  <div class="row"><div class="c yes">≤3 行的 API 用法</div><div class="c no">一次给好几步</div></div>
+</div>
+
+<h2>常见卡点预警</h2>
+<div class="warnbox">
+  <b>① 环境跑不起来</b><br>
+  你已经装了 Anaconda 3.9.13，路径 <code>D:\anaconda\python.exe</code>。
+  不用重装。VS Code 打开文件夹，按运行键就行。<br><br>
+
+  <b>② 文件存了但读不回来</b><br>
+  九成是路径问题：程序在哪运行，文件就写在哪。
+  用绝对路径先跑通，再改相对路径。<br><br>
+
+  <b>③ 想加功能，结果把能跑的改崩了</b><br>
+  先复制一份能跑的版本再改。崩了就把旧的拿回来——这是最基本的自保习惯。
+</div>
+
+<h2>时间安排</h2>
+<p>
+  <b>10/26 晚</b>　v0.1 → v0.3（2 小时）<br>
+  <b>10/27 晚</b>　v0.4 → v0.6（2 小时）<br>
+  <b>10/28 晚</b>　v0.7 → v0.8（1.5 小时）<br>
+  <b>10/29 晚</b>　v1.0 收尾（1 小时）<br>
+  <b>10/30</b>　编程全停，给大物期中让路
+</p>
+
+<footer>
+  做完 v1.0 之后，下一版（v2）加搜索、改、删、月度报表。<br>
+  再往后切回 C，写通讯录练 struct 和多文件工程。
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>
