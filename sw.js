@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v47';
+const CACHE = 'study-board-v48';
 
 const ASSETS = [
   './',
@@ -33,7 +33,19 @@ const ASSETS = [
   './docs/电路/电路课件5带读.html',
   './docs/电路/电路课件6带读.html',
   './docs/电路/电子电路与技术2_补课辅助.html',
-  './docs/数竞/数竞30天冲刺计划_非数学A类.html',
+  './docs/数竞/数竞19天冲刺计划_按章节.html',
+  './docs/数竞/CMC十年真题章节分类表.html',
+  './docs/数竞/CMC极限知识点手册.html',
+  './docs/数竞/分章练习/00-总索引.html',
+  './docs/数竞/分章练习/01-极限.html',
+  './docs/数竞/分章练习/02-一元微分.html',
+  './docs/数竞/分章练习/03-一元积分.html',
+  './docs/数竞/分章练习/04-常微分方程.html',
+  './docs/数竞/分章练习/05-空间解析几何.html',
+  './docs/数竞/分章练习/06-多元微分.html',
+  './docs/数竞/分章练习/07-多元积分.html',
+  './docs/数竞/分章练习/08-无穷级数.html',
+  './docs/数竞/分章练习/09-连续与间断.html',
   './docs/大物/大物速成课目录.html',
   './docs/大物/大物热学知识总结.html',
   './docs/大物/大物模拟卷.html',
