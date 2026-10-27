@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v46';
+const CACHE = 'study-board-v47';
 
 const ASSETS = [
   './',
@@ -37,6 +37,7 @@ const ASSETS = [
   './docs/大物/大物速成课目录.html',
   './docs/大物/大物热学知识总结.html',
   './docs/大物/大物模拟卷.html',
+  './docs/大物/大物考前重点题与公式表.html',
   './docs/六级/六级听力专项.html',
   './docs/六级/六级写作翻译模板.html',
   './docs/离散/离散集中补计划.html',

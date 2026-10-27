@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>大物热学 · 卷三重点题 + 一页纸公式表</title>
+<style>
+  :root{
+    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+    --line:#272d3a; --line2:#333b4d;
+    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
+    --phys:#f5a623; --cyan:#38d0d8; --ok:#2ecc8f; --bad:#ff7a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--tx);line-height:1.75;
+    font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px;
+    font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+  .wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+  header{padding:22px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .kicker{display:inline-block;font-size:10.5px;letter-spacing:.16em;color:var(--phys);
+    border:1px solid rgba(245,166,35,.35);background:rgba(245,166,35,.08);
+    padding:3px 10px;border-radius:100px;margin-bottom:12px}
+  h1{font-size:20px;font-weight:700;line-height:1.4;text-wrap:balance}
+  h1 small{display:block;font-size:12.5px;font-weight:400;color:var(--tx3);margin-top:7px}
+
+  .rule{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.28);
+    border-radius:11px;padding:13px 15px;margin-bottom:16px;font-size:12.5px;color:var(--tx2)}
+  .rule b{color:var(--tx)}
+
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px}
+  .meta div{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:10px 8px;text-align:center}
+  .meta .n{display:block;font-size:16px;font-weight:700;color:var(--phys);line-height:1.3}
+  .meta .l{display:block;font-size:10px;color:var(--tx3);margin-top:3px}
+
+  section{margin-bottom:30px}
+  h2{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:9px;
+    padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h2 .no{font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px;
+    background:rgba(245,166,35,.15);color:var(--phys)}
+  h2 .tm{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
+
+  h3{font-size:12.5px;font-weight:700;color:var(--cyan);margin:20px 0 10px;
+    padding-left:9px;border-left:2px solid var(--cyan);letter-spacing:.02em}
+  h3 span{font-weight:400;color:var(--tx3);font-size:11px;margin-left:6px}
+
+  .q{margin-bottom:16px;font-size:13px;color:var(--tx2)}
+  .q .qn{font-weight:700;color:var(--tx);margin-right:6px}
+  .q .sub{font-size:12px;color:var(--tx3);margin-top:4px}
+
+  .opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .opt{font-size:12.5px;color:var(--tx2);padding:6px 11px;background:var(--card);
+    border:1px solid var(--line);border-radius:8px}
+  .opt b{color:var(--phys);margin-right:6px;font-weight:700}
+
+  .blank{display:inline-block;min-width:76px;border-bottom:1px solid var(--line2);
+    color:var(--phys);text-align:center;margin:0 3px;font-weight:700}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:0;overflow:hidden;margin-bottom:16px}
+  details summary{padding:11px 15px;font-size:12.5px;font-weight:700;color:var(--cyan);
+    cursor:pointer;list-style:none;background:var(--card2)}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"▸ ";font-size:11px}
+  details[open] summary::before{content:"▾ "}
+  details .a{padding:13px 15px;font-size:12.5px;color:var(--tx2);line-height:1.85}
+  details .a b{color:var(--tx)}
+  details .a .step{display:block;margin-bottom:5px}
+  details .a .res{display:block;margin-top:7px;padding:7px 11px;background:#0b0d12;
+    border:1px solid var(--line);border-radius:8px;color:var(--ok);font-size:12.5px}
+  .warn{color:var(--phys);font-weight:700}
+
+  /* 公式表 */
+  .sheet{background:var(--card);border:1px solid var(--line2);border-radius:13px;
+    padding:16px 17px;margin-bottom:14px}
+  .sheet h4{font-size:12.5px;color:var(--phys);margin:0 0 9px;letter-spacing:.04em}
+  .sheet h4:not(:first-child){margin-top:16px;padding-top:13px;border-top:1px dashed var(--line2)}
+  .fr{display:flex;gap:10px;font-size:12.5px;padding:4px 0;align-items:baseline}
+  .fr .k{flex:0 0 92px;color:var(--tx3);font-size:11.5px}
+  .fr .v{flex:1;color:var(--tx);font-weight:600}
+  .fr .v em{color:var(--tx3);font-style:normal;font-weight:400;font-size:11.5px}
+
+  .tips{background:rgba(255,122,122,.06);border:1px solid rgba(255,122,122,.25);
+    border-radius:11px;padding:13px 15px;font-size:12.5px;color:var(--tx2)}
+  .tips li{margin-left:16px;margin-bottom:6px}
+  .tips b{color:var(--phys)}
+
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;color:var(--tx2)}
+  th{background:var(--card2);color:var(--tx3);font-weight:600;font-size:11.5px}
+  td:first-child{color:var(--tx);font-weight:600;white-space:nowrap}
+
+  footer{border-top:1px solid var(--line);padding-top:16px;margin-top:24px;
+    font-size:11px;color:var(--tx3);line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">大学物理（二）· 考前最后一晚</div>
+  <h1>卷三 · 重点题 + 一页纸公式表
+    <small>12 题 / 60 分钟 ｜ 做完立刻对答案，然后只看公式表</small>
+  </h1>
+</header>
+
+<div class="meta">
+  <div><span class="n">12</span><span class="l">题</span></div>
+  <div><span class="n">60</span><span class="l">分钟</span></div>
+  <div><span class="n">100</span><span class="l">满分</span></div>
+  <div><span class="n">1</span><span class="l">页公式表</span></div>
+</div>
+
+<div class="rule">
+  <b>这天只做三件事</b>：① 做这套重点卷（60 分钟，不是 90——今晚不追求做完，追求<b>全部写对</b>）；② 对完答案只看下半部分的公式表；③ 把前两套的错题按四类错因归一遍。<br>
+  <b>不要熬夜</b>。今晚多学一小时，明天少考十分——这是真的，不是安慰。<br>
+  取 R = 8.31 J/(mol·K)，k = 1.38×10⁻²³ J/K，0 ℃ = 273.15 K。
+</div>
+
+<!-- ============ 卷三 ============ -->
+<section>
+  <h2><span class="no">卷三</span> 重点卷 <span class="tm">60 分钟 / 100 分</span></h2>
+
+  <h3>一、选择题 <span>每题 5 分，共 20 分</span></h3>
+
+  <div class="q">
+    <span class="qn">1.</span>一定量理想气体温度保持不变，压强变为原来的 2 倍，则分子的平均自由程 λ 变为原来的：
+    <div class="opts">
+      <div class="opt"><b>A</b>2 倍</div>
+      <div class="opt"><b>B</b>1/2</div>
+      <div class="opt"><b>C</b>1/4</div>
+      <div class="opt"><b>D</b>不变</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <span class="qn">2.</span>1 mol 刚性<b>单原子</b>理想气体在等压过程中吸收的热量，有百分之多少用于对外做功：
+    <div class="opts">
+      <div class="opt"><b>A</b>2/5 = 40%</div>
+      <div class="opt"><b>B</b>3/5 = 60%</div>
+      <div class="opt"><b>C</b>2/7 ≈ 28.6%</div>
+      <div class="opt"><b>D</b>1/3 ≈ 33.3%</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <span class="qn">3.</span>关于<b>可逆绝热过程</b>与<b>绝热自由膨胀</b>，下列说法正确的是：
+    <div class="opts">
+      <div class="opt"><b>A</b>两者温度都不变</div>
+      <div class="opt"><b>B</b>两者熵变都为零</div>
+      <div class="opt"><b>C</b>前者熵变为零，后者熵增大</div>
+      <div class="opt"><b>D</b>前者熵增大，后者熵变为零</div>
+    </div>
+  </div>
+
+  <div class="q">
+    <span class="qn">4.</span>一定量理想气体经一循环过程回到初态，则：
+    <div class="opts">
+      <div class="opt"><b>A</b>ΔU = 0，净吸热等于对外做的净功</div>
+      <div class="opt"><b>B</b>ΔU = 0，所以整个过程既不吸热也不放热</div>
+      <div class="opt"><b>C</b>对外做的净功为零</div>
+      <div class="opt"><b>D</b>熵变为负</div>
+    </div>
+  </div>
+
+  <details>
+    <summary>展开选择题答案</summary>
+    <div class="a">
+      <b>1. B</b>　λ = kT/(√2·πd²p)，与 T 成正比、与 p 成反比。T 不变、p 加倍 → λ 减半。<br>
+      <span class="warn">易错</span>：别用 λ = 1/(√2πd²n) 时忘记 n 也随 p 变了，两条式子等价，选一条算到底。<br>
+      <b>2. A</b>　单原子 i = 3，C<sub>p</sub> = (5/2)R。W = RΔT，Q = (5/2)RΔT → W/Q = 2/5 = 40%。<br>
+      <span class="warn">易错</span>：这题卷一考的是<b>双原子</b>（2/7），换成单原子就是 2/5。i 变了答案就变，看清分子类型。<br>
+      <b>3. C</b>　可逆绝热 Q<sub>rev</sub> = 0 → ΔS = ∫dQ/T = 0。绝热自由膨胀虽 Q = 0，但<b>不可逆</b>，不能套 dQ/T，实际熵增大（等于同温可逆膨胀的 νR ln2）。<br>
+      <b>4. A</b>　循环回到初态，状态函数变化为零：ΔU = 0、ΔS = 0。由 Q = ΔU + W 得 Q<sub>净</sub> = W<sub>净</sub>。<br>
+      <span class="warn">易错</span>：ΔU = 0 不等于「没有热交换」——一个循环里既吸热又放热，只是净值为 W。
+    </div>
+  </details>
+
+  <h3>二、填空题 <span>每空 3 分，共 18 分</span></h3>
+
+  <div class="q">
+    <span class="qn">5.</span>2 mol 刚性双原子理想气体，温度从 300 K 升到 400 K。等容过程吸热 Q = <span class="blank">?</span>；若改为等压过程，吸热 Q′ = <span class="blank">?</span>。
+  </div>
+
+  <div class="q">
+    <span class="qn">6.</span>一卡诺热机低温热源 300 K，效率 40%，则高温热源 T₁ = <span class="blank">?</span> K；若低温不变、要把效率提到 50%，T₁ 需升到 <span class="blank">?</span> K。
+  </div>
+
+  <div class="q">
+    <span class="qn">7.</span>1 mol 理想气体在 300 K 下等温可逆膨胀，体积变为原来的 3 倍，则 ΔS = <span class="blank">?</span> J/K，ΔU = <span class="blank">?</span>。
+  </div>
+
+  <details>
+    <summary>展开填空题答案</summary>
+    <div class="a">
+      <b>5.</b>　双原子 i = 5，ΔT = 100 K，ν = 2<br>
+      <span class="step">等容：Q = νC<sub>V</sub>ΔT = (5/2)×2×8.31×100 = <b>4.16×10³ J</b></span>
+      <span class="step">等压：Q′ = νC<sub>p</sub>ΔT = (7/2)×2×8.31×100 = <b>5.82×10³ J</b></span>
+      <span class="res">两者之差 1.66×10³ J 正是等压过程对外做的功 νRΔT = 2×8.31×100</span>
+      <b>6.</b>　η = 1 − T₂/T₁ → T₁ = T₂/(1−η)<br>
+      <span class="step">η = 40%：T₁ = 300/0.6 = <b>500 K</b></span>
+      <span class="step">η = 50%：T₁ = 300/0.5 = <b>600 K</b></span>
+      <span class="warn">易错</span>：效率每提高 10 个百分点，高温热源要涨 100 K——这就是为什么实际热机效率提升极难。<br>
+      <b>7.</b>　<span class="step">ΔS = νR ln(V₂/V₁) = 8.31 × ln3 = 8.31 × 1.0986 = <b>9.13 J/K</b></span>
+      <span class="res">ΔU = <b>0</b>（等温，理想气体内能只与 T 有关）</span>
+    </div>
+  </details>
+
+  <h3>三、计算与简答题 <span>共 62 分</span></h3>
+
+  <div class="q">
+    <span class="qn">8.</span>（12 分）1 mol 单原子理想气体作卡诺循环，高温热源 600 K、低温 300 K，等温膨胀时体积由 V₁ 变为 2V₁。求：(1) 循环效率；(2) 等温膨胀过程吸收的热量；(3) 每次循环的净功。
+  </div>
+
+  <div class="q">
+    <span class="qn">9.</span>（12 分）2 mol 刚性双原子理想气体，初温 300 K。先<b>等容吸热</b>使压强加倍，再<b>绝热膨胀</b>到温度回到 300 K。求整个过程的 ΔU、W、Q。
+  </div>
+
+  <div class="q">
+    <span class="qn">10.</span>（12 分）一卡诺制冷机从 260 K 的冷库吸热，向 300 K 的环境放热，每秒从冷库吸热 1000 J。求：(1) 制冷系数；(2) 每秒消耗的功；(3) 每秒向环境放出的热量。
+  </div>
+
+  <div class="q">
+    <span class="qn">11.</span>（12 分）1.5 kg、90 ℃ 的水与 2.5 kg、20 ℃ 的水在绝热容器中混合（c = 4.18×10³ J/(kg·K)）。求：(1) 平衡温度；(2) 混合过程的总熵变。
+  </div>
+
+  <div class="q">
+    <span class="qn">12.</span>（14 分）试从分子动理论角度说明：为什么理想气体的内能只是温度的函数、与体积无关？真实气体在什么条件下会偏离这一结论？
+  </div>
+
+  <details>
+    <summary>展开计算题答案与解析</summary>
+    <div class="a">
+      <b>8.</b><br>
+      <span class="step">(1) η = 1 − T₂/T₁ = 1 − 300/600 = <b>50%</b></span>
+      <span class="step">(2) 等温膨胀吸热 = 对外做功：Q₁ = νRT₁ln(V₂/V₁) = 1×8.31×600×ln2</span>
+      <span class="step">　　= 4986 × 0.6931 = <b>3.46×10³ J</b></span>
+      <span class="step">(3) W<sub>净</sub> = ηQ₁ = 0.5 × 3.46×10³ = <b>1.73×10³ J</b></span>
+      <span class="res">也可算 W<sub>净</sub> = Q₁ − Q₂，其中 Q₂ = νRT₂ln2 = 8.31×300×0.693 = 1.73×10³ J</span>
+      <b class="warn">易错</b>：绝热两段 Q = 0，所以「吸的热」只有等温膨胀那一段；卡诺循环的效率只由两热源温度定，跟 V₂/V₁ 无关。
+    </div>
+  </details>
+
+  <details>
+    <summary>展开计算题答案与解析</summary>
+    <div class="a">
+      <b>9.</b> 关键：末温 300 K 等于初温 300 K<br>
+      <span class="step">1→2 等容吸热：p 加倍 → T₂ = 2T₁ = 600 K</span>
+      <span class="step">2→3 绝热膨胀：T 由 600 K 降到 300 K，Q₂₃ = 0</span>
+      <span class="step">全过程 ΔU = (5/2)νR(T<sub>末</sub>−T<sub>初</sub>) = 0（温度回到原值）</span>
+      <span class="step">Q = Q₁₂ = (5/2)×2×8.31×(600−300) = <b>1.25×10⁴ J</b>（只有等容段吸热）</span>
+      <span class="step">W = Q − ΔU = <b>1.25×10⁴ J</b>（全部吸收的热都变成功）</span>
+      <span class="res">验算：W = W₁₂ + W₂₃ = 0 + [−ΔU₂₃] = (5/2)×2×8.31×300 = 1.25×10⁴ J ✓</span>
+      <b class="warn">易错</b>：这题最容易错在「以为绝热膨胀温度不变」。可逆绝热膨胀温度一定下降（600→300 K），不变的是<b>绝热自由膨胀</b>。两者别混。
+    </div>
+  </details>
+
+  <details>
+    <summary>展开计算题答案与解析</summary>
+    <div class="a">
+      <b>10.</b><br>
+      <span class="step">(1) w = T₂/(T₁−T₂) = 260/(300−260) = 260/40 = <b>6.5</b></span>
+      <span class="step">(2) W = Q₂/w = 1000/6.5 = <b>≈154 J</b></span>
+      <span class="step">(3) Q₁ = Q₂ + W = 1000 + 154 = <b>≈1154 J</b></span>
+      <span class="res">校验：w = Q₂/W = 1000/154 ≈ 6.5 ✓</span>
+      <b class="warn">易错</b>：制冷系数分母是<b>温差</b> T₁−T₂，不是 T₁；w 远大于 1 完全正常，它衡量的是「每花 1 J 电能搬走多少 J 热量」。
+    </div>
+  </details>
+
+  <details>
+    <summary>展开计算题答案与解析</summary>
+    <div class="a">
+      <b>11.</b><br>
+      <span class="step">(1) 热平衡：1.5×(90−T) = 2.5×(T−20)</span>
+      <span class="step">　　135 − 1.5T = 2.5T − 50 → 4T = 185 → T = <b>46.25 ℃ = 319.40 K</b></span>
+      <span class="step">(2) 热水降温：ΔS₁ = 1.5×4180 × ln(319.40/363.15) = 6270 × (−0.12837) = <b>−805 J/K</b></span>
+      <span class="step">　　冷水升温：ΔS₂ = 2.5×4180 × ln(319.40/293.15) = 10450 × 0.08576 = <b>+896 J/K</b></span>
+      <span class="res">总熵变 ΔS = −805 + 896 ≈ <b>+91 J/K &gt; 0</b>，符合熵增原理</span>
+      <b class="warn">易错</b>：温度必须换成<b>开尔文</b>再取对数，用摄氏度算出来是错的；两段分别算再相加，不能先求平均温度。
+    </div>
+  </details>
+
+  <details>
+    <summary>展开简答题答案与解析</summary>
+    <div class="a">
+      <b>12.</b> 答题要踩三个点：<br>
+      <span class="step"><b>① 无势能</b>：理想气体模型忽略分子间相互作用力（除碰撞瞬间），所以分子间没有势能，内能 = 全体分子动能之和。</span>
+      <span class="step"><b>② 动能只由 T 定</b>：由能量均分定理，每个自由度平均 (1/2)kT，故 U = (i/2)νRT，只含 T，与 V 无关。</span>
+      <span class="step"><b>③ 推论</b>：所以理想气体等温过程 ΔU = 0，绝热自由膨胀温度不变，节流膨胀温度不变。</span>
+      <span class="res">真实气体的偏离：分子间有引力和斥力，存在分子势能，与分子间距（即体积 V）有关 → U = U(T, V)。只有在<b>高温低压</b>（分子间距远大于分子直径、势能占比可忽略）时才接近理想气体。</span>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 一页纸公式表 ============ -->
+<section>
+  <h2><span class="no">公式表</span> 一页纸 · 抄一遍再背 <span class="tm">睡前 15 分钟</span></h2>
+
+  <div class="rule">
+    <b>怎么用</b>：不要只读。拿一张白纸，把这 20 条<b>默写一遍</b>，写完对照本文找漏。默写出来的才算记住，看着眼熟的不算。
+  </div>
+
+  <div class="sheet">
+    <h4>① 气体动理论</h4>
+    <div class="fr"><span class="k">压强</span><span class="v">p = nkT = (2/3)n·ε̄<sub>k</sub>　<em>n = N/V 数密度</em></span></div>
+    <div class="fr"><span class="k">平均平动动能</span><span class="v">ε̄<sub>k</sub> = (3/2)kT　<em>只与 T 有关，与气体种类无关</em></span></div>
+    <div class="fr"><span class="k">自由度 i</span><span class="v">单原子 3 ｜ 刚性双原子 5 ｜ 刚性多原子 6</span></div>
+    <div class="fr"><span class="k">内能</span><span class="v">U = (i/2)νRT = (i/2)pV　<em>理想气体 U 只随 T 变</em></span></div>
+    <div class="fr"><span class="k">三种速率</span><span class="v">v<sub>p</sub> = √(2RT/M) &lt; v̄ = √(8RT/πM) &lt; √(v̄²) = √(3RT/M)</span></div>
+    <div class="fr"><span class="k">平均自由程</span><span class="v">λ = kT/(√2·πd²p) = 1/(√2·πd²n)</span></div>
+
+    <h4>② 热力学第一定律</h4>
+    <div class="fr"><span class="k">核心式</span><span class="v">Q = ΔU + W　<em>W 为气体对外做功</em></span></div>
+    <div class="fr"><span class="k">热容</span><span class="v">C<sub>V</sub> = (i/2)R，C<sub>p</sub> = ((i+2)/2)R，γ = C<sub>p</sub>/C<sub>V</sub></span></div>
+    <div class="fr"><span class="k">等容</span><span class="v">W = 0，Q = ΔU = νC<sub>V</sub>ΔT；p/T = 常量</span></div>
+    <div class="fr"><span class="k">等压</span><span class="v">W = pΔV = νRΔT，Q = νC<sub>p</sub>ΔT；V/T = 常量</span></div>
+    <div class="fr"><span class="k">等温</span><span class="v">ΔU = 0，Q = W = νRT ln(V₂/V₁)；pV = 常量</span></div>
+    <div class="fr"><span class="k">绝热</span><span class="v">Q = 0，W = −ΔU = νC<sub>V</sub>(T₁−T₂)</span></div>
+    <div class="fr"><span class="k">绝热方程</span><span class="v">pV<sup>γ</sup> = 常量，TV<sup>γ−1</sup> = 常量　<em>仅可逆绝热可用</em></span></div>
+    <div class="fr"><span class="k">循环</span><span class="v">W<sub>净</sub> = ∮p dV = p-V 图封闭面积（顺时针为正）；η = W<sub>净</sub>/Q<sub>吸</sub></span></div>
+
+    <h4>③ 热力学第二定律</h4>
+    <div class="fr"><span class="k">热机效率</span><span class="v">η = W/Q₁ = 1 − Q₂/Q₁</span></div>
+    <div class="fr"><span class="k">卡诺效率</span><span class="v">η<sub>卡</sub> = 1 − T₂/T₁　<em>只由两热源温度决定</em></span></div>
+    <div class="fr"><span class="k">制冷系数</span><span class="v">w = Q₂/W = T₂/(T₁−T₂)　<em>可大于 1</em></span></div>
+    <div class="fr"><span class="k">熵变定义</span><span class="v">ΔS = ∫dQ<sub>可逆</sub>/T　<em>必须沿可逆路径积分</em></span></div>
+    <div class="fr"><span class="k">常用熵变</span><span class="v">等温 νRln(V₂/V₁) ｜ 等压 νC<sub>p</sub>ln(T₂/T₁) ｜ 等容 νC<sub>V</sub>ln(T₂/T₁)</span></div>
+    <div class="fr"><span class="k">固液变温</span><span class="v">ΔS = mc·ln(T₂/T₁)　<em>分几段就加几次</em></span></div>
+    <div class="fr"><span class="k">统计意义</span><span class="v">S = k ln Ω　<em>Ω 为微观状态数</em></span></div>
+    <div class="fr"><span class="k">熵增原理</span><span class="v">孤立系统 ΔS ≥ 0，等号对应可逆过程</span></div>
+  </div>
+
+  <h3>五个最容易丢分的坑 <span>考前扫一眼</span></h3>
+  <div class="tips">
+    <ul>
+      <li><b>① 熵增原理只对孤立系统</b>。系统放热时熵会减小，别写「任何过程 ΔS ≥ 0」。</li>
+      <li><b>② 「绝热」不等于「温度不变」</b>。可逆绝热膨胀温度降；温度不变的是<b>绝热自由膨胀</b>（Q = 0 且 W = 0 → ΔU = 0）。</li>
+      <li><b>③ 循环效率的分母只放吸热项</b>。放热的那部分绝不能进分母。</li>
+      <li><b>④ 内能用 i，平均平动动能只用 3</b>。双原子 U 用 5 个自由度，但 ε̄<sub>k</sub> 永远是 (3/2)kT。</li>
+      <li><b>⑤ 熵变遇不可逆过程，必须另设可逆路径</b>。直接用 Q/T 会算出 0，与熵增矛盾。</li>
+    </ul>
+  </div>
+
+  <h3>错题四类归类 <span>前两套卷子拿出来对一遍</span></h3>
+  <table>
+    <tr><th>错因</th><th>典型表现</th><th>今晚怎么补</th></tr>
+    <tr><td>公式记不住</td><td>知道思路，写不出式子</td><td>默写上面公式表，只补漏的那几条</td></tr>
+    <tr><td>算错</td><td>式子对、结果错</td><td>重算一遍，检查单位与数量级（10³ 有没有丢）</td></tr>
+    <tr><td>符号搞反</td><td>ΔU 或 W 正负颠倒</td><td>回到 Q = ΔU + W 的定义，先定「谁对谁做功」</td></tr>
+    <tr><td>没思路</td><td>看完题不知道从哪下手</td><td>只记这题的第一步（画 p-V 图 / 判过程类型），不追求全会</td></tr>
+  </table>
+</section>
+
+<footer>
+  <div>范围：期中热学三章 ｜ 建议 10/30 晚做，60 分钟限时，做完只看公式表</div>
+  <div>配套：<code>大物模拟卷.html</code>（卷一 / 卷二，各 12 题 90 分钟）· <code>大物热学知识总结.html</code>（三章详解 + 15 条默写）</div>
+</footer>
+
+</div>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>
