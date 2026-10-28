@@ -402,6 +402,19 @@
   .cmc .go{display:inline-flex;align-items:center;gap:4px;margin-top:10px;
     font-size:12px;color:var(--math);text-decoration:none;
     border:1px solid rgba(91,155,255,.32);border-radius:7px;padding:5px 10px}
+  .cmc .h .chk{flex:0 0 26px;width:26px;height:26px;margin-left:4px;padding:0;
+    border-radius:50%;border:2px solid var(--line2);background:transparent;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    position:relative}
+  /* 视觉 26px，点击区扩到 46px，手指点得准 */
+  .cmc .h .chk::before{content:"";position:absolute;inset:-10px;border-radius:50%}
+  .cmc .h .chk::after{content:"";width:10px;height:6px;margin-top:-2px;
+    border-left:2.5px solid transparent;border-bottom:2.5px solid transparent;
+    transform:rotate(-45deg)}
+  .cmc .h .chk.done{background:var(--cyan);border-color:var(--cyan)}
+  .cmc .h .chk.done::after{border-left-color:#0b1017;border-bottom-color:#0b1017}
+  .cmc.done .c{color:var(--tx3);text-decoration:line-through}
+  .cmc.done .t{opacity:.55}
 
   @media (min-width:560px){
     h1{font-size:22px}
@@ -944,6 +957,7 @@
     var d=parseKey(cur);
     dLabel.textContent = (d.getMonth()+1)+' 月 '+d.getDate()+' 日';
     dSub.textContent = WK[d.getDay()] + (cur===todayKey?' · 今天':'');
+    renderCmc(cur);   // 数竞卡片跟着日期走
 
     if(!day){
       box.innerHTML='<div class="today"><div class="empty">这一天没有逐日条目<br>'+
@@ -1351,7 +1365,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v51';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v52';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1761,12 +1775,10 @@
     try{ localStorage.setItem('sb-hint-off','1'); }catch(e){}
   });
 
-  focusRender();
-})();
-
 /* ================= 数竞今日任务 ================= */
-(function(){
-  var P = {
+/* ===== 数竞今日任务卡：跟随日期切换 + 可打钩 =====
+   原先是独立 IIFE 写死 new Date()，切日期不跟着变，也不能打钩 */
+var CMC_P = {
     '10-26':['05 空间解析几何','背六条公式 → 独立做 <b>17届第2题</b>（平面方程）','1h','05-空间解析几何.html'],
     '10-27':['05 收尾 + 09 连续','<b>16届第4题</b>（直线与平面投影）+ 背闭区间四大定理','45min','05-空间解析几何.html'],
     '10-28':['07 信号题 ①','<b>17届第5题</b> 第一类曲线积分 · 轮换对称（答案 6π）','45min','07-多元积分.html'],
@@ -1787,25 +1799,56 @@
     '11-12':['套卷 ② + 错题归类','<b>限时 150 分钟</b>做 16届整套；错题按九个章节贴标签','3.5h','00-总索引.html'],
     '11-13':['收官','错题回炉 + 一页纸公式表 + 60 分钟轻量模拟。<b>不做新题</b>','2h','00-总索引.html']
   };
+
+function renderCmc(dk){
   var el = document.getElementById('cmcToday');
   if(!el) return;
-  var now = new Date();
-  var k = ('0'+(now.getMonth()+1)).slice(-2) + '-' + ('0'+now.getDate()).slice(-2);
-  if(k === '11-14'){
+  if(!dk){ el.style.display='none'; el.innerHTML=''; return; }
+
+  if(dk === '11-14'){
     el.style.display = '';
-    el.innerHTML = '<div class="h"><b>数竞 · 今天</b><span class="n">考试日</span></div>' +
+    el.className = 'cmc';
+    el.innerHTML = '<div class="h"><b>数竞 · 考试日</b><span class="n">11-14</span></div>' +
       '<div class="c">09:00 – 11:30 初赛</div>' +
       '<div class="t">填空 40 分钟 → 常规大题 → 压轴骗分 → 留 10 分钟检查</div>';
     return;
   }
-  var it = P[k];
-  if(!it) return;
+
+  var it = CMC_P[dk];
+  if(!it){ el.style.display='none'; el.innerHTML=''; return; }
+
+  var st = LSget('sb-cmc-'+dk, {});
+  var isDone = !!st.on;
+
   el.style.display = '';
-  el.innerHTML = '<div class="h"><b>数竞 · 今日</b><span class="n">' + it[2] + '</span></div>' +
+  el.className = 'cmc' + (isDone ? ' done' : '');
+  el.innerHTML =
+    '<div class="h"><b>数竞 · ' + (dk===todayKey ? '今日' : dk) + '</b>' +
+      '<span class="n">' + it[2] + '</span>' +
+      '<button class="chk' + (isDone ? ' done' : '') + '" id="cmcChk" aria-label="标记完成"></button>' +
+    '</div>' +
     '<div class="c">' + it[0] + '</div>' +
     '<div class="t">' + it[1] + '</div>' +
     '<a class="go" href="docs/数竞/分章练习/' + it[3] + '">打开这一章 ›</a>';
+
+  var btn = document.getElementById('cmcChk');
+  if(btn) btn.addEventListener('click', function(ev){
+    ev.preventDefault();
+    ev.stopPropagation();
+    var s2 = LSget('sb-cmc-'+dk, {});
+    if(s2.on){ delete s2.on; }
+    else { s2.on = 1; if(navigator.vibrate) navigator.vibrate(12); }
+    LSset('sb-cmc-'+dk, s2);
+    btn.classList.toggle('done', !!s2.on);
+    el.classList.toggle('done', !!s2.on);
+  });
+}
+
+  renderCmc(cur);   // 首屏渲染一次
+  focusRender();
 })();
+
+
 </script>
 
 <!-- ============ Morphicons 图标形变 ============ -->
