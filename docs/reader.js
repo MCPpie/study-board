@@ -100,8 +100,19 @@
   document.body.classList.add('sbr-has-back');
 
   backBtn.addEventListener('click', function () {
-    var base = location.pathname.indexOf('/docs/') >= 0 ? '../' : './';
-    var home = base + 'index.html';
+    // 首页路径按「文档在 docs 下第几层」现算：
+    //   docs/电路/x.html        -> ../../index.html
+    //   docs/数竞/分章练习/x.html -> ../../../index.html
+    // （2026-10-25 文档迁入科目子目录后，原先固定 '../' 会跳到不存在的 docs/index.html）
+    var home = (function () {
+      var p = location.pathname;
+      var i = p.indexOf('/docs/');
+      if (i < 0) return 'index.html';                  // 本身就在站点根目录
+      var depth = (p.slice(i + 6).match(/\//g) || []).length;
+      var up = '';
+      for (var n = 0; n <= depth; n++) up += '../';
+      return up + 'index.html';
+    })();
     var before = location.pathname + location.search;
     var ref = document.referrer || '';
     // 只有「确实是从本站点内点进来的」才回退历史，否则直接回首页
