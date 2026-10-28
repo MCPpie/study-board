@@ -509,6 +509,13 @@
     wrap.classList.remove('on');
   }
 
+  // 给返回键用：抽屉开着就吃掉一次返回
+  window.TT = {
+    isOpen: function () { return !!(wrap && wrap.classList.contains('on')); },
+    close: closeSheet,
+    open: openSheet
+  };
+
   function renderSheet() {
     var realWk = currentWeek();
     var w = viewWeek();

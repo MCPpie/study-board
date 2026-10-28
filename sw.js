@@ -1,7 +1,7 @@
 /* 学习看板 Service Worker · v9
    策略：HTML/JS/CSS/JSON 走「网络优先」，保证内容永远最新；
         图片等静态资源走「缓存优先」，保证离线可用。 */
-const CACHE = 'study-board-v49';
+const CACHE = 'study-board-v50';
 
 const ASSETS = [
   './',
@@ -108,7 +108,7 @@ self.addEventListener('fetch', e => {
           let settled = false;
           const timer = setTimeout(() => {
             if (!settled) { settled = true; resolve(cached); }
-          }, 1200);
+          }, 250);
           netTask.then(res => {
             if (!settled) { settled = true; clearTimeout(timer); resolve(res); }
           }).catch(() => {

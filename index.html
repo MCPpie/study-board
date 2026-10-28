@@ -64,7 +64,7 @@
   /* 日期导航 */
   .dnav{display:flex;align-items:center;gap:8px;background:var(--card);
     border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:12px}
-  .dnav button{flex:0 0 34px;height:34px;border-radius:9px;border:1px solid var(--line);
+  .dnav button{flex:0 0 44px;height:44px;border-radius:11px;border:1px solid var(--line);
     background:var(--card2);color:var(--tx2);font-size:16px;font-family:inherit;line-height:1}
   .dnav button:disabled{opacity:.3}
   .dnav .mid{flex:1;text-align:center}
@@ -102,7 +102,7 @@
   .ttl{font-size:12.5px;font-weight:700;color:var(--tx);margin-bottom:2px;transition:opacity .18s}
   .txt{font-size:12.5px;color:var(--tx2);line-height:1.6;transition:opacity .18s}
 
-  .tick{flex:0 0 24px;height:24px;margin-top:1px;border-radius:50%;
+  .tick{flex:0 0 26px;height:26px;margin-top:1px;border-radius:50%;
     border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s}
   .tick svg{width:12px;height:12px;stroke:var(--tx3);stroke-width:2.6;fill:none;
@@ -866,6 +866,36 @@
     b.addEventListener('click',function(){ showTab(b.dataset.tab); });
   });
 
+  /* ================= 应用内返回栈 =================
+     APK 的返回键先问这里：能处理就吃掉，处理不了才走浏览器历史。
+     顺序：维护面板 → 课表抽屉 → 编辑表单 → 非今日标签 → 交回历史 */
+  window.SBBack = function () {
+    try {
+      // 1. 维护面板（点遮罩关闭，避开函数作用域问题）
+      var ms = document.getElementById('mSheet');
+      if (ms && ms.classList.contains('on')) {
+        var mk = document.getElementById('mMask');
+        if (mk) mk.click();
+        return true;
+      }
+
+      // 2. 课表抽屉
+      if (window.TT && TT.isOpen && TT.isOpen()) { TT.close(); return true; }
+
+      // 3. 任务编辑 / 新增表单（在今日视图里）
+      if (document.getElementById('edSave')) { renderDay(); return true; }
+
+      // 4. 不在「今日」标签 → 回到今日
+      var curBtn = document.querySelector('.tb.on');
+      if (curBtn && curBtn.dataset.tab !== 'today') { showTab('today'); return true; }
+
+      // 5. 交回浏览器历史
+      return false;
+    } catch (e) {
+      return false;
+    }
+  };
+
   /* ================= 今日视图 ================= */
   var box=document.getElementById('todayBox');
   var dLabel=document.getElementById('dLabel');
@@ -1316,7 +1346,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v49';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v50';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
