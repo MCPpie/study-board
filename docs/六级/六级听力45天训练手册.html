@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>六级听力 45 天训练手册</title>
+<style>
+:root{
+  --bg:#0e1015; --card:#181c24; --card2:#1e2330;
+  --ink:#e8ebf2; --ink2:#aab3c4; --ink3:#7c8699;
+  --line:#272d3a; --line2:#333b4d; --chk-line:rgba(232,235,242,.30);
+  --amber:#e8b44a; --amber-bg:rgba(232,180,74,.13);
+  --blue:#38d0d8;  --blue-bg:rgba(56,208,216,.10);
+  --teal:#2ecc8f;  --teal-bg:rgba(46,204,143,.12);
+  --purple:#a99cf5;--purple-bg:rgba(169,156,245,.13);
+  --gray:#8b94a6;  --gray-bg:#1e2330;
+  --red:#ff7a7a;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; padding:0 0 64px; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.7;
+  font-variant-numeric:tabular-nums; -webkit-font-feature-settings:"tnum";
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 20px}
+
+header{padding:44px 0 28px}
+.kicker{font-size:12px; letter-spacing:.14em; color:var(--ink3); text-transform:uppercase; margin-bottom:10px}
+h1{font-size:30px; line-height:1.25; margin:0 0 12px; font-weight:600; letter-spacing:-.02em; text-wrap:balance}
+.sub{color:var(--ink2); font-size:14px; margin:0}
+.jump{margin:14px 0 0}
+.jump a{display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--teal);
+  text-decoration:none; border:1px solid rgba(46,204,143,.32); background:var(--teal-bg);
+  padding:8px 15px; border-radius:100px; font-weight:500}
+.jump a:active{opacity:.7}
+
+.countdown{
+  margin-top:24px; background:var(--card); border-radius:16px; padding:20px 22px;
+  box-shadow:0 0 0 .5px var(--line), 0 1px 2px rgba(0,0,0,.30), 0 8px 24px -12px rgba(0,0,0,.45);
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.cd-num{font-size:38px; font-weight:600; letter-spacing:-.03em; line-height:1}
+.cd-num small{font-size:14px; font-weight:400; color:var(--ink2); margin-left:4px; letter-spacing:0}
+.cd-label{font-size:12px; color:var(--ink3); margin-top:6px}
+.bar-wrap{flex:1; min-width:180px}
+.bar-top{display:flex; justify-content:space-between; font-size:12px; color:var(--ink2); margin-bottom:7px}
+.bar{height:8px; border-radius:4px; background:var(--gray-bg); overflow:hidden}
+.bar-fill{height:100%; width:0; border-radius:4px; background:var(--teal); transition:width .35s ease}
+
+section{margin-top:44px}
+h2{font-size:13px; letter-spacing:.10em; color:var(--ink3); font-weight:500; margin:0 0 16px; text-transform:uppercase}
+h3{font-size:17px; margin:28px 0 10px; font-weight:600; letter-spacing:-.01em; text-wrap:balance}
+p{margin:0 0 12px; color:var(--ink)}
+.muted{color:var(--ink2)}
+.small{font-size:13px}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:8px}
+.metric{
+  background:var(--card); border-radius:12px; padding:16px 18px;
+  box-shadow:0 0 0 .5px var(--line);
+}
+.metric .k{font-size:12px; color:var(--ink3); margin-bottom:6px}
+.metric .v{font-size:24px; font-weight:600; letter-spacing:-.02em; line-height:1.2}
+.metric .v small{font-size:13px; font-weight:400; color:var(--ink2); margin-left:3px}
+.metric.hot .v{color:var(--amber)}
+.metric.good .v{color:var(--teal)}
+
+.card{
+  background:var(--card); border-radius:16px; padding:22px 24px; margin-bottom:14px;
+  box-shadow:0 0 0 .5px var(--line), 0 1px 2px rgba(0,0,0,.25);
+}
+.card h3{margin-top:0}
+.card.flat{box-shadow:0 0 0 .5px var(--line)}
+
+ol.steps{margin:12px 0 0; padding-left:0; list-style:none; counter-reset:s}
+ol.steps li{
+  counter-increment:s; position:relative; padding:0 0 14px 40px; color:var(--ink);
+  border-left:1px solid var(--line); margin-left:11px; padding-top:2px;
+}
+ol.steps li:last-child{border-left-color:transparent; padding-bottom:0}
+ol.steps li::before{
+  content:counter(s); position:absolute; left:-11px; top:0;
+  width:22px; height:22px; border-radius:50%; background:var(--gray-bg);
+  color:var(--ink2); font-size:11px; font-weight:600; display:flex;
+  align-items:center; justify-content:center; line-height:1;
+}
+ol.steps li b{font-weight:600}
+ol.steps .t{color:var(--ink3); font-size:12px; margin-left:6px; font-weight:400}
+
+.rule{display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--line)}
+.rule:last-child{border-bottom:none; padding-bottom:0}
+.rule .n{
+  flex:0 0 26px; height:26px; border-radius:8px; background:var(--amber-bg); color:var(--amber);
+  font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center;
+}
+.rule .body{flex:1}
+.rule .body b{display:block; margin-bottom:3px; font-weight:600}
+.rule .body span{color:var(--ink2); font-size:14px}
+
+.stage-h{
+  display:flex; align-items:baseline; gap:10px; margin:30px 0 10px; padding-top:6px;
+}
+.stage-h .name{font-size:15px; font-weight:600}
+.stage-h .range{font-size:12px; color:var(--ink3)}
+
+.list{background:var(--card); border-radius:16px; overflow:hidden; box-shadow:0 0 0 .5px var(--line)}
+.row{
+  display:grid; grid-template-columns:26px 92px 1fr; gap:12px; align-items:center;
+  padding:12px 18px; border-bottom:1px solid var(--line);
+}
+.row:last-child{border-bottom:none}
+.row.today{background:var(--blue-bg)}
+.row.contest{background:var(--gray-bg); opacity:.8}
+
+.chk{
+  width:20px; height:20px; border-radius:6px; box-shadow:inset 0 0 0 1.5px var(--chk-line);
+  cursor:pointer; transition:background .15s, box-shadow .15s; position:relative; flex:none;
+}
+.chk:hover{box-shadow:inset 0 0 0 1.5px var(--teal)}
+.chk.done{background:var(--teal); box-shadow:inset 0 0 0 1.5px var(--teal)}
+.chk.done::after{
+  content:""; position:absolute; left:6px; top:2px; width:5px; height:10px;
+  border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
+}
+.chk.none{cursor:default; box-shadow:none; background:transparent}
+
+.when{font-size:12px; color:var(--ink3); display:flex; flex-direction:column; line-height:1.35}
+.when .d{font-weight:600; color:var(--ink2); font-size:12px}
+.when .md{font-size:13px; color:var(--ink)}
+.when .wd{font-size:11px}
+
+.task{font-size:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0}
+.task .txt{flex:1; min-width:0}
+.task .txt b{font-weight:600}
+.task .vc{font-size:12px; color:var(--ink2); white-space:nowrap}
+.task .vc em{font-style:normal; color:var(--ink3)}
+.tag{
+  font-size:11px; padding:2px 8px; border-radius:6px; font-weight:500; white-space:nowrap;
+}
+.tag.c-amber{background:var(--amber-bg); color:var(--amber)}
+.tag.c-blue{background:var(--blue-bg); color:var(--blue)}
+.tag.c-teal{background:var(--teal-bg); color:var(--teal)}
+.tag.c-purple{background:var(--purple-bg); color:var(--purple)}
+.tag.gray{background:var(--gray-bg); color:var(--gray)}
+.tag.lite{background:var(--gray-bg); color:var(--red); font-weight:400}
+
+table{width:100%; border-collapse:collapse; font-size:14px}
+.tbl-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -2px}
+@media (max-width:560px){
+  .tbl-wrap table{min-width:520px}
+}
+th,td{text-align:left; padding:11px 10px; border-bottom:1px solid var(--line)}
+th{font-size:12px; color:var(--ink3); font-weight:500; white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+
+.pit{padding:14px 0; border-bottom:1px solid var(--line)}
+.pit:last-child{border-bottom:none}
+.pit b{display:block; margin-bottom:4px; font-weight:600}
+.pit span{color:var(--ink2); font-size:14px}
+.pit .why{color:var(--red); font-size:13px; display:block; margin-top:5px}
+
+code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.5px;
+  background:var(--gray-bg); padding:2px 6px; border-radius:5px; word-break:break-all;
+}
+.path{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+  color:var(--ink2); background:var(--gray-bg); padding:10px 12px; border-radius:10px;
+  margin:8px 0 4px; word-break:break-all; line-height:1.6;
+}
+.reset{
+  margin-top:22px; font-size:12px; color:var(--ink3); background:none; border:none;
+  cursor:pointer; text-decoration:underline; padding:0; font-family:inherit;
+}
+footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--ink3)}
+@media (max-width:520px){
+  h1{font-size:24px}
+  .row{grid-template-columns:24px 74px 1fr; padding:12px 14px; gap:9px}
+  .task{font-size:13.5px; gap:6px}
+  .task .vc{width:100%; padding-left:0}
+  .card{padding:18px 18px}
+  .wrap{padding:0 16px}
+}
+@media print{
+  :root{--bg:#fff;--card:#fff;--card2:#f5f5f5;--ink:#111;--ink2:#444;--ink3:#666;
+    --line:#ddd;--line2:#ccc;--chk-line:#999;--gray-bg:#f2f2f2;
+    --amber:#8a5a12;--amber-bg:#fdf3e0;--blue:#166a8f;--blue-bg:#eef7fb;
+    --teal:#0f6e56;--teal-bg:#eaf7f1;--purple:#4b43a8;--purple-bg:#f0eefb;--red:#a32d2d}
+  body{background:#fff; font-size:12px}
+  .chk{box-shadow:inset 0 0 0 1px #999}
+  .countdown,.card,.list{box-shadow:none; border:1px solid #ddd}
+  .row{break-inside:avoid; animation:none}
+  header{padding-top:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">CET-6 · 2026 年 12 月</div>
+  <h1>六级听力 45 天训练手册</h1>
+  <p class="sub">从对 10 题到对 16 题 · 2026.10.28 – 2026.12.11 · 每天 60 分钟</p>
+  <p class="jump"><a href="六级听力45天题库.html">打开配套题库 · 每天该练的题 ›</a></p>
+
+  <div class="countdown">
+    <div>
+      <div class="cd-num" id="cdNum">45<small>天</small></div>
+      <div class="cd-label">距 12/12 考试</div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-top"><span>训练完成度</span><span id="pct">0 / 44</span></div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <div class="bar-top" style="margin:8px 0 0"><span id="stageNow">今天：D1</span><span id="daysLeft"></span></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>一 · 先把账算清楚</h2>
+  <div class="grid">
+    <div class="metric"><div class="k">现在</div><div class="v">≤10<small>题</small></div></div>
+    <div class="metric hot"><div class="k">550 需要</div><div class="v">16<small>题</small></div></div>
+    <div class="metric"><div class="k">缺口</div><div class="v">+6<small>题</small></div></div>
+    <div class="metric good"><div class="k">总投入</div><div class="v">45<small>小时</small></div></div>
+  </div>
+  <p class="small muted" style="margin-top:12px">听力 248.5 分 = 25 题。Section A 长对话 8 题、Section B 篇章 7 题，每题 7.1 分；Section C 讲座 10 题，<b>每题 14.2 分</b>。C 一个人占 142 分，超过听力总分一半——这就是为什么主战场在 C。</p>
+  <p class="small muted">你阅读接近满分，写作翻译按 150 算，550 需要的听力是 155 分，也就是 25 题对 16 题。不是 80%，不是“每句都听懂”，是 62%。</p>
+
+  <div class="card flat" style="margin-top:18px">
+    <h3 style="margin-bottom:8px">开工前先做这个 3 分钟测试</h3>
+    <p class="small" style="margin-bottom:10px">这份手册是按“音形连接断了”设计的。但你的自评可能不准，先验证一次，别练错方向。</p>
+    <p class="small muted" style="margin-bottom:10px">挑一句真题原句，正常速度听一遍（大概听不懂），再用 0.5 倍速<b>逐词</b>慢放。</p>
+    <p class="small" style="margin-bottom:6px"><b>慢放时每个词都认识</b> → 你的问题在语速和连读，不是音形。把音形压到 5 分钟，剩下的 15 分钟全部给“变速精听”：0.8 倍速听 → 原速听 → 跟读。</p>
+    <p class="small" style="margin-bottom:0"><b>慢放时还有词反应不过来</b> → 真的是音形断了，按本手册走，别改。</p>
+  </div>
+</section>
+
+<section>
+  <h2>二 · 三条铁律</h2>
+  <div class="card flat">
+    <div class="rule">
+      <div class="n">1</div>
+      <div class="body"><b>音形优先，前 3 周不做全篇精听</b>
+      <span>单词听不出来的状态下做精听，等于在练“听一串噪音”。先把 1500 个高频词的声音→意思通道打通，再上句子。前 17 天精听只做 3–4 句，不是偷懒，是顺序。</span></div>
+    </div>
+    <div class="rule">
+      <div class="n">2</div>
+      <div class="body"><b>宁短不断</b>
+      <span>音形记忆靠频率，不靠单次时长。11/7–11/13 数竞冲刺周降到 20 分钟（只做音形 + 预读盲听），11/14 当天停。断三天退一周，这条比任何方法都重要——你以前的计划都死在这里。</span></div>
+    </div>
+    <div class="rule">
+      <div class="n">3</div>
+      <div class="body"><b>只精听出题句，不追全篇</b>
+      <span>一篇 400 词逐句听写要 50 分钟，你没有这个时间。只做 3–4 句：出题的句子 + 你卡住的句子。其余部分听懂大意就够。</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>三 · 每天 60 分钟怎么走</h2>
+
+  <h3>音形 20 分钟</h3>
+  <p class="small muted">素材：高频词汇 wav + 同名 PDF。每天一个文件，约 50 词。</p>
+  <ol class="steps">
+    <li><b>盲听第一遍，不看 PDF</b><span class="t">4 min</span><br><span class="small muted">听到一个词，立刻在脑子里反应中文。反应不出来的，记下大概位置（第几个），别停。</span></li>
+    <li><b>对 PDF，只标卡住的词</b><span class="t">4 min</span><br><span class="small muted">认识的直接跳过，不要逐个读。这一遍只干一件事：把“听不出来”的词圈出来。</span></li>
+    <li><b>第二遍盲听，只盯圈出来的</b><span class="t">4 min</span><br><span class="small muted">听到那个词，脑子里必须能跳出中文，跳不出就再听一遍这个位置。</span></li>
+    <li><b>第三遍：跟读卡住的词，出声</b><span class="t">4 min</span><br><span class="small muted">嘴巴动过，耳朵才认得。只读卡住的，不读全表。</span></li>
+    <li><b>抄进卡词本</b><span class="t">4 min</span><br><span class="small muted">只抄单词 + 一个中文，不抄例句。这本子是最后 4 天唯一的复习材料。</span></li>
+  </ol>
+  <p class="small" style="margin-top:14px; padding:12px 14px; background:var(--amber-bg); border-radius:10px; color:var(--amber)"><b>最容易犯的错：</b>看着拼写猜意思。看到 recognize 知道是“认出”，和听到 /ˈrekəɡnaɪz/ 知道是“认出”，是两种能力。前者你早就会了，练它没有意义。</p>
+
+  <h3>精听 40 分钟</h3>
+  <p class="small muted">素材：真题 Section C 一篇。音频 + 试卷 PDF + 解析 PDF（原文在解析里）。</p>
+  <ol class="steps">
+    <li><b>预读选项</b><span class="t">3 min</span><br><span class="small muted">只看这一篇的 3–4 题选项，圈出重复出现的词，猜这篇讲什么。这一步决定你听的时候抓什么。</span></li>
+    <li><b>盲听做题</b><span class="t">3 min</span><br><span class="small muted">一遍过，不暂停、不回放。模拟考场，允许听不懂。</span></li>
+    <li><b>对答案，不看原文</b><span class="t">2 min</span><br><span class="small muted">只标对错。错的先别急着找原因。</span></li>
+    <li><b>逐句听写 3–4 句</b><span class="t">18 min</span><br><span class="small muted">挑出题句 + 你听糊的句子。每句听 3 遍，写下你听到的音（拼错无所谓），写不出的留空。</span></li>
+    <li><b>对照原文，标断点类型</b><span class="t">7 min</span><br><span class="small muted">每个错处标一个：<b>A 词不认识</b> / <b>B 连读弱读听不出</b> / <b>C 语速跟不上</b>。这一步是全训练的核心产出。</span></li>
+    <li><b>跟读断点句</b><span class="t">7 min</span><br><span class="small muted">每句跟 5 遍，跟到能和音频同速。跟读只读断点句，不读全篇。</span></li>
+  </ol>
+  <p class="small" style="margin-top:14px; padding:12px 14px; background:var(--blue-bg); border-radius:10px; color:var(--blue)"><b>每周日翻一次断点标注：</b>如果 A 类最多，下周音形加到 25 分钟；如果 B、C 类多，说明音形已经够用，精听时间往上加。别凭感觉调，看标注。</p>
+</section>
+
+<section>
+  <h2>四 · 45 天日历</h2>
+  <p class="small muted" style="margin-bottom:14px">点方块打勾，进度自动存在本机浏览器里。今天那行会高亮。</p>
+  <div class="card flat" style="padding:14px 20px; margin-bottom:18px">
+    <div class="rule" style="padding:8px 0"><div class="n" style="background:var(--amber-bg); color:var(--amber)">1</div><div class="body"><b style="font-size:14px">建通道 · D1–D17</b><span style="font-size:13.5px">音形 25 分钟 + 精听 35 分钟。D11–D17 数竞冲刺周，减量到 20 分钟，只做音形 + 预读盲听，不做听写。</span></div></div>
+    <div class="rule" style="padding:8px 0"><div class="n" style="background:var(--blue-bg); color:var(--blue)">2</div><div class="body"><b style="font-size:14px">上强度 · D19–D31</b><span style="font-size:13.5px">音形 20 分钟 + 精听 40 分钟，精听走完整六步。数竞结束，这是唯一能满负荷的窗口。</span></div></div>
+    <div class="rule" style="padding:8px 0"><div class="n" style="background:var(--teal-bg); color:var(--teal)">3</div><div class="body"><b style="font-size:14px">套题期 · D32–D41</b><span style="font-size:13.5px">每 2 天一套：第 1 天限时模考（25 题 30 分钟），第 2 天复盘错题。音形转二轮，只过卡词本。重点练预读和节奏，不再逐句听写。</span></div></div>
+    <div class="rule" style="padding:8px 0; border-bottom:none"><div class="n" style="background:var(--purple-bg); color:var(--purple)">4</div><div class="body"><b style="font-size:14px">收尾 · D42–D45</b><span style="font-size:13.5px">D42–D43 最后一套模考，D44 卡词本总过一遍，D45 只看错题、早睡。考前不做新题。</span></div></div>
+  </div>
+
+<div class="row today" data-stage="1">
+  <div class="chk" data-id="d1"></div>
+  <div class="when"><span class="d">D1</span><span class="md">10/28</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第1套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 01 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d2"></div>
+  <div class="when"><span class="d">D2</span><span class="md">10/29</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第1套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 02 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d3"></div>
+  <div class="when"><span class="d">D3</span><span class="md">10/30</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第1套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 03 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d4"></div>
+  <div class="when"><span class="d">D4</span><span class="md">10/31</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第2套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 04 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d5"></div>
+  <div class="when"><span class="d">D5</span><span class="md">11/1</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第2套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 05 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d6"></div>
+  <div class="when"><span class="d">D6</span><span class="md">11/2</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2020.12 第2套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 06 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d7"></div>
+  <div class="when"><span class="d">D7</span><span class="md">11/3</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2021.06 第1套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 07 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d8"></div>
+  <div class="when"><span class="d">D8</span><span class="md">11/4</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2021.06 第1套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 08 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d9"></div>
+  <div class="when"><span class="d">D9</span><span class="md">11/5</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2021.06 第1套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 09 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d10"></div>
+  <div class="when"><span class="d">D10</span><span class="md">11/6</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="txt"><b>2021.06 第2套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 10 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d11"></div>
+  <div class="when"><span class="d">D11</span><span class="md">11/7</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.06 第2套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 11 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d12"></div>
+  <div class="when"><span class="d">D12</span><span class="md">11/8</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.06 第2套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 12 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d13"></div>
+  <div class="when"><span class="d">D13</span><span class="md">11/9</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.12 第1套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 13 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d14"></div>
+  <div class="when"><span class="d">D14</span><span class="md">11/10</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.12 第1套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 14 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d15"></div>
+  <div class="when"><span class="d">D15</span><span class="md">11/11</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.12 第1套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 15 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d16"></div>
+  <div class="when"><span class="d">D16</span><span class="md">11/12</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.12 第2套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 16 <em>减量</em></span></div>
+</div>
+<div class="row" data-stage="1">
+  <div class="chk" data-id="d17"></div>
+  <div class="when"><span class="d">D17</span><span class="md">11/13</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-amber">精听</span><span class="tag lite">减量</span><span class="txt"><b>2021.12 第2套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 17 <em>减量</em></span></div>
+</div>
+<div class="row contest" data-stage="0">
+  <div class="chk none"></div>
+  <div class="when"><span class="d">D18</span><span class="md">11/14</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag gray">数竞</span><span class="txt">今天不学听力，考完再说</span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d19"></div>
+  <div class="when"><span class="d">D19</span><span class="md">11/15</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2021.12 第2套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 18 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d20"></div>
+  <div class="when"><span class="d">D20</span><span class="md">11/16</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第1套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 19 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d21"></div>
+  <div class="when"><span class="d">D21</span><span class="md">11/17</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第1套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 20 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d22"></div>
+  <div class="when"><span class="d">D22</span><span class="md">11/18</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第1套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 21 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d23"></div>
+  <div class="when"><span class="d">D23</span><span class="md">11/19</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第2套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 22 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d24"></div>
+  <div class="when"><span class="d">D24</span><span class="md">11/20</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第2套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 23 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d25"></div>
+  <div class="when"><span class="d">D25</span><span class="md">11/21</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2022.12 第2套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 24 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d26"></div>
+  <div class="when"><span class="d">D26</span><span class="md">11/22</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第1套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 25 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d27"></div>
+  <div class="when"><span class="d">D27</span><span class="md">11/23</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第1套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 26 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d28"></div>
+  <div class="when"><span class="d">D28</span><span class="md">11/24</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第1套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 27 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d29"></div>
+  <div class="when"><span class="d">D29</span><span class="md">11/25</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第2套</b> · Section C 第 1 篇 · 题 16-18</span><span class="vc">音形 28 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d30"></div>
+  <div class="when"><span class="d">D30</span><span class="md">11/26</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第2套</b> · Section C 第 2 篇 · 题 19-21</span><span class="vc">音形 29 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="2">
+  <div class="chk" data-id="d31"></div>
+  <div class="when"><span class="d">D31</span><span class="md">11/27</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-blue">精听</span><span class="txt"><b>2023.06 第2套</b> · Section C 第 3 篇 · 题 22-25</span><span class="vc">音形 30 <em>新词</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d32"></div>
+  <div class="when"><span class="d">D32</span><span class="md">11/28</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag c-teal">模考</span><span class="txt"><b>2023.12 第2套</b> · 完整听力 25 题 · 限时 30 分钟</span><span class="vc">音形 06 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d33"></div>
+  <div class="when"><span class="d">D33</span><span class="md">11/29</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-teal">复盘</span><span class="txt"><b>2023.12 第2套</b> · 错题精听 + 预读复盘</span><span class="vc">音形 07 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d34"></div>
+  <div class="when"><span class="d">D34</span><span class="md">11/30</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-teal">模考</span><span class="txt"><b>2024.06 第1套</b> · 完整听力 25 题 · 限时 30 分钟</span><span class="vc">音形 12 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d35"></div>
+  <div class="when"><span class="d">D35</span><span class="md">12/1</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-teal">复盘</span><span class="txt"><b>2024.06 第1套</b> · 错题精听 + 预读复盘</span><span class="vc">音形 13 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d36"></div>
+  <div class="when"><span class="d">D36</span><span class="md">12/2</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-teal">模考</span><span class="txt"><b>2024.06 第2套</b> · 完整听力 25 题 · 限时 30 分钟</span><span class="vc">音形 18 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d37"></div>
+  <div class="when"><span class="d">D37</span><span class="md">12/3</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-teal">复盘</span><span class="txt"><b>2024.06 第2套</b> · 错题精听 + 预读复盘</span><span class="vc">音形 19 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d38"></div>
+  <div class="when"><span class="d">D38</span><span class="md">12/4</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-teal">模考</span><span class="txt"><b>2024.12 第1套</b> · 完整听力 25 题 · 限时 30 分钟</span><span class="vc">音形 24 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d39"></div>
+  <div class="when"><span class="d">D39</span><span class="md">12/5</span><span class="wd">周六</span></div>
+  <div class="task"><span class="tag c-teal">复盘</span><span class="txt"><b>2024.12 第1套</b> · 错题精听 + 预读复盘</span><span class="vc">音形 25 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d40"></div>
+  <div class="when"><span class="d">D40</span><span class="md">12/6</span><span class="wd">周日</span></div>
+  <div class="task"><span class="tag c-teal">回炉</span><span class="txt">上一套错题</span><span class="vc">音形 28 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="3">
+  <div class="chk" data-id="d41"></div>
+  <div class="when"><span class="d">D41</span><span class="md">12/7</span><span class="wd">周一</span></div>
+  <div class="task"><span class="tag c-teal">回炉</span><span class="txt">上一套错题</span><span class="vc">音形 29 <em>二轮</em></span></div>
+</div>
+<div class="row" data-stage="4">
+  <div class="chk" data-id="d42"></div>
+  <div class="when"><span class="d">D42</span><span class="md">12/8</span><span class="wd">周二</span></div>
+  <div class="task"><span class="tag c-purple">模考</span><span class="txt"><b>2024.12 第2套</b> · 完整听力 25 题 · 限时 30 分钟</span><span class="vc">音形 全部快过 <em>总复习</em></span></div>
+</div>
+<div class="row" data-stage="4">
+  <div class="chk" data-id="d43"></div>
+  <div class="when"><span class="d">D43</span><span class="md">12/9</span><span class="wd">周三</span></div>
+  <div class="task"><span class="tag c-purple">复盘</span><span class="txt"><b>2024.12 第2套</b> · 错题精听 + 预读复盘</span><span class="vc">音形 全部快过 <em>总复习</em></span></div>
+</div>
+<div class="row" data-stage="4">
+  <div class="chk" data-id="d44"></div>
+  <div class="when"><span class="d">D44</span><span class="md">12/10</span><span class="wd">周四</span></div>
+  <div class="task"><span class="tag c-purple">回炉</span><span class="txt">全期错题本</span><span class="vc">音形 全部快过 <em>总复习</em></span></div>
+</div>
+<div class="row" data-stage="4">
+  <div class="chk" data-id="d45"></div>
+  <div class="when"><span class="d">D45</span><span class="md">12/11</span><span class="wd">周五</span></div>
+  <div class="task"><span class="tag c-purple">轻量</span><span class="txt">只看错题本</span><span class="vc">音形 全部快过 <em>总复习</em></span></div>
+</div>
+  <button class="reset" id="resetBtn">清空所有勾选</button>
+</section>
+
+<section>
+  <h2>五 · 每周日自测</h2>
+  <p class="small muted">每周日<b>额外加 30 分钟</b>，当天的精听照常做。三件事：<b>①</b> 一套完整听力（限时 30 分钟，25 题）；<b>②</b> 数本周卡词本上有多少词；<b>③</b> 看断点标注哪类最多。把数字填进下表，这是你唯一的客观进度条。</p>
+  <p class="small muted">周日的卷子用 <b>2016–2019</b> 的旧卷（音频在 <code>2014年-2022年 【真题 解析 音频】</code> 里，语速稍慢，适合练手），把 2023–2024 的 5 套留给阶段三模考，别提前用掉。</p>
+  <div class="card flat" style="padding:6px 18px 10px">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>周次</th><th>日期</th><th>完整听力对几题</th><th>本周卡词数</th><th>断点最多类型</th></tr></thead>
+      <tbody>
+        <tr><td class="num">W1</td><td class="num">11/01</td><td></td><td></td><td></td></tr>
+        <tr><td class="num">W2</td><td class="num">11/08</td><td></td><td></td><td></td></tr>
+        <tr><td class="num">W3</td><td class="num">11/15</td><td></td><td></td><td></td></tr>
+        <tr><td class="num">W4</td><td class="num">11/22</td><td></td><td></td><td></td></tr>
+        <tr><td class="num">W5</td><td class="num">11/29</td><td></td><td></td><td></td></tr>
+        <tr><td class="num">W6</td><td class="num">12/06</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p class="small muted" style="margin-top:12px"><b>参考线：</b>W1 对 10–11 题正常，W3 该到 12–13，W5 到 14–15，考前 16 上下。如果 W3 还在 10 题，别加量，回头查是不是 A 类词没补上。</p>
+</section>
+
+<section>
+  <h2>六 · 五个坑</h2>
+  <div class="card flat">
+    <div class="pit"><b>1. 用“看文本跟读”代替听写</b><span>眼睛帮忙了，耳朵没练到。跟读前必须先盲听写一遍，哪怕只写出一半。</span><span class="why">后果：练了一个月，还是听不出来。</span></div>
+    <div class="pit"><b>2. 追全篇听写</b><span>一篇 400 词全听写要 50 分钟，你会做不完，然后放弃整件事。</span><span class="why">后果：三天打鱼，进度归零。</span></div>
+    <div class="pit"><b>3. 只做题不复盘</b><span>对了答案就过，不标断点类型。</span><span class="why">后果：做了 30 篇，不知道自己在错什么。</span></div>
+    <div class="pit"><b>4. 数竞周断掉</b><span>11/7–11/13 那周你会很忙，很可能整周跳过。</span><span class="why">后果：音形记忆断三天退一周，前 17 天白练。</span></div>
+    <div class="pit"><b>5. 用四级音频或慢速材料练</b><span>六级语速 130–150 wpm，用 0.8 倍速练会养成“等”的习惯。</span><span class="why">后果：考场上一上来就懵。变速只用于听写卡住的那一句，不用于整篇。</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>七 · 素材索引</h2>
+
+  <h3>高频词汇（音形训练）</h3>
+  <div class="path">C:\Users\28982\Desktop\大一\大一下\英语四六级真题整合\英语四六级真题【版本二】此版为主 此文件夹会持续更新\大学英语四六级高频词汇 （带音频）</div>
+  <p class="small muted">30 组，每组一个 <code>.pdf</code> + 一个同名 <code>.wav</code>，编号 01–30。每天一组，正好用满 30 天。主题是分块的（01 教育、15 医疗……），同主题的词一起记更牢。</p>
+
+  <h3>精听真题（Section C）</h3>
+  <div class="path">…\六级真题\1.六级真题+答案解析+听力音频\</div>
+  <p class="small muted">用到 10 套，每套 3 篇 C，共 30 篇：</p>
+  <div class="card flat" style="padding:6px 18px 10px">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>卷次</th><th>真题 PDF</th><th>听力音频</th></tr></thead>
+      <tbody>
+        <tr><td class="num">2020.12 第1套</td><td class="small">2020.12六级真题第1套【可复制可搜索，打印首选】.pdf</td><td class="small">2020年12月大学英语六级听力真题（第一套）.mp3</td></tr>
+        <tr><td class="num">2020.12 第2套</td><td class="small">2020.12六级真题第2套【可复制可搜索，打印首选】.pdf</td><td class="small">2020年12月大学英语六级听力真题（第二套）.mp3</td></tr>
+        <tr><td class="num">2021.06 第1套</td><td class="small">2021.06六级真题第1套.pdf</td><td class="small">2021年6月大学英语六级听力真题（第一套）.mp3</td></tr>
+        <tr><td class="num">2021.06 第2套</td><td class="small">2021.06六级真题第2套.pdf</td><td class="small">2021年6月大学英语六级听力真题（第二套）.mp3</td></tr>
+        <tr><td class="num">2021.12 第1套</td><td class="small">2021.12六级真题第1套.pdf</td><td class="small">2021.12六级听力音频（第1套）.mp3</td></tr>
+        <tr><td class="num">2021.12 第2套</td><td class="small">2021.12六级真题第2套.pdf</td><td class="small">2021.12六级听力音频（第2套）.mp3</td></tr>
+        <tr><td class="num">2022.12 第1套</td><td class="small">2022.12六级真题第1套.pdf</td><td class="small">2022.12六级真题第1套听力.mp3</td></tr>
+        <tr><td class="num">2022.12 第2套</td><td class="small">2022.12六级真题第2套.pdf</td><td class="small">2022.12六级真题第2套听力.mp3</td></tr>
+        <tr><td class="num">2023.06 第1套</td><td class="small">2023.06第1套\2023.06六级真题第1套.pdf</td><td class="small">2023.06第1套\2023.06六级真题第1套听力音频.mp3</td></tr>
+        <tr><td class="num">2023.06 第2套</td><td class="small">2023.06第2套\2023.06六级真题第2套.pdf</td><td class="small">2023.06第2套\2023.06六级真题第2套听力音频.mp3</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <h3>模考真题（完整 25 题）</h3>
+  <p class="small muted">按上表顺序从 D32 起依次使用，越靠后越新。不做精听，专门练节奏和预读。</p>
+  <div class="card flat" style="padding:6px 18px 10px">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>卷次</th><th>真题 PDF</th><th>听力音频</th></tr></thead>
+      <tbody>
+        <tr><td class="num">2023.12 第2套</td><td class="small">2023.12六级真题第2套【可复制可检索，打印首选】.pdf</td><td class="small">2023年12月六级听力音频第2 套.mp3</td></tr>
+        <tr><td class="num">2024.06 第1套</td><td class="small">2024年6月第1套英语六级真题【可复制可搜索，打印首选】.pdf</td><td class="small">2024年6月大学英语六级考试真题第1套听力.mp3</td></tr>
+        <tr><td class="num">2024.06 第2套</td><td class="small">2024年6月第2套英语六级真题【可复制可搜索，打印首选】.pdf</td><td class="small">2024年6月英语六级听力音频（第2套）.mp3</td></tr>
+        <tr><td class="num">2024.12 第1套</td><td class="small">2024.12六级真题第1套【可复制可检索】.pdf</td><td class="small">2024年12月六级听力音频第1套.mp3</td></tr>
+        <tr><td class="num">2024.12 第2套</td><td class="small">2024.12六级真题第2套【可复制可检索】.pdf</td><td class="small">2024年12月六级听力音频第2套.mp3</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p class="small muted" style="margin-top:12px">原文在每套的「解析」PDF 里（同一场次的 <code>…解析…pdf</code>）。听写对不上时再打开，别提前看。</p>
+</section>
+
+<footer>
+  六级听力 45 天训练手册 · 2026.10.28 起 · 目标 550<br>
+  <a href="六级听力45天题库.html" style="color:var(--teal); text-decoration:none">配套题库（30 篇 Section C + 5 套模考）›</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var KEY = 'cet6_listen_v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e) { state = {}; }
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk[data-id]'));
+  var total = boxes.length;
+
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  function refresh(){
+    var done = 0;
+    boxes.forEach(function(b){
+      var on = !!state[b.dataset.id];
+      b.classList.toggle('done', on);
+      if(on) done++;
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('pct').textContent = done + ' / ' + total;
+    document.getElementById('barFill').style.width = pct + '%';
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('click', function(){
+      state[b.dataset.id] = !state[b.dataset.id];
+      save(); refresh();
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(!confirm('确定清空全部勾选？')) return;
+    state = {}; save(); refresh();
+  });
+
+  var exam = new Date(2026, 11, 12);
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var left = Math.ceil((exam - today) / 86400000);
+  document.getElementById('cdNum').innerHTML = (left > 0 ? left : 0) + '<small>天</small>';
+  document.getElementById('daysLeft').textContent = left > 0 ? ('剩 ' + left + ' 天') : '考试周';
+
+  var start = new Date(2026, 9, 28);
+  start.setHours(0,0,0,0);
+  var dn = Math.round((today - start) / 86400000) + 1;
+  document.querySelectorAll('.row.today').forEach(function(r){ r.classList.remove('today'); });
+  var chkToday = document.querySelector('.chk[data-id="d' + dn + '"]');
+  if(chkToday){
+    var rw = chkToday.closest('.row');
+    if(rw) rw.classList.add('today');
+    document.getElementById('stageNow').textContent = '今天：D' + dn;
+  } else {
+    document.getElementById('stageNow').textContent = dn > 45 ? '计划已结束' : '计划外';
+  }
+
+  refresh();
+})();
+</script>
+</body>
+</html>
