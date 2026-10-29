@@ -88,9 +88,28 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
   .paper{padding:12px 12px 10px}
 }
 @media print{
-  body{background:#fff;color:#111}
-  .paper{border-color:#ddd;background:#fff}
-  .day{break-inside:avoid}
+  @page{size:A4;margin:12mm 12mm 12mm 12mm}
+  :root{--bg:#fff;--card:#fff;--card2:#f5f5f5;--line:#ddd;--line2:#ccc;
+    --tx:#111;--tx2:#3d3d3d;--tx3:#6b6b6b;--eng:#0f6e56;--cyan:#0a5f70;
+    --amber:#8a5a12;--red:#a32d2d}
+  body{background:#fff;color:#111;font-size:11.5px;padding:0}
+  .wrap{max-width:none;padding:0}
+  .paper{border-color:#d8d8d8;background:#fff;box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .day{margin-bottom:9px}
+  .dh{margin-bottom:4px;break-after:avoid;page-break-after:avoid}
+  .dh b{font-size:12px}
+  .paper{padding:10px 12px 8px}
+  .ph{margin-bottom:7px;padding-bottom:6px}
+  .q{margin-bottom:8px}
+  .qn{margin-bottom:2px}
+  .ol{gap:1px}
+  .o{font-size:10.8px;line-height:1.42}
+  .info{border-color:#d8d8d8;background:#f7f7f7;color:#333}
+  .jump{display:none}
+  .path{background:#f5f5f5;color:#555}
+  .o{font-size:11.5px}
+  h2{border-bottom-color:#ccc}
+  table th,table td{border-bottom-color:#e2e2e2}
 }
 </style>
 </head>
@@ -111,7 +130,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
 </div>
 
 <section>
-  <h2>45 天计划 <em>点右侧蓝色条目跳到当天题目</em></h2>
+  <h2>45 天计划 <em>点条目跳转（电子版）</em></h2>
   <table>
     <thead><tr><th>天</th><th>日期</th><th>音形</th><th>听力任务</th></tr></thead>
     <tbody>
