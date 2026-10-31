@@ -14,19 +14,29 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <title>学习看板</title>
 <style>
+  /* ===== Tokyo Night =====
+     bg #1a1b26 / card #1f2335 / highlight #292e42
+     fg #c0caf5 / fg_dark #a9b1d6 / comment #565f89 / gutter #3b4261 */
   :root{
-    --bg:#0e1015; --card:#181c24; --card2:#1e2330;
-    --line:#272d3a; --line2:#333b4d;
-    --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
-    --prob:#ff7a7a; --phys:#f5a623; --math:#5b9bff; --eng:#2ecc8f;
-    --code:#a97bff; --dm:#22d3ee; --circ:#fb923c; --cyan:#38d0d8;
-    --cv:#f472b6; --marx:#facc15; --misc:#94a3b8;
-    --ok:#2ecc8f; --bad:#ff7a7a;
+    --bg:#191a24; --card:#22263a; --card2:#2c3149;
+    --line:#2a2f45; --line2:#3b4261;
+    --tx:#c0caf5; --tx2:#a9b1d6; --tx3:#565f89;
+    --prob:#f7768e; --phys:#ff9e64; --math:#7aa2f7; --eng:#9ece6a;
+    --code:#9d7cd8; --dm:#2ac3de; --circ:#e0af68; --cyan:#7dcfff;
+    --cv:#bb9af7; --marx:#73daca; --misc:#565f89;
+    --ok:#9ece6a; --bad:#f7768e;
+    /* 三档圆角，全站统一 */
+    --r-s:9px; --r-m:13px; --r-pill:100px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
+  /* 顶部一层极淡光晕：模拟光源，不是渐变背景 */
+  body::before{content:"";position:fixed;top:-260px;left:50%;
+    transform:translateX(-50%);width:760px;height:520px;pointer-events:none;
+    background:radial-gradient(circle,rgba(122,162,247,.07) 0%,rgba(122,162,247,0) 68%);
+    z-index:0}
   body{
-    background:var(--bg);color:var(--tx);line-height:1.7;
+    background:var(--bg);color:var(--tx);line-height:1.7;position:relative;
     font-family:-apple-system,"PingFang SC","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
     padding:0 0 calc(62px + env(safe-area-inset-bottom));
@@ -40,10 +50,10 @@
   .date{font-size:12.5px;color:var(--tx3);font-variant-numeric:tabular-nums}
 
   .countdown{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
-  .cd{background:var(--card);border:1px solid var(--line);border-radius:9px;
-    padding:7px 11px;font-size:11px;color:var(--tx3)}
+  .cd{background:var(--card);border:none;border-radius:var(--r-m);
+    padding:8px 11px;font-size:11px;color:var(--tx3)}
   .cd b{display:block;font-size:15px;color:var(--tx);font-weight:700;margin-top:1px}
-  .cd.urgent{border-color:rgba(255,122,122,.35)}
+  .cd.urgent{background:rgba(247,118,142,.08)}
   .cd.urgent b{color:#ff9d9d}
 
   .view{display:none}
@@ -59,39 +69,48 @@
   section{margin-bottom:20px}
   h2{font-size:12.5px;font-weight:700;color:var(--tx3);letter-spacing:.08em;
     margin-bottom:9px;display:flex;align-items:center;gap:8px}
-  h2::before{content:"";width:3px;height:12px;border-radius:2px;background:var(--cyan)}
+  h2::before{content:"";width:3px;height:12px;border-radius:var(--r-s);background:var(--cyan)}
   h2 .cnt{margin-left:auto;font-size:11px;color:var(--cyan);letter-spacing:0;font-weight:600}
 
   /* 日期导航 */
-  .dnav{display:flex;align-items:center;gap:8px;background:var(--card);
-    border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:12px}
-  .dnav button{flex:0 0 44px;height:44px;border-radius:11px;border:1px solid var(--line);
-    background:var(--card2);color:var(--tx2);font-size:16px;font-family:inherit;line-height:1}
+  /* 日期导航不再包一层卡片，直接坐在背景上 —— 少一层「砖」 */
+  .dnav{display:flex;align-items:center;gap:2px;
+    border:none;border-radius:var(--r-m);padding:6px 4px;margin-bottom:10px}
+  .dnav button{flex:0 0 44px;height:44px;border-radius:var(--r-m);border:none;
+    background:transparent;color:var(--tx3);font-size:17px;font-family:inherit;line-height:1}
   .dnav button:disabled{opacity:.3}
   .dnav .mid{flex:1;text-align:center}
-  .dnav .mid b{display:block;font-size:14.5px;font-weight:700}
+  .dnav .mid b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
   .dnav .mid span{font-size:11px;color:var(--tx3)}
-  .dnav .jump{flex:0 0 auto;padding:0 11px;height:34px;border-radius:9px;
-    border:1px solid rgba(56,208,216,.3);background:rgba(56,208,216,.1);
-    color:var(--cyan);font-size:11.5px;font-family:inherit;font-weight:600}
+  .dnav .jump{flex:0 0 auto;padding:0 8px;height:32px;border-radius:var(--r-s);
+    border:none;background:transparent;
+    color:var(--tx3);font-size:11.5px;font-family:inherit;font-weight:500}
 
-  .today{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .today-hd{padding:12px 15px 10px;background:var(--card2);border-bottom:1px solid var(--line)}
+  /* 去边框，靠背景色差分层 —— 六层边框叠起来像砖墙 */
+  .today{background:var(--card);border:none;border-radius:var(--r-m);overflow:hidden}
+  .today-hd{padding:13px 15px 11px;background:transparent;
+    border-bottom:1px solid rgba(255,255,255,.05)}
   .hd-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
   .today-hd .d{font-size:14px;font-weight:700}
   .today-hd .w{font-size:11.5px;color:var(--tx3)}
-  .main-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:100px;
-    background:rgba(56,208,216,.14);color:var(--cyan);border:1px solid rgba(56,208,216,.3);margin-left:auto}
-  .bar{height:3px;background:var(--line2);border-radius:100px;overflow:hidden;margin-top:9px}
+  .main-tag{font-size:11px;font-weight:500;padding:0;border-radius:0;
+    background:none;color:var(--tx3);border:none;margin-left:auto}
+  .main-tag b{color:var(--tx2);font-weight:500}
+  .bar{height:3px;background:var(--line2);border-radius:var(--r-pill);overflow:hidden;margin-top:9px}
   .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),#5b9bff);
-    border-radius:100px;transition:width .3s ease}
+    border-radius:var(--r-pill);transition:width .3s ease}
 
-  .item{display:flex;gap:11px;align-items:flex-start;padding:12px 15px;border-bottom:1px solid var(--line)}
+  .item{display:flex;gap:11px;align-items:flex-start;padding:14px 15px;
+    border-bottom:1px solid rgba(255,255,255,.045)}
   .item:last-child{border-bottom:none}
   .item:active{background:rgba(255,255,255,.025)}
   .item-body{flex:1;min-width:0}
   .item-h{display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap}
-  .tag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;white-space:nowrap}
+  /* 彩色药丸 → 小圆点 + 彩色文字：颜色还在，面积缩到 6px */
+  .tag{font-size:11px;font-weight:500;padding:0;border-radius:0;white-space:nowrap;
+    background:none !important;display:inline-flex;align-items:center;gap:5px}
+  .tag::before{content:"";width:6px;height:6px;border-radius:50%;
+    background:currentColor;flex:0 0 6px}
   .tag.prob{background:rgba(255,122,122,.14);color:var(--prob)}
   .tag.phys{background:rgba(245,166,35,.14);color:var(--phys)}
   .tag.math{background:rgba(91,155,255,.14);color:var(--math)}
@@ -103,7 +122,7 @@
   .tag.marx{background:rgba(250,204,21,.14);color:var(--marx)}
   .tag.misc{background:rgba(148,163,184,.14);color:var(--misc)}
   /* 可选任务：灰色小字，和必做的区分开 */
-  .opt{font-size:9.5px;padding:1px 5px;border-radius:4px;margin-left:5px;
+  .opt{font-size:9.5px;padding:1px 5px;border-radius:var(--r-s);margin-left:5px;
     background:rgba(148,163,184,.12);color:#8b96a8;vertical-align:1px;flex:0 0 auto}
   .qty{font-size:10.5px;color:var(--cyan);font-weight:600}
   .ttl{font-size:12.5px;font-weight:700;color:var(--tx);margin-bottom:2px;transition:opacity .18s}
@@ -123,7 +142,7 @@
   .empty{padding:24px 15px;text-align:center;font-size:12.5px;color:var(--tx3);line-height:1.8}
 
   /* 周计划 */
-  .wk{background:var(--card);border:1px solid var(--line);border-radius:13px;
+  .wk{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);
     padding:14px 15px;margin-bottom:11px}
   .wk-h{font-size:13.5px;font-weight:700;margin-bottom:9px;color:var(--tx)}
   .wk-r{display:flex;gap:9px;font-size:12px;color:var(--tx2);padding:5px 0;
@@ -133,17 +152,17 @@
   .wk-r .v{flex:1}
 
   /* 卡片通用 */
-  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:12px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);padding:15px 16px;margin-bottom:12px}
   .box-h{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
   .box-h .r{margin-left:auto;font-size:11px;color:var(--tx3);font-weight:400}
 
   /* 刷题 */
   .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-  .stat{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;text-align:center}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:var(--r-m);padding:9px 10px;text-align:center}
   .stat b{display:block;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
   .stat span{font-size:10.5px;color:var(--tx3)}
   .btn-row{display:flex;gap:8px}
-  .btn{flex:1;height:42px;border-radius:11px;border:1px solid var(--line);
+  .btn{flex:1;height:42px;border-radius:var(--r-m);border:1px solid var(--line);
     background:var(--card2);color:var(--tx);font-size:13.5px;font-weight:600;font-family:inherit;
     display:flex;align-items:center;justify-content:center;gap:7px}
   .btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.1;
@@ -159,23 +178,23 @@
 
   /* 专注 */
   .subj{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
-  .subj button{padding:6px 12px;border-radius:9px;border:1px solid var(--line);
+  .subj button{padding:6px 12px;border-radius:var(--r-m);border:1px solid var(--line);
     background:var(--card2);color:var(--tx3);font-size:12px;font-family:inherit}
   .subj button.on{border-color:rgba(56,208,216,.45);background:rgba(56,208,216,.12);color:var(--cyan);font-weight:600}
 
   /* 笔记 */
   textarea{width:100%;min-height:86px;background:var(--card2);border:1px solid var(--line);
-    border-radius:11px;padding:11px 12px;color:var(--tx);font-size:13px;font-family:inherit;
+    border-radius:var(--r-m);padding:11px 12px;color:var(--tx);font-size:13px;font-family:inherit;
     line-height:1.6;resize:vertical}
   textarea:focus{outline:none;border-color:rgba(56,208,216,.4)}
   .saved{font-size:11px;color:var(--tx3);text-align:right;margin-top:6px;height:14px}
 
   /* 文档 */
   .doc{display:flex;align-items:center;gap:12px;background:var(--card);
-    border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:9px;
+    border:1px solid var(--line);border-radius:var(--r-m);padding:13px 14px;margin-bottom:9px;
     text-decoration:none;color:inherit}
   .doc:active{background:var(--card2)}
-  .doc .ico{flex:0 0 34px;height:34px;border-radius:9px;display:flex;align-items:center;
+  .doc .ico{flex:0 0 34px;height:34px;border-radius:var(--r-m);display:flex;align-items:center;
     justify-content:center;font-size:14px;font-weight:700}
   .doc .t{flex:1;min-width:0}
   .doc .t b{display:block;font-size:13px;font-weight:600;margin-bottom:1px}
@@ -187,8 +206,8 @@
   .bars{display:grid;gap:7px;margin-top:4px}
   .brow{display:flex;align-items:center;gap:9px;font-size:12px}
   .brow .n{flex:0 0 48px;color:var(--tx2)}
-  .brow .t{flex:1;height:16px;background:var(--card2);border-radius:5px;overflow:hidden;position:relative}
-  .brow .t i{display:block;height:100%;border-radius:5px;transition:width .3s}
+  .brow .t{flex:1;height:16px;background:var(--card2);border-radius:var(--r-s);overflow:hidden;position:relative}
+  .brow .t i{display:block;height:100%;border-radius:var(--r-s);transition:width .3s}
   .brow .v{flex:0 0 42px;text-align:right;color:var(--tx3);font-size:11px;font-variant-numeric:tabular-nums}
 
 
@@ -198,15 +217,15 @@
   .dgh .em{font-size:13px;line-height:1}
   .dgh b{font-size:12.5px;font-weight:700;color:var(--tx2);letter-spacing:.02em}
   .dgh em{font-style:normal;font-size:10.5px;color:var(--tx3);margin-left:auto;
-    background:var(--card2);border:1px solid var(--line);border-radius:100px;padding:1px 8px}
+    background:var(--card2);border:1px solid var(--line);border-radius:var(--r-pill);padding:1px 8px}
   .doc.pending{opacity:.55}
   .doc.pending .t b{color:var(--tx3)}
   .subj-tag{display:inline-block;font-size:9.5px;font-weight:700;padding:0 5px;
-    border-radius:4px;margin-right:5px;vertical-align:1px}
+    border-radius:var(--r-s);margin-right:5px;vertical-align:1px}
 
 
   /* 折叠栏目 */
-  .dsec{background:var(--card);border:1px solid var(--line);border-radius:13px;
+  .dsec{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);
     margin-bottom:10px;overflow:hidden}
   .dsec summary{padding:13px 15px;display:flex;align-items:center;gap:10px;
     cursor:pointer;list-style:none;font-size:13.5px;font-weight:700}
@@ -216,7 +235,7 @@
   .dsec[open] summary::after{transform:rotate(90deg)}
   .dsec summary .em{font-size:14px;line-height:1}
   .dsec summary .cnt{font-style:normal;font-size:10.5px;color:var(--tx3);
-    background:var(--card2);border:1px solid var(--line);border-radius:100px;padding:0 7px}
+    background:var(--card2);border:1px solid var(--line);border-radius:var(--r-pill);padding:0 7px}
   .dsec summary .cur{margin-left:auto;font-size:10.5px;color:var(--tx3);font-weight:400}
   .dsec summary::after{margin-left:8px}
   .dbody{border-top:1px solid var(--line);padding:2px 0}
@@ -224,6 +243,10 @@
     border-bottom:1px solid rgba(255,255,255,.045);text-decoration:none;color:inherit}
   .doc2:last-child{border-bottom:none}
   .doc2:active{background:var(--card2)}
+  /* 按下时轻微缩小 + 提亮，给「按到了」的触感反馈 */
+  .item,.doc2,.mrow{-webkit-tap-highlight-color:transparent;
+    transition:transform .12s ease,background .12s ease}
+  .item:active,.doc2:active,.mrow:active{transform:scale(.985)}
   .idx{flex:0 0 22px;font-size:10.5px;color:var(--tx3);font-weight:700;
     font-variant-numeric:tabular-nums}
   .doc2 .t{flex:1;min-width:0}
@@ -238,22 +261,22 @@
 
   /* 计划编辑 */
   .ed-bar{display:flex;gap:8px;margin-top:10px}
-  .ed-bar button{flex:1;height:38px;border-radius:10px;border:1px solid var(--line2);
-    background:var(--card2);color:var(--tx3);font-size:12px;font-family:inherit}
+  .ed-bar button{flex:1;height:38px;border-radius:var(--r-m);border:none;
+    background:var(--card);color:var(--tx3);font-size:12px;font-family:inherit}
   .ed-bar button.on{background:rgba(56,208,216,.13);border-color:rgba(56,208,216,.42);
     color:var(--cyan);font-weight:600}
   .ed-ops{display:flex;gap:6px;margin-top:8px;padding-top:8px;
     border-top:1px dashed rgba(255,255,255,.08)}
-  .ed-ops button{flex:1;height:32px;border-radius:8px;border:1px solid var(--line2);
+  .ed-ops button{flex:1;height:32px;border-radius:var(--r-m);border:1px solid var(--line2);
     background:transparent;color:var(--tx3);font-size:11px;font-family:inherit}
   .ed-ops button.del{color:#ff9d9d;border-color:rgba(255,122,122,.3)}
-  .ed-add{display:block;width:100%;height:42px;margin-top:10px;border-radius:10px;
+  .ed-add{display:block;width:100%;height:42px;margin-top:10px;border-radius:var(--r-m);
     border:1px dashed var(--line2);background:transparent;color:var(--tx3);
     font-size:12.5px;font-family:inherit}
   .ed-add:active{background:var(--card2)}
   .ed-form{display:flex;flex-direction:column;gap:9px}
   .ed-form input,.ed-form textarea,.ed-form select{
-    background:var(--card2);border:1px solid var(--line2);border-radius:10px;
+    background:var(--card2);border:1px solid var(--line2);border-radius:var(--r-m);
     padding:10px 12px;color:var(--tx);font-size:12.5px;font-family:inherit;width:100%}
   .ed-form textarea{resize:vertical;min-height:64px;line-height:1.6}
   .ed-form input:focus,.ed-form textarea:focus{outline:none;
@@ -263,10 +286,12 @@
   .ed-row > *{flex:1}
 
   /* 考试倒计时 */
-  .cd{display:flex;align-items:center;gap:11px;background:linear-gradient(100deg,
-    rgba(255,122,122,.11),rgba(255,122,122,.04));border:1px solid rgba(255,122,122,.3);
-    border-radius:12px;padding:11px 13px;margin-bottom:11px;cursor:pointer}
-  .cd:active{background:rgba(255,122,122,.16)}
+  /* 考试倒计时：从整块红渐变改成深色底 + 一个红点，该显眼但不抢戏 */
+  .cd{display:flex;align-items:center;gap:11px;background:var(--card);
+    border:none;border-radius:var(--r-m);padding:11px 13px;margin-bottom:8px;cursor:pointer}
+  .cd::before{content:"";position:absolute;left:13px;width:5px;height:5px;border-radius:50%;
+    background:var(--bad);display:none}
+  .cd:active{background:var(--card2)}
   .cd .big{flex:0 0 auto;text-align:center;min-width:44px}
   .cd .big b{display:block;font-size:22px;font-weight:800;color:#ff8f8f;
     line-height:1;font-variant-numeric:tabular-nums}
@@ -274,13 +299,13 @@
   .cd .tx{flex:1;min-width:0}
   .cd .tx b{display:block;font-size:12.5px;color:#e8ebf2;font-weight:600;margin-bottom:1px}
   .cd .tx span{font-size:11px;color:#b89a9a;display:block;line-height:1.5}
-  .cd.hot{border-color:rgba(255,122,122,.55);background:linear-gradient(100deg,
-    rgba(255,122,122,.2),rgba(255,122,122,.07))}
-  .cd.hot .big b{color:#ff6b6b}
-  .cd .go{flex:0 0 auto;font-size:11px;color:#ff9d9d}
+  /* 考试当天：不再是整块红渐变，只让数字和圆点变红 */
+  .cd.hot{background:var(--card2)}
+  .cd.hot .big b{color:var(--bad)}
+  .cd .go{flex:0 0 auto;font-size:11px;color:var(--tx3)}
 
   /* 维护面板 */
-  .gear{flex:0 0 auto;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);
+  .gear{flex:0 0 auto;width:28px;height:28px;border-radius:var(--r-m);border:1px solid var(--line);
     background:var(--card);color:var(--tx3);font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;font-family:inherit}
   .gear:active{background:var(--card2);color:var(--cyan)}
@@ -289,7 +314,7 @@
   .mrow{display:flex;align-items:center;gap:11px;padding:13px 15px;
     border-bottom:1px solid var(--line)}
   .mrow:last-child{border-bottom:none}
-  .mrow .ic{flex:0 0 30px;height:30px;border-radius:8px;display:flex;align-items:center;
+  .mrow .ic{flex:0 0 30px;height:30px;border-radius:var(--r-m);display:flex;align-items:center;
     justify-content:center;font-size:14px;background:var(--card2)}
   .mrow .tx{flex:1;min-width:0}
   .mrow .tx b{display:block;font-size:13px;font-weight:600;color:var(--tx);margin-bottom:1px}
@@ -302,13 +327,13 @@
   .sbmask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none}
   .sbmask.on{display:block}
   .sbsheet{position:fixed;left:0;right:0;bottom:0;z-index:201;
-    background:#161a23;border-radius:16px 16px 0 0;border-top:1px solid var(--line2);
+    background:#161a23;border-radius:var(--r-m) 16px 0 0;border-top:1px solid var(--line2);
     transform:translateY(100%);transition:transform .24s ease;max-height:76vh;overflow:auto;
     padding-bottom:env(safe-area-inset-bottom)}
   .sbsheet.on{transform:translateY(0)}
   /* ---- 科目管理 ---- */
   .sjsheet{position:fixed;left:0;right:0;bottom:0;z-index:203;
-    background:#161a23;border-radius:16px 16px 0 0;border-top:1px solid var(--line2);
+    background:#161a23;border-radius:var(--r-m) 16px 0 0;border-top:1px solid var(--line2);
     transform:translateY(100%);transition:transform .24s ease;
     max-height:82vh;overflow:auto;padding-bottom:env(safe-area-inset-bottom)}
   .sjsheet.on{transform:translateY(0)}
@@ -317,14 +342,14 @@
   .sj-dot{width:14px;height:14px;border-radius:50%;flex:0 0 14px}
   .sj-name{flex:1;min-width:0;font-size:13.5px;font-weight:600;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .sj-btn{flex:0 0 auto;font-size:11px;padding:6px 10px;border-radius:7px;
+  .sj-btn{flex:0 0 auto;font-size:11px;padding:6px 10px;border-radius:var(--r-m);
     border:1px solid var(--line2);background:var(--card2);color:var(--tx2);
     font-family:inherit;line-height:1}
   .sj-btn:disabled{opacity:.28}
   .sj-btn.del{color:#ff9d9d;border-color:rgba(255,120,120,.35)}
   .sj-edit{padding:13px 15px;border-bottom:1px solid var(--line);background:var(--card2)}
   .sj-edit input{width:100%;box-sizing:border-box;background:#0b0e14;
-    border:1px solid var(--line2);border-radius:8px;padding:10px 12px;
+    border:1px solid var(--line2);border-radius:var(--r-m);padding:10px 12px;
     color:var(--tx);font-size:13.5px;font-family:inherit}
   .sj-lab{font-size:10.5px;color:var(--tx3);margin:11px 0 6px}
   .sj-pal{display:flex;gap:8px;flex-wrap:wrap}
@@ -332,7 +357,7 @@
     border:2px solid transparent;display:block;box-sizing:border-box}
   .sj-pal i.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.18)}
   .sj-ops{display:flex;gap:8px;margin-top:12px}
-  .sj-ops button{flex:1;padding:10px;border-radius:8px;border:1px solid var(--line2);
+  .sj-ops button{flex:1;padding:10px;border-radius:var(--r-m);border:1px solid var(--line2);
     background:var(--card);color:var(--tx);font-size:12.5px;font-family:inherit}
   .sj-ops button.pri{background:rgba(56,208,216,.15);
     border-color:rgba(56,208,216,.45);color:var(--cyan);font-weight:600}
@@ -347,7 +372,7 @@
   /* 专注计时增强 */
   .fldlab{font-size:11px;color:var(--tx3);margin:0 0 7px 2px;font-weight:600;letter-spacing:.04em}
   .dur{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-  .dur button{padding:7px 13px;border-radius:9px;border:1px solid var(--line);
+  .dur button{padding:7px 13px;border-radius:var(--r-m);border:1px solid var(--line);
     background:var(--card2);color:var(--tx3);font-size:12px;font-family:inherit;
     font-variant-numeric:tabular-nums}
   .dur button.on{border-color:rgba(56,208,216,.45);background:rgba(56,208,216,.12);
@@ -358,30 +383,30 @@
 
   /* 核对页 */
   .sumrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-  .sm{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  .sm{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);
     padding:11px 10px;text-align:center}
   .sm b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
   .sm span{font-size:10.5px;color:var(--tx3);display:block;margin-top:2px}
   .sm.ok b{color:var(--ok)} .sm.warn b{color:var(--warn)} .sm.bad b{color:var(--bad)}
 
-  .prow{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  .prow{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);
     padding:12px 14px;margin-bottom:9px}
   .prow-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
   .prow-h .nm{font-size:12.5px;font-weight:700;color:var(--tx)}
-  .prow-h .st{font-size:10px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:auto}
+  .prow-h .st{font-size:10px;font-weight:700;padding:1px 7px;border-radius:var(--r-s);margin-left:auto}
   .prow-h .num{font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
   .st.ok{background:rgba(46,204,143,.14);color:var(--ok)}
   .st.warn{background:rgba(245,166,35,.14);color:var(--warn)}
   .st.bad{background:rgba(255,122,122,.14);color:var(--bad)}
   .st.idle{background:rgba(124,134,153,.14);color:var(--tx3)}
 
-  .pbar{height:15px;background:var(--card2);border-radius:5px;position:relative;
+  .pbar{height:15px;background:var(--card2);border-radius:var(--r-s);position:relative;
     overflow:hidden;border:1px solid var(--line)}
-  .pbar i{display:block;height:100%;border-radius:4px;transition:width .35s ease}
+  .pbar i{display:block;height:100%;border-radius:var(--r-s);transition:width .35s ease}
   .pbar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.55);
-    border-radius:1px}
+    border-radius:var(--r-s)}
 
-  .debt{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .debt{background:var(--card);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden}
   .debt-i{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);
     align-items:flex-start}
   .debt-i:last-child{border-bottom:none}
@@ -396,10 +421,10 @@
 
   /* 图书馆入口 */
   .lib{display:flex;align-items:center;gap:12px;background:var(--card);
-    border:1px solid rgba(56,208,216,.3);border-radius:12px;padding:12px 14px;
-    margin-bottom:12px;text-decoration:none;color:inherit}
+    border:none;border-radius:var(--r-m);padding:12px 14px;
+    margin-bottom:8px;text-decoration:none;color:inherit}
   .lib:active{background:var(--card2)}
-  .lib .ic{flex:0 0 34px;height:34px;border-radius:9px;background:rgba(56,208,216,.13);
+  .lib .ic{flex:0 0 34px;height:34px;border-radius:var(--r-m);background:rgba(56,208,216,.13);
     display:flex;align-items:center;justify-content:center;font-size:16px}
   .lib .tx{flex:1;min-width:0}
   .lib .tx b{display:block;font-size:13px;font-weight:600;margin-bottom:1px}
@@ -417,29 +442,32 @@
   .tb svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;
     stroke-linecap:round;stroke-linejoin:round}
   .tb span{font-size:9.5px;letter-spacing:0}
-  .tb.on{color:var(--cyan)}
+  .tb.on{color:var(--tx);font-weight:600}
+  .tb.on::before{content:"";position:absolute;top:2px;left:50%;transform:translateX(-50%);
+    width:26px;height:2px;border-radius:var(--r-pill);background:var(--cyan)}
+  .tb{position:relative}
 
   .hint{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));
-    background:#1b2130;border:1px solid var(--line2);border-radius:13px;
+    background:#1b2130;border:1px solid var(--line2);border-radius:var(--r-m);
     padding:12px 14px;display:none;align-items:center;gap:11px;
     box-shadow:0 8px 28px rgba(0,0,0,.5);z-index:70}
   .hint.show{display:flex}
   .hint .t{flex:1;font-size:12px;color:var(--tx2);line-height:1.55}
   .hint .t b{color:var(--tx)}
   .hint button{flex:0 0 auto;background:var(--cyan);color:#08131a;border:none;
-    border-radius:8px;padding:6px 12px;font-size:11.5px;font-weight:700;font-family:inherit}
+    border-radius:var(--r-m);padding:6px 12px;font-size:11.5px;font-weight:700;font-family:inherit}
 
-  .cmc{background:var(--card);border:1px solid rgba(91,155,255,.32);border-radius:13px;
-    padding:13px 15px;margin:0 0 10px}
-  .cmc .h{display:flex;align-items:center;gap:7px;margin-bottom:7px}
-  .cmc .h b{font-size:11.5px;letter-spacing:.06em;color:var(--math);font-weight:600}
+  /* 数竞：从独立大卡压成一行，避免和日期导航重复说日期 */
+  .cmc{background:transparent;border:none;border-radius:0;padding:4px 2px;margin:0}
+  .cmc .h{display:flex;align-items:center;gap:6px;margin:0}
+  .cmc .h b{font-size:11.5px;color:var(--math);font-weight:500;letter-spacing:0}
   .cmc .h .n{margin-left:auto;font-size:11px;color:var(--tx3)}
-  .cmc .c{font-size:14.5px;font-weight:600;color:var(--tx);margin-bottom:5px;line-height:1.45}
-  .cmc .t{font-size:12.5px;color:var(--tx2);line-height:1.65}
-  .cmc .t b{color:var(--tx)}
-  .cmc .go{display:inline-flex;align-items:center;gap:4px;margin-top:10px;
-    font-size:12px;color:var(--math);text-decoration:none;
-    border:1px solid rgba(91,155,255,.32);border-radius:7px;padding:5px 10px}
+  .cmc .c{font-size:12.5px;font-weight:500;color:var(--tx2);margin:0;line-height:1.5;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .cmc .t{display:none}
+  .cmc .go{display:inline-flex;align-items:center;gap:3px;margin:0 0 0 8px;
+    font-size:11px;color:var(--math);text-decoration:none;
+    border:none;background:transparent;padding:0;flex:0 0 auto}
   .cmc .h .chk{flex:0 0 26px;width:26px;height:26px;margin-left:4px;padding:0;
     border-radius:50%;border:2px solid var(--line2);background:transparent;
     display:flex;align-items:center;justify-content:center;cursor:pointer;
@@ -465,7 +493,6 @@
 
   <header>
     <div class="top">
-      <h1>学习看板</h1>
       <div class="date" id="todayDate">—</div>
       <button class="gear" id="gearBtn" aria-label="维护"><morph-icon data-icon="settings" data-alt="x"></morph-icon></button>
     </div>
@@ -523,7 +550,7 @@
   <div class="view" id="v-docs">
 
     <a class="doc2" href="个人学习总规划_2026秋.html"
-       style="background:var(--card);border:1px solid rgba(56,208,216,.3);border-radius:13px;margin-bottom:10px;padding:14px 15px">
+       style="background:var(--card);border:1px solid rgba(56,208,216,.3);border-radius:var(--r-m);margin-bottom:10px;padding:14px 15px">
       <span class="idx" style="color:var(--cyan)">总</span>
       <div class="t"><b>个人学习总规划 v6</b><span>逐日计划 · 甘特图 · 七科定论 · 周计划</span></div>
       <span class="arrow">›</span>
@@ -897,16 +924,16 @@
        on     是否启用（留给后面的科目管理界面用）
   */
   var DEFAULT_SUBJECTS = [
-    {id:'phys', name:'大物2',  color:'#f5a623', order:1, on:true},
-    {id:'circ', name:'电路',   color:'#fb923c', order:2, on:true},
-    {id:'prob', name:'概率论', color:'#ff7a7a', order:3, on:true},
-    {id:'cv',   name:'复变',   color:'#f472b6', order:4, on:true},
-    {id:'marx', name:'马原',   color:'#facc15', order:5, on:true},
-    {id:'math', name:'数竞',   color:'#5b9bff', order:6, on:true},
-    {id:'eng',  name:'六级',   color:'#2ecc8f', order:7, on:true},
-    {id:'dm',   name:'离散',   color:'#22d3ee', order:8, on:true},
-    {id:'code', name:'编程',   color:'#a97bff', order:9, on:true},
-    {id:'misc', name:'补漏',   color:'#94a3b8', order:99, on:true}
+    {id:'phys', name:'大物2',  color:'#ff9e64', order:1, on:true},
+    {id:'circ', name:'电路',   color:'#e0af68', order:2, on:true},
+    {id:'prob', name:'概率论', color:'#f7768e', order:3, on:true},
+    {id:'cv',   name:'复变',   color:'#bb9af7', order:4, on:true},
+    {id:'marx', name:'马原',   color:'#73daca', order:5, on:true},
+    {id:'math', name:'数竞',   color:'#7aa2f7', order:6, on:true},
+    {id:'eng',  name:'六级',   color:'#9ece6a', order:7, on:true},
+    {id:'dm',   name:'离散',   color:'#2ac3de', order:8, on:true},
+    {id:'code', name:'编程',   color:'#9d7cd8', order:9, on:true},
+    {id:'misc', name:'补漏',   color:'#565f89', order:99, on:true}
   ];
 
   /* 用户改过的配置优先（为空时用默认）—— 目前没有编辑界面，先留通道 */
@@ -1098,7 +1125,7 @@
 
     var h='<div class="today"><div class="today-hd"><div class="hd-row">'+
       '<span class="d">'+cur+'</span><span class="w">'+day.w+'</span>'+
-      (day.sum?'<span class="main-tag">主攻 '+day.sum+'</span>':'')+
+      (day.sum?'<span class="main-tag">主攻 <b>'+day.sum+'</b></span>':'')+
       '</div>';
     if(total) h+='<div class="bar"><i style="width:'+(n/total*100)+'%"></i></div>';
     h+='</div><div class="today-bd">';
@@ -1273,7 +1300,7 @@
       el.id = 'sbTip';
       el.style.cssText = 'position:fixed;left:50%;bottom:100px;transform:translateX(-50%);'
         + 'z-index:9999;background:#243044;border:1px solid #38506e;color:#e8ebf2;'
-        + 'font-size:12px;padding:10px 18px;border-radius:100px;pointer-events:none;'
+        + 'font-size:12px;padding:10px 18px;border-radius:var(--r-pill);pointer-events:none;'
         + 'max-width:84vw;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.5)';
       document.body.appendChild(el);
     }
@@ -1492,7 +1519,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v57';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v58';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1952,9 +1979,9 @@ function renderCmc(dk){
   if(dk === '11-14'){
     el.style.display = '';
     el.className = 'cmc';
-    el.innerHTML = '<div class="h"><b>数竞 · 考试日</b><span class="n">11-14</span></div>' +
-      '<div class="c">09:00 – 11:30 初赛</div>' +
-      '<div class="t">填空 40 分钟 → 常规大题 → 压轴骗分 → 留 10 分钟检查</div>';
+    el.innerHTML = '<div class="h"><b>数竞</b>' +
+      '<span class="c">09:00–11:30 初赛</span>' +
+      '<span class="n">11-14</span></div>';
     return;
   }
 
@@ -1967,13 +1994,13 @@ function renderCmc(dk){
   el.style.display = '';
   el.className = 'cmc' + (isDone ? ' done' : '');
   el.innerHTML =
-    '<div class="h"><b>数竞 · ' + (dk===todayKey ? '今日' : dk) + '</b>' +
+    '<div class="h">' +
+      '<b>数竞</b>' +
+      '<span class="c">' + it[0] + '</span>' +
       '<span class="n">' + it[2] + '</span>' +
+      '<a class="go" href="docs/数竞/分章练习/' + it[3] + '">›</a>' +
       '<button class="chk' + (isDone ? ' done' : '') + '" id="cmcChk" aria-label="标记完成"></button>' +
-    '</div>' +
-    '<div class="c">' + it[0] + '</div>' +
-    '<div class="t">' + it[1] + '</div>' +
-    '<a class="go" href="docs/数竞/分章练习/' + it[3] + '">打开这一章 ›</a>';
+    '</div>';
 
   var btn = document.getElementById('cmcChk');
   if(btn) btn.addEventListener('click', function(ev){

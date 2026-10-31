@@ -186,11 +186,11 @@
 
   /* ---------------- 样式 ---------------- */
   var CSS = ''
-  + '.tt-card{background:var(--card);border:1px solid rgba(56,208,216,.22);border-radius:12px;'
-  + 'padding:11px 13px;margin-bottom:12px;cursor:pointer}'
+  + '.tt-card{background:var(--card);border:none;border-radius:var(--r-m);'
+  + 'padding:12px 14px;margin-bottom:8px;cursor:pointer}'
   + '.tt-card:active{background:var(--card2)}'
   + '.tt-card .hd{display:flex;align-items:center;gap:7px;margin-bottom:7px}'
-  + '.tt-card .hd b{font-size:11.5px;color:var(--cyan);font-weight:700;letter-spacing:.03em}'
+  + '.tt-card .hd b{font-size:11.5px;color:var(--tx2);font-weight:500;letter-spacing:0}'
   + '.tt-card .hd span{margin-left:auto;font-size:10.5px;color:var(--tx3)}'
   + '.tt-row{display:flex;align-items:baseline;gap:8px;font-size:12px;'
   + 'color:var(--tx2);padding:3px 0}'
