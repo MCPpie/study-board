@@ -20,7 +20,7 @@
     --tx:#e8ebf2; --tx2:#aab3c4; --tx3:#7c8699;
     --prob:#ff7a7a; --phys:#f5a623; --math:#5b9bff; --eng:#2ecc8f;
     --code:#a97bff; --dm:#22d3ee; --circ:#fb923c; --cyan:#38d0d8;
-    --cv:#f472b6; --marx:#facc15;
+    --cv:#f472b6; --marx:#facc15; --misc:#94a3b8;
     --ok:#2ecc8f; --bad:#ff7a7a;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -101,6 +101,10 @@
   .tag.circ{background:rgba(251,146,60,.14);color:var(--circ)}
   .tag.cv{background:rgba(244,114,182,.14);color:var(--cv)}
   .tag.marx{background:rgba(250,204,21,.14);color:var(--marx)}
+  .tag.misc{background:rgba(148,163,184,.14);color:var(--misc)}
+  /* 可选任务：灰色小字，和必做的区分开 */
+  .opt{font-size:9.5px;padding:1px 5px;border-radius:4px;margin-left:5px;
+    background:rgba(148,163,184,.12);color:#8b96a8;vertical-align:1px;flex:0 0 auto}
   .qty{font-size:10.5px;color:var(--cyan);font-weight:600}
   .ttl{font-size:12.5px;font-weight:700;color:var(--tx);margin-bottom:2px;transition:opacity .18s}
   .txt{font-size:12.5px;color:var(--tx2);line-height:1.6;transition:opacity .18s}
@@ -835,10 +839,10 @@
 
   /* ================= 基础 ================= */
   var TAG={prob:'概率论',phys:'大物2',math:'数竞',eng:'六级',code:'编程',dm:'离散',circ:'电路',
-           cv:'复变',marx:'马原'};
+           cv:'复变',marx:'马原',misc:'补漏'};
   var COL={prob:'#ff7a7a',phys:'#f5a623',math:'#5b9bff',eng:'#2ecc8f',
            code:'#a97bff',dm:'#22d3ee',circ:'#fb923c',
-           cv:'#f472b6',marx:'#facc15'};
+           cv:'#f472b6',marx:'#facc15',misc:'#94a3b8'};
   var WK=['周日','周一','周二','周三','周四','周五','周六'];
   var CD=[
     {d:'2026-10-31T08:00:00+08:00', n:'大物期中'},
@@ -1011,6 +1015,7 @@
       h+='<div class="item'+(done[i]?' done':'')+'" data-i="'+i+'">'+
          '<div class="item-body"><div class="item-h">'+
          '<span class="tag '+k+'">'+name+'</span>'+
+         (it.core===false?'<span class="opt">可选</span>':'')+
          (it.time?'<span class="qty">'+it.time+'</span>':'')+'</div>'+
          (it.title?'<div class="ttl">'+it.title+'</div>':'')+
          (it.text?'<div class="txt">'+it.text+'</div>':'')+
@@ -1389,7 +1394,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v54';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v55';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
@@ -1546,9 +1551,18 @@
     var sig = ckSignature();
     if(_ckCache && _ckSig === sig) return _ckCache;
 
-    var keys = Object.keys(DATA.days).sort();
+    var keys = sortKeys(Object.keys(DATA.days));
+    /* 「今天」在逐日表里的位置。表里没有今天时：
+       计划还没开始 → di = 0（一项都不欠）
+       计划已经过完 → di = 最后（全部都要算） */
     var di = keys.indexOf(todayKey);
-    if(di < 0) di = keys.length - 1;
+    if(di < 0){
+      var _tk = parseKey(todayKey);
+      di = keys.length;
+      for(var _i=0; _i<keys.length; _i++){
+        if(parseKey(keys[_i]) > _tk){ di = _i; break; }
+      }
+    }
 
     var per = {};       // 科目统计
     var debt = [];      // 欠账
@@ -1574,7 +1588,7 @@
           p.expect++;
           if(!isDone){
             p.debt++;
-            debt.push({d:dk, k:k, t:it.title || '', x:it.text || '', i:i});
+            debt.push({d:dk, k:k, t:it.title || '', x:it.text || '', i:i, core:it.core});
           }
         }
       });
@@ -1643,7 +1657,11 @@
     if(!r.debt.length){
       dEl.innerHTML = '<div class="debt"><div class="none">✓ 没有欠账，按计划走着</div></div>';
     } else {
-      r.debt.sort(function(x, y){ return x.d < y.d ? 1 : -1; });  // 最近的在前
+      /* 核心欠账排前面（先补要命的），同组内最近的在前 */
+      r.debt.sort(function(x, y){
+        if(!!x.core !== !!y.core) return x.core ? -1 : 1;
+        return x.d < y.d ? 1 : -1;
+      });
       dEl.innerHTML = '<div class="debt">' + r.debt.map(function(x){
         var d = parseKey(x.d);
         var lbl = (d.getMonth()+1) + '/' + d.getDate();
@@ -1651,7 +1669,8 @@
         return '<div class="debt-i" data-go="' + x.d + '">'
           + '<div class="debt-d">' + lbl + '</div>'
           + '<div class="debt-b">'
-          + '<div class="t"><span class="tag ' + x.k + '" style="margin-right:5px">' + (TAG[x.k]||x.k) + '</span>' + esc2(title) + '</div>'
+          + '<div class="t"><span class="tag ' + x.k + '" style="margin-right:5px">' + (TAG[x.k]||x.k) + '</span>'
+          + (x.core === false ? '<span class="opt">可选</span>' : '') + esc2(title) + '</div>'
           + '<div class="x">' + esc2((x.x||'').slice(0, 46)) + '</div>'
           + '</div><div class="debt-go">›</div></div>';
       }).join('') + '</div>';
