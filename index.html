@@ -838,11 +838,52 @@
   'use strict';
 
   /* ================= 基础 ================= */
-  var TAG={prob:'概率论',phys:'大物2',math:'数竞',eng:'六级',code:'编程',dm:'离散',circ:'电路',
-           cv:'复变',marx:'马原',misc:'补漏'};
-  var COL={prob:'#ff7a7a',phys:'#f5a623',math:'#5b9bff',eng:'#2ecc8f',
-           code:'#a97bff',dm:'#22d3ee',circ:'#fb923c',
-           cv:'#f472b6',marx:'#facc15',misc:'#94a3b8'};
+  /* ================= 科目配置（唯一真源） =================
+     原来科目信息散在 TAG / COL / SUBJ_LIST / SUBJ 四处 + CSS 里 10 个类名。
+     现在集中到这里：加一科只改这个数组，不用满文件找。
+
+     字段：
+       id     内部键，改了就丢历史数据 —— 别动已有的
+       name   显示名（标签上显示的字）
+       color  主色，渲染时走 CSS 变量 --<id>
+       order  编辑下拉和计时器里的排序，小的在前
+       on     是否启用（留给后面的科目管理界面用）
+  */
+  var DEFAULT_SUBJECTS = [
+    {id:'phys', name:'大物2',  color:'#f5a623', order:1, on:true},
+    {id:'circ', name:'电路',   color:'#fb923c', order:2, on:true},
+    {id:'prob', name:'概率论', color:'#ff7a7a', order:3, on:true},
+    {id:'cv',   name:'复变',   color:'#f472b6', order:4, on:true},
+    {id:'marx', name:'马原',   color:'#facc15', order:5, on:true},
+    {id:'math', name:'数竞',   color:'#5b9bff', order:6, on:true},
+    {id:'eng',  name:'六级',   color:'#2ecc8f', order:7, on:true},
+    {id:'dm',   name:'离散',   color:'#22d3ee', order:8, on:true},
+    {id:'code', name:'编程',   color:'#a97bff', order:9, on:true},
+    {id:'misc', name:'补漏',   color:'#94a3b8', order:99, on:true}
+  ];
+
+  /* 用户改过的配置优先（为空时用默认）—— 目前没有编辑界面，先留通道 */
+  function loadSubjects(){
+    var saved = LSget('sb-subjects', null);
+    if(saved && saved.length) return saved;
+    return DEFAULT_SUBJECTS.slice();
+  }
+
+  var SUBJECTS = loadSubjects();
+
+  /* 下面四个都从 SUBJECTS 派生，代码里原有的引用一律不用改 */
+  var TAG = {}, COL = {}, SUBJ_LIST = [], SUBJ = [];
+  SUBJECTS.slice()
+    .sort(function(a, b){ return (a.order||99) - (b.order||99); })
+    .forEach(function(x){
+      TAG[x.id] = x.name;
+      COL[x.id] = x.color;
+      /* misc 是「补漏日」的占位标签，不是真实科目 —— 不进下拉也不进计时器 */
+      if(x.on !== false && x.id !== 'misc'){
+        SUBJ.push(x.id);
+        SUBJ_LIST.push(x.id);
+      }
+    });
   var WK=['周日','周一','周二','周三','周四','周五','周六'];
   var CD=[
     {d:'2026-10-31T08:00:00+08:00', n:'大物期中'},
@@ -1109,7 +1150,7 @@
   }
 
   /* ---------- 任务编辑表单 ---------- */
-  var SUBJ_LIST = ['phys','circ','prob','cv','marx','math','eng','dm','code'];
+  /* SUBJ_LIST 已在上方由 SUBJECTS 派生 */
 
   function editItem(idx){
     var list = planOf(cur).slice();
@@ -1220,7 +1261,7 @@
   });
 
   /* ================= 专注计时 ================= */
-  var SUBJ=['phys','circ','prob','cv','marx','math','eng','dm','code'];
+  /* SUBJ 已在上方由 SUBJECTS 派生 */
   var DURS=[
     {m:15,  t:'15 分钟'},
     {m:25,  t:'25 分钟'},
@@ -1394,7 +1435,7 @@
 
   /* ================= 维护面板 ================= */
   (function(){
-    var VER = 'v55';   // 与 sw.js 的 CACHE 版本保持一致
+    var VER = 'v56';   // 与 sw.js 的 CACHE 版本保持一致
 
     var mask = document.getElementById('mMask');
     var sheet = document.getElementById('mSheet');
