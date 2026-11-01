@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>电路复习作战手册 · 11/26</title>
+<style>
+:root{
+  --bg:#1a1b26; --card:#22263a; --card2:#2c3149;
+  --tx:#c0caf5; --tx2:#a9b1d6; --tx3:#565f89;
+  --blue:#7aa2f7; --cyan:#7dcfff; --teal:#73daca; --green:#9ece6a;
+  --orange:#ff9e64; --yellow:#e0af68; --red:#f7768e; --purple:#bb9af7;
+  --line:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#191a24;color:var(--tx);line-height:1.75;
+  font-family:-apple-system,"PingFang SC","HarmonyOS Sans SC","Segoe UI","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:0 0 60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+header{padding:26px 0 6px}
+h1{font-size:21px;font-weight:600;margin:0 0 5px;letter-spacing:-.01em}
+.sub{font-size:12.5px;color:var(--tx3);margin-bottom:16px}
+
+/* 铁律卡 */
+.rules{background:var(--card);border-radius:13px;padding:16px 17px;margin-bottom:22px}
+.rules h2{font-size:13px;font-weight:600;color:var(--yellow);margin:0 0 11px;letter-spacing:.02em}
+.rules ol{margin:0;padding-left:19px}
+.rules li{font-size:13px;color:var(--tx2);margin-bottom:8px;line-height:1.65}
+.rules li:last-child{margin-bottom:0}
+.rules b{color:var(--tx);font-weight:600}
+.rules .warn{color:var(--red);font-weight:600}
+
+/* 板块 */
+.sect{margin-bottom:26px}
+.sect-h{display:flex;align-items:baseline;gap:9px;margin-bottom:12px;padding:0 2px}
+.sect-h .n{font-size:11px;font-weight:600;color:var(--tx3);letter-spacing:.08em}
+.sect-h h2{font-size:16px;font-weight:600;margin:0}
+.sect-h .tag{font-size:10.5px;padding:1px 7px;border-radius:5px;margin-left:auto;font-weight:500}
+.tag-core{background:rgba(247,118,142,.13);color:var(--red)}
+.tag-mid{background:rgba(224,175,104,.13);color:var(--yellow)}
+.tag-light{background:rgba(115,218,202,.12);color:var(--teal)}
+
+/* 课件卡 */
+.deck{background:var(--card);border-radius:13px;margin-bottom:9px;overflow:hidden}
+.deck-h{padding:13px 15px;display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.deck-h .dot{width:6px;height:6px;border-radius:50%;flex:0 0 6px}
+.deck-h b{font-size:13.5px;font-weight:500;flex:1;min-width:0}
+.deck-h .pg{font-size:11px;color:var(--tx3);flex:0 0 auto}
+.deck-h .arw{font-size:11px;color:var(--tx3);transition:transform .18s;flex:0 0 auto}
+.deck.open .deck-h .arw{transform:rotate(90deg)}
+.deck-b{display:none;padding:0 15px 14px}
+.deck.open .deck-b{display:block}
+
+.row{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12.5px}
+.row:first-child{border-top:none;padding-top:2px}
+.row .p{flex:0 0 62px;color:var(--tx3);font-family:"Cascadia Code",Consolas,monospace;font-size:11.5px;padding-top:1px}
+.row .d{flex:1;color:var(--tx2);min-width:0}
+.row .d b{color:var(--tx);font-weight:500}
+.row .d .hi{color:var(--orange);font-weight:500}
+.row .d .skip{color:var(--tx3);text-decoration:line-through}
+
+/* 必做题 */
+.do{background:var(--card2);border-radius:9px;padding:11px 13px;margin-top:11px}
+.do-h{font-size:11.5px;color:var(--green);font-weight:600;margin-bottom:7px;letter-spacing:.02em}
+.do p{font-size:12.5px;color:var(--tx2);margin:0 0 5px;line-height:1.7}
+.do p:last-child{margin-bottom:0}
+.do b{color:var(--tx);font-weight:600}
+.do .must{color:var(--yellow);font-weight:600}
+
+/* 时间表 */
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+th,td{padding:8px 4px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;color:var(--tx3);font-weight:500;letter-spacing:.04em}
+td{color:var(--tx2)}
+td:first-child{color:var(--tx3);font-family:"Cascadia Code",Consolas,monospace;font-size:11.5px;white-space:nowrap;width:74px}
+td b{color:var(--tx);font-weight:500}
+
+.note{background:rgba(255,158,100,.07);border-left:2px solid var(--orange);
+  border-radius:0 8px 8px 0;padding:11px 13px;font-size:12.5px;color:var(--tx2);margin:13px 0}
+.note b{color:var(--orange);font-weight:600}
+
+.foot{text-align:center;font-size:11.5px;color:var(--tx3);padding:22px 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>电路复习作战手册</h1>
+  <div class="sub">电子电路与技术（2）· 期末 11/26 · 依据官方复习范围 + 10 份课件整理</div>
+</header>
+
+<div class="rules">
+  <h2>答题铁律 · 先记住这七条</h2>
+  <ol>
+    <li><b>先写表达式，再代数字。</b>复习范围原话：「否则若只有结果且结果错误会扣分较多」。<span class="warn">算错不要紧，不写公式才致命。</span></li>
+    <li><b>一个大题里的小题互不影响得分。</b>某个量算错，后面用到它的题不重复扣分。→ <b>卡住就往下写，别死磕。</b></li>
+    <li><b>化简逻辑函数不限方法。</b>卡诺图只考到 4 变量。代数法、卡诺图随便用。</li>
+    <li><b>场效应管放大电路只要求列表达式，不用算数值。</b>开根号省了。</li>
+    <li><b>有源滤波器只要求认出几阶、什么类型。</b>不算传递函数、不判稳定性。</li>
+    <li><b>所有芯片都不考内部电路。</b>只考功能表 + 连线应用。</li>
+    <li><b>半导体存储器（ROM/RAM）整章不考。</b>别浪费时间。</li>
+  </ol>
+</div>
+
+<!-- ==================== 模电 ==================== -->
+<div class="sect">
+  <div class="sect-h"><span class="n">模电</span><h2>二极管 → 三极管 → 场效应管 → 运放 → 电源</h2></div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--teal)"></span><b>课件 1-2 · 半导体与二极管</b><span class="pg">47 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="row"><span class="p">p1–15</span><span class="d"><span class="skip">绪论：电子技术概念、发展史</span>　<span style="color:var(--tx3);font-size:11px">→ 快速翻，不考</span></span></div>
+      <div class="row"><span class="p">p16–31</span><span class="d"><b>半导体基础 + PN 结</b>：本征/杂质半导体、多子少子、<span class="hi">温度对少子的影响</span>、PN 结形成与单向导电</span></div>
+      <div class="row"><span class="p">p32–35</span><span class="d"><span class="hi">二极管两种等效模型</span>：理想开关模型、恒压降模型</span></div>
+      <div class="row"><span class="p">p36–41</span><span class="d"><b>三种应用电路</b>：整流、限幅、开关（各认一个典型图）</span></div>
+      <div class="row"><span class="p">p42–43</span><span class="d"><b>稳压二极管</b>：伏安特性 + <span class="hi">限流电阻取值范围的推导</span>（常考计算）</span></div>
+      <div class="row"><span class="p">p44–47</span><span class="d">小结 + 练习题</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：全做</p>
+        <p><b>习题</b>（二版第2章）：2-1、2-3、2-7、2-8、2-9、2-10</p>
+        <p><b>习题</b>（三版第4章）：4-1、4-3、4-7、4-8、4-9、4-10</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--red)"></span><b>课件 3 · 三极管与基本放大电路</b><span class="pg">90 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="note"><b>这一份是模电最重的。</b>复习范围里三极管 + 基本放大电路占 5 学时，是全课最多的。</div>
+      <div class="row"><span class="p">p1–12</span><span class="d"><b>晶体管本体</b>：结构类型、电流放大系数 β、<span class="hi">输入/输出特性曲线</span>、三个工作区的偏置特点</span></div>
+      <div class="row"><span class="p">p13–30</span><span class="d">放大的概念、性能指标（Au / Ri / Ro）、共射电路组成与工作原理</span></div>
+      <div class="row"><span class="p">p31–56</span><span class="d"><span class="hi">共射分析三件套</span>：① 估算法求静态工作点 Q　② h 参数等效电路求动态参数　③ 图解法（Q 点合适否、饱和/截止失真、最大不失真输出电压）</span></div>
+      <div class="row"><span class="p">p57–75</span><span class="d"><b>共集 / 共基</b>：只要求记住特点（共集 Ri 大 Ro 小、共基频带宽）</span></div>
+      <div class="row"><span class="p">p76–86</span><span class="d"><span class="hi">分压式偏置共射</span>：静态 + 动态全流程（比固定偏置更常考）</span></div>
+      <div class="row"><span class="p">p87–90</span><span class="d">三种组态比较表 + 小结 + 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：二版第3章 1–24；三版第5章 1–20</p>
+        <p><b>习题</b>：3、4、6、8、9、10（二版三版题号一致）</p>
+        <p><span class="must">雨课堂拍照上交的作业（老师重点看过）：</span><br>（共射）6、8、9　（共集）10</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--green)"></span><b>课件 4 · 场效应管</b><span class="pg">24 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="note"><b>复习范围明确降要求：</b>「会列表达式，<b>不需要计算数值</b>，静态工作点方程中开根号的计算省了」。→ 别在这里花时间练算数。</div>
+      <div class="row"><span class="p">p1–2</span><span class="d">引言 + 分类（JFET 不要求）</span></div>
+      <div class="row"><span class="p">p3–7</span><span class="d"><b>N 沟道增强型 MOSFET</b>：结构符号、工作原理、<span class="hi">输出特性 + 转移特性曲线</span>、开启电压 UGS(th)</span></div>
+      <div class="row"><span class="p">p8–11</span><span class="d"><b>N 沟道耗尽型</b>：与增强型的区别（零栅压就有沟道）、夹断电压 UGS(off)</span></div>
+      <div class="row"><span class="p">p12–19</span><span class="d"><span class="hi">分压式偏置共源放大电路</span>：静态（列方程即可）+ 动态（Au、Ri、Ro 表达式）</span></div>
+      <div class="row"><span class="p">p20–22</span><span class="d">共漏 / 共栅、与 BJT 放大电路的比较（<span style="color:var(--tx3)">了解</span>）</span></div>
+      <div class="row"><span class="p">p23–24</span><span class="d">小结 + 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：二版第4章全部；三版第5章 21–25</p>
+        <p><b>习题</b>（二版第4章）：1、4、5、6、8</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--yellow)"></span><b>课件 5 · 运放应用（滤波 + 比较器 + 波形发生）</b><span class="pg">58 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="row"><span class="p">p1–26</span><span class="d"><b>有源滤波器</b>：一阶/二阶低通、高通、带通、带阻的结构识别<br><span style="color:var(--tx3);font-size:11.5px">只要求「看到电路能说出是几阶、哪种类型」，<b>不算传递函数</b></span></span></div>
+      <div class="row"><span class="p">p27</span><span class="d"><span class="hi">定性分析练习</span>：给电路判类型和阶数（对照做一遍）</span></div>
+      <div class="row"><span class="p">p28–40</span><span class="d"><b>电压比较器</b>：单限比较器、<span class="hi">同相/反相滞回比较器的阈值计算 + 电压传输特性</span></span></div>
+      <div class="row"><span class="p">p41–55</span><span class="d"><b>非正弦波发生电路</b>：矩形波、三角波、锯齿波——<span class="hi">周期/频率、幅值、占空比</span>（复习范围点名要算这三样）</span></div>
+      <div class="row"><span class="p">p56–58</span><span class="d">小结 + 练习（p58 是一道综合难题，可选）</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：二版第8章 8–12；三版第8章 9–15</p>
+        <p><b>习题</b>：二版第8章 8；三版第8章 10</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--orange)"></span><b>课件 6 · 直流电源</b><span class="pg">33 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="row"><span class="p">p1–17</span><span class="d"><b>整流电路</b>：半波 0.45U₂、桥式 0.9U₂　+　<b>电容滤波</b> 约 1.2U₂<br><span style="color:var(--tx3);font-size:11.5px">这三个系数必须脱口而出</span></span></div>
+      <div class="row"><span class="p">p18</span><span class="d">电感滤波（了解）</span></div>
+      <div class="row"><span class="p">p19–24</span><span class="d"><span class="hi">串联型稳压电路</span>：输出电压可调范围的推导</span></div>
+      <div class="row"><span class="p">p25–31</span><span class="d"><b>三端集成稳压器</b>：78 系列（正压）、79 系列（负压）、317（可调正）、337（可调负）的输出电压计算</span></div>
+      <div class="row"><span class="p">p32–33</span><span class="d">小结（三个公式汇总）+ 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：都可以做</p>
+        <p><span class="must">重点习题</span>：2、5、8、11、12</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 数电 ==================== -->
+<div class="sect">
+  <div class="sect-h"><span class="n">数电</span><h2>逻辑代数 → 组合逻辑 → 触发器 → 时序逻辑 → AD/DA</h2></div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--blue)"></span><b>课件 7 · 逻辑代数基础</b><span class="pg">69 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="row"><span class="p">p1–20</span><span class="d"><b>数制与码制</b>：二/十/十六进制互转、<span class="hi">8421BCD</span>、认 5421/2421/余三码/格雷码</span></div>
+      <div class="row"><span class="p">p21–45</span><span class="d"><b>逻辑代数</b>：基本公式、定理、<span class="hi">对偶规则与反演规则</span>、代数法化简</span></div>
+      <div class="row"><span class="p">p46–58</span><span class="d"><b>最小项与标准与或式</b>：从真值表直接写标准式</span></div>
+      <div class="row"><span class="p">p59–66</span><span class="d"><span class="hi">卡诺图化简</span>：含无关项的处理（<b>最高 4 变量</b>，5 变量以上不考）</span></div>
+      <div class="row"><span class="p">p67–69</span><span class="d">小结 + 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：12、16 题不做，其余都可练</p>
+        <p><span class="must">必做</span>：3-4、3-5（1–3）、3-6、3-10</p>
+        <p><b>可做</b>：3-1（1–4）、3-3、3-11、3-12；3-13 了解</p>
+        <p><span style="color:var(--tx3)">最大项题目不做；卡诺图 5 变量及以上不做</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--red)"></span><b>课件 8 · 组合逻辑电路</b><span class="pg">77 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="note"><b>138 译码器是全课第一个硬重点。</b>复习范围原话：「<b>重点熟练掌握 138 译码器，会分析，会设计电路</b>（芯片已画出，需要会连线设计实现组合逻辑函数）」。</div>
+      <div class="row"><span class="p">p1–3</span><span class="d">组合逻辑的特点、与时序逻辑的区别（<span class="hi">必考简答</span>）</span></div>
+      <div class="row"><span class="p">p4–15</span><span class="d"><b>分析方法</b>：逻辑图 → 表达式 → 真值表 → 说功能（例1–3 各做一遍）</span></div>
+      <div class="row"><span class="p">p16–21</span><span class="d"><b>设计方法</b>：逻辑抽象 → 真值表 → 化简 → 画图（例4 楼梯灯、例5 车窗报警、例6 温控）<br><span style="color:var(--tx3);font-size:11.5px">复习范围点名「以温控、车窗报警为例」</span></span></div>
+      <div class="row"><span class="p">p22–34</span><span class="d"><b>加法器</b>：半加/全加、74LS283 功能表（<span style="color:var(--tx3)">设计不讲</span>）</span></div>
+      <div class="row"><span class="p">p35–48</span><span class="d"><b>编码器</b>：二进制编码、优先编码器 74LS148（功能表）</span></div>
+      <div class="row"><span class="p">p49–61</span><span class="d"><span class="hi">74HC138 译码器</span>：功能表、级联成 4-16 线、<b>用 138 实现任意组合逻辑函数</b>（p54–55 是关键）<br>显示译码器 74LS47/48（设计不要求）</span></div>
+      <div class="row"><span class="p">p62–73</span><span class="d"><b>数据选择器</b>：74LS153（双4选1）、74LS151（8选1）功能表；用它实现逻辑函数</span></div>
+      <div class="row"><span class="p">p74–77</span><span class="d">小结 + 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><span style="color:var(--tx3)">HDL 题目不做；习题 5、9、13 不做</span></p>
+        <p><span class="must">建议必做</span>：3、6、7、12、14、15</p>
+        <p><b>雨课堂收的作业</b>：习题 7、12</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--purple)"></span><b>课件 9 · 触发器</b><span class="pg">20 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="row"><span class="p">p1–10</span><span class="d"><b>四种触发器</b>：D / JK / T / T′ 的特性方程 + 功能描述（状态表、特性方程、状态图、时序图）</span></div>
+      <div class="row"><span class="p">p11–15</span><span class="d">边沿触发原理、异步置位复位端</span></div>
+      <div class="row"><span class="p">p16–17</span><span class="d"><span class="hi">触发器功能转换</span>：JK→D、JK→T′、D→T′（复习范围点名要会）<br><span style="color:var(--tx3);font-size:11.5px">方法：令两个特性方程相等，反解驱动方程</span></span></div>
+      <div class="row"><span class="p">p18–20</span><span class="d">小结（五个特性方程汇总）+ 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：自行练习</p>
+        <p><span class="must">习题</span>：4、6、7、8</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck" data-open="1">
+    <div class="deck-h"><span class="dot" style="background:var(--red)"></span><b>课件 10 · 时序逻辑电路</b><span class="pg">50 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="note"><b>第二个硬重点。</b>课件 p48 原话：「<b>重点题型：集成计数器构成的电路的分析、用集成计数器设计电路，即任意进制计数器的分析和设计</b>」。</div>
+      <div class="row"><span class="p">p1–6</span><span class="d">时序电路的特点、分类（同步/异步、Mealy/Moore）、四种功能描述方法</span></div>
+      <div class="row"><span class="p">p7–14</span><span class="d"><span class="hi">同步时序分析五步</span>：时钟方程 → 驱动方程 → 状态方程 → 状态表 → 状态图/时序图<br>几个概念：有效状态、无效状态、<b>自启动</b></span></div>
+      <div class="row"><span class="p">p15–17</span><span class="d">带输入的同步电路分析（Mealy 型）</span></div>
+      <div class="row"><span class="p">p18–23</span><span class="d"><span class="hi">异步时序分析</span>：多写一个时钟方程，只在有时钟脉冲时才更新状态</span></div>
+      <div class="row"><span class="p">p24–29</span><span class="d"><b>集成同步计数器</b>：74HC160/161/162/163 功能表（清零/置数/保持/计数）</span></div>
+      <div class="row"><span class="p">p30–35</span><span class="d"><span class="hi">改变计数进制</span>：清零法、置数法（预置数固定 / 可变）——<b>这一块必考设计题</b></span></div>
+      <div class="row"><span class="p">p36–42</span><span class="d"><b>74LS90</b> 异步计数器：内部结构、五进制、5421 码、级联成百进制</span></div>
+      <div class="row"><span class="p">p43–45</span><span class="d">综合题：计数器 + 译码器 → 顺序脉冲；计数器 + 数据选择器 → 序列脉冲</span></div>
+      <div class="row"><span class="p">p46–50</span><span class="d">小结 + 练习 + 两道分析练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：7、8、9、10、11、13</p>
+        <p><span class="must">习题</span>：1、2、7、8、9、10、12</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="deck">
+    <div class="deck-h"><span class="dot" style="background:var(--teal)"></span><b>课件 11 · 数模与模数转换</b><span class="pg">35 页</span><span class="arw">›</span></div>
+    <div class="deck-b">
+      <div class="note">复习范围对这块要求最低：「<b>设计时会选型即可</b>」，题型是小题（概念或步骤）。<b>别在这里花超过 1 小时。</b></div>
+      <div class="row"><span class="p">p1–20</span><span class="d"><b>D/A 转换</b>：倒 T 形电阻网络（电路识别 + 计算公式）、AD7524、<span class="hi">分辨率</span></span></div>
+      <div class="row"><span class="p">p21–33</span><span class="d"><b>A/D 转换</b>：四个步骤（采样、保持、量化、编码）；并行比较型 / 逐次逼近型 / 流水线型的<b>优缺点对比</b>（会选型）</span></div>
+      <div class="row"><span class="p">p34–35</span><span class="d">小结 + 练习</span></div>
+      <div class="do">
+        <div class="do-h">练习</div>
+        <p><b>自我检测</b>：1–8</p>
+        <p><b>习题</b>：逐次逼近型 10-3、10-4；综合题 10-7</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 时间表 ==================== -->
+<div class="sect">
+  <div class="sect-h"><span class="n">排期</span><h2>24 天怎么走</h2></div>
+
+  <div class="note">
+    <b>核心判断：</b>课件 1 和 3 是模电的地基，但 11/1–11/13 这段时间还要保数竞，所以每天只放 1.5 小时。
+    真正的冲刺在 <b>11/15–11/25</b>，那时数竞已考完，每天 3 小时。
+  </div>
+
+  <table>
+    <thead><tr><th>日期</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>11/01</td><td><b>课件 1-2</b> p16–41　半导体 + PN结 + 二极管模型与应用</td></tr>
+      <tr><td>11/02</td><td><b>课件 1-2</b> p42–47　稳压管 + 限流电阻 + 习题 2-7/2-9</td></tr>
+      <tr><td>11/03</td><td><b>课件 3</b> p1–12　晶体管结构、β、特性曲线、三个工作区</td></tr>
+      <tr><td>11/04</td><td><b>课件 3</b> p31–56　共射分析三件套（静态 / 等效电路 / 图解）</td></tr>
+      <tr><td>11/05</td><td><b>课件 3</b> p76–86　分压式偏置共射 + 习题 6/8/9</td></tr>
+      <tr><td>11/06</td><td><b>课件 4</b> 全　场效应管（只练列式，不算数值）</td></tr>
+      <tr><td>11/07</td><td><b>课件 5</b> p1–27　滤波器识别（只认阶数和类型）</td></tr>
+      <tr><td>11/08</td><td><b>课件 5</b> p28–58　比较器阈值 + 波形发生器三参数</td></tr>
+      <tr><td>11/09</td><td><b>课件 6</b> 全　整流/滤波/稳压 + 三个系数</td></tr>
+      <tr><td>11/10</td><td><b>课件 7</b> p1–45　数制码制 + 逻辑代数 + 代数法化简</td></tr>
+      <tr><td>11/11</td><td><b>课件 7</b> p46–69　最小项 + 卡诺图（含无关项）+ 必做 3-4/3-6/3-10</td></tr>
+      <tr><td>11/12</td><td><b>课件 8</b> p1–21　组合逻辑分析与设计（三个例题）</td></tr>
+      <tr><td>11/13</td><td><b>课件 8</b> p49–61　<span style="color:var(--red)">138 译码器专项</span>（含做习题 7、12）</td></tr>
+      <tr><td>11/14</td><td style="color:var(--tx3)">数竞考试</td></tr>
+      <tr><td>11/15</td><td><b>课件 8</b> p22–48 + p62–77　加法器/编码器/数据选择器 + 必做 3/6/14/15</td></tr>
+      <tr><td>11/16</td><td><b>课件 9</b> 全　四种触发器 + 功能转换（4 道习题）</td></tr>
+      <tr><td>11/17</td><td><b>课件 10</b> p1–23　同步/异步时序分析五步</td></tr>
+      <tr><td>11/18</td><td><b>课件 10</b> p24–35　<span style="color:var(--red)">任意进制计数器设计</span>（清零法 / 置数法）</td></tr>
+      <tr><td>11/19</td><td><b>课件 10</b> p36–50　74LS90 + 综合题 + 习题 7–12</td></tr>
+      <tr><td>11/20</td><td><b>课件 11</b> 全　AD/DA（控制在 1 小时内）</td></tr>
+      <tr><td>11/21</td><td><b>模电回炉</b>：课件 3 + 5 的错题，重做雨课堂作业 6/8/9/10</td></tr>
+      <tr><td>11/22</td><td><b>数电回炉</b>：138 译码器 + 任意进制计数器，各做 3 道</td></tr>
+      <tr><td>11/23</td><td><b>整卷模拟</b>：限时 120 分钟，按考试节奏</td></tr>
+      <tr><td>11/24</td><td><b>错题定位</b>：回课件找错因，写一页纸公式表</td></tr>
+      <tr><td>11/25</td><td><b>公式表 + 早睡</b>：只看一页纸，不做新题</td></tr>
+      <tr><td>11/26</td><td style="color:var(--red);font-weight:600">考试</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note" style="margin-top:26px">
+  <b>一页纸公式表怎么整理：</b>按这 8 组收<br>
+  ① 二极管：0.7V 恒压降 / 稳压管限流电阻区间<br>
+  ② 共射：Au = −β(Rc∥RL)/rbe，Ri = Rb∥rbe，Ro ≈ Rc<br>
+  ③ 场效应管：Au = −gm(Rd∥RL)，Ri ≈ Rg1∥Rg2<br>
+  ④ 电源：0.45U₂ / 0.9U₂ / 1.2U₂<br>
+  ⑤ 波形发生：T 的表达式、占空比<br>
+  ⑥ 五个触发器特性方程<br>
+  ⑦ 74HC161 清零法/置数法的反馈项写法<br>
+  ⑧ 倒 T 形网络：uo = −(VREF/2ⁿ)·D
+</div>
+
+<div class="foot">依据《电路与电子技术（2）复习范围》+ 10 份课件整理 · 页码为 PDF 实际页序</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.deck[data-open="1"]').forEach(function(d){ d.classList.add('open'); });
+document.querySelectorAll('.deck-h').forEach(function(h){
+  h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+});
+</script>
+<script src="../reader.js" defer></script>
+<script src="../ask.js" defer></script>
+</body>
+</html>
