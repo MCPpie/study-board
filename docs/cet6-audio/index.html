@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<title>六级听力播放器 · 2014—2026（在线版）</title>
+<style>
+:root{
+  --bg:#0b0f14; --surface:#141a21; --surface-2:#1b232c; --surface-3:#222c36;
+  --text:#e8edf2; --muted:#8b98a5; --dim:#5f6c78;
+  --accent:#f5a524; --accent-2:#ffd166; --accent-soft:rgba(245,165,36,.13);
+  --radius:18px; --inner:10px; --gap:8px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.5;
+  padding-bottom:132px;
+  padding-bottom:calc(132px + env(safe-area-inset-bottom));
+}
+.app{max-width:940px;margin:0 auto;padding:28px 20px 0}
+h1{font-size:25px;line-height:1.25;margin:0 0 6px;text-wrap:balance;letter-spacing:.3px}
+.lead{color:var(--muted);font-size:13px;margin:0 0 18px;text-wrap:balance}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{
+  background:var(--surface);border-radius:var(--inner);padding:9px 14px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 1px 0 rgba(255,255,255,.04) inset,0 6px 18px rgba(0,0,0,.28);
+  font-size:12px;color:var(--muted)
+}
+.stat b{color:var(--accent-2);font-size:15px;margin-right:4px;font-variant-numeric:tabular-nums}
+.tip{
+  background:linear-gradient(135deg,rgba(245,165,36,.12),rgba(245,165,36,.04));
+  border-radius:var(--inner);padding:12px 15px;margin-bottom:26px;
+  box-shadow:0 0 0 1px rgba(245,165,36,.18),0 1px 0 rgba(255,255,255,.04) inset;
+  font-size:12.5px;color:#e9d4b0;line-height:1.65
+}
+.tip strong{color:var(--accent-2)}
+section{margin-bottom:28px}
+section h2{
+  font-size:14px;color:var(--muted);font-weight:600;margin:0 0 12px;
+  display:flex;align-items:center;gap:10px;text-wrap:balance
+}
+section h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.10),transparent)}
+section h2 span{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:12px}
+.card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border-radius:var(--radius);padding:12px;
+  cursor:pointer;user-select:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 1px 0 rgba(255,255,255,.035) inset,
+             0 10px 28px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.22);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  animation:rise .44s cubic-bezier(.2,.7,.2,1) both;
+  animation-delay:calc(var(--i) * 100ms)
+}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-2px);background:var(--surface-2)}
+.card.active{
+  background:linear-gradient(135deg,rgba(245,165,36,.16),rgba(245,165,36,.05));
+  box-shadow:0 0 0 1px rgba(245,165,36,.42),0 1px 0 rgba(255,255,255,.06) inset,
+             0 12px 32px rgba(0,0,0,.4),0 0 26px rgba(245,165,36,.10)
+}
+.card.off{opacity:.45;cursor:not-allowed}
+.card.off:hover{transform:none;background:var(--surface)}
+.badge{
+  flex:0 0 auto;width:52px;height:52px;border-radius:var(--inner);
+  display:grid;place-items:center;font-size:12px;font-weight:700;
+  background:var(--surface-3);color:var(--muted);
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 4px 12px rgba(0,0,0,.25)
+}
+.card.active .badge{background:var(--accent);color:#1a1206}
+.meta{flex:1;min-width:0}
+.name{font-size:14.5px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note{color:var(--accent-2);opacity:.85}
+.act{flex:0 0 auto;display:flex;align-items:center;gap:9px}
+.dur{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(245,165,36,.15);display:none}
+.card.active .dot{display:block}
+.card.active .dur{display:none}
+/* ---------- player ---------- */
+.player{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  background:rgba(11,15,20,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 -1px 0 rgba(255,255,255,.06),0 -10px 40px rgba(0,0,0,.5);
+  padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+}
+.pinner{max-width:940px;margin:0 auto}
+.ptop{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.ptime{min-width:0;flex:1}
+.ptitle{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.psub{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.seekrow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.t{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:38px}
+.t.right{text-align:right}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;flex:1;height:22px;background:transparent;cursor:pointer;margin:0
+}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--accent) var(--fill,0%),var(--surface-3) var(--fill,0%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent-2);margin-top:-5px;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:5px;border-radius:5px;background:var(--surface-3)}
+input[type=range]::-moz-range-progress{height:5px;border-radius:5px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border:0;border-radius:50%;background:var(--accent-2)}
+.ctrls{display:flex;align-items:center;justify-content:center;gap:16px}
+button{
+  font:inherit;color:var(--text);background:transparent;border:0;cursor:pointer;
+  display:grid;place-items:center;border-radius:12px
+}
+.iconbtn{
+  width:42px;height:42px;background:var(--surface-2);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 4px 12px rgba(0,0,0,.3)
+}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn:disabled{opacity:.35;cursor:not-allowed}
+.playbtn{
+  width:54px;height:54px;background:var(--accent);color:#1a1206;
+  box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 8px 22px rgba(245,165,36,.3)
+}
+.playbtn:active{transform:scale(.95)}
+.ratebtn{
+  min-width:58px;height:38px;padding:0 10px;background:var(--surface-2);color:var(--accent-2);
+  font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 4px 12px rgba(0,0,0,.3)
+}
+svg{width:19px;height:19px;fill:currentColor}
+.playbtn svg{width:23px;height:23px}
+.hint{text-align:center;font-size:10.5px;color:var(--dim);margin-top:9px}
+@media(max-width:520px){
+  .app{padding:20px 14px 0}
+  .grid{grid-template-columns:1fr}
+  .ctrls{gap:12px}
+  .player{padding-left:14px;padding-right:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>英语六级听力播放器</h1>
+  <p class="lead">2014 — 2026 · 与《英语六级听力真题大合集》PDF 按年份套次对应</p>
+  <div class="stats">
+    <div class="stat"><b id="s1">23</b>套试题</div>
+    <div class="stat"><b id="s2">22</b>个音频</div>
+    <div class="stat"><b>0.75–2.0</b>倍速</div>
+  </div>
+  <div class="tip">
+    <strong>用法：</strong>这个网页和音频在同一个文件夹里。<br>
+    这是<strong>在线版</strong>：平板、手机、电脑打开同一个网址即可收听，不需要互传音频文件。<br>
+    进度会自动记住，下次打开接着听（换设备进度不共用）。空格暂停/播放，← → 快退快进 5 秒。
+  </div>
+  <div id="list"></div>
+</div>
+
+<div class="player">
+  <div class="pinner">
+    <div class="ptop">
+      <div class="ptime">
+        <div class="ptitle" id="ptitle">选一套开始播放</div>
+        <div class="psub" id="psub">下方列表 · 按年份排列</div>
+      </div>
+    </div>
+    <div class="seekrow">
+      <span class="t" id="tcur">00:00</span>
+      <input type="range" id="seek" min="0" max="100" value="0" step="0.1">
+      <span class="t right" id="tdur">00:00</span>
+    </div>
+    <div class="ctrls">
+      <button class="iconbtn" id="prev" title="上一套" aria-label="上一套">
+        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      </button>
+      <button class="playbtn" id="play" title="播放/暂停" aria-label="播放或暂停">
+        <svg id="playicon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="iconbtn" id="next" title="下一套" aria-label="下一套">
+        <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>
+      </button>
+      <button class="ratebtn" id="rate" title="切换倍速">1.0×</button>
+    </div>
+    <div class="hint">空格 播放/暂停 · ← → 快退/快进 5 秒 · ↑ ↓ 切换套次</div>
+  </div>
+</div>
+
+<script>
+const TRACKS=[
+ {y:2014,m:'12月',s:1,f:'audio/2014年12月_第1套.mp3',pg:2},
+ {y:2015,m:'12月',s:1,f:'audio/2015年12月_第1套.mp3',pg:15},
+ {y:2016,m:'12月',s:1,f:'audio/2016年12月_第1套.mp3',pg:25},
+ {y:2017,m:'12月',s:1,f:'audio/2017年12月_第1套.mp3',pg:54},
+ {y:2018,m:'12月',s:1,f:'audio/2018年12月_第1套.mp3',pg:83},
+ {y:2019,m:'12月',s:1,f:'audio/2019年12月_第1套.mp3',pg:98},
+ {y:2020,m:'12月',s:1,f:'audio/2020年12月_第1套.mp3',pg:112},
+ {y:2021,m:'12月',s:1,f:'audio/2021年12月_第1套.mp3',pg:126},
+ {y:2022,m:'12月',s:1,f:'audio/2022年12月_第1套.mp3',pg:136},
+ {y:2022,m:'12月',s:2,f:'audio/2022年12月_第2套.mp3',pg:146},
+ {y:2022,m:'12月',s:3,f:'audio/2022年12月_第3套.mp3',pg:156,note:'听力同第1套'},
+ {y:2023,m:'12月',s:1,f:'audio/2023年12月_第1套.mp3',pg:168},
+ {y:2023,m:'12月',s:2,f:'audio/2023年12月_第2套.mp3',pg:181},
+ {y:2023,m:'12月',s:3,f:'audio/2023年12月_第3套.mp3',pg:194,note:'音频同第1套'},
+ {y:2024,m:'12月',s:1,f:'audio/2024年12月_第1套.mp3',pg:207},
+ {y:2024,m:'12月',s:2,f:'audio/2024年12月_第2套.mp3',pg:217},
+ {y:2024,m:'12月',s:3,f:'audio/2024年12月_第3套.mp3',pg:227,note:'音频同第1套'},
+ {y:2025,m:'12月',s:1,f:'audio/2025年12月_第1套.mp3',pg:237},
+ {y:2025,m:'12月',s:2,f:'audio/2025年12月_第2套.mp3',pg:256},
+ {y:2025,m:'12月',s:3,f:null,pg:275,note:'官方无音频'},
+ {y:2026,m:'6月',s:1,f:'audio/2026年6月_第1套.mp4',pg:289,note:'三套共用原声'},
+ {y:2026,m:'6月',s:2,f:'audio/2026年6月_第2套.mp4',pg:315,note:'三套共用原声'},
+ {y:2026,m:'6月',s:3,f:'audio/2026年6月_第3套.mp4',pg:340,note:'三套共用原声'}
+];
+const RATES=[0.75,1,1.25,1.5,2];
+const audio=new Audio();
+audio.preload='metadata';
+let cur=-1, rate=1, pendingSeek=0, lastSave=0;
+const $=(id)=>document.getElementById(id);
+
+function fmt(t){
+  if(!isFinite(t)||t<0) return '00:00';
+  const m=Math.floor(t/60), s=Math.floor(t%60);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem('cet6_audio_player_v1')||'{}'); }catch(e){ return {}; }
+}
+function saveState(o){
+  try{ localStorage.setItem('cet6_audio_player_v1',JSON.stringify(o)); }catch(e){}
+}
+function label(t){ return t.y+'年'+t.m+' · 第'+t.s+'套'; }
+
+function renderList(){
+  const list=$('list'); list.innerHTML='';
+  const groups={};
+  TRACKS.forEach((t,i)=>{ (groups[t.y]=groups[t.y]||[]).push({t,i}); });
+  let n=0;
+  Object.keys(groups).forEach(y=>{
+    const sec=document.createElement('section');
+    const h=document.createElement('h2');
+    h.innerHTML=y+' 年 <span>'+groups[y].length+' 套</span>';
+    sec.appendChild(h);
+    const grid=document.createElement('div'); grid.className='grid';
+    groups[y].forEach(({t,i})=>{
+      const card=document.createElement('div');
+      card.className='card'+(t.f?'':' off');
+      card.style.setProperty('--i',n++);
+      card.dataset.i=i;
+      const note=t.note?' · <span class="note">'+t.note+'</span>':'';
+      card.innerHTML=
+        '<div class="badge">第'+t.s+'套</div>'+
+        '<div class="meta"><div class="name">'+t.m+' · 六级听力</div>'+
+        '<div class="sub">PDF 第 '+t.pg+' 页'+note+'</div></div>'+
+        '<div class="act"><span class="dur">'+fmt(0)+'</span><span class="dot"></span></div>';
+      if(t.f) card.addEventListener('click',()=>play(i));
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid); list.appendChild(sec);
+  });
+}
+function updateActive(){
+  document.querySelectorAll('.card').forEach((el,i)=>el.classList.toggle('active',i===cur));
+  $('prev').disabled=cur<=0;
+  $('next').disabled=cur>=TRACKS.length-1||!TRACKS[cur+1]?.f;
+}
+function setIcon(playing){
+  $('playicon').innerHTML=playing?'<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';
+}
+function updatePlayerInfo(){
+  if(cur<0) return;
+  const t=TRACKS[cur];
+  $('ptitle').textContent=label(t);
+  $('psub').textContent='PDF 第 '+t.pg+' 页'+(t.note?' · '+t.note:'');
+}
+function play(i,seek){
+  const t=TRACKS[i];
+  if(!t||!t.f) return;
+  cur=i; pendingSeek=seek||0; lastSave=0;
+  audio.src=encodeURI(t.f);
+  audio.playbackRate=rate;
+  audio.load();
+  updateActive(); updatePlayerInfo();
+  setIcon(false);
+  saveState({i:cur,t:0,rate:rate});
+}
+function toggle(){
+  if(cur<0){ play(0); return; }
+  if(audio.paused) audio.play().catch(()=>{}); else audio.pause();
+}
+audio.addEventListener('loadedmetadata',()=>{
+  $('seek').max=audio.duration||0;
+  $('tdur').textContent=fmt(audio.duration);
+  if(pendingSeek>0){ audio.currentTime=pendingSeek; pendingSeek=0; }
+});
+audio.addEventListener('timeupdate',()=>{
+  $('tcur').textContent=fmt(audio.currentTime);
+  const d=audio.duration||0;
+  const el=$('seek'); el.value=audio.currentTime;
+  el.style.setProperty('--fill',(d?audio.currentTime/d*100:0)+'%');
+  if(audio.currentTime-lastSave>4){
+    lastSave=audio.currentTime;
+    saveState({i:cur,t:audio.currentTime,rate:rate});
+  }
+});
+audio.addEventListener('play',()=>setIcon(true));
+audio.addEventListener('pause',()=>setIcon(false));
+audio.addEventListener('ended',()=>{
+  let j=cur+1;
+  while(j<TRACKS.length&&!TRACKS[j].f) j++;
+  if(j<TRACKS.length) play(j);
+});
+$('play').addEventListener('click',toggle);
+$('prev').addEventListener('click',()=>{ if(cur>0) play(cur-1); });
+$('next').addEventListener('click',()=>{
+  let j=cur+1; while(j<TRACKS.length&&!TRACKS[j].f) j++;
+  if(j<TRACKS.length) play(j);
+});
+$('rate').addEventListener('click',()=>{
+  rate=RATES[(RATES.indexOf(rate)+1)%RATES.length];
+  audio.playbackRate=rate;
+  $('rate').textContent=rate.toFixed(2).replace(/0$/,'')+'×';
+  if(cur>=0) saveState({i:cur,t:audio.currentTime,rate:rate});
+});
+$('seek').addEventListener('input',e=>{
+  if(!isFinite(audio.duration)) return;
+  audio.currentTime=Number(e.target.value);
+  e.target.style.setProperty('--fill',(audio.currentTime/audio.duration*100)+'%');
+});
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(e.code==='Space'){ e.preventDefault(); toggle(); }
+  else if(e.code==='ArrowRight'){ e.preventDefault(); audio.currentTime=Math.min(audio.duration||0,audio.currentTime+5); }
+  else if(e.code==='ArrowLeft'){ e.preventDefault(); audio.currentTime=Math.max(0,audio.currentTime-5); }
+  else if(e.code==='ArrowUp'){ e.preventDefault(); if(cur>0) play(cur-1); }
+  else if(e.code==='ArrowDown'){ e.preventDefault(); let j=cur+1; while(j<TRACKS.length&&!TRACKS[j].f) j++; if(j<TRACKS.length) play(j); }
+});
+
+// init
+renderList();
+const st=loadState();
+if(typeof st.rate==='number'&&RATES.includes(st.rate)) rate=st.rate;
+$('rate').textContent=rate.toFixed(2).replace(/0$/,'')+'×';
+if(typeof st.i==='number'&&TRACKS[st.i]&&TRACKS[st.i].f){
+  play(st.i,st.t||0);
+  audio.pause(); // 恢复进度但不自动出声，等用户点播放
+  setIcon(false);
+}
+updateActive();
+</script>
+</body>
+</html>
